@@ -51,3 +51,13 @@ export const Loading: Story = {
     products: [],
   },
 }
+
+export const Dark: Story = {
+  decorators: [
+    (Story) => (
+      <div className="dark">
+        <Story />
+      </div>
+    ),
+  ],
+}

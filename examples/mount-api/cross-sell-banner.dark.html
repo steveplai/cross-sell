@@ -1,0 +1,27 @@
+<!doctype html>
+<html class="dark" lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cross-sell Banner Mount API Dark Mode</title>
+  </head>
+  <body style="background: #111827; color: white">
+    <main style="max-width: 720px; margin: 40px auto; font-family: sans-serif">
+      <h1>Mount API dark mode example</h1>
+      <div id="dark-root"></div>
+    </main>
+    <script src="../../dist/widgets/cross-sell-banner.mount.js"></script>
+    <script>
+      const products = [
+        { id: 'p1', name: '商品 A', price: 1200 },
+        { id: 'p2', name: '商品 B', price: 900 },
+      ]
+
+      CrossSellBanner.mount('#dark-root', {
+        title: '繼承深色商品',
+        locale: 'zh-TW',
+        products,
+      })
+    </script>
+  </body>
+</html>

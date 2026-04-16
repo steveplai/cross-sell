@@ -1,0 +1,30 @@
+<!doctype html>
+<html class="dark" lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cross-sell Banner Web Component Dark Mode</title>
+  </head>
+  <body style="background: #111827; color: white">
+    <main style="max-width: 720px; margin: 40px auto; font-family: sans-serif">
+      <h1>Web Component dark mode example</h1>
+      <cross-sell-banner
+        class="dark"
+        id="explicit-dark"
+        title="深色推薦商品"
+        locale="zh-TW"
+        products='[{"id":"p1","name":"商品 A","price":1200},{"id":"p2","name":"商品 B","price":900}]'
+      ></cross-sell-banner>
+
+      <div style="height: 24px"></div>
+
+      <cross-sell-banner
+        id="default-light"
+        title="預設亮色商品"
+        locale="zh-TW"
+        products='[{"id":"p3","name":"商品 C","price":1500},{"id":"p4","name":"商品 D","price":700}]'
+      ></cross-sell-banner>
+    </main>
+    <script src="../../dist/widgets/cross-sell-banner.wc.js"></script>
+  </body>
+</html>

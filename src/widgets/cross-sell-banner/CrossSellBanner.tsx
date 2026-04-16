@@ -35,7 +35,10 @@ export function CrossSellBanner({
 
   if (loading) {
     return (
-      <section className="w-full rounded-lg border border-border bg-background p-4 text-foreground shadow-sm">
+      <section
+        className="w-full rounded-lg border border-border bg-background p-4 text-foreground shadow-sm"
+        data-cross-sell-widget
+      >
         <h2 className="text-base font-semibold">{title}</h2>
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {[0, 1].map((item) => (
@@ -52,7 +55,10 @@ export function CrossSellBanner({
   }
 
   return (
-    <section className="w-full rounded-lg border border-border bg-background p-4 text-foreground shadow-sm">
+    <section
+      className="w-full rounded-lg border border-border bg-background p-4 text-foreground shadow-sm"
+      data-cross-sell-widget
+    >
       <div className="flex items-start justify-between gap-4">
         <div>
           <Badge
@@ -103,10 +109,7 @@ export function CrossSellBanner({
                   </p>
                 </div>
               </div>
-              <Button
-                onClick={() => onSelectProduct?.(product)}
-                type="button"
-              >
+              <Button onClick={() => onSelectProduct?.(product)} type="button">
                 加入 {product.name}
               </Button>
             </Card>

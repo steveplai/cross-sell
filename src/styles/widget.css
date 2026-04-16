@@ -1,9 +1,11 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
 
-@custom-variant dark (&:is(.dark *));
+/* Make Tailwind dark: utilities follow the same .dark contract used by shadcn tokens. */
+@custom-variant dark (&:where(.dark, .dark *, :host(.dark) *));
 
+/* Map shadcn semantic color utilities to the widget-local CSS variables below. */
 @theme inline {
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -48,8 +50,17 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-:root,
+/* Web Component host defaults. Mount API roots use [data-cross-sell-widget] instead. */
 :host {
+  display: block;
+  font-family: inherit;
+}
+
+/* Shared light theme tokens for both Web Component (:host) and Mount API roots. */
+:host,
+[data-cross-sell-widget] {
+  color-scheme: light;
+
   --radius: 0.5rem;
 
   --background: oklch(1 0 0);
@@ -79,7 +90,6 @@
   --input: oklch(0.92 0.004 286.32);
   --ring: oklch(0.448 0.119 151.328);
 
-  /* Added tokens for shadcn scaffold compatibility */
   --chart-1: oklch(0.448 0.119 151.328);
   --chart-2: oklch(0.577 0.245 27.325);
   --chart-3: oklch(0.552 0.016 285.938);
@@ -96,8 +106,12 @@
   --sidebar-ring: oklch(0.448 0.119 151.328);
 }
 
-.dark,
-:host(.dark) {
+/* Shared dark theme tokens: Mount API inherits .dark ancestors; Web Components use host.dark. */
+.dark [data-cross-sell-widget],
+:host(.dark),
+:host(.dark) [data-cross-sell-widget] {
+  color-scheme: dark;
+
   --background: oklch(0.18 0.01 285);
   --foreground: oklch(0.96 0.01 286);
 
@@ -107,7 +121,6 @@
   --popover: oklch(0.22 0.01 285);
   --popover-foreground: oklch(0.96 0.01 286);
 
-  /* Keep your brand hue, but brighten it for dark surfaces */
   --primary: oklch(0.72 0.14 151.328);
   --primary-foreground: oklch(0.18 0.03 155);
 
@@ -142,22 +155,27 @@
   --sidebar-ring: oklch(0.72 0.14 151.328);
 }
 
-:host {
-  display: block;
-  font-family: inherit;
-}
-
 @layer base {
-  * {
+  /* Keep widget sizing and focus/border tokens scoped to the two supported render modes. */
+  :host,
+  :host * {
     box-sizing: border-box;
     @apply border-border outline-ring/50;
   }
 
-  body {
-    @apply bg-background text-foreground;
+  [data-cross-sell-widget],
+  [data-cross-sell-widget] * {
+    box-sizing: border-box;
+    @apply border-border outline-ring/50;
   }
 
+  /* Apply semantic background and foreground tokens to each widget root. */
   :host {
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+
+  [data-cross-sell-widget] {
     background-color: var(--background);
     color: var(--foreground);
   }

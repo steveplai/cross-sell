@@ -53,8 +53,13 @@ The practical rule: if consumers need a different tag name, different global API
 
 ## Web Component Usage
 
+Web Component dark mode is enabled by adding `class="dark"` to the custom
+element host. A `.dark` class on the outer page does not cross the Shadow DOM
+boundary.
+
 ```html
 <cross-sell-banner
+  class="dark"
   title="推薦商品"
   locale="zh-TW"
   products='[{"id":"p1","name":"商品 A","price":1200}]'
@@ -64,6 +69,10 @@ The practical rule: if consumers need a different tag name, different global API
 ```
 
 ## Mount API Usage
+
+Mount API dark mode follows the host page's Tailwind/shadcn convention. If the
+mount target is inside `<html class="dark">` or another `.dark` ancestor, the
+mounted widget renders in dark mode.
 
 ```html
 <div id="cross-sell-root"></div>
