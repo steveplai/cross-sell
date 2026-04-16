@@ -4,7 +4,7 @@ import { createRoot, type Root } from 'react-dom/client'
 
 import { injectStyles } from './injectStyles'
 
-interface CreateReactWebComponentOptions<Props> {
+interface CreateReactWebComponentOptions<Props extends object> {
   tagName: string
   Component: ComponentType<Props>
   observedAttributes: string[]
@@ -12,7 +12,7 @@ interface CreateReactWebComponentOptions<Props> {
   mapElementToProps: (element: HTMLElement) => Props
 }
 
-export function createReactWebComponent<Props>({
+export function createReactWebComponent<Props extends object>({
   tagName,
   Component,
   observedAttributes,

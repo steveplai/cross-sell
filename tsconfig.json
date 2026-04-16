@@ -15,14 +15,15 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["vitest/globals"]
+    "types": ["vite/client", "vitest/globals", "node"]
   },
   "include": [
     "src",
     "stories",
     "scripts",
     "tests",
-    ".storybook",
+    ".storybook/**/*.ts",
+    ".storybook/**/*.tsx",
     "vite.config.ts",
     "vitest.config.ts",
     "playwright.config.ts"

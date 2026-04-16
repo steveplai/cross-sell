@@ -4,12 +4,12 @@ import { createRoot, type Root } from 'react-dom/client'
 
 import { injectStyles } from './injectStyles'
 
-export interface MountedWidget<Props> {
+export interface MountedWidget<Props extends object> {
   update(nextProps: Props): void
   unmount(): void
 }
 
-export function createMountApi<Props>(
+export function createMountApi<Props extends object>(
   Component: ComponentType<Props>,
   styleId: string,
   styles: string,

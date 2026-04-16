@@ -1,4 +1,3 @@
-// codex resume 019d8e94-5489-7872-b6c4-1da2a4808b8d
 import {
   Body,
   Button,
