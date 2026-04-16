@@ -1,0 +1,12 @@
+node_modules/
+dist/
+storybook-static/
+coverage/
+test-results/
+playwright-report/
+.vite/
+.vite-temp/
+node_modules/.cache/
+node_modules/.vite/
+node_modules/.vite-temp/
+pnpm-lock.yaml

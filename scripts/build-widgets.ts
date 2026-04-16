@@ -1,7 +1,8 @@
 import { rm } from 'node:fs/promises'
 import { resolve } from 'node:path'
-import react from '@vitejs/plugin-react'
+
 import tailwindcss from '@tailwindcss/vite'
+import react from '@vitejs/plugin-react'
 import { build, type InlineConfig } from 'vite'
 
 const root = process.cwd()

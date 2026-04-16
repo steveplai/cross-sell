@@ -49,10 +49,10 @@ export function CrossSellBanner({
     <section className="w-full rounded-lg border border-zinc-200 bg-white p-4 text-zinc-900 shadow-sm">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-medium uppercase tracking-normal text-emerald-700">
+          <p className="text-xs font-medium tracking-normal text-emerald-700 uppercase">
             Cross-sell
           </p>
-          <h2 className="mt-1 text-lg font-semibold leading-tight">{title}</h2>
+          <h2 className="mt-1 text-lg leading-tight font-semibold">{title}</h2>
         </div>
       </div>
 
@@ -87,7 +87,7 @@ export function CrossSellBanner({
                   </div>
                 )}
                 <div className="min-w-0 flex-1">
-                  <h3 className="break-words text-sm font-semibold leading-snug">
+                  <h3 className="text-sm leading-snug font-semibold break-words">
                     {product.name}
                   </h3>
                   <p className="mt-1 text-sm text-zinc-600">
@@ -96,7 +96,7 @@ export function CrossSellBanner({
                 </div>
               </div>
               <button
-                className="mt-3 w-full rounded-lg bg-emerald-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                className="mt-3 w-full rounded-lg bg-emerald-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-emerald-800 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:outline-none"
                 onClick={() => onSelectProduct?.(product)}
                 type="button"
               >

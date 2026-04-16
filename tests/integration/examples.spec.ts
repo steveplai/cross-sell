@@ -16,12 +16,10 @@ test('web component example renders and emits event', async ({ page }) => {
     .toContain('推薦商品')
   await expect(page.getByTestId('event-log')).toContainText('No events yet')
 
-  await page
-    .locator('cross-sell-banner')
-    .evaluate((element) => {
-      const button = element.shadowRoot?.querySelector('button')
-      ;(button as HTMLButtonElement | null)?.click()
-    })
+  await page.locator('cross-sell-banner').evaluate((element) => {
+    const button = element.shadowRoot?.querySelector('button')
+    ;(button as HTMLButtonElement | null)?.click()
+  })
 
   await expect(page.getByTestId('event-log')).toContainText(
     'cross-sell:product-select',

@@ -10,6 +10,7 @@ import {
   Section,
   Text,
 } from '@react-email/components'
+
 import type { Product } from '../../shared/types/product'
 import { formatCurrency } from '../../shared/utils/formatCurrency'
 

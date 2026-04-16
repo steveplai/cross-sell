@@ -1,6 +1,7 @@
 import type { ComponentType } from 'react'
 import { createElement } from 'react'
 import { createRoot, type Root } from 'react-dom/client'
+
 import { injectStyles } from './injectStyles'
 
 interface CreateReactWebComponentOptions<Props> {

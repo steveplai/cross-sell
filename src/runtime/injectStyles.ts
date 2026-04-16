@@ -1,6 +1,10 @@
 const injectedTargets = new WeakMap<Node, Set<string>>()
 
-export function injectStyles(target: ShadowRoot | Document, id: string, css: string) {
+export function injectStyles(
+  target: ShadowRoot | Document,
+  id: string,
+  css: string,
+) {
   let ids = injectedTargets.get(target)
 
   if (!ids) {

@@ -1,11 +1,12 @@
-import type { CrossSellBannerLayout, CrossSellBannerProps } from '../widgets/cross-sell-banner'
-import { CrossSellBanner } from '../widgets/cross-sell-banner'
 import { createReactWebComponent } from '../runtime/createReactWebComponent'
 import styles from '../styles/widget.css?inline'
+import type {
+  CrossSellBannerLayout,
+  CrossSellBannerProps,
+} from '../widgets/cross-sell-banner'
+import { CrossSellBanner } from '../widgets/cross-sell-banner'
 
-const fallbackProducts = [
-  { id: 'demo-1', name: '加購推薦商品', price: 1200 },
-]
+const fallbackProducts = [{ id: 'demo-1', name: '加購推薦商品', price: 1200 }]
 
 function parseProducts(value: string | null) {
   if (!value) {
@@ -29,7 +30,8 @@ createReactWebComponent<CrossSellBannerProps>({
     title: element.getAttribute('title') ?? '推薦商品',
     locale: element.getAttribute('locale') ?? 'zh-TW',
     layout:
-      (element.getAttribute('layout') as CrossSellBannerLayout | null) ?? 'grid',
+      (element.getAttribute('layout') as CrossSellBannerLayout | null) ??
+      'grid',
     products: parseProducts(element.getAttribute('products')),
     onSelectProduct: (product) => {
       element.dispatchEvent(

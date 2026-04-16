@@ -1,6 +1,8 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
+
 import { render } from '@react-email/render'
+
 import { CrossSellOfferEmail } from '../src/emails/cross-sell-offer/CrossSellOfferEmail'
 import { sampleProducts } from '../src/emails/cross-sell-offer/sample-data'
 

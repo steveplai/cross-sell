@@ -1,6 +1,7 @@
 import type { ComponentType } from 'react'
 import { createElement } from 'react'
 import { createRoot, type Root } from 'react-dom/client'
+
 import { injectStyles } from './injectStyles'
 
 export interface MountedWidget<Props> {
@@ -15,7 +16,10 @@ export function createMountApi<Props>(
 ) {
   const roots = new WeakMap<Element, Root>()
 
-  return function mount(target: string | Element, props: Props): MountedWidget<Props> {
+  return function mount(
+    target: string | Element,
+    props: Props,
+  ): MountedWidget<Props> {
     const element =
       typeof target === 'string' ? document.querySelector(target) : target
 
