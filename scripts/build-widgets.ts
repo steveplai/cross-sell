@@ -10,12 +10,12 @@ const root = process.cwd()
 
 const entries = [
   {
-    entry: resolve(root, 'src/entries/cross-sell-banner.wc.tsx'),
+    entry: resolve(root, 'src/entries/cross-sell-banner/wc.tsx'),
     fileName: 'cross-sell-banner.wc.js',
     name: 'CrossSellBannerWebComponent',
   },
   {
-    entry: resolve(root, 'src/entries/cross-sell-banner.mount.ts'),
+    entry: resolve(root, 'src/entries/cross-sell-banner/mount.ts'),
     fileName: 'cross-sell-banner.mount.js',
     name: 'CrossSellBanner',
   },

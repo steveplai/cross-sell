@@ -1,10 +1,10 @@
-import { createReactWebComponent } from '../runtime/createReactWebComponent'
-import styles from '../styles/widget.css?inline'
+import { createReactWebComponent } from '../../runtime/createReactWebComponent'
+import styles from '../../styles/widget.css?inline'
 import type {
   CrossSellBannerLayout,
   CrossSellBannerProps,
-} from '../widgets/cross-sell-banner'
-import { CrossSellBanner } from '../widgets/cross-sell-banner'
+} from '../../widgets/cross-sell-banner'
+import { CrossSellBanner } from '../../widgets/cross-sell-banner'
 
 const fallbackProducts = [{ id: 'demo-1', name: '加購推薦商品', price: 1200 }]
 
