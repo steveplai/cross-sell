@@ -1,3 +1,5 @@
+import '../src/widgets/cross-sell-banner/style.css'
+
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
 import { CrossSellBanner } from '../src/widgets/cross-sell-banner'
