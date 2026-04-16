@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
 
+import { widgetRootProps } from '../../runtime/widgetRoot'
 import type { Product } from '../../shared/types/product'
 import { formatCurrency } from '../../shared/utils/formatCurrency'
 
@@ -37,7 +38,7 @@ export function CrossSellBanner({
     return (
       <section
         className="w-full rounded-lg border border-border bg-background p-4 text-foreground shadow-sm"
-        data-cross-sell-widget
+        {...widgetRootProps}
       >
         <h2 className="text-base font-semibold">{title}</h2>
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -57,7 +58,7 @@ export function CrossSellBanner({
   return (
     <section
       className="w-full rounded-lg border border-border bg-background p-4 text-foreground shadow-sm"
-      data-cross-sell-widget
+      {...widgetRootProps}
     >
       <div className="flex items-start justify-between gap-4">
         <div>

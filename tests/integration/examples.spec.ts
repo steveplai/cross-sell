@@ -1,6 +1,8 @@
 import type { Page } from '@playwright/test'
 import { expect, test } from '@playwright/test'
 
+import { widgetRootSelector } from '../../src/runtime/widgetRoot'
+
 function normalizeThemeState(
   state: { background: string; colorScheme: string } | null,
 ) {
@@ -19,18 +21,20 @@ function normalizeThemeState(
 }
 
 async function getWebComponentWidgetState(page: Page, selector: string) {
-  const state = await page.locator(selector).evaluate((element) => {
-    const root = element.shadowRoot?.querySelector('[data-cross-sell-widget]')
+  const state = await page
+    .locator(selector)
+    .evaluate((element, rootSelector) => {
+      const root = element.shadowRoot?.querySelector(rootSelector)
 
-    if (!(root instanceof HTMLElement)) {
-      return null
-    }
+      if (!(root instanceof HTMLElement)) {
+        return null
+      }
 
-    return {
-      background: getComputedStyle(root).getPropertyValue('--background'),
-      colorScheme: getComputedStyle(root).colorScheme,
-    }
-  })
+      return {
+        background: getComputedStyle(root).getPropertyValue('--background'),
+        colorScheme: getComputedStyle(root).colorScheme,
+      }
+    }, widgetRootSelector)
 
   return normalizeThemeState(state)
 }
@@ -113,7 +117,7 @@ test('mount API inherits host dark class', async ({ page }) => {
 
   await expect
     .poll(() =>
-      getLightDomWidgetState(page, '#dark-root [data-cross-sell-widget]'),
+      getLightDomWidgetState(page, `#dark-root ${widgetRootSelector}`),
     )
     .toEqual({
       hasDarkBackground: true,
@@ -130,7 +134,7 @@ test('mount API defaults to light theme without dark ancestor', async ({
 
   await expect
     .poll(() =>
-      getLightDomWidgetState(page, '#cross-sell-root [data-cross-sell-widget]'),
+      getLightDomWidgetState(page, `#cross-sell-root ${widgetRootSelector}`),
     )
     .toEqual({
       hasDarkBackground: false,
