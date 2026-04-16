@@ -1,3 +1,5 @@
+import { fileURLToPath, URL } from 'node:url'
+
 import type { StorybookConfig } from '@storybook/react-vite'
 
 const config: StorybookConfig = {
@@ -6,6 +8,15 @@ const config: StorybookConfig = {
   framework: {
     name: '@storybook/react-vite',
     options: {},
+  },
+  viteFinal(config) {
+    config.resolve ??= {}
+    config.resolve.alias = {
+      ...(config.resolve.alias ?? {}),
+      '@': fileURLToPath(new URL('../src', import.meta.url)),
+    }
+
+    return config
   },
 }
 

@@ -1,3 +1,9 @@
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
+import { cn } from '@/lib/utils'
+
 import type { Product } from '../../shared/types/product'
 import { formatCurrency } from '../../shared/utils/formatCurrency'
 
@@ -29,13 +35,13 @@ export function CrossSellBanner({
 
   if (loading) {
     return (
-      <section className="w-full rounded-lg border border-zinc-200 bg-white p-4 text-zinc-900 shadow-sm">
+      <section className="w-full rounded-lg border border-border bg-background p-4 text-foreground shadow-sm">
         <h2 className="text-base font-semibold">{title}</h2>
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {[0, 1].map((item) => (
-            <div
+            <Skeleton
               aria-hidden="true"
-              className="h-24 animate-pulse rounded-lg bg-zinc-100"
+              className="h-24 rounded-lg"
               data-testid="loading-card"
               key={item}
             />
@@ -46,29 +52,31 @@ export function CrossSellBanner({
   }
 
   return (
-    <section className="w-full rounded-lg border border-zinc-200 bg-white p-4 text-zinc-900 shadow-sm">
+    <section className="w-full rounded-lg border border-border bg-background p-4 text-foreground shadow-sm">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-medium tracking-normal text-emerald-700 uppercase">
+          <Badge
+            className="tracking-normal text-primary uppercase"
+            variant="secondary"
+          >
             Cross-sell
-          </p>
+          </Badge>
           <h2 className="mt-1 text-lg leading-tight font-semibold">{title}</h2>
         </div>
       </div>
 
       {products.length === 0 ? (
-        <p className="mt-4 rounded-lg bg-zinc-50 px-3 py-4 text-sm text-zinc-600">
+        <p className="mt-4 rounded-lg bg-muted px-3 py-4 text-sm text-muted-foreground">
           目前沒有可推薦的商品。
         </p>
       ) : (
         <div className={`mt-4 ${listClass}`} data-testid="product-list">
           {products.map((product) => (
-            <article
-              className={
-                layout === 'carousel'
-                  ? 'min-w-60 rounded-lg border border-zinc-200 bg-zinc-50 p-3'
-                  : 'rounded-lg border border-zinc-200 bg-zinc-50 p-3'
-              }
+            <Card
+              className={cn(
+                'p-3 shadow-none',
+                layout === 'carousel' && 'min-w-60',
+              )}
               key={product.id}
             >
               <div className="flex gap-3">
@@ -81,28 +89,27 @@ export function CrossSellBanner({
                 ) : (
                   <div
                     aria-hidden="true"
-                    className="flex h-16 w-16 flex-none items-center justify-center rounded-lg bg-emerald-100 text-sm font-semibold text-emerald-800"
+                    className="flex h-16 w-16 flex-none items-center justify-center rounded-lg bg-primary/10 text-sm font-semibold text-primary"
                   >
                     {product.name.slice(0, 1)}
                   </div>
                 )}
                 <div className="min-w-0 flex-1">
-                  <h3 className="text-sm leading-snug font-semibold break-words">
+                  <h3 className="text-sm leading-snug font-semibold wrap-break-word">
                     {product.name}
                   </h3>
-                  <p className="mt-1 text-sm text-zinc-600">
+                  <p className="mt-1 text-sm text-muted-foreground">
                     {formatCurrency(product.price, locale)}
                   </p>
                 </div>
               </div>
-              <button
-                className="mt-3 w-full rounded-lg bg-emerald-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-emerald-800 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:outline-none"
+              <Button
                 onClick={() => onSelectProduct?.(product)}
                 type="button"
               >
                 加入 {product.name}
-              </button>
-            </article>
+              </Button>
+            </Card>
           ))}
         </div>
       )}

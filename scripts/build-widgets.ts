@@ -1,5 +1,6 @@
 import { rm } from 'node:fs/promises'
 import { resolve } from 'node:path'
+import { fileURLToPath, URL } from 'node:url'
 
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
@@ -30,6 +31,11 @@ for (const item of entries) {
     },
     mode: 'production',
     plugins: [react(), tailwindcss()],
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('../src', import.meta.url)),
+      },
+    },
     build: {
       emptyOutDir: false,
       outDir: resolve(root, 'dist/widgets'),
