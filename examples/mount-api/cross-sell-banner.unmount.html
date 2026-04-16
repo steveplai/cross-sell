@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cross-sell Banner Mount API Unmount</title>
+  </head>
+  <body>
+    <main style="max-width: 720px; margin: 40px auto; font-family: sans-serif;">
+      <h1>Mount API unmount example</h1>
+      <div id="cross-sell-root"></div>
+      <button type="button" id="unmount">卸載元件</button>
+    </main>
+    <script src="../../dist/widgets/cross-sell-banner.mount.js"></script>
+    <script>
+      const mounted = CrossSellBanner.mount('#cross-sell-root', {
+        title: '推薦商品',
+        locale: 'zh-TW',
+        products: [{ id: 'p1', name: '商品 A', price: 1200 }],
+      })
+
+      document.getElementById('unmount').addEventListener('click', () => {
+        mounted.unmount()
+      })
+    </script>
+  </body>
+</html>

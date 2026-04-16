@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cross-sell Banner Mount API</title>
+  </head>
+  <body>
+    <main style="max-width: 720px; margin: 40px auto; font-family: sans-serif;">
+      <h1>Mount API basic example</h1>
+      <div id="cross-sell-root"></div>
+    </main>
+    <script src="../../dist/widgets/cross-sell-banner.mount.js"></script>
+    <script>
+      CrossSellBanner.mount('#cross-sell-root', {
+        title: '推薦商品',
+        locale: 'zh-TW',
+        products: [
+          { id: 'p1', name: '商品 A', price: 1200 },
+          { id: 'p2', name: '商品 B', price: 900 },
+        ],
+      })
+    </script>
+  </body>
+</html>

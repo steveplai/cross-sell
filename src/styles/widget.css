@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+:host {
+  display: block;
+  font-family: inherit;
+}
+
+* {
+  box-sizing: border-box;
+}
