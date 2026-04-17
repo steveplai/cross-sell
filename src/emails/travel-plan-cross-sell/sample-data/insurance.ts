@@ -1,6 +1,6 @@
-import type { InsuranceCrossSellEmailProps } from './InsuranceCrossSellEmail'
+import type { TravelPlanCrossSellEmailProps } from '../types'
 
-export const insuranceCrossSellSampleData: InsuranceCrossSellEmailProps = {
+export const insuranceCrossSellSampleData: TravelPlanCrossSellEmailProps = {
   previewText: '旅遊計劃書與簽證護照提醒',
   title: '旅遊計劃書',
   sections: [
