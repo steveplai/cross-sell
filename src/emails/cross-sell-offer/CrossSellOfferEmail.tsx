@@ -5,8 +5,10 @@ import {
   Head,
   Heading,
   Html,
+  pixelBasedPreset,
   Preview,
   Section,
+  Tailwind,
   Text,
 } from '@react-email/components'
 
@@ -28,82 +30,57 @@ export function CrossSellOfferEmail({
     <Html lang="zh-TW">
       <Head />
       <Preview>{title}</Preview>
-      <Body style={body}>
-        <Container style={container}>
-          <Heading style={heading}>{title}</Heading>
-          <Text style={copy}>為你整理了幾項可以一起參考的商品。</Text>
-          <Section>
-            {products.map((product) => (
-              <Section key={product.id} style={productCard}>
-                <Text style={productName}>{product.name}</Text>
-                <Text style={price}>{formatCurrency(product.price)}</Text>
-              </Section>
-            ))}
-          </Section>
-          <Button href={ctaUrl} style={button}>
-            查看推薦
-          </Button>
-        </Container>
-      </Body>
+      <Tailwind
+        config={{
+          presets: [pixelBasedPreset],
+          theme: {
+            extend: {
+              colors: {
+                brand: '#047857',
+                ink: '#18181b',
+                line: '#e4e4e7',
+                muted: '#52525b',
+                page: '#f4f4f5',
+              },
+              fontFamily: {
+                sans: ['Arial', 'sans-serif'],
+              },
+            },
+          },
+        }}
+      >
+        <Body className="bg-page text-ink m-0 font-sans">
+          <Container className="mx-auto w-full max-w-140 bg-white p-6">
+            <Heading className="m-0 mb-3 text-[22px] leading-7.5">
+              {title}
+            </Heading>
+            <Text className="m-0 mb-4 text-[15px] leading-6 text-muted">
+              為你整理了幾項可以一起參考的商品。
+            </Text>
+            <Section>
+              {products.map((product) => (
+                <Section
+                  className="border-line mb-3 rounded-lg border p-3"
+                  key={product.id}
+                >
+                  <Text className="m-0 mb-1 text-[15px] font-bold">
+                    {product.name}
+                  </Text>
+                  <Text className="text-brand m-0 text-sm">
+                    {formatCurrency(product.price)}
+                  </Text>
+                </Section>
+              ))}
+            </Section>
+            <Button
+              className="bg-brand mt-5 block rounded-lg px-4.5 py-3 text-center text-[15px] font-bold text-white no-underline"
+              href={ctaUrl}
+            >
+              查看推薦
+            </Button>
+          </Container>
+        </Body>
+      </Tailwind>
     </Html>
   )
-}
-
-const body = {
-  backgroundColor: '#f4f4f5',
-  color: '#18181b',
-  fontFamily: 'Arial, sans-serif',
-  margin: 0,
-}
-
-const container = {
-  backgroundColor: '#ffffff',
-  margin: '0 auto',
-  padding: '24px',
-  width: '100%',
-  maxWidth: '560px',
-}
-
-const heading = {
-  fontSize: '22px',
-  lineHeight: '30px',
-  margin: '0 0 12px',
-}
-
-const copy = {
-  color: '#52525b',
-  fontSize: '15px',
-  lineHeight: '24px',
-}
-
-const productCard = {
-  border: '1px solid #e4e4e7',
-  borderRadius: '8px',
-  padding: '12px',
-  marginBottom: '12px',
-}
-
-const productName = {
-  fontSize: '15px',
-  fontWeight: '700',
-  margin: '0 0 4px',
-}
-
-const price = {
-  color: '#047857',
-  fontSize: '14px',
-  margin: 0,
-}
-
-const button = {
-  backgroundColor: '#047857',
-  borderRadius: '8px',
-  color: '#ffffff',
-  display: 'block',
-  fontSize: '15px',
-  fontWeight: '700',
-  marginTop: '20px',
-  padding: '12px 18px',
-  textAlign: 'center' as const,
-  textDecoration: 'none',
 }
