@@ -16,7 +16,7 @@ export function Header({ title, deadlineText }: HeaderProps) {
         </Column>
         {deadlineText ? (
           <Column>
-            <Text className="bg-brand-red-soft text-brand-red m-0 inline-block rounded-[5px] px-1.5 py-0.75 text-[12px] leading-5.5">
+            <Text className="bg-brand-red-soft text-brand-red m-0 ml-4 inline-block rounded-[5px] px-1.5 py-0.75 text-[12px] leading-5.5">
               {deadlineText}
             </Text>
           </Column>

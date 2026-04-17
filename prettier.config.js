@@ -4,4 +4,5 @@ export default {
   semi: false,
   singleQuote: true,
   tailwindStylesheet: './src/styles/widget.css',
+  tailwindFunctions: ['cn', 'clsx', 'cva'],
 }
