@@ -304,13 +304,34 @@ pnpm test:all
 pnpm build:storybook
 ```
 
-If future changes touch runtime/build/test configuration, rerun at least:
+## Validation Policy
+
+By default, Codex should not proactively run validation, build, test, or
+formatter commands after making changes. Instead, Codex should tell the user
+which validation commands are recommended for the change and what each command
+checks.
+
+Only run validation/build/test commands when the user explicitly asks Codex to
+run them, for example "run tests", "run build", "verify it", or names a
+specific command.
+
+Recommended validation guidance:
+
+- For email template or email build changes, suggest:
+
+```bash
+pnpm build:emails
+pnpm typecheck
+```
+
+- For widget source, runtime, entrypoint, build, or test configuration changes,
+  suggest:
 
 ```bash
 pnpm test:all
 ```
 
-If future changes touch Storybook config/stories, rerun:
+- For Storybook config or story changes, suggest:
 
 ```bash
 pnpm build:storybook

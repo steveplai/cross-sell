@@ -28,6 +28,7 @@ dist/
     cross-sell-banner.mount.js
   emails/
     cross-sell-offer.html
+    order-cross-sell.html
   manifest.json
 ```
 

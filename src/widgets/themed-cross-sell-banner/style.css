@@ -5,7 +5,8 @@
 }
 
 .dark [data-csc-widget][data-csc-widget-name='themed-cross-sell-banner'],
-:host(.dark) [data-csc-widget][data-csc-widget-name='themed-cross-sell-banner'] {
+:host(.dark)
+  [data-csc-widget][data-csc-widget-name='themed-cross-sell-banner'] {
   --primary: oklch(0.74 0.16 250);
   --ring: oklch(0.74 0.16 250);
   --radius: 0.625rem;
