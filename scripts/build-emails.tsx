@@ -5,8 +5,12 @@ import { render } from '@react-email/render'
 
 import { CrossSellOfferEmail } from '../src/emails/cross-sell-offer/CrossSellOfferEmail'
 import { sampleProducts } from '../src/emails/cross-sell-offer/sample-data'
+import { InsuranceCrossSellEmail } from '../src/emails/insurance-cross-sell/InsuranceCrossSellEmail'
+import { insuranceCrossSellSampleData } from '../src/emails/insurance-cross-sell/sample-data'
 import { OrderCrossSellEmail } from '../src/emails/order-cross-sell/OrderCrossSellEmail'
 import { orderCrossSellSampleData } from '../src/emails/order-cross-sell/sample-data'
+import { SalesCrossSellEmail } from '../src/emails/sales-cross-sell/SalesCrossSellEmail'
+import { salesCrossSellSampleData } from '../src/emails/sales-cross-sell/sample-data'
 
 const outDir = resolve(process.cwd(), 'dist/emails')
 
@@ -26,6 +30,16 @@ const emails = [
   {
     fileName: 'order-cross-sell.html',
     html: await render(<OrderCrossSellEmail {...orderCrossSellSampleData} />),
+  },
+  {
+    fileName: 'sales-cross-sell.html',
+    html: await render(<SalesCrossSellEmail {...salesCrossSellSampleData} />),
+  },
+  {
+    fileName: 'insurance-cross-sell.html',
+    html: await render(
+      <InsuranceCrossSellEmail {...insuranceCrossSellSampleData} />,
+    ),
   },
 ]
 

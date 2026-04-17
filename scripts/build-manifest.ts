@@ -31,6 +31,14 @@ const manifest = {
       name: 'order-cross-sell',
       file: 'emails/order-cross-sell.html',
     },
+    {
+      name: 'sales-cross-sell',
+      file: 'emails/sales-cross-sell.html',
+    },
+    {
+      name: 'insurance-cross-sell',
+      file: 'emails/insurance-cross-sell.html',
+    },
   ],
 }
 
