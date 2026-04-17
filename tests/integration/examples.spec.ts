@@ -163,6 +163,9 @@ test('web component host dark class controls shadow DOM theme', async ({
 test('web component applies widget-specific theme tokens', async ({ page }) => {
   await page.goto('/examples/web-component/cross-sell-banner.custom-theme.html')
 
+  await expect(
+    page.locator('themed-cross-sell-banner'),
+  ).toHaveJSProperty('localName', 'themed-cross-sell-banner')
   await expect
     .poll(() =>
       getWebComponentWidgetTokenState(page, '#custom-theme-web-component'),

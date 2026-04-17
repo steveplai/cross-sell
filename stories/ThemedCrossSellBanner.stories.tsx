@@ -1,11 +1,13 @@
+import '../src/widgets/themed-cross-sell-banner/style.css'
+
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import { CrossSellBanner } from '../src/widgets/cross-sell-banner'
+import { ThemedCrossSellBanner } from '../src/widgets/themed-cross-sell-banner'
 
 const meta = {
-  id: 'crosssellbanner',
-  title: 'CrossSell Banner/Base',
-  component: CrossSellBanner,
+  id: 'themed-crosssellbanner',
+  title: 'CrossSell Banner/Themed',
+  component: ThemedCrossSellBanner,
   args: {
     title: '推薦商品',
     locale: 'zh-TW',
@@ -21,7 +23,7 @@ const meta = {
       options: ['compact', 'grid', 'carousel'],
     },
   },
-} satisfies Meta<typeof CrossSellBanner>
+} satisfies Meta<typeof ThemedCrossSellBanner>
 
 export default meta
 

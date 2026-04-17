@@ -12,6 +12,15 @@ const manifest = {
       },
       events: ['cross-sell:product-select'],
     },
+    {
+      name: 'themed-cross-sell-banner',
+      tagName: 'themed-cross-sell-banner',
+      files: {
+        webComponent: 'widgets/themed-cross-sell-banner.wc.js',
+        mountApi: 'widgets/themed-cross-sell-banner.mount.js',
+      },
+      events: ['cross-sell:product-select'],
+    },
   ],
   emails: [
     {
