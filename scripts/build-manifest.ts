@@ -27,6 +27,10 @@ const manifest = {
       name: 'cross-sell-offer',
       file: 'emails/cross-sell-offer.html',
     },
+    {
+      name: 'order-cross-sell',
+      file: 'emails/order-cross-sell.html',
+    },
   ],
 }
 
