@@ -1,6 +1,6 @@
 import type { TravelPlanCrossSellEmailProps } from '../types'
 
-export const orderCrossSellSampleData: TravelPlanCrossSellEmailProps = {
+export const orderCrossSellEmailContent: TravelPlanCrossSellEmailProps = {
   previewText: '旅遊計劃書與限時加購優惠',
   title: '旅遊計劃書',
   deadlineText: '加購優惠於2026/04/10 13:49 截止！',

@@ -5,8 +5,8 @@ import { type ReactNode,Suspense } from 'react'
 import { CrossSellSection } from '../../src/emails/travel-plan-cross-sell/components/CrossSellSection'
 import { Header } from '../../src/emails/travel-plan-cross-sell/components/Header'
 import { Highlights } from '../../src/emails/travel-plan-cross-sell/components/Highlights'
-import { insuranceCrossSellSampleData } from '../../src/emails/travel-plan-cross-sell/sample-data/insurance'
-import { orderCrossSellSampleData } from '../../src/emails/travel-plan-cross-sell/sample-data/order'
+import { insuranceCrossSellEmailContent } from '../../src/emails/travel-plan-cross-sell/content/insurance'
+import { orderCrossSellEmailContent } from '../../src/emails/travel-plan-cross-sell/content/order'
 import { travelPlanCrossSellTailwindConfig } from '../../src/emails/travel-plan-cross-sell/tailwind-config'
 import type { TravelPlanCrossSellSection } from '../../src/emails/travel-plan-cross-sell/types'
 
@@ -34,8 +34,8 @@ function EmailCanvas({ children }: { children: ReactNode }) {
 
 function getSection(id: string): TravelPlanCrossSellSection {
   const section = [
-    ...orderCrossSellSampleData.sections,
-    ...insuranceCrossSellSampleData.sections,
+    ...orderCrossSellEmailContent.sections,
+    ...insuranceCrossSellEmailContent.sections,
   ].find((item) => item.id === id)
 
   if (!section) {
@@ -60,8 +60,8 @@ export const HeaderWithDeadline: Story = {
   render: () => (
     <EmailCanvas>
       <Header
-        deadlineText={orderCrossSellSampleData.deadlineText}
-        title={orderCrossSellSampleData.title}
+        deadlineText={orderCrossSellEmailContent.deadlineText}
+        title={orderCrossSellEmailContent.title}
       />
     </EmailCanvas>
   ),
@@ -70,7 +70,7 @@ export const HeaderWithDeadline: Story = {
 export const HeaderWithoutDeadline: Story = {
   render: () => (
     <EmailCanvas>
-      <Header title={insuranceCrossSellSampleData.title} />
+      <Header title={insuranceCrossSellEmailContent.title} />
     </EmailCanvas>
   ),
 }
@@ -78,7 +78,7 @@ export const HeaderWithoutDeadline: Story = {
 export const HighlightsRow: Story = {
   render: () => (
     <EmailCanvas>
-      <Highlights highlights={orderCrossSellSampleData.highlights ?? []} />
+      <Highlights highlights={orderCrossSellEmailContent.highlights ?? []} />
     </EmailCanvas>
   ),
 }

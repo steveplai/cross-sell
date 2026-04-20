@@ -2,9 +2,9 @@ import { render } from '@react-email/render'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useEffect, useState } from 'react'
 
-import { insuranceCrossSellSampleData } from '../../src/emails/travel-plan-cross-sell/sample-data/insurance'
-import { orderCrossSellSampleData } from '../../src/emails/travel-plan-cross-sell/sample-data/order'
-import { salesCrossSellSampleData } from '../../src/emails/travel-plan-cross-sell/sample-data/sales'
+import { insuranceCrossSellEmailContent } from '../../src/emails/travel-plan-cross-sell/content/insurance'
+import { orderCrossSellEmailContent } from '../../src/emails/travel-plan-cross-sell/content/order'
+import { salesCrossSellEmailContent } from '../../src/emails/travel-plan-cross-sell/content/sales'
 import { TravelPlanCrossSellEmail } from '../../src/emails/travel-plan-cross-sell/TravelPlanCrossSellEmail'
 import type { TravelPlanCrossSellEmailProps } from '../../src/emails/travel-plan-cross-sell/types'
 
@@ -97,18 +97,18 @@ type Story = StoryObj<typeof meta>
 
 export const Order: Story = {
   args: {
-    data: orderCrossSellSampleData,
+    data: orderCrossSellEmailContent,
   },
 }
 
 export const Sales: Story = {
   args: {
-    data: salesCrossSellSampleData,
+    data: salesCrossSellEmailContent,
   },
 }
 
 export const Insurance: Story = {
   args: {
-    data: insuranceCrossSellSampleData,
+    data: insuranceCrossSellEmailContent,
   },
 }
