@@ -1,4 +1,5 @@
 export interface TravelPlanCrossSellHighlight {
+  checkIconSrc?: string
   id: string
   label?: string
   text: string

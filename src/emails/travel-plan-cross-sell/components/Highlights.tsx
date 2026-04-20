@@ -1,5 +1,6 @@
-import { Column, Row, Section, Text } from '@react-email/components'
+import { Column, Img, Row, Section, Text } from '@react-email/components'
 
+import { getCheckIconDataUri } from '../icons/CheckIcon'
 import type { TravelPlanCrossSellHighlight } from '../types'
 
 interface HighlightsProps {
@@ -7,20 +8,38 @@ interface HighlightsProps {
 }
 
 export function Highlights({ highlights }: HighlightsProps) {
+  const checkIconSrc = getCheckIconDataUri()
+
   return (
     <Section className="mb-2.5">
-      <Row>
-        {highlights.map((highlight) => (
-          <Column className="pr-3" key={highlight.id}>
-            <Text className="text-ink m-0 text-[12px] leading-5.5 whitespace-nowrap">
-              <span className="text-orange inline-block pr-1">✓</span>
-              {highlight.label ? (
-                <span className="text-orange pr-0.5">{highlight.label}</span>
-              ) : null}
-              {highlight.text}
-            </Text>
-          </Column>
-        ))}
+      <Row align="left" width="auto" style={{ width: 'auto' }}>
+        {highlights.map((highlight, index) => {
+          const highlightCheckIconSrc = highlight.checkIconSrc || checkIconSrc
+
+          return (
+            <Column
+              key={highlight.id}
+              style={{
+                paddingRight: index === highlights.length - 1 ? 0 : 12,
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <Text className="text-ink m-0 text-[12px] leading-5.5">
+                <Img
+                  className="inline align-text-bottom size-4"
+                  src={highlightCheckIconSrc}
+                  alt=""
+                />
+                {highlight.label ? (
+                  <span className="text-orange pr-0.5">
+                    {highlight.label}
+                  </span>
+                ) : null}
+                {highlight.text}
+              </Text>
+            </Column>
+          )
+        })}
       </Row>
     </Section>
   )
