@@ -5,12 +5,21 @@ import { render } from '@react-email/render'
 
 import { DemoProductOfferEmail } from '../src/emails/demo-product-offer/DemoProductOfferEmail'
 import { sampleProducts } from '../src/emails/demo-product-offer/sample-data'
-import { insuranceCrossSellEmailContent } from '../src/emails/travel-plan-cross-sell/content/insurance'
-import { orderCrossSellEmailContent } from '../src/emails/travel-plan-cross-sell/content/order'
-import { salesCrossSellEmailContent } from '../src/emails/travel-plan-cross-sell/content/sales'
+import { createInsuranceCrossSellEmailContent } from '../src/emails/travel-plan-cross-sell/content/insurance'
+import { createOrderCrossSellEmailContent } from '../src/emails/travel-plan-cross-sell/content/order'
+import { createSalesCrossSellEmailContent } from '../src/emails/travel-plan-cross-sell/content/sales'
+import {
+  createTravelPlanCrossSellAssetUrls,
+  resolveTravelPlanCrossSellEmailDomainMode,
+} from '../src/emails/travel-plan-cross-sell/content/shared-assets'
 import { TravelPlanCrossSellEmail } from '../src/emails/travel-plan-cross-sell/TravelPlanCrossSellEmail'
 
 const outDir = resolve(process.cwd(), 'dist/emails')
+const travelPlanCrossSellEmailDomainMode =
+  resolveTravelPlanCrossSellEmailDomainMode(process.env.EMAIL_DOMAIN_MODE)
+const travelPlanCrossSellAssetUrls = createTravelPlanCrossSellAssetUrls(
+  travelPlanCrossSellEmailDomainMode,
+)
 
 await mkdir(outDir, { recursive: true })
 
@@ -28,19 +37,25 @@ const emails = [
   {
     fileName: 'order-cross-sell.html',
     html: await render(
-      <TravelPlanCrossSellEmail {...orderCrossSellEmailContent} />,
+      <TravelPlanCrossSellEmail
+        {...createOrderCrossSellEmailContent(travelPlanCrossSellAssetUrls)}
+      />,
     ),
   },
   {
     fileName: 'sales-cross-sell.html',
     html: await render(
-      <TravelPlanCrossSellEmail {...salesCrossSellEmailContent} />,
+      <TravelPlanCrossSellEmail
+        {...createSalesCrossSellEmailContent(travelPlanCrossSellAssetUrls)}
+      />,
     ),
   },
   {
     fileName: 'insurance-cross-sell.html',
     html: await render(
-      <TravelPlanCrossSellEmail {...insuranceCrossSellEmailContent} />,
+      <TravelPlanCrossSellEmail
+        {...createInsuranceCrossSellEmailContent(travelPlanCrossSellAssetUrls)}
+      />,
     ),
   },
 ]
