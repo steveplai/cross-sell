@@ -10,6 +10,8 @@
     "build:storybook": "storybook build",
     "build:widgets": "tsx scripts/build-widgets.ts",
     "build:emails": "tsx scripts/build-emails.tsx",
+    "build:emails:uat": "tsx scripts/build-emails.tsx --domain-mode=uat",
+    "build:emails:production": "tsx scripts/build-emails.tsx --domain-mode=production",
     "build:manifest": "tsx scripts/build-manifest.ts",
     "build": "pnpm build:widgets && pnpm build:emails && pnpm build:manifest",
     "serve:examples": "node scripts/serve-static.mjs 4174",

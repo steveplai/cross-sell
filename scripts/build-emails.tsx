@@ -14,9 +14,35 @@ import {
 } from '../src/emails/travel-plan-cross-sell/content/shared-assets'
 import { TravelPlanCrossSellEmail } from '../src/emails/travel-plan-cross-sell/TravelPlanCrossSellEmail'
 
+function getDomainModeArg(args: string[]) {
+  const domainModeFlag = '--domain-mode'
+
+  for (let index = 0; index < args.length; index += 1) {
+    const arg = args[index]
+
+    if (arg === domainModeFlag) {
+      const value = args[index + 1]
+
+      if (!value) {
+        throw new Error(`Missing value for ${domainModeFlag}.`)
+      }
+
+      return value
+    }
+
+    if (arg.startsWith(`${domainModeFlag}=`)) {
+      return arg.slice(`${domainModeFlag}=`.length)
+    }
+  }
+
+  return undefined
+}
+
 const outDir = resolve(process.cwd(), 'dist/emails')
 const travelPlanCrossSellEmailDomainMode =
-  resolveTravelPlanCrossSellEmailDomainMode(process.env.EMAIL_DOMAIN_MODE)
+  resolveTravelPlanCrossSellEmailDomainMode(
+    getDomainModeArg(process.argv.slice(2)) ?? process.env.EMAIL_DOMAIN_MODE,
+  )
 const travelPlanCrossSellAssetUrls = createTravelPlanCrossSellAssetUrls(
   travelPlanCrossSellEmailDomainMode,
 )
