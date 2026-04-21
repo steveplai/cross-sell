@@ -49,9 +49,11 @@ dist/
 
 ```txt
 src/widgets/    Pure React widget components
+src/components/ Shared React UI primitives
 src/runtime/    Shared Web Component and Mount API runtime helpers
 src/entries/    Public widget entrypoints and external contracts
 src/emails/     React Email templates, components, and content data
+src/lib/        Shared React/Tailwind utility helpers
 src/styles/     Shared widget CSS and design tokens
 examples/       Plain HTML examples that load built dist files
 stories/        Storybook playground stories
@@ -102,6 +104,7 @@ pnpm lint
 pnpm test:unit
 pnpm test:internal
 pnpm test:internal:handoff
+pnpm test:coverage
 pnpm test:all
 ```
 
@@ -226,6 +229,28 @@ Shared widget styles live in:
 src/styles/widget.css
 ```
 
+Shared React UI primitives live in:
+
+```txt
+src/components/ui/
+```
+
+These are project-owned shadcn/ui-style primitives, not an external black box.
+It is acceptable to edit them when changing the baseline behavior or visual
+language of the project design system.
+
+Use `src/components/ui` for low-level primitives such as buttons, cards, badges,
+and skeleton states. Build widget-specific or domain-specific components above
+that layer when the component has product meaning, fixed layout, tracking, event
+behavior, or a public integration contract.
+
+Do not expose shadcn/ui implementation details as widget public API. External
+widget contracts should use product-oriented props and attributes such as
+`layout`, `title`, `products`, `locale`, and events such as
+`demo-product:product-select`. Keep internal primitive details such as
+`Button` variants, `Card` class names, and Tailwind utility choices inside the
+React implementation.
+
 The Web Component host uses:
 
 ```css
@@ -296,6 +321,18 @@ behave like real handoff artifacts, without Vite dev-server transforms.
 - Internal Vitest tests protect project-level runtime contracts.
 - Playwright opens built examples and verifies real `dist` artifacts.
 - Storybook executable tests are intentionally deferred.
+
+Do not add tests to every `src/components/ui` primitive mechanically. Add focused
+tests when a primitive contains project-owned behavior, custom variants,
+accessibility logic, controlled state, callback behavior, or other non-trivial
+decisions. Prefer testing product behavior through widgets, emails, entries, and
+runtime contracts when the primitive is only a styling building block.
+
+Coverage reports should keep `src/components/ui` visible so custom primitive
+usage and gaps are easy to spot. Avoid using coverage thresholds to force
+low-value tests for unchanged shadcn-style primitives. If untouched generated or
+vendor-like primitives start distorting coverage, prefer a precise exclude rule
+over excluding all shared UI components.
 
 ## Widget Split Guidelines
 

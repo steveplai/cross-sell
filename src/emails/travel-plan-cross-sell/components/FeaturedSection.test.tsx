@@ -30,11 +30,11 @@ describe('FeaturedSection', () => {
       document.querySelector(`a[href="${section.ctaUrl}"]`)?.textContent,
     ).toContain(section.ctaLabel)
     expect(
-      document.querySelector('img[src="https://example.com/transportIcon.png"]'),
+      document.querySelector(
+        'img[src="https://example.com/transportIcon.png"]',
+      ),
     ).not.toBeNull()
-    expect(
-      document.querySelector('img[src$="searchIcon.png"]'),
-    ).toBeNull()
+    expect(document.querySelector('img[src$="searchIcon.png"]')).toBeNull()
     expect(html).not.toContain('推薦熱門')
   })
 })
