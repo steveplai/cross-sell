@@ -22,7 +22,7 @@ custom element connected
 - Banner widget
 - Product card
 - Product recommendation block
-- Cross-sell offer block
+- Demo product offer block
 - Embedded CTA
 - 小型互動 UI 區塊
 
@@ -42,15 +42,15 @@ custom element connected
 HTML attribute 天然承載的是字串：
 
 ```html
-<cross-sell-banner title="推薦商品" locale="zh-TW"></cross-sell-banner>
+<demo-product-banner title="推薦商品" locale="zh-TW"></demo-product-banner>
 ```
 
 這對簡單值很適合，但複雜資料就需要解析：
 
 ```html
-<cross-sell-banner
+<demo-product-banner
   products='[{"id":"p1","name":"商品 A","price":1200}]'
-></cross-sell-banner>
+></demo-product-banner>
 ```
 
 這在小型範例中可行，但有一些限制：
@@ -64,7 +64,7 @@ HTML attribute 天然承載的是字串：
 如果 widget 變得更複雜，應該加入 DOM property 支援：
 
 ```js
-const el = document.querySelector('cross-sell-banner')
+const el = document.querySelector('demo-product-banner')
 el.products = [{ id: 'p1', name: '商品 A', price: 1200 }]
 ```
 
@@ -81,13 +81,13 @@ onSelectProduct(product)
 會轉成：
 
 ```txt
-cross-sell:product-select
+demo-product:product-select
 ```
 
 宿主頁可以這樣監聽：
 
 ```js
-el.addEventListener('cross-sell:product-select', (event) => {
+el.addEventListener('demo-product:product-select', (event) => {
   console.log(event.detail.product)
 })
 ```
@@ -95,7 +95,7 @@ el.addEventListener('cross-sell:product-select', (event) => {
 如果事件是從 Shadow DOM 裡 dispatch，應該使用：
 
 ```ts
-new CustomEvent('cross-sell:product-select', {
+new CustomEvent('demo-product:product-select', {
   bubbles: true,
   composed: true,
   detail: { product },
@@ -119,7 +119,7 @@ Shadow DOM 可以保護 widget，避免大多數宿主頁 CSS 污染。這對嵌
 
 ```css
 :host {
-  --cross-sell-primary: #047857;
+  --demo-product-primary: #047857;
 }
 ```
 
@@ -267,4 +267,4 @@ component renders again
 - SSR hydration 應該是另一種獨立輸出模式。
 - Production hardening 前應補上 Error Boundary。
 
-目前實作適合第一階段的 cross-sell widgets。下一個主要 runtime 升級建議是 DOM property support 與 Error Boundary handling。
+目前實作適合第一階段的 demo product widgets。下一個主要 runtime 升級建議是 DOM property support 與 Error Boundary handling。

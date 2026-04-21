@@ -5,35 +5,35 @@ import {
   widgetRootNameAttribute,
   widgetRootSelector,
 } from '../../src/runtime/widgetRoot'
-import { CrossSellBanner } from '../../src/widgets/cross-sell-banner'
-import { ThemedCrossSellBanner } from '../../src/widgets/themed-cross-sell-banner'
+import { DemoProductBanner } from '../../src/widgets/demo-product-banner'
+import { ThemedDemoProductBanner } from '../../src/widgets/themed-demo-product-banner'
 
 const products = [{ id: 'p1', name: '商品 A', price: 1200 }]
 
-describe('CrossSellBanner root marker', () => {
+describe('DemoProductBanner root marker', () => {
   it('renders the base widget root marker', () => {
     const { container } = render(
-      <CrossSellBanner title="推薦商品" products={products} />,
+      <DemoProductBanner title="推薦商品" products={products} />,
     )
 
     const root = container.querySelector(widgetRootSelector)
 
     expect(root).not.toBeNull()
     expect(root?.getAttribute(widgetRootNameAttribute)).toBe(
-      'cross-sell-banner',
+      'demo-product-banner',
     )
   })
 
   it('renders the themed widget root marker', () => {
     const { container } = render(
-      <ThemedCrossSellBanner title="推薦商品" products={products} />,
+      <ThemedDemoProductBanner title="推薦商品" products={products} />,
     )
 
     const root = container.querySelector(widgetRootSelector)
 
     expect(root).not.toBeNull()
     expect(root?.getAttribute(widgetRootNameAttribute)).toBe(
-      'themed-cross-sell-banner',
+      'themed-demo-product-banner',
     )
   })
 })

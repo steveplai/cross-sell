@@ -3,8 +3,8 @@ import { resolve } from 'node:path'
 
 import { render } from '@react-email/render'
 
-import { CrossSellOfferEmail } from '../src/emails/cross-sell-offer/CrossSellOfferEmail'
-import { sampleProducts } from '../src/emails/cross-sell-offer/sample-data'
+import { DemoProductOfferEmail } from '../src/emails/demo-product-offer/DemoProductOfferEmail'
+import { sampleProducts } from '../src/emails/demo-product-offer/sample-data'
 import { insuranceCrossSellEmailContent } from '../src/emails/travel-plan-cross-sell/content/insurance'
 import { orderCrossSellEmailContent } from '../src/emails/travel-plan-cross-sell/content/order'
 import { salesCrossSellEmailContent } from '../src/emails/travel-plan-cross-sell/content/sales'
@@ -16,9 +16,9 @@ await mkdir(outDir, { recursive: true })
 
 const emails = [
   {
-    fileName: 'cross-sell-offer.html',
+    fileName: 'demo-product-offer.html',
     html: await render(
-      <CrossSellOfferEmail
+      <DemoProductOfferEmail
         ctaUrl="https://example.com/recommendations"
         products={sampleProducts}
         title="你的專屬加購推薦"

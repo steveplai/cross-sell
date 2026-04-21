@@ -1,6 +1,6 @@
 # cross-sell-components
 
-React component packaging project for cross-sell widgets and email templates.
+React component packaging project for embeddable demo product widgets and email templates.
 
 ## Goals
 
@@ -24,10 +24,10 @@ pnpm test:all
 ```txt
 dist/
   widgets/
-    cross-sell-banner.wc.js
-    cross-sell-banner.mount.js
+    demo-product-banner.wc.js
+    demo-product-banner.mount.js
   emails/
-    cross-sell-offer.html
+    demo-product-offer.html
     order-cross-sell.html
     sales-cross-sell.html
     insurance-cross-sell.html
@@ -40,15 +40,15 @@ Use one widget when the integration contract is the same and only visual state c
 
 Examples that should stay as one widget variant:
 
-- `cross-sell-banner` with `layout="compact"`
-- `cross-sell-banner` with `layout="grid"`
-- `cross-sell-banner` with `layout="carousel"`
+- `demo-product-banner` with `layout="compact"`
+- `demo-product-banner` with `layout="grid"`
+- `demo-product-banner` with `layout="carousel"`
 
 Split into a new widget when the external contract is meaningfully different.
 
 Examples that should be separate widgets:
 
-- `cross-sell-banner`: a horizontal promotion block.
+- `demo-product-banner`: a horizontal promotion block.
 - `product-carousel`: a browsable product rail with next/previous controls.
 - `bundle-offer`: a bundle purchase card with bundled pricing logic.
 
@@ -61,14 +61,14 @@ element host. A `.dark` class on the outer page does not cross the Shadow DOM
 boundary.
 
 ```html
-<cross-sell-banner
+<demo-product-banner
   class="dark"
   title="推薦商品"
   locale="zh-TW"
   products='[{"id":"p1","name":"商品 A","price":1200}]'
-></cross-sell-banner>
+></demo-product-banner>
 
-<script src="./dist/widgets/cross-sell-banner.wc.js"></script>
+<script src="./dist/widgets/demo-product-banner.wc.js"></script>
 ```
 
 ## Mount API Usage
@@ -78,11 +78,11 @@ mount target is inside `<html class="dark">` or another `.dark` ancestor, the
 mounted widget renders in dark mode.
 
 ```html
-<div id="cross-sell-root"></div>
+<div id="demo-product-root"></div>
 
-<script src="./dist/widgets/cross-sell-banner.mount.js"></script>
+<script src="./dist/widgets/demo-product-banner.mount.js"></script>
 <script>
-  CrossSellBanner.mount('#cross-sell-root', {
+  DemoProductBanner.mount('#demo-product-root', {
     title: '推薦商品',
     locale: 'zh-TW',
     products: [{ id: 'p1', name: '商品 A', price: 1200 }],

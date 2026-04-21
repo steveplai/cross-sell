@@ -65,7 +65,9 @@ function EmailCanvas({ children }: { children: ReactNode }) {
   }, [children])
 
   if (!result) {
-    return <div style={{ padding: 24 }}>Rendering email component preview...</div>
+    return (
+      <div style={{ padding: 24 }}>Rendering email component preview...</div>
+    )
   }
 
   if (result.errorMessage) {
@@ -82,7 +84,9 @@ function EmailCanvas({ children }: { children: ReactNode }) {
   }
 
   if (!result.html) {
-    return <div style={{ padding: 24 }}>Rendering email component preview...</div>
+    return (
+      <div style={{ padding: 24 }}>Rendering email component preview...</div>
+    )
   }
 
   return (

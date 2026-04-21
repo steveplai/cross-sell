@@ -1,4 +1,11 @@
-import { Button, Column, Img, Row, Section, Text } from '@react-email/components'
+import {
+  Button,
+  Column,
+  Img,
+  Row,
+  Section,
+  Text,
+} from '@react-email/components'
 
 import type { TravelPlanCrossSellSection } from '../types'
 import { IconBadge } from './IconBadge'
@@ -25,7 +32,7 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
 
       <Section className="mb-2.5 w-full p-0">
         <Row>
-          <Column className="w-9 pt-2.5 pb-0 pr-1.25 pl-7.5">
+          <Column className="w-9 pt-2.5 pr-1.25 pb-0 pl-7.5">
             <Text className="bg-ink mx-auto my-0 block h-48.5 w-px text-[0px] leading-none">
               &nbsp;
             </Text>
@@ -67,7 +74,7 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
                       rel="noopener noreferrer"
                       target="_blank"
                     >
-                      <span className="hover:underline inline-block max-w-115 truncate align-middle">
+                      <span className="inline-block max-w-115 truncate align-middle hover:underline">
                         {recommendation.text}
                       </span>
                       <Img

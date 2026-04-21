@@ -3,22 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cross-sell Banner Multiple Instances</title>
+    <title>Demo Product Banner Multiple Instances</title>
   </head>
   <body>
     <main style="max-width: 720px; margin: 40px auto; font-family: sans-serif">
       <h1>Web Component multiple instances example</h1>
-      <cross-sell-banner
+      <demo-product-banner
         title="推薦商品 A"
         products='[{"id":"p1","name":"商品 A","price":1200}]'
-      ></cross-sell-banner>
+      ></demo-product-banner>
       <div style="height: 24px"></div>
-      <cross-sell-banner
+      <demo-product-banner
         layout="compact"
         title="推薦商品 B"
         products='[{"id":"p2","name":"商品 B","price":900}]'
-      ></cross-sell-banner>
+      ></demo-product-banner>
     </main>
-    <script src="../../dist/widgets/cross-sell-banner.wc.js"></script>
+    <script src="../../dist/widgets/demo-product-banner.wc.js"></script>
   </body>
 </html>

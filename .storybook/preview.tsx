@@ -39,6 +39,11 @@ const preview: Preview = {
     },
   ],
   parameters: {
+    options: {
+      storySort: {
+        order: ['Demos', 'Emails'],
+      },
+    },
     backgrounds: {
       default: 'light',
       options: {

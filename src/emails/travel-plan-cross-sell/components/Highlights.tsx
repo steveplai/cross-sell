@@ -26,14 +26,12 @@ export function Highlights({ highlights }: HighlightsProps) {
             >
               <Text className="text-ink m-0 text-[12px] leading-5.5">
                 <Img
-                  className="inline align-text-bottom size-4"
+                  className="inline size-4 align-text-bottom"
                   src={highlightCheckIconSrc}
                   alt=""
                 />
                 {highlight.label ? (
-                  <span className="text-orange pr-0.5">
-                    {highlight.label}
-                  </span>
+                  <span className="text-orange pr-0.5">{highlight.label}</span>
                 ) : null}
                 {highlight.text}
               </Text>

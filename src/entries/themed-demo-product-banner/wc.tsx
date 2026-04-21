@@ -1,11 +1,11 @@
 import { createReactWebComponent } from '../../runtime/createReactWebComponent'
 import baseStyles from '../../styles/widget.css?inline'
 import type {
-  CrossSellBannerLayout,
-  CrossSellBannerProps,
-} from '../../widgets/themed-cross-sell-banner'
-import { ThemedCrossSellBanner } from '../../widgets/themed-cross-sell-banner'
-import widgetStyles from '../../widgets/themed-cross-sell-banner/style.css?inline'
+  ThemedDemoProductBannerLayout,
+  ThemedDemoProductBannerProps,
+} from '../../widgets/themed-demo-product-banner'
+import { ThemedDemoProductBanner } from '../../widgets/themed-demo-product-banner'
+import widgetStyles from '../../widgets/themed-demo-product-banner/style.css?inline'
 
 const fallbackProducts = [{ id: 'demo-1', name: '加購推薦商品', price: 1200 }]
 const styles = `${baseStyles}\n${widgetStyles}`
@@ -23,21 +23,22 @@ function parseProducts(value: string | null) {
   }
 }
 
-createReactWebComponent<CrossSellBannerProps>({
-  tagName: 'themed-cross-sell-banner',
-  Component: ThemedCrossSellBanner,
+createReactWebComponent<ThemedDemoProductBannerProps>({
+  tagName: 'themed-demo-product-banner',
+  Component: ThemedDemoProductBanner,
   observedAttributes: ['title', 'locale', 'layout', 'products'],
   styles,
   mapElementToProps: (element) => ({
     title: element.getAttribute('title') ?? '推薦商品',
     locale: element.getAttribute('locale') ?? 'zh-TW',
     layout:
-      (element.getAttribute('layout') as CrossSellBannerLayout | null) ??
-      'grid',
+      (element.getAttribute(
+        'layout',
+      ) as ThemedDemoProductBannerLayout | null) ?? 'grid',
     products: parseProducts(element.getAttribute('products')),
     onSelectProduct: (product) => {
       element.dispatchEvent(
-        new CustomEvent('cross-sell:product-select', {
+        new CustomEvent('demo-product:product-select', {
           bubbles: true,
           composed: true,
           detail: { product },

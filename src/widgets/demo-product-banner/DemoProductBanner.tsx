@@ -8,29 +8,27 @@ import { createWidgetRootProps } from '../../runtime/widgetRoot'
 import type { Product } from '../../shared/types/product'
 import { formatCurrency } from '../../shared/utils/formatCurrency'
 
-const themedCrossSellBannerRootProps = createWidgetRootProps(
-  'themed-cross-sell-banner',
-)
+const demoProductBannerRootProps = createWidgetRootProps('demo-product-banner')
 
-export type CrossSellBannerLayout = 'compact' | 'grid' | 'carousel'
+export type DemoProductBannerLayout = 'compact' | 'grid' | 'carousel'
 
-export interface CrossSellBannerProps {
+export interface DemoProductBannerProps {
   title: string
   locale?: string
-  layout?: CrossSellBannerLayout
+  layout?: DemoProductBannerLayout
   products: Product[]
   loading?: boolean
   onSelectProduct?: (product: Product) => void
 }
 
-export function ThemedCrossSellBanner({
+export function DemoProductBanner({
   title,
   locale = 'zh-TW',
   layout = 'grid',
   products,
   loading = false,
   onSelectProduct,
-}: CrossSellBannerProps) {
+}: DemoProductBannerProps) {
   const listClass =
     layout === 'compact'
       ? 'grid grid-cols-1 gap-3'
@@ -42,7 +40,7 @@ export function ThemedCrossSellBanner({
     return (
       <section
         className="w-full rounded-lg border border-border bg-background p-4 text-foreground shadow-sm"
-        {...themedCrossSellBannerRootProps}
+        {...demoProductBannerRootProps}
       >
         <h2 className="text-base font-semibold">{title}</h2>
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -62,7 +60,7 @@ export function ThemedCrossSellBanner({
   return (
     <section
       className="w-full rounded-lg border border-border bg-background p-4 text-foreground shadow-sm"
-      {...themedCrossSellBannerRootProps}
+      {...demoProductBannerRootProps}
     >
       <div className="flex items-start justify-between gap-4">
         <div>
@@ -70,7 +68,7 @@ export function ThemedCrossSellBanner({
             className="tracking-normal text-primary uppercase"
             variant="secondary"
           >
-            Cross-sell
+            Demo product
           </Badge>
           <h2 className="mt-1 text-lg leading-tight font-semibold">{title}</h2>
         </div>

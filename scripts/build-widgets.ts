@@ -10,24 +10,24 @@ const root = process.cwd()
 
 const entries = [
   {
-    entry: resolve(root, 'src/entries/cross-sell-banner/wc.tsx'),
-    fileName: 'cross-sell-banner.wc.js',
-    name: 'CrossSellBannerWebComponent',
+    entry: resolve(root, 'src/entries/demo-product-banner/wc.tsx'),
+    fileName: 'demo-product-banner.wc.js',
+    name: 'DemoProductBannerWebComponent',
   },
   {
-    entry: resolve(root, 'src/entries/cross-sell-banner/mount.ts'),
-    fileName: 'cross-sell-banner.mount.js',
-    name: 'CrossSellBanner',
+    entry: resolve(root, 'src/entries/demo-product-banner/mount.ts'),
+    fileName: 'demo-product-banner.mount.js',
+    name: 'DemoProductBanner',
   },
   {
-    entry: resolve(root, 'src/entries/themed-cross-sell-banner/wc.tsx'),
-    fileName: 'themed-cross-sell-banner.wc.js',
-    name: 'ThemedCrossSellBannerWebComponent',
+    entry: resolve(root, 'src/entries/themed-demo-product-banner/wc.tsx'),
+    fileName: 'themed-demo-product-banner.wc.js',
+    name: 'ThemedDemoProductBannerWebComponent',
   },
   {
-    entry: resolve(root, 'src/entries/themed-cross-sell-banner/mount.ts'),
-    fileName: 'themed-cross-sell-banner.mount.js',
-    name: 'ThemedCrossSellBanner',
+    entry: resolve(root, 'src/entries/themed-demo-product-banner/mount.ts'),
+    fileName: 'themed-demo-product-banner.mount.js',
+    name: 'ThemedDemoProductBanner',
   },
 ]
 

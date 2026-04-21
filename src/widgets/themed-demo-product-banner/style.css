@@ -1,0 +1,13 @@
+[data-csc-widget][data-csc-widget-name='themed-demo-product-banner'] {
+  --primary: oklch(0.52 0.18 250);
+  --ring: oklch(0.52 0.18 250);
+  --radius: 0.625rem;
+}
+
+.dark [data-csc-widget][data-csc-widget-name='themed-demo-product-banner'],
+:host(.dark)
+  [data-csc-widget][data-csc-widget-name='themed-demo-product-banner'] {
+  --primary: oklch(0.74 0.16 250);
+  --ring: oklch(0.74 0.16 250);
+  --radius: 0.625rem;
+}

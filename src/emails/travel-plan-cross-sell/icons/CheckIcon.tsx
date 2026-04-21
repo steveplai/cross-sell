@@ -39,10 +39,7 @@ export function CheckIcon({
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      <path
-        d={CHECK_ICON_PATH}
-        fill={color}
-      />
+      <path d={CHECK_ICON_PATH} fill={color} />
     </svg>
   )
 }

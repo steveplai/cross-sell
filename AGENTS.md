@@ -20,10 +20,10 @@ Primary outputs:
 ```txt
 dist/
   widgets/
-    cross-sell-banner.wc.js
-    cross-sell-banner.mount.js
+    demo-product-banner.wc.js
+    demo-product-banner.mount.js
   emails/
-    cross-sell-offer.html
+    demo-product-offer.html
   manifest.json
 ```
 
@@ -117,15 +117,15 @@ Use one widget when the external integration contract is the same and only visua
 
 Examples that should stay as variants of one widget:
 
-- `cross-sell-banner` with `layout="compact"`
-- `cross-sell-banner` with `layout="grid"`
-- `cross-sell-banner` with `layout="carousel"`
+- `demo-product-banner` with `layout="compact"`
+- `demo-product-banner` with `layout="grid"`
+- `demo-product-banner` with `layout="carousel"`
 
 Split into a new widget when consumers need a different public contract.
 
 Examples that should be separate widgets:
 
-- `cross-sell-banner`: horizontal promotion/recommendation block
+- `demo-product-banner`: horizontal promotion/recommendation block
 - `product-carousel`: browsable product rail with carousel controls
 - `bundle-offer`: bundle purchase card with bundled pricing behavior
 
@@ -228,7 +228,7 @@ Storybook is currently a playground only.
 It is used to inspect source React component states:
 
 ```txt
-stories/CrossSellBanner.stories.tsx
+stories/demos/DemoProductBanner.stories.tsx
 ```
 
 Storybook tests are intentionally deferred to phase two. Do not add Storybook Vitest addon unless asked or unless the project has enough stories to justify making stories executable tests.

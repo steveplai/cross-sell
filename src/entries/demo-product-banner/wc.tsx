@@ -1,10 +1,10 @@
 import { createReactWebComponent } from '../../runtime/createReactWebComponent'
 import styles from '../../styles/widget.css?inline'
 import type {
-  CrossSellBannerLayout,
-  CrossSellBannerProps,
-} from '../../widgets/cross-sell-banner'
-import { CrossSellBanner } from '../../widgets/cross-sell-banner'
+  DemoProductBannerLayout,
+  DemoProductBannerProps,
+} from '../../widgets/demo-product-banner'
+import { DemoProductBanner } from '../../widgets/demo-product-banner'
 
 const fallbackProducts = [{ id: 'demo-1', name: '加購推薦商品', price: 1200 }]
 
@@ -21,21 +21,21 @@ function parseProducts(value: string | null) {
   }
 }
 
-createReactWebComponent<CrossSellBannerProps>({
-  tagName: 'cross-sell-banner',
-  Component: CrossSellBanner,
+createReactWebComponent<DemoProductBannerProps>({
+  tagName: 'demo-product-banner',
+  Component: DemoProductBanner,
   observedAttributes: ['title', 'locale', 'layout', 'products'],
   styles,
   mapElementToProps: (element) => ({
     title: element.getAttribute('title') ?? '推薦商品',
     locale: element.getAttribute('locale') ?? 'zh-TW',
     layout:
-      (element.getAttribute('layout') as CrossSellBannerLayout | null) ??
+      (element.getAttribute('layout') as DemoProductBannerLayout | null) ??
       'grid',
     products: parseProducts(element.getAttribute('products')),
     onSelectProduct: (product) => {
       element.dispatchEvent(
-        new CustomEvent('cross-sell:product-select', {
+        new CustomEvent('demo-product:product-select', {
           bubbles: true,
           composed: true,
           detail: { product },

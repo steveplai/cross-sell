@@ -4,28 +4,28 @@ import { resolve } from 'node:path'
 const manifest = {
   widgets: [
     {
-      name: 'cross-sell-banner',
-      tagName: 'cross-sell-banner',
+      name: 'demo-product-banner',
+      tagName: 'demo-product-banner',
       files: {
-        webComponent: 'widgets/cross-sell-banner.wc.js',
-        mountApi: 'widgets/cross-sell-banner.mount.js',
+        webComponent: 'widgets/demo-product-banner.wc.js',
+        mountApi: 'widgets/demo-product-banner.mount.js',
       },
-      events: ['cross-sell:product-select'],
+      events: ['demo-product:product-select'],
     },
     {
-      name: 'themed-cross-sell-banner',
-      tagName: 'themed-cross-sell-banner',
+      name: 'themed-demo-product-banner',
+      tagName: 'themed-demo-product-banner',
       files: {
-        webComponent: 'widgets/themed-cross-sell-banner.wc.js',
-        mountApi: 'widgets/themed-cross-sell-banner.mount.js',
+        webComponent: 'widgets/themed-demo-product-banner.wc.js',
+        mountApi: 'widgets/themed-demo-product-banner.mount.js',
       },
-      events: ['cross-sell:product-select'],
+      events: ['demo-product:product-select'],
     },
   ],
   emails: [
     {
-      name: 'cross-sell-offer',
-      file: 'emails/cross-sell-offer.html',
+      name: 'demo-product-offer',
+      file: 'emails/demo-product-offer.html',
     },
     {
       name: 'order-cross-sell',

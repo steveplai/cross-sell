@@ -15,17 +15,17 @@ import {
 import type { Product } from '../../shared/types/product'
 import { formatCurrency } from '../../shared/utils/formatCurrency'
 
-interface CrossSellOfferEmailProps {
+interface DemoProductOfferEmailProps {
   title: string
   products: Product[]
   ctaUrl: string
 }
 
-export function CrossSellOfferEmail({
+export function DemoProductOfferEmail({
   title,
   products,
   ctaUrl,
-}: CrossSellOfferEmailProps) {
+}: DemoProductOfferEmailProps) {
   return (
     <Html lang="zh-TW">
       <Tailwind

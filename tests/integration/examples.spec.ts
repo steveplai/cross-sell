@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test'
 
 import { widgetRootSelector } from '../../src/runtime/widgetRoot'
 
-const crossSellBannerThemeTokens = {
+const demoProductBannerThemeTokens = {
   primary: 'oklch(52% .18 250)',
   radius: '.625rem',
   ring: 'oklch(52% .18 250)',
@@ -111,35 +111,35 @@ async function getLightDomWidgetTokenState(page: Page, selector: string) {
 }
 
 test('web component example renders and emits event', async ({ page }) => {
-  await page.goto('/examples/web-component/cross-sell-banner.events.html')
+  await page.goto('/examples/web-component/demo-product-banner.events.html')
 
-  await expect(page.locator('cross-sell-banner')).toHaveJSProperty(
+  await expect(page.locator('demo-product-banner')).toHaveJSProperty(
     'localName',
-    'cross-sell-banner',
+    'demo-product-banner',
   )
   await expect
     .poll(() =>
-      page.locator('cross-sell-banner').evaluate((element) => {
+      page.locator('demo-product-banner').evaluate((element) => {
         return element.shadowRoot?.textContent ?? ''
       }),
     )
     .toContain('推薦商品')
   await expect(page.getByTestId('event-log')).toContainText('No events yet')
 
-  await page.locator('cross-sell-banner').evaluate((element) => {
+  await page.locator('demo-product-banner').evaluate((element) => {
     const button = element.shadowRoot?.querySelector('button')
     ;(button as HTMLButtonElement | null)?.click()
   })
 
   await expect(page.getByTestId('event-log')).toContainText(
-    'cross-sell:product-select',
+    'demo-product:product-select',
   )
 })
 
 test('web component host dark class controls shadow DOM theme', async ({
   page,
 }) => {
-  await page.goto('/examples/web-component/cross-sell-banner.dark.html')
+  await page.goto('/examples/web-component/demo-product-banner.dark.html')
 
   await expect
     .poll(() => getWebComponentWidgetState(page, '#explicit-dark'))
@@ -161,21 +161,23 @@ test('web component host dark class controls shadow DOM theme', async ({
 })
 
 test('web component applies widget-specific theme tokens', async ({ page }) => {
-  await page.goto('/examples/web-component/cross-sell-banner.custom-theme.html')
+  await page.goto(
+    '/examples/web-component/demo-product-banner.custom-theme.html',
+  )
 
-  await expect(page.locator('themed-cross-sell-banner')).toHaveJSProperty(
+  await expect(page.locator('themed-demo-product-banner')).toHaveJSProperty(
     'localName',
-    'themed-cross-sell-banner',
+    'themed-demo-product-banner',
   )
   await expect
     .poll(() =>
       getWebComponentWidgetTokenState(page, '#custom-theme-web-component'),
     )
-    .toEqual(crossSellBannerThemeTokens)
+    .toEqual(demoProductBannerThemeTokens)
 })
 
 test('mount API example can update and unmount', async ({ page }) => {
-  await page.goto('/examples/mount-api/cross-sell-banner.update.html')
+  await page.goto('/examples/mount-api/demo-product-banner.update.html')
 
   await expect(page.getByText('推薦商品')).toBeVisible()
 
@@ -187,7 +189,7 @@ test('mount API example can update and unmount', async ({ page }) => {
 })
 
 test('mount API applies widget-specific theme tokens', async ({ page }) => {
-  await page.goto('/examples/mount-api/cross-sell-banner.custom-theme.html')
+  await page.goto('/examples/mount-api/demo-product-banner.custom-theme.html')
 
   await expect
     .poll(() =>
@@ -196,11 +198,11 @@ test('mount API applies widget-specific theme tokens', async ({ page }) => {
         `#custom-theme-root ${widgetRootSelector}`,
       ),
     )
-    .toEqual(crossSellBannerThemeTokens)
+    .toEqual(demoProductBannerThemeTokens)
 })
 
 test('mount API inherits host dark class', async ({ page }) => {
-  await page.goto('/examples/mount-api/cross-sell-banner.dark.html')
+  await page.goto('/examples/mount-api/demo-product-banner.dark.html')
 
   await expect
     .poll(() =>
@@ -217,11 +219,11 @@ test('mount API inherits host dark class', async ({ page }) => {
 test('mount API defaults to light theme without dark ancestor', async ({
   page,
 }) => {
-  await page.goto('/examples/mount-api/cross-sell-banner.basic.html')
+  await page.goto('/examples/mount-api/demo-product-banner.basic.html')
 
   await expect
     .poll(() =>
-      getLightDomWidgetState(page, `#cross-sell-root ${widgetRootSelector}`),
+      getLightDomWidgetState(page, `#demo-product-root ${widgetRootSelector}`),
     )
     .toEqual({
       hasDarkBackground: false,
