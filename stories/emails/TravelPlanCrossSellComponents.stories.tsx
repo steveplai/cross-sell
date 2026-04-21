@@ -1,6 +1,7 @@
-import { Tailwind } from '@react-email/components'
+import { Body, Container, Head, Html, Tailwind } from '@react-email/components'
+import { render } from '@react-email/render'
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { type ReactNode,Suspense } from 'react'
+import { type ReactNode, useEffect, useState } from 'react'
 
 import { CrossSellSection } from '../../src/emails/travel-plan-cross-sell/components/CrossSellSection'
 import { Header } from '../../src/emails/travel-plan-cross-sell/components/Header'
@@ -10,25 +11,92 @@ import { orderCrossSellEmailContent } from '../../src/emails/travel-plan-cross-s
 import { travelPlanCrossSellTailwindConfig } from '../../src/emails/travel-plan-cross-sell/tailwind-config'
 import type { TravelPlanCrossSellSection } from '../../src/emails/travel-plan-cross-sell/types'
 
-const previewWidth = 600
+const previewHeight = 430
+const previewWidth = 640
+
+interface EmailCanvasResult {
+  errorMessage?: string
+  html?: string
+}
+
+function EmailCanvasDocument({ children }: { children: ReactNode }) {
+  return (
+    <Html lang="zh-TW">
+      <Tailwind config={travelPlanCrossSellTailwindConfig}>
+        <Head />
+        <Body className="m-0 bg-white p-0">
+          <Container className="text-ink mx-auto w-150 max-w-150 rounded-[5px] bg-white p-5 font-sans">
+            {children}
+          </Container>
+        </Body>
+      </Tailwind>
+    </Html>
+  )
+}
 
 function EmailCanvas({ children }: { children: ReactNode }) {
+  const [result, setResult] = useState<EmailCanvasResult>()
+
+  useEffect(() => {
+    let isCurrent = true
+
+    void render(<EmailCanvasDocument>{children}</EmailCanvasDocument>, {
+      pretty: true,
+    })
+      .then((renderedHtml) => {
+        if (isCurrent) {
+          setResult({ html: renderedHtml })
+        }
+      })
+      .catch((error: unknown) => {
+        if (isCurrent) {
+          setResult({
+            errorMessage:
+              error instanceof Error
+                ? error.message
+                : 'Failed to render email component preview.',
+          })
+        }
+      })
+
+    return () => {
+      isCurrent = false
+    }
+  }, [children])
+
+  if (!result) {
+    return <div style={{ padding: 24 }}>Rendering email component preview...</div>
+  }
+
+  if (result.errorMessage) {
+    return (
+      <pre
+        style={{
+          color: '#b91c1c',
+          whiteSpace: 'pre-wrap',
+        }}
+      >
+        {result.errorMessage}
+      </pre>
+    )
+  }
+
+  if (!result.html) {
+    return <div style={{ padding: 24 }}>Rendering email component preview...</div>
+  }
+
   return (
-    <Suspense fallback={<div style={{ padding: 24 }}>Preparing preview...</div>}>
-      <Tailwind config={travelPlanCrossSellTailwindConfig}>
-        <div
-          style={{
-            backgroundColor: '#ffffff',
-            boxSizing: 'border-box',
-            fontFamily: '"Noto Sans TC", Arial, sans-serif',
-            padding: 20,
-            width: previewWidth,
-          }}
-        >
-          {children}
-        </div>
-      </Tailwind>
-    </Suspense>
+    <iframe
+      srcDoc={result.html}
+      style={{
+        backgroundColor: '#ffffff',
+        border: 0,
+        height: previewHeight,
+        maxWidth: '100%',
+        width: previewWidth,
+      }}
+      title="Travel plan cross sell component preview"
+    />
   )
 }
 
