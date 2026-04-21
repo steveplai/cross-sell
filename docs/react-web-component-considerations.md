@@ -249,7 +249,7 @@ component renders again
 1. 支援複雜 props 的 DOM property API。
 2. Widget-level Error Boundary。
 3. 以 CSS variables 為基礎的主題系統。
-4. 在 README 與 manifest 中補齊事件契約文件。
+4. 在 README 中補齊事件契約文件。
 5. Modal 類 UI 的 overlay 與 portal 策略。
 6. 當 widget 變得更互動時，補上 focus 與 form 行為測試。
 

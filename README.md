@@ -31,7 +31,6 @@ dist/
     order-cross-sell.html
     sales-cross-sell.html
     insurance-cross-sell.html
-  manifest.json
 ```
 
 ## Widget Split Guidelines

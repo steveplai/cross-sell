@@ -24,7 +24,6 @@ dist/
     demo-product-banner.mount.js
   emails/
     demo-product-offer.html
-  manifest.json
 ```
 
 The first version intentionally includes one complete example widget and one complete email template.
@@ -407,10 +406,9 @@ Recommended next runtime improvements:
 1. Add DOM property support for complex props.
 2. Add a widget-level Error Boundary.
 3. Add CSS variable theming for primary color, radius, spacing, and font.
-4. Expand `manifest.json` with event contracts and integration metadata.
-5. Define an overlay/portal strategy before adding modal-like UI.
-6. Add focus/form integration tests when widgets become more interactive.
-7. Add Storybook tests with the Storybook Vitest addon in phase two.
+4. Define an overlay/portal strategy before adding modal-like UI.
+5. Add focus/form integration tests when widgets become more interactive.
+6. Add Storybook tests with the Storybook Vitest addon in phase two.
 
 Recommended next project improvements:
 
