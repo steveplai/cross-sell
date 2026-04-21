@@ -38,8 +38,8 @@ The first version intentionally includes one complete example widget and one com
 - Mount API for JS-driven embedding
 - React Email for static HTML email output
 - Storybook as the component playground
-- Vitest + Testing Library for component/unit tests
-- Playwright for built-artifact integration tests
+- Vitest + Testing Library for component/unit tests and internal contract tests
+- Playwright for internal built-artifact handoff tests
 - pnpm for package management
 
 ## Important Architecture
@@ -196,9 +196,9 @@ More detail:
 docs/react-web-component-considerations.md
 ```
 
-## Integration Testing Design
+## Internal Handoff Testing Design
 
-Playwright integration tests intentionally do not use Vite dev server.
+Playwright internal handoff tests intentionally do not use Vite dev server.
 
 Reason: Vite dev server transforms served JS and may inject React Refresh/HMR code. That broke the original attempt to serve already-built `dist/*.js` files, causing errors like:
 
@@ -239,7 +239,8 @@ Future role:
 Storybook = visual/component playground
 Storybook tests = protect playground states
 Vitest = component logic tests
-Playwright = dist/examples integration tests
+Internal Vitest = project contract tests
+Internal Playwright = dist/examples handoff tests
 ```
 
 ## Commands
@@ -280,10 +281,16 @@ Run unit/component tests:
 pnpm test:unit
 ```
 
-Run examples integration tests:
+Run internal project contract and handoff tests:
 
 ```bash
-pnpm test:examples
+pnpm test:internal
+```
+
+Run built widget handoff tests:
+
+```bash
+pnpm test:internal:handoff
 ```
 
 Run all tests:

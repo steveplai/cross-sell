@@ -13,7 +13,11 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
-    exclude: ['**/node_modules/**', '**/dist/**', 'tests/integration/**'],
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      'tests/internal/playwright/**',
+    ],
     setupFiles: ['./tests/setup.ts'],
     globals: true,
     coverage: {

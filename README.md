@@ -97,6 +97,7 @@ mounted widget renders in dark mode.
 
 - Storybook is the playground for component states.
 - Vitest + Testing Library tests React components and utilities.
+- Internal tests protect project contracts and built artifact handoff flows.
 - Playwright opens widget examples under `examples/web-component/` and
   `examples/mount-api/` after build and verifies the real `dist` artifacts.
 - Storybook testing is intentionally deferred to phase two.
