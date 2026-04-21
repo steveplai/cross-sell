@@ -21,21 +21,21 @@ export function CompactSection({
 
   return (
     <Section className={cardClassName}>
-      <Row>
+      <Row className="table-fixed">
         <Column className="w-11.75">
           <IconBadge section={section} />
         </Column>
-        <Column className="w-19">
+        <Column className="w-18">
           <Text className="text-ink m-0 text-[16px] leading-6 font-bold whitespace-nowrap">
             {section.title}
           </Text>
         </Column>
-        <Column className="w-66.25">
-          <Text className="m-0 text-[14px] leading-5.5 text-black text-nowrap">
+        <Column className="w-74.75">
+          <Text className="m-0 text-[14px] leading-5.5 whitespace-nowrap text-black">
             {section.description}
           </Text>
         </Column>
-        <Column className="w-32.5 text-right">
+        <Column className="w-28 text-right">
           <Button className={buttonClassName} href={section.ctaUrl}>
             {section.ctaLabel}
           </Button>
