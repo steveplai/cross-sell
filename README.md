@@ -1,31 +1,28 @@
 # cross-sell-components
 
-React component packaging project for embeddable demo product widgets and email templates.
+React + TypeScript component packaging project for cross-sell widgets and
+static email templates.
 
-## Goals
+This repository is maintained as an engineering handoff package:
 
-- Build interactive widgets as standalone browser scripts.
-- Offer both Web Component and Mount API integration modes.
-- Generate static HTML email templates.
-- Keep widget examples close to real handoff usage.
-- Test React components and built `dist` artifacts separately.
-
-## Development
-
-```bash
-pnpm install
-pnpm dev
-pnpm build
-pnpm test:all
+```txt
+develop React widget/email components
+-> build and inspect deliverables
+-> hand off dist files with examples/docs
 ```
 
-## Output
+It is not an admin platform or a hosted application. The main deliverables are
+browser-ready widget scripts and rendered email HTML files.
+
+## Outputs
 
 ```txt
 dist/
   widgets/
     demo-product-banner.wc.js
     demo-product-banner.mount.js
+    themed-demo-product-banner.wc.js
+    themed-demo-product-banner.mount.js
   emails/
     demo-product-offer.html
     order-cross-sell.html
@@ -33,74 +30,295 @@ dist/
     insurance-cross-sell.html
 ```
 
-## Widget Split Guidelines
+`dist/` is generated output and should not be committed.
 
-Use one widget when the integration contract is the same and only visual state changes.
+## Stack
 
-Examples that should stay as one widget variant:
+- React + TypeScript
+- Vite library builds for widget scripts
+- Tailwind CSS + shadcn/ui tokens for widget styling
+- Web Components + Shadow DOM for cross-framework embedding
+- Mount API for JavaScript-driven embedding
+- React Email for static email HTML generation
+- Storybook for component and email previews
+- Vitest + Testing Library for unit and contract tests
+- Playwright for built-artifact handoff tests
+- pnpm for package management
 
-- `demo-product-banner` with `layout="compact"`
-- `demo-product-banner` with `layout="grid"`
-- `demo-product-banner` with `layout="carousel"`
+## Project Layout
 
-Split into a new widget when the external contract is meaningfully different.
+```txt
+src/widgets/    Pure React widget components
+src/runtime/    Shared Web Component and Mount API runtime helpers
+src/entries/    Public widget entrypoints and external contracts
+src/emails/     React Email templates, components, and content data
+src/styles/     Shared widget CSS and design tokens
+examples/       Plain HTML examples that load built dist files
+stories/        Storybook playground stories
+tests/          Internal contract and handoff tests
+scripts/        Build and static server scripts
+```
 
-Examples that should be separate widgets:
+Widget components should stay framework-local and avoid knowing about Web
+Components, globals, or `dist/` output. Public integration behavior belongs in
+`src/entries/`, with shared mechanics in `src/runtime/`.
 
-- `demo-product-banner`: a horizontal promotion block.
-- `product-carousel`: a browsable product rail with next/previous controls.
-- `bundle-offer`: a bundle purchase card with bundled pricing logic.
+## Development
 
-The practical rule: if consumers need a different tag name, different global API, different event names, or a different payload shape, split it into a different widget.
+Install dependencies:
+
+```bash
+pnpm install
+```
+
+Run Storybook:
+
+```bash
+pnpm dev
+```
+
+Build all deliverables:
+
+```bash
+pnpm build
+```
+
+Serve examples and built files through the static server:
+
+```bash
+pnpm serve:examples
+```
+
+Useful focused commands:
+
+```bash
+pnpm build:widgets
+pnpm build:emails
+pnpm build:emails:uat
+pnpm build:emails:production
+pnpm build:storybook
+pnpm typecheck
+pnpm lint
+pnpm test:unit
+pnpm test:internal
+pnpm test:internal:handoff
+pnpm test:all
+```
+
+`build:emails` defaults to UAT asset domains. Use `build:emails:production` or
+`EMAIL_DOMAIN_MODE=production pnpm build:emails` for production asset URLs.
+
+## Widgets
+
+### `demo-product-banner`
+
+Base demo product recommendation widget.
+
+Public contract:
+
+- Web Component tag: `demo-product-banner`
+- Mount API global: `window.DemoProductBanner`
+- Attributes: `title`, `locale`, `layout`, `products`
+- Layout values: `compact`, `grid`, `carousel`
+- Event: `demo-product:product-select`
+- Event detail shape: `{ product }`
+
+Product shape:
+
+```ts
+interface Product {
+  id: string
+  name: string
+  price: number
+  imageUrl?: string
+}
+```
+
+### `themed-demo-product-banner`
+
+Same external behavior as `demo-product-banner`, with widget-specific CSS token
+overrides for primary color, ring color, and radius.
+
+Public contract:
+
+- Web Component tag: `themed-demo-product-banner`
+- Mount API global: `window.ThemedDemoProductBanner`
+- Attributes: `title`, `locale`, `layout`, `products`
+- Layout values: `compact`, `grid`, `carousel`
+- Event: `demo-product:product-select`
+- Event detail shape: `{ product }`
 
 ## Web Component Usage
 
-Web Component dark mode is enabled by adding `class="dark"` to the custom
-element host. A `.dark` class on the outer page does not cross the Shadow DOM
-boundary.
-
 ```html
 <demo-product-banner
-  class="dark"
   title="推薦商品"
   locale="zh-TW"
-  products='[{"id":"p1","name":"商品 A","price":1200}]'
+  layout="grid"
+  products='[
+    {"id":"p1","name":"商品 A","price":1200},
+    {"id":"p2","name":"商品 B","price":900}
+  ]'
 ></demo-product-banner>
 
 <script src="./dist/widgets/demo-product-banner.wc.js"></script>
+<script>
+  const widget = document.querySelector('demo-product-banner')
+
+  widget.addEventListener('demo-product:product-select', (event) => {
+    console.log(event.detail.product)
+  })
+</script>
 ```
 
-## Mount API Usage
+Web Component data passed through HTML attributes is string-based. Complex props
+such as `products` are parsed from JSON by the entrypoint.
 
-Mount API dark mode follows the host page's Tailwind/shadcn convention. If the
-mount target is inside `<html class="dark">` or another `.dark` ancestor, the
-mounted widget renders in dark mode.
+Dark mode is enabled by adding `class="dark"` to the custom element host:
+
+```html
+<demo-product-banner class="dark"></demo-product-banner>
+```
+
+A `.dark` class on the outer page does not automatically cross the Shadow DOM
+boundary.
+
+## Mount API Usage
 
 ```html
 <div id="demo-product-root"></div>
 
 <script src="./dist/widgets/demo-product-banner.mount.js"></script>
 <script>
-  DemoProductBanner.mount('#demo-product-root', {
+  const widget = DemoProductBanner.mount('#demo-product-root', {
     title: '推薦商品',
     locale: 'zh-TW',
-    products: [{ id: 'p1', name: '商品 A', price: 1200 }],
+    layout: 'grid',
+    products: [
+      { id: 'p1', name: '商品 A', price: 1200 },
+      { id: 'p2', name: '商品 B', price: 900 },
+    ],
     onSelectProduct(product) {
       console.log(product)
     },
   })
+
+  widget.update({
+    title: '更新後商品',
+    locale: 'zh-TW',
+    layout: 'compact',
+    products: [{ id: 'p3', name: '商品 C', price: 1500 }],
+  })
+
+  widget.unmount()
 </script>
 ```
 
+Mount API scripts inject widget CSS into the document and render into the target
+element. Dark mode follows the host page convention: if the mount target is
+inside a `.dark` ancestor, the widget renders with dark tokens.
+
+## Styling and Theming
+
+Shared widget styles live in:
+
+```txt
+src/styles/widget.css
+```
+
+The Web Component host uses:
+
+```css
+:host {
+  display: block;
+  font-family: inherit;
+}
+```
+
+This keeps widget styles isolated while allowing the widget to inherit the host
+page font.
+
+Theme values are defined as widget-local CSS variables. The themed widget adds
+its own overrides in:
+
+```txt
+src/widgets/themed-demo-product-banner/style.css
+```
+
+Prefer CSS variables for supported theming instead of asking host pages to
+override internal generated classes.
+
+## Emails
+
+Email templates are React Email components under `src/emails/`.
+
+Current generated email files:
+
+- `demo-product-offer.html`
+- `order-cross-sell.html`
+- `sales-cross-sell.html`
+- `insurance-cross-sell.html`
+
+Travel plan cross-sell emails support two asset domain modes:
+
+- `uat`: `https://uwww.liontravel.com`
+- `production`: `https://www.liontravel.com`
+
+Build examples:
+
+```bash
+pnpm build:emails
+pnpm build:emails:uat
+pnpm build:emails:production
+EMAIL_DOMAIN_MODE=production pnpm build:emails
+```
+
+Storybook contains full email previews and smaller component previews under
+`Emails/Travel Plan Cross Sell`.
+
+## Examples
+
+Built widget handoff examples live in:
+
+```txt
+examples/web-component/
+examples/mount-api/
+```
+
+These examples intentionally load `dist/widgets/*.js` directly. Internal
+Playwright handoff tests serve them with `scripts/serve-static.mjs` so the files
+behave like real handoff artifacts, without Vite dev-server transforms.
+
 ## Testing Strategy
 
-- Storybook is the playground for component states.
-- Vitest + Testing Library tests React components and utilities.
-- Internal tests protect project contracts and built artifact handoff flows.
-- Playwright opens widget examples under `examples/web-component/` and
-  `examples/mount-api/` after build and verifies the real `dist` artifacts.
-- Storybook testing is intentionally deferred to phase two.
+- Storybook is the playground for widget and email states.
+- Vitest + Testing Library cover source React components and small contracts.
+- Internal Vitest tests protect project-level runtime contracts.
+- Playwright opens built examples and verifies real `dist` artifacts.
+- Storybook executable tests are intentionally deferred.
 
-## Documentation
+## Widget Split Guidelines
+
+Use one widget when the external integration contract is the same and only
+visual state changes.
+
+Keep these as variants of one widget:
+
+- `demo-product-banner` with `layout="compact"`
+- `demo-product-banner` with `layout="grid"`
+- `demo-product-banner` with `layout="carousel"`
+
+Split into a new widget when consumers need a different public contract.
+
+Make these separate widgets:
+
+- `demo-product-banner`: horizontal promotion/recommendation block
+- `product-carousel`: browsable product rail with carousel controls
+- `bundle-offer`: bundle purchase card with bundled pricing behavior
+
+Practical rule: if consumers need a different tag name, global API, event name,
+or payload shape, make it a separate widget.
+
+## Additional Docs
 
 - [React Web Component 注意事項](./docs/react-web-component-considerations.md)
