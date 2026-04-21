@@ -2,20 +2,20 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
-import { DemoProductBanner } from './DemoProductBanner'
+import { ThemedDemoProductBanner } from './ThemedDemoProductBanner'
 
 const products = [
   { id: 'p1', name: '商品 A', price: 1200 },
   { id: 'p2', name: '商品 B', price: 900 },
 ]
 
-describe('DemoProductBanner', () => {
+describe('ThemedDemoProductBanner', () => {
   it('renders products and calls onSelectProduct', async () => {
     const user = userEvent.setup()
     const onSelectProduct = vi.fn()
 
     render(
-      <DemoProductBanner
+      <ThemedDemoProductBanner
         onSelectProduct={onSelectProduct}
         products={products}
         title="推薦商品"
@@ -33,13 +33,13 @@ describe('DemoProductBanner', () => {
   })
 
   it('renders empty state without crashing', () => {
-    render(<DemoProductBanner products={[]} title="推薦商品" />)
+    render(<ThemedDemoProductBanner products={[]} title="推薦商品" />)
 
     expect(screen.getByText('目前沒有可推薦的商品。')).toBeInTheDocument()
   })
 
   it('renders loading state', () => {
-    render(<DemoProductBanner loading products={[]} title="推薦商品" />)
+    render(<ThemedDemoProductBanner loading products={[]} title="推薦商品" />)
 
     expect(screen.getByText('推薦商品')).toBeInTheDocument()
     expect(screen.getAllByTestId('loading-card')).toHaveLength(2)
@@ -50,7 +50,7 @@ describe('DemoProductBanner', () => {
     ['carousel', 'overflow-x-auto'],
   ] as const)('renders the %s layout class', (layout, expectedClassName) => {
     render(
-      <DemoProductBanner
+      <ThemedDemoProductBanner
         layout={layout}
         products={products}
         title="推薦商品"
@@ -62,7 +62,7 @@ describe('DemoProductBanner', () => {
 
   it('renders product images when imageUrl is provided', () => {
     const { container } = render(
-      <DemoProductBanner
+      <ThemedDemoProductBanner
         products={[
           {
             id: 'p1',

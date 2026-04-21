@@ -10,6 +10,13 @@ describe('travel plan cross-sell email shared assets', () => {
     expect(resolveTravelPlanCrossSellEmailDomainMode()).toBe('uat')
   })
 
+  it.each(['uat', 'production'] as const)(
+    'resolves %s as a valid domain mode',
+    (mode) => {
+      expect(resolveTravelPlanCrossSellEmailDomainMode(mode)).toBe(mode)
+    },
+  )
+
   it.each([
     ['uat', 'https://uwww.liontravel.com'],
     ['production', 'https://www.liontravel.com'],
