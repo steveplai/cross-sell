@@ -215,7 +215,7 @@ scripts/serve-static.mjs
 Playwright serves plain files exactly like a real handoff page:
 
 ```txt
-examples/*.html
+examples/{web-component,mount-api}/*.html
 -> script src="../../dist/widgets/*.js"
 ```
 

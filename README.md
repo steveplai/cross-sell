@@ -7,7 +7,7 @@ React component packaging project for embeddable demo product widgets and email 
 - Build interactive widgets as standalone browser scripts.
 - Offer both Web Component and Mount API integration modes.
 - Generate static HTML email templates.
-- Keep examples close to real handoff usage.
+- Keep widget examples close to real handoff usage.
 - Test React components and built `dist` artifacts separately.
 
 ## Development
@@ -97,7 +97,8 @@ mounted widget renders in dark mode.
 
 - Storybook is the playground for component states.
 - Vitest + Testing Library tests React components and utilities.
-- Playwright opens `examples/*.html` after build and verifies the real `dist` artifacts.
+- Playwright opens widget examples under `examples/web-component/` and
+  `examples/mount-api/` after build and verifies the real `dist` artifacts.
 - Storybook testing is intentionally deferred to phase two.
 
 ## Documentation
