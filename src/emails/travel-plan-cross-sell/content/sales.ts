@@ -1,5 +1,8 @@
 import type { TravelPlanCrossSellEmailProps } from '../types'
 
+const recommendationArrowIconUrl =
+  'https://example.com/assets/icons/chevron-right.svg'
+
 export const salesCrossSellEmailContent: TravelPlanCrossSellEmailProps = {
   previewText: '旅遊計劃書與限時加購優惠',
   title: '旅遊計劃書',
@@ -40,9 +43,21 @@ export const salesCrossSellEmailContent: TravelPlanCrossSellEmailProps = {
       iconUrl: 'https://example.com/assets/icons/hotel.png',
       recommendationsTitle: '推薦熱門住宿：',
       recommendations: [
-        'OMO5 東京大塚 by 星野集團',
-        '淺草田原町站前APA飯店',
-        'Super Hotel 淺草',
+        {
+          text: 'OMO5 東京大塚 by 星野集團',
+          url: 'https://example.com/sales-cross-sell/hotels/omo5-tokyo-otsuka',
+          arrowIconUrl: recommendationArrowIconUrl,
+        },
+        {
+          text: '淺草田原町站前APA飯店',
+          url: 'https://example.com/sales-cross-sell/hotels/apa-asakusa-tawaramachi',
+          arrowIconUrl: recommendationArrowIconUrl,
+        },
+        {
+          text: 'Super Hotel 淺草',
+          url: 'https://example.com/sales-cross-sell/hotels/super-hotel-asakusa',
+          arrowIconUrl: recommendationArrowIconUrl,
+        },
       ],
     },
     {

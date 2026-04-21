@@ -17,6 +17,7 @@ import type { TravelPlanCrossSellEmailProps } from './types'
 export type {
   TravelPlanCrossSellEmailProps,
   TravelPlanCrossSellHighlight,
+  TravelPlanCrossSellRecommendation,
   TravelPlanCrossSellSection,
   TravelPlanCrossSellSectionVariant,
 } from './types'
@@ -30,9 +31,9 @@ export function TravelPlanCrossSellEmail({
 }: TravelPlanCrossSellEmailProps) {
   return (
     <Html lang="zh-TW">
-      <Head />
-      <Preview>{previewText}</Preview>
       <Tailwind config={travelPlanCrossSellTailwindConfig}>
+        <Head />
+        <Preview>{previewText}</Preview>
         <Body className="m-0 bg-white p-0">
           <Container className="text-ink mx-auto w-150 max-w-150 rounded-[5px] bg-white p-5 font-sans">
             <Header title={title} deadlineText={deadlineText} />

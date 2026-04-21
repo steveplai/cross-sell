@@ -10,6 +10,12 @@ export type TravelPlanCrossSellSectionVariant =
   | 'featured'
   | 'emphasis'
 
+export interface TravelPlanCrossSellRecommendation {
+  text: string
+  url: string
+  arrowIconUrl: string
+}
+
 export interface TravelPlanCrossSellSection {
   id: string
   title: string
@@ -20,7 +26,7 @@ export interface TravelPlanCrossSellSection {
   iconAlt: string
   variant?: TravelPlanCrossSellSectionVariant
   recommendationsTitle?: string
-  recommendations?: string[]
+  recommendations?: TravelPlanCrossSellRecommendation[]
 }
 
 export interface TravelPlanCrossSellEmailProps {

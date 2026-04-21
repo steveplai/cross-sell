@@ -1,4 +1,4 @@
-import { Button, Column, Row, Section, Text } from '@react-email/components'
+import { Button, Column, Img, Row, Section, Text } from '@react-email/components'
 
 import type { TravelPlanCrossSellSection } from '../types'
 import { IconBadge } from './IconBadge'
@@ -55,12 +55,25 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
                 <Text className="text-brand-red m-0 mb-1.25 text-[16px] leading-6">
                   {section.recommendationsTitle}
                 </Text>
-                {section.recommendations.map((recommendation) => (
+                {section.recommendations.map((recommendation, index) => (
                   <Text
-                    className="text-ink m-0 text-[16px] leading-6 whitespace-nowrap"
-                    key={recommendation}
+                    className="m-0 text-[16px] leading-6 whitespace-nowrap"
+                    key={recommendation.url}
+                    style={{ marginTop: index === 0 ? 0 : 5 }}
                   >
-                    {recommendation} &gt;
+                    <a
+                      className="text-ink inline-block no-underline hover:underline"
+                      href={recommendation.url}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span>{recommendation.text}</span>
+                      <Img
+                        alt=""
+                        className="inline size-4 align-middle"
+                        src={recommendation.arrowIconUrl}
+                      />
+                    </a>
                   </Text>
                 ))}
               </Section>

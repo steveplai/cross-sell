@@ -31,7 +31,7 @@ export function CompactSection({
           </Text>
         </Column>
         <Column className="w-66.25">
-          <Text className="m-0 text-[14px] leading-5.5 text-black">
+          <Text className="m-0 text-[14px] leading-5.5 text-black text-nowrap">
             {section.description}
           </Text>
         </Column>

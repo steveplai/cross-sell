@@ -28,8 +28,6 @@ export function CrossSellOfferEmail({
 }: CrossSellOfferEmailProps) {
   return (
     <Html lang="zh-TW">
-      <Head />
-      <Preview>{title}</Preview>
       <Tailwind
         config={{
           presets: [pixelBasedPreset],
@@ -49,6 +47,8 @@ export function CrossSellOfferEmail({
           },
         }}
       >
+        <Head />
+        <Preview>{title}</Preview>
         <Body className="bg-page text-ink m-0 font-sans">
           <Container className="mx-auto w-full max-w-140 bg-white p-6">
             <Heading className="m-0 mb-3 text-[22px] leading-7.5">

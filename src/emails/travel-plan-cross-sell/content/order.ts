@@ -1,5 +1,18 @@
 import type { TravelPlanCrossSellEmailProps } from '../types'
 
+const transportIconSrcUrl =
+  'https://uwww.liontravel.com/_webassets/lightspeed/subsitebundles/common/imgs/crossSale/icons/transportIcon.png'
+const bedIconSrcUrl =
+  'https://uwww.liontravel.com/_webassets/lightspeed/subsitebundles/common/imgs/crossSale/icons/bedIcon.png'
+const mountainIconSrcUrl =
+  'https://uwww.liontravel.com/_webassets/lightspeed/subsitebundles/common/imgs/crossSale/icons/mountainIcon.png'
+const trainIconSrcUrl =
+  'https://uwww.liontravel.com/_webassets/lightspeed/subsitebundles/common/imgs/crossSale/icons/trainIcon.png'
+const checkIconSrcUrl =
+  'https://uwww.liontravel.com/_webassets/lightspeed/subsitebundles/common/imgs/crossSale/icons/checkIcon.png'
+const recommendationArrowIconUrl =
+  'https://uwww.liontravel.com/_webassets/lightspeed/subsitebundles/common/imgs/crossSale/icons/arrowIcon.png'
+
 export const orderCrossSellEmailContent: TravelPlanCrossSellEmailProps = {
   previewText: '旅遊計劃書與限時加購優惠',
   title: '旅遊計劃書',
@@ -9,14 +22,17 @@ export const orderCrossSellEmailContent: TravelPlanCrossSellEmailProps = {
       id: 'hotel-discount',
       label: '加購優惠',
       text: '訂房最高可省 25%',
+      checkIconSrc: checkIconSrcUrl,
     },
     {
       id: 'hotel-cancel',
       text: '航班異動可免費取消住宿',
+      checkIconSrc: checkIconSrcUrl,
     },
     {
       id: 'rail-discount',
       text: '加購高鐵享8折',
+      checkIconSrc: checkIconSrcUrl,
     },
   ],
   sections: [
@@ -28,12 +44,24 @@ export const orderCrossSellEmailContent: TravelPlanCrossSellEmailProps = {
       ctaUrl: 'https://example.com/order-cross-sell/transportation',
       variant: 'featured',
       iconAlt: '交通',
-      iconUrl: 'https://example.com/assets/icons/transportation.png',
+      iconUrl: transportIconSrcUrl,
       recommendationsTitle: '推薦熱門交通：',
       recommendations: [
-        '日本-東京成田/羽田機場至東京市區/郊區 | 機場接送專車',
-        '日本-東京地鐵乘車券 Tokyo Subway Ticket',
-        '日本-京成電鐵Skyliner特急券| 東京成田機場往返上野・日暮里...',
+        {
+          text: '日本-東京成田/羽田機場至東京市區/郊區 | 機場接送專車',
+          url: 'https://example.com/order-cross-sell/transportation/airport-transfer',
+          arrowIconUrl: recommendationArrowIconUrl,
+        },
+        {
+          text: '日本-東京地鐵乘車券 Tokyo Subway Ticket',
+          url: 'https://example.com/order-cross-sell/transportation/tokyo-subway-ticket',
+          arrowIconUrl: recommendationArrowIconUrl,
+        },
+        {
+          text: '日本-京成電鐵Skyliner特急券| 東京成田機場往返上野・日暮里...',
+          url: 'https://example.com/order-cross-sell/transportation/keisei-skyliner',
+          arrowIconUrl: recommendationArrowIconUrl,
+        },
       ],
     },
     {
@@ -43,7 +71,7 @@ export const orderCrossSellEmailContent: TravelPlanCrossSellEmailProps = {
       ctaLabel: '搜尋東京飯店',
       ctaUrl: 'https://example.com/order-cross-sell/hotels',
       iconAlt: '訂房',
-      iconUrl: 'https://example.com/assets/icons/hotel.png',
+      iconUrl: bedIconSrcUrl,
     },
     {
       id: 'local-experience',
@@ -52,7 +80,7 @@ export const orderCrossSellEmailContent: TravelPlanCrossSellEmailProps = {
       ctaLabel: '探索東京體驗',
       ctaUrl: 'https://example.com/order-cross-sell/experiences',
       iconAlt: '當地遊',
-      iconUrl: 'https://example.com/assets/icons/local-experience.png',
+      iconUrl: mountainIconSrcUrl,
     },
     {
       id: 'rail',
@@ -61,7 +89,7 @@ export const orderCrossSellEmailContent: TravelPlanCrossSellEmailProps = {
       ctaLabel: '查詢高鐵班次',
       ctaUrl: 'https://example.com/order-cross-sell/rail',
       iconAlt: '台灣高鐵',
-      iconUrl: 'https://example.com/assets/icons/rail.png',
+      iconUrl: trainIconSrcUrl,
     },
   ],
 }
