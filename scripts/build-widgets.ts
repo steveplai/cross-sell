@@ -29,6 +29,16 @@ const entries = [
     fileName: 'themed-demo-product-banner.mount.js',
     name: 'ThemedDemoProductBanner',
   },
+  {
+    entry: resolve(root, 'src/entries/flight-order-cross-sell/wc.tsx'),
+    fileName: 'flight-order-cross-sell.wc.js',
+    name: 'FlightOrderCrossSellWebComponent',
+  },
+  {
+    entry: resolve(root, 'src/entries/flight-order-cross-sell/mount.ts'),
+    fileName: 'flight-order-cross-sell.mount.js',
+    name: 'FlightOrderCrossSell',
+  },
 ]
 
 await rm(resolve(root, 'dist/widgets'), { force: true, recursive: true })

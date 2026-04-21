@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flight Order Cross Sell Mount API</title>
+    <style>
+      body {
+        margin: 0;
+        background: #fff8f4;
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          sans-serif;
+      }
+
+      .event-log {
+        margin: 16px auto;
+        max-width: 1190px;
+        border: 1px solid #ececec;
+        background: white;
+        padding: 12px;
+        color: #444;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="flight-order-cross-sell-root"></div>
+    <div class="event-log" data-testid="flight-cross-sell-mount-log">
+      No events yet
+    </div>
+
+    <script src="../../dist/widgets/flight-order-cross-sell.mount.js"></script>
+    <script>
+      const startsAt = new Date(Date.now() - 10 * 60 * 1000).toISOString()
+      const data = {
+        locale: 'zh-TW',
+        currency: 'TWD',
+        promo: {
+          id: 'limited-offer',
+          activeTitle: '您已解鎖限時優惠！',
+          expiredTitle: '發現更多旅遊靈感！',
+          startsAt,
+          durationSeconds: 40 * 60 * 60,
+          benefits: ['加購商品最高省 25%', '會員訂單 14 天內可加購'],
+          itineraryLabel: '加訂住宿、高鐵、服務享一筆折扣',
+          serviceLabel: '航班周邊服務',
+        },
+        hsrAddon: {
+          id: 'hsr',
+          title: '加購高鐵 行程更順暢',
+          description: '購買國內外行程，最高享 8 折優惠',
+          ctaLabel: '前往加購',
+          helperLabel: '住宿1：大阪',
+        },
+        reminders: {
+          title: '別忘了 加購一份安心與便利',
+          subtitle: '即將出門？',
+          items: [
+            {
+              id: 'internet-service',
+              icon: 'wifi',
+              title: '網路服務',
+              description: '提供超過50個國家以上的 WiFi 分享器及上網 SIM 卡。',
+            },
+            {
+              id: 'member-order',
+              icon: 'gift',
+              title: '還在猶豫嗎？',
+              description: '可以從會員訂單中加購，14天內皆可享加購價。',
+            },
+          ],
+        },
+        sections: [
+          {
+            id: 'tokyo-hotels',
+            title: '探索東京飯店',
+            viewMoreLabel: '探索更多',
+            items: [
+              {
+                id: 'la-vista-tokyo-bay',
+                title: 'LA VISTA 東京灣',
+                imageUrl:
+                  'https://www.figma.com/api/mcp/asset/e33aa4b4-2d1e-469a-88fd-0c48ac9d27be',
+                location: '距離市場前站0.2公里',
+                badge: '熱銷 TOP1',
+                promoBadge: '86%東京旅客喜愛',
+                rating: '4.5',
+                ratingLabel: '太讚了',
+                reviewCount: 1132,
+                cancellationLabel: '免費取消',
+                originalPrice: 1825,
+                discountLabel: '折扣 20%',
+                price: 1224152,
+                priceSuffix: '起',
+              },
+            ],
+          },
+        ],
+      }
+      const log = document.querySelector(
+        '[data-testid="flight-cross-sell-mount-log"]',
+      )
+
+      window.FlightOrderCrossSell.mount('#flight-order-cross-sell-root', {
+        data,
+        onSelectItem(event) {
+          log.textContent = `item-select: ${event.sectionId}/${event.item.id}`
+        },
+      })
+    </script>
+  </body>
+</html>

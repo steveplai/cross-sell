@@ -23,6 +23,8 @@ dist/
     demo-product-banner.mount.js
     themed-demo-product-banner.wc.js
     themed-demo-product-banner.mount.js
+    flight-order-cross-sell.wc.js
+    flight-order-cross-sell.mount.js
   emails/
     demo-product-offer.html
     order-cross-sell.html
@@ -150,6 +152,26 @@ Public contract:
 - Layout values: `compact`, `grid`, `carousel`
 - Event: `demo-product:product-select`
 - Event detail shape: `{ product }`
+
+### `flight-order-cross-sell`
+
+Flight order completion-page cross-sell widget. It supports the active limited
+offer state and the expired no-special-offer state.
+
+Public contract:
+
+- Web Component tag: `flight-order-cross-sell`
+- Mount API global: `window.FlightOrderCrossSell`
+- Attribute: `data`
+- Events:
+  - `flight-order-cross-sell:item-select`, detail `{ sectionId, item }`
+  - `flight-order-cross-sell:view-more`, detail `{ sectionId }`
+  - `flight-order-cross-sell:addon-select`, detail `{ addonId }`
+  - `flight-order-cross-sell:promo-click`, detail `{ promoId }`
+
+The `data.promo.startsAt` ISO timestamp and `data.promo.durationSeconds`
+determine whether the widget renders the active discount state or the expired
+travel-inspiration state.
 
 ## Web Component Usage
 
