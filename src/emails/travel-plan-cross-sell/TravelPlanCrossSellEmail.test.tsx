@@ -86,6 +86,10 @@ describe('TravelPlanCrossSellEmail', () => {
       expectLink(document, expectedCtaLabel, expectedCtaUrl)
       expectImage(document, assetUrls.transportIconUrl)
 
+      if (content.highlights?.length) {
+        expectImage(document, assetUrls.checkIconUrl)
+      }
+
       if (content.deadlineText) {
         expect(html).toContain(content.deadlineText)
       }

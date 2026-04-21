@@ -1,6 +1,5 @@
 import { Column, Img, Row, Section, Text } from '@react-email/components'
 
-import { getCheckIconDataUri } from '../icons/CheckIcon'
 import type { TravelPlanCrossSellHighlight } from '../types'
 
 interface HighlightsProps {
@@ -8,14 +7,10 @@ interface HighlightsProps {
 }
 
 export function Highlights({ highlights }: HighlightsProps) {
-  const checkIconSrc = getCheckIconDataUri()
-
   return (
     <Section className="mb-2.5">
       <Row align="left" width="auto" style={{ width: 'auto' }}>
         {highlights.map((highlight, index) => {
-          const highlightCheckIconSrc = highlight.checkIconSrc || checkIconSrc
-
           return (
             <Column
               key={highlight.id}
@@ -27,7 +22,7 @@ export function Highlights({ highlights }: HighlightsProps) {
               <Text className="text-ink m-0 text-[12px] leading-5.5">
                 <Img
                   className="inline size-4 align-text-bottom"
-                  src={highlightCheckIconSrc}
+                  src={highlight.checkIconSrc}
                   alt=""
                 />
                 {highlight.label ? (
