@@ -12,6 +12,7 @@ export function createSalesCrossSellEmailContent(
     bedIconUrl,
     checkIconUrl,
     mountainIconUrl,
+    searchIconUrl,
     trainIconUrl,
     transportIconUrl,
   } = assetUrls
@@ -54,6 +55,7 @@ export function createSalesCrossSellEmailContent(
         description: '熱門的優質住宿極易滿房，建議您優先卡位！',
         ctaLabel: '立即搜尋東京飯店',
         ctaUrl: 'https://example.com/sales-cross-sell/hotels',
+        ctaIconUrl: searchIconUrl,
         variant: 'featured',
         iconAlt: '訂房',
         iconUrl: bedIconUrl,

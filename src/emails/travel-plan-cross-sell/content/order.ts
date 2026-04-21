@@ -12,6 +12,7 @@ export function createOrderCrossSellEmailContent(
     bedIconUrl,
     checkIconUrl,
     mountainIconUrl,
+    searchIconUrl,
     trainIconUrl,
     transportIconUrl,
   } = assetUrls
@@ -45,6 +46,7 @@ export function createOrderCrossSellEmailContent(
         description: '落地第一步，先搞定機場到市區交通',
         ctaLabel: '立即預訂交通票券',
         ctaUrl: 'https://example.com/order-cross-sell/transportation',
+        ctaIconUrl: searchIconUrl,
         variant: 'featured',
         iconAlt: '交通',
         iconUrl: transportIconUrl,

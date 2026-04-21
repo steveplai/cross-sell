@@ -22,6 +22,7 @@ export interface TravelPlanCrossSellSection {
   description: string
   ctaLabel: string
   ctaUrl: string
+  ctaIconUrl?: string
   iconUrl: string
   iconAlt: string
   variant?: TravelPlanCrossSellSectionVariant

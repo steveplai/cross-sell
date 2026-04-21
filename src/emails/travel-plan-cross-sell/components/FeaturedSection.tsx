@@ -52,7 +52,16 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
                   className="border-brand-red text-brand-red inline-block rounded-[5px] border border-solid bg-white px-2.5 py-1.25 text-center text-[16px] leading-6 whitespace-nowrap no-underline"
                   href={section.ctaUrl}
                 >
-                  {section.ctaLabel}
+                  <span className="inline-block whitespace-nowrap">
+                    {section.ctaIconUrl ? (
+                      <Img
+                        alt=""
+                        className="mr-1.25 inline-block size-4 align-bottom"
+                        src={section.ctaIconUrl}
+                      />
+                    ) : null}
+                    <span>{section.ctaLabel}</span>
+                  </span>
                 </Button>
               </Column>
             </Row>
@@ -79,7 +88,7 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
                       </span>
                       <Img
                         alt=""
-                        className="inline size-4 align-middle"
+                        className="inline-block size-4 align-text-bottom"
                         src={recommendation.arrowIconUrl}
                       />
                     </a>
