@@ -4,6 +4,14 @@ import {
   type TravelPlanCrossSellAssetUrls,
 } from './shared-assets'
 
+const orderCrossSellUtmQuery = {
+  hotel:
+    '?utm_source=orderconfirmation&utm_medium=email&utm_campaign=hotel-addon&utm_content=flight',
+  localExperience:
+    '?utm_source=orderconfirmation&utm_medium=email&utm_campaign=activity-addon&utm_content=flight',
+  rail: '?utm_source=orderconfirmation&utm_medium=email&utm_campaign=thsrc-addon&utm_content=flight',
+} as const
+
 export function createOrderCrossSellEmailContent(
   assetUrls: TravelPlanCrossSellAssetUrls = defaultTravelPlanCrossSellAssetUrls,
 ): TravelPlanCrossSellEmailProps {
@@ -74,7 +82,7 @@ export function createOrderCrossSellEmailContent(
         title: '飯店下榻',
         description: '熱門的優質住宿極易滿房，建議您優先卡位！',
         ctaLabel: '搜尋東京飯店',
-        ctaUrl: 'https://example.com/order-cross-sell/hotels',
+        ctaUrl: `https://example.com/order-cross-sell/hotels${orderCrossSellUtmQuery.hotel}`,
         iconAlt: '訂房',
         iconUrl: bedIconUrl,
       },
@@ -83,7 +91,7 @@ export function createOrderCrossSellEmailContent(
         title: '在地探索',
         description: '行程沒頭緒？熱門票券與一日遊先卡位',
         ctaLabel: '探索東京體驗',
-        ctaUrl: 'https://example.com/order-cross-sell/experiences',
+        ctaUrl: `https://example.com/order-cross-sell/experiences${orderCrossSellUtmQuery.localExperience}`,
         iconAlt: '當地遊',
         iconUrl: mountainIconUrl,
       },
@@ -92,7 +100,7 @@ export function createOrderCrossSellEmailContent(
         title: '高鐵加購',
         description: '結束完美旅程，預訂回程高鐵安心返家',
         ctaLabel: '查詢高鐵班次',
-        ctaUrl: 'https://example.com/order-cross-sell/rail',
+        ctaUrl: `https://example.com/order-cross-sell/rail${orderCrossSellUtmQuery.rail}`,
         iconAlt: '台灣高鐵',
         iconUrl: trainIconUrl,
       },
