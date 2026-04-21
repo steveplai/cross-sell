@@ -67,7 +67,9 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
                       rel="noopener noreferrer"
                       target="_blank"
                     >
-                      <span>{recommendation.text}</span>
+                      <span className="inline-block max-w-115 truncate align-middle">
+                        {recommendation.text}
+                      </span>
                       <Img
                         alt=""
                         className="inline size-4 align-middle"
