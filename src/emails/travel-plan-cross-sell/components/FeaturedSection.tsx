@@ -62,12 +62,12 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
                     style={{ marginTop: index === 0 ? 0 : 5 }}
                   >
                     <a
-                      className="text-ink inline-block no-underline hover:underline"
+                      className="text-ink inline-block no-underline"
                       href={recommendation.url}
                       rel="noopener noreferrer"
                       target="_blank"
                     >
-                      <span className="inline-block max-w-115 truncate align-middle">
+                      <span className="hover:underline inline-block max-w-115 truncate align-middle">
                         {recommendation.text}
                       </span>
                       <Img
