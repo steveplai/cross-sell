@@ -1,6 +1,7 @@
 import { Check } from 'lucide-react'
 
 import type { FlightOrderCrossSellPromo } from '../types'
+import { CountdownBackground } from './CountdownBackground'
 import { PromoCountdown } from './PromoCountdown'
 
 interface PromoHeaderProps {
@@ -24,21 +25,7 @@ export function PromoHeader({
           : 'relative overflow-hidden rounded-t-[10px] bg-linear-to-b from-[#fff5eb] via-[#fff8f1] to-white px-5 pt-9 pb-6 text-center md:pt-11.25'
       }
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 mx-auto h-36 max-w-150.5 opacity-60"
-      >
-        <div className="absolute top-8 left-[18%] h-2 w-2 rounded-full bg-[#ffd7ad]" />
-        <div className="absolute top-11 right-[20%] h-2 w-2 rounded-full bg-[#ffd7ad]" />
-        <div className="absolute top-2 left-[28%] text-5xl leading-none text-[#ffd7ad]">
-          *
-        </div>
-        <div className="absolute top-0 right-[28%] text-7xl leading-none text-[#ffd7ad]">
-          *
-        </div>
-        <div className="absolute top-5 right-[15%] h-10 w-24 rounded-[50%] border-t-8 border-[#ffd7ad]" />
-        <div className="absolute top-8 left-[15%] h-8 w-20 rounded-[50%] border-t-8 border-[#ffd7ad]" />
-      </div>
+      <CountdownBackground className="pointer-events-none absolute inset-x-0 top-0 mx-auto h-36 w-full max-w-150.5 opacity-60" />
 
       <div className="relative mx-auto flex max-w-90 flex-col items-center gap-3">
         <button
