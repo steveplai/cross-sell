@@ -1,3 +1,5 @@
+import { cn } from '@/lib/utils'
+
 import { formatCountdownUnit, getCountdownParts } from '../countdown'
 
 interface PromoCountdownProps {
@@ -17,10 +19,17 @@ export function PromoCountdown({ remainingSeconds }: PromoCountdownProps) {
     >
       {values.map((value, index) => (
         <div className="flex items-center gap-1" key={countdownLabels[index]}>
-          <span className="flex h-8 min-w-9 items-center justify-center bg-[#eef1f4] px-2 text-center text-base leading-8 font-bold text-[#222]">
+          <span
+            className={cn(
+              'flex h-7 min-w-7 items-center justify-center p-1 md:h-10 md:min-w-10',
+              'rounded-lg bg-(--lion-gray-200) text-(--lion-gray-900)',
+              'text-center text-sm leading-5.5 font-bold',
+              'md:text-xl md:leading-8',
+            )}
+          >
             {formatCountdownUnit(value)}
           </span>
-          <span className="text-xs leading-5 text-[#444]">
+          <span className="text-xs leading-5.5 text-(--lion-gray-800) md:text-sm">
             {countdownLabels[index]}
           </span>
         </div>

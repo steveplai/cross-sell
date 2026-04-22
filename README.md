@@ -167,7 +167,6 @@ Public contract:
   - `flight-order-cross-sell:item-select`, detail `{ sectionId, item }`
   - `flight-order-cross-sell:view-more`, detail `{ sectionId }`
   - `flight-order-cross-sell:addon-select`, detail `{ addonId }`
-  - `flight-order-cross-sell:promo-click`, detail `{ promoId }`
 
 The `data.promo.startsAt` ISO timestamp and `data.promo.durationSeconds`
 determine whether the widget renders the active discount state or the expired

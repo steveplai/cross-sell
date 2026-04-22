@@ -1,6 +1,38 @@
 [data-csc-widget][data-csc-widget-name='flight-order-cross-sell'] {
+  font-family:
+    'Noto Sans TC',
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+
   color-scheme: light;
-  /* Wait for implement */
+
+  --background: #fff5eb;
+  --foreground: var(--lion-gray-900);
+
+  /* Lion Design Token */
+  --lion-gray-100: #f5f5f5;
+  --lion-gray-200: #f1f1f1;
+  --lion-gray-300: #ececec;
+  --lion-gray-600: #999999;
+  --lion-gray-700: #666666;
+  --lion-gray-800: #444444;
+  --lion-gray-900: #222222;
+  --lion-stone-300: #dddddd;
+  --lion-stone-400: #bbbbbb;
+  --lion-red-100: #ffefef;
+  --lion-red-200: #ffe8e9;
+  --lion-red-300: #fcd7d9;
+  --lion-red-600: #f03742;
+  --lion-orange-100: #fff3e5;
+  --lion-orange-200: #ffe7ca;
+  --lion-orange-300: #ffd9ac;
+  --lion-orange-400: #ff9166;
+  --lion-orange-500: #ff7238;
+  --lion-orange-600: #ff8400;
+  --lion-blue-600: #3ea5d9;
 }
 
 .dark [data-csc-widget][data-csc-widget-name='flight-order-cross-sell'],

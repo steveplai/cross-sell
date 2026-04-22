@@ -1,6 +1,12 @@
 import { Check } from 'lucide-react'
 
-import type { FlightOrderCrossSellPromo } from '../types'
+import { Badge } from '@/components/ui/badge'
+import { cn } from '@/lib/utils'
+
+import type {
+  FlightOrderCrossSellBenefit,
+  FlightOrderCrossSellPromo,
+} from '../types'
 import { CountdownBackground } from './CountdownBackground'
 import { PromoCountdown } from './PromoCountdown'
 
@@ -8,52 +14,72 @@ interface PromoHeaderProps {
   isPromoActive: boolean
   promo: FlightOrderCrossSellPromo
   remainingSeconds: number
-  onPromoClick?: () => void
+}
+
+function getBenefitContent(benefit: FlightOrderCrossSellBenefit): {
+  label: string
+  tagLabel?: string
+} {
+  return typeof benefit === 'string' ? { label: benefit } : benefit
+}
+
+function getBenefitKey(benefit: FlightOrderCrossSellBenefit, index: number) {
+  return typeof benefit === 'string'
+    ? benefit
+    : (benefit.id ?? `${benefit.label}-${index}`)
 }
 
 export function PromoHeader({
   isPromoActive,
   promo,
   remainingSeconds,
-  onPromoClick,
 }: PromoHeaderProps) {
   return (
     <div
-      className={
-        isPromoActive
-          ? 'relative overflow-hidden rounded-t-[10px] bg-linear-to-b from-[#fff3e5] via-[#fff8f1] to-white px-5 pt-9 pb-6 text-center md:pt-11.25'
-          : 'relative overflow-hidden rounded-t-[10px] bg-linear-to-b from-[#fff5eb] via-[#fff8f1] to-white px-5 pt-9 pb-6 text-center md:pt-11.25'
-      }
+      className={cn(
+        'relative overflow-visible text-center',
+        'px-3 pt-9 md:px-0 md:pt-11.25',
+        'bg-linear-to-b from-[#fff5eb] to-white bg-size-[100%_60%] bg-no-repeat',
+        'md:via-[#fff8f1] md:bg-size-[100%_100%]',
+      )}
     >
-      <CountdownBackground className="pointer-events-none absolute inset-x-0 top-0 mx-auto h-36 w-full max-w-150.5 opacity-60" />
+      <CountdownBackground />
 
-      <div className="relative mx-auto flex max-w-90 flex-col items-center gap-3">
-        <button
-          className="border-0 bg-transparent p-0 text-[22px] leading-7.5 font-bold text-[#ff8400] md:text-[32px]"
-          onClick={onPromoClick}
-          type="button"
-        >
+      <div className="relative mx-auto flex max-w-90 flex-col items-center gap-3 md:gap-6">
+        <p className="m-0 text-xl leading-7.5 font-bold text-[#ff8400] md:text-[32px]">
           {isPromoActive ? promo.activeTitle : promo.expiredTitle}
-        </button>
+        </p>
 
         {isPromoActive ? (
           <>
             <PromoCountdown remainingSeconds={remainingSeconds} />
-            <div className="rounded border border-[#ececec] bg-white px-7 py-3 text-xs text-[#444] shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-              <p className="font-bold">
-                {promo.serviceLabel ?? '服務享一筆折扣'}
+            <div className="rounded-[10px] border border-(--lion-gray-300) bg-transparent p-2">
+              <p className="m-0 text-sm leading-5.5 text-(--lion-gray-900)">
+                {promo.serviceLabel ?? '加訂住宿、高鐵與票券享專屬折扣'}
               </p>
               {promo.benefits && promo.benefits.length > 0 ? (
-                <div className="mt-2 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[10px]">
-                  {promo.benefits.map((benefit) => (
-                    <span
-                      className="inline-flex items-center gap-1"
-                      key={benefit}
-                    >
-                      <Check className="size-3 text-[#f03742]" />
-                      {benefit}
-                    </span>
-                  ))}
+                <div className="mt-1 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs leading-5.5 text-(--lion-gray-700)">
+                  {promo.benefits.map((benefit, index) => {
+                    const { label, tagLabel } = getBenefitContent(benefit)
+
+                    return (
+                      <span
+                        className="inline-flex items-center gap-1"
+                        key={getBenefitKey(benefit, index)}
+                      >
+                        <Check className="size-5 text-(--lion-red-600)" />
+                        {tagLabel ? (
+                          <Badge
+                            className="rounded bg-(--lion-red-100) px-2 py-0.5 text-xs leading-4.75 font-medium text-(--lion-red-600) shadow-none"
+                            variant="ghost"
+                          >
+                            {tagLabel}
+                          </Badge>
+                        ) : null}
+                        <span>{label}</span>
+                      </span>
+                    )
+                  })}
                 </div>
               ) : null}
             </div>

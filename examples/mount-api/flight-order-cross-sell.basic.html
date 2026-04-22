@@ -45,8 +45,17 @@
           expiredTitle: '發現更多旅遊靈感！',
           startsAt,
           durationSeconds: 40 * 60 * 60,
-          benefits: ['加購商品最高省 25%', '會員訂單 14 天內可加購'],
-          itineraryLabel: '加訂住宿、高鐵、服務享一筆折扣',
+          benefits: [
+            {
+              id: 'addon-discount',
+              tagLabel: '加購價',
+              label: '最高可省 25%',
+            },
+            {
+              id: 'flight-change-cancel',
+              label: '航班異動可免費取消',
+            },
+          ],
           serviceLabel: '航班周邊服務',
         },
         hsrAddon: {

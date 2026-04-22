@@ -1,11 +1,18 @@
+export type FlightOrderCrossSellBenefit =
+  | string
+  | {
+      id?: string
+      label: string
+      tagLabel?: string
+    }
+
 export interface FlightOrderCrossSellPromo {
   id: string
   activeTitle: string
   expiredTitle: string
   startsAt: string
   durationSeconds: number
-  benefits?: string[]
-  itineraryLabel?: string
+  benefits?: FlightOrderCrossSellBenefit[]
   serviceLabel?: string
 }
 
@@ -79,14 +86,9 @@ export interface FlightOrderCrossSellAddonEvent {
   addonId: string
 }
 
-export interface FlightOrderCrossSellPromoEvent {
-  promoId: string
-}
-
 export interface FlightOrderCrossSellProps {
   data: FlightOrderCrossSellData
   onSelectItem?: (event: FlightOrderCrossSellItemEvent) => void
   onViewMore?: (event: FlightOrderCrossSellViewMoreEvent) => void
   onSelectAddon?: (event: FlightOrderCrossSellAddonEvent) => void
-  onPromoClick?: (event: FlightOrderCrossSellPromoEvent) => void
 }

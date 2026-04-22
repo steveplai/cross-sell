@@ -75,14 +75,5 @@ createReactWebComponent<FlightOrderCrossSellProps>({
         }),
       )
     },
-    onPromoClick: (detail) => {
-      element.dispatchEvent(
-        new CustomEvent('flight-order-cross-sell:promo-click', {
-          bubbles: true,
-          composed: true,
-          detail,
-        }),
-      )
-    },
   }),
 })

@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 
+import { cn } from '@/lib/utils'
+
 import { createWidgetRootProps } from '../../runtime/widgetRoot'
 import { CrossSellSection } from './components/CrossSellSection'
 import { HsrAddonBanner } from './components/HsrAddonBanner'
@@ -30,7 +32,6 @@ function useCurrentTime(promoKey: string) {
 
 export function FlightOrderCrossSell({
   data,
-  onPromoClick,
   onSelectAddon,
   onSelectItem,
   onViewMore,
@@ -41,7 +42,6 @@ export function FlightOrderCrossSell({
     <FlightOrderCrossSellContent
       data={data}
       key={promoKey}
-      onPromoClick={onPromoClick}
       onSelectAddon={onSelectAddon}
       onSelectItem={onSelectItem}
       onViewMore={onViewMore}
@@ -52,7 +52,6 @@ export function FlightOrderCrossSell({
 
 function FlightOrderCrossSellContent({
   data,
-  onPromoClick,
   onSelectAddon,
   onSelectItem,
   onViewMore,
@@ -67,19 +66,21 @@ function FlightOrderCrossSellContent({
 
   return (
     <section
-      className="w-full bg-[#fff8f4] text-[#222]"
+      className={cn(
+        'w-full text-foreground',
+        'bg-linear-to-b from-[#fff5ec] to-white',
+      )}
       data-promo-state={isPromoActive ? 'active' : 'expired'}
       {...flightOrderCrossSellRootProps}
     >
-      <div className="mx-auto flex w-full max-w-297.5 flex-col gap-2.5 py-0 md:py-0">
+      <div className="h-4.5 w-full bg-white md:h-12.5" />
+      <div className="mx-auto flex w-full max-w-297.5 flex-col gap-2.5 bg-white py-0 md:py-0">
+        <PromoHeader
+          isPromoActive={isPromoActive}
+          promo={data.promo}
+          remainingSeconds={remainingSeconds}
+        />
         <div className="overflow-hidden rounded-none bg-white md:rounded-[10px]">
-          <PromoHeader
-            isPromoActive={isPromoActive}
-            onPromoClick={() => onPromoClick?.({ promoId: data.promo.id })}
-            promo={data.promo}
-            remainingSeconds={remainingSeconds}
-          />
-
           <div className="flex flex-col divide-y divide-[#f4f4f4]">
             {data.sections.map((section) => (
               <CrossSellSection

@@ -40,9 +40,7 @@ describe('FlightOrderCrossSell', () => {
       />,
     )
 
-    expect(
-      screen.getByRole('button', { name: '您已解鎖限時優惠！' }),
-    ).toBeInTheDocument()
+    expect(screen.getByText('您已解鎖限時優惠！')).toBeInTheDocument()
     expect(
       screen.getByLabelText('優惠倒數 0 天 1 時 0 分 0 秒'),
     ).toBeInTheDocument()
@@ -119,9 +117,7 @@ describe('FlightOrderCrossSell', () => {
       />,
     )
 
-    expect(
-      screen.getByRole('button', { name: '發現更多旅遊靈感！' }),
-    ).toBeInTheDocument()
+    expect(screen.getByText('發現更多旅遊靈感！')).toBeInTheDocument()
     expect(screen.queryByText('您已解鎖限時優惠！')).not.toBeInTheDocument()
     expect(screen.queryByLabelText(/優惠倒數/)).not.toBeInTheDocument()
     expect(screen.queryByText('折扣 20%')).not.toBeInTheDocument()
@@ -129,9 +125,8 @@ describe('FlightOrderCrossSell', () => {
     expect(screen.getAllByText('1,224,152').length).toBeGreaterThan(0)
   })
 
-  it('calls callbacks with product, section, addon, and promo payloads', async () => {
+  it('calls callbacks with product, section, and addon payloads', async () => {
     const user = userEvent.setup()
-    const onPromoClick = vi.fn()
     const onSelectAddon = vi.fn()
     const onSelectItem = vi.fn()
     const onViewMore = vi.fn()
@@ -139,19 +134,16 @@ describe('FlightOrderCrossSell', () => {
     render(
       <FlightOrderCrossSell
         data={cloneSampleData()}
-        onPromoClick={onPromoClick}
         onSelectAddon={onSelectAddon}
         onSelectItem={onSelectItem}
         onViewMore={onViewMore}
       />,
     )
 
-    await user.click(screen.getByRole('button', { name: '您已解鎖限時優惠！' }))
     await user.click(screen.getAllByRole('button', { name: /探索更多/ })[0])
     await user.click(screen.getByRole('button', { name: /LA VISTA 東京灣/ }))
     await user.click(screen.getByRole('button', { name: /前往加購/ }))
 
-    expect(onPromoClick).toHaveBeenCalledWith({ promoId: 'limited-offer' })
     expect(onViewMore).toHaveBeenCalledWith({ sectionId: 'tokyo-hotels' })
     expect(onSelectItem).toHaveBeenCalledWith(
       expect.objectContaining({

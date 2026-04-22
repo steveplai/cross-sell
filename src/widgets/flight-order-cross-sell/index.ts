@@ -8,7 +8,6 @@ export type {
   FlightOrderCrossSellItem,
   FlightOrderCrossSellItemEvent,
   FlightOrderCrossSellPromo,
-  FlightOrderCrossSellPromoEvent,
   FlightOrderCrossSellProps,
   FlightOrderCrossSellReminder,
   FlightOrderCrossSellSection,
