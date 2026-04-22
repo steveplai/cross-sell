@@ -5,8 +5,8 @@
   "type": "module",
   "packageManager": "pnpm@10.33.0",
   "scripts": {
-    "dev": "storybook dev -p 6006",
-    "storybook": "storybook dev -p 6006",
+    "dev": "storybook dev -p 6006 --no-open",
+    "storybook": "storybook dev -p 6006 --no-open",
     "build:storybook": "storybook build",
     "build:widgets": "tsx scripts/build-widgets.ts",
     "build:emails": "tsx scripts/build-emails.tsx",
