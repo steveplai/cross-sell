@@ -1,3 +1,5 @@
+import '../../src/widgets/flight-order-cross-sell/style.css'
+
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
 import {

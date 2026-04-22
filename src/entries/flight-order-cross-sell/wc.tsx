@@ -1,11 +1,14 @@
 import { createReactWebComponent } from '../../runtime/createReactWebComponent'
-import styles from '../../styles/widget.css?inline'
+import baseStyles from '../../styles/widget.css?inline'
 import {
   FlightOrderCrossSell,
   type FlightOrderCrossSellData,
   type FlightOrderCrossSellProps,
   flightOrderCrossSellSampleData,
 } from '../../widgets/flight-order-cross-sell'
+import widgetStyles from '../../widgets/flight-order-cross-sell/style.css?inline'
+
+const styles = `${baseStyles}\n${widgetStyles}`
 
 function parseData(value: string | null): FlightOrderCrossSellData {
   if (!value) {

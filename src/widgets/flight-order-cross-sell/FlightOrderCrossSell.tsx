@@ -67,12 +67,12 @@ function FlightOrderCrossSellContent({
 
   return (
     <section
-      className="w-full bg-[#fff8f4] text-[#222]"
+      className="w-full bg-(--csc-page-bg) text-foreground"
       data-promo-state={isPromoActive ? 'active' : 'expired'}
       {...flightOrderCrossSellRootProps}
     >
       <div className="mx-auto flex w-full max-w-297.5 flex-col gap-2.5 py-0 md:py-0">
-        <div className="overflow-hidden rounded-none bg-white md:rounded-[10px]">
+        <div className="overflow-hidden rounded-none bg-card md:rounded-(--csc-radius-section)">
           <PromoHeader
             isPromoActive={isPromoActive}
             onPromoClick={() => onPromoClick?.({ promoId: data.promo.id })}
@@ -80,7 +80,7 @@ function FlightOrderCrossSellContent({
             remainingSeconds={remainingSeconds}
           />
 
-          <div className="flex flex-col divide-y divide-[#f4f4f4]">
+          <div className="flex flex-col divide-y divide-(--csc-divider)">
             {data.sections.map((section) => (
               <CrossSellSection
                 currency={currency}
@@ -98,7 +98,7 @@ function FlightOrderCrossSellContent({
         </div>
 
         {hsrAddon ? (
-          <div className="overflow-hidden rounded-none bg-white md:rounded-[10px]">
+          <div className="overflow-hidden rounded-none bg-card md:rounded-(--csc-radius-section)">
             <HsrAddonBanner
               addon={hsrAddon}
               onSelectAddon={() => onSelectAddon?.({ addonId: hsrAddon.id })}
@@ -107,7 +107,7 @@ function FlightOrderCrossSellContent({
         ) : null}
 
         {data.reminders ? (
-          <div className="overflow-hidden rounded-none bg-white md:rounded-[10px]">
+          <div className="overflow-hidden rounded-none bg-card md:rounded-(--csc-radius-section)">
             <ReminderCards
               items={data.reminders.items}
               onSelectAddon={(addonId) => onSelectAddon?.({ addonId })}

@@ -1,7 +1,10 @@
 import { createMountApi } from '../../runtime/createMountApi'
-import styles from '../../styles/widget.css?inline'
+import baseStyles from '../../styles/widget.css?inline'
 import type { FlightOrderCrossSellProps } from '../../widgets/flight-order-cross-sell'
 import { FlightOrderCrossSell } from '../../widgets/flight-order-cross-sell'
+import widgetStyles from '../../widgets/flight-order-cross-sell/style.css?inline'
+
+const styles = `${baseStyles}\n${widgetStyles}`
 
 declare global {
   interface Window {
