@@ -1,4 +1,4 @@
-import type { FlightOrderCrossSellPromo } from './types'
+import type { FlightOrderCrossSellPromo } from '../types'
 
 const secondsPerMinute = 60
 const secondsPerHour = secondsPerMinute * 60

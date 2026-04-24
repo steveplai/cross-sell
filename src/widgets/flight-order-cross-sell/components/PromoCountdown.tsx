@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils'
 
-import { formatCountdownUnit, getCountdownParts } from '../countdown'
+import { formatCountdownUnit, getCountdownParts } from '../lib/countdown'
 
 interface PromoCountdownProps {
   remainingSeconds: number

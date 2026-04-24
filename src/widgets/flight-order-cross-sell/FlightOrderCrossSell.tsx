@@ -7,7 +7,7 @@ import { CrossSellSection } from './components/CrossSellSection'
 import { HsrAddonBanner } from './components/HsrAddonBanner'
 import { PromoHeader } from './components/PromoHeader'
 import { ReminderCards } from './components/ReminderCards'
-import { getRemainingPromoSeconds } from './countdown'
+import { getRemainingPromoSeconds } from './lib/countdown'
 import type { FlightOrderCrossSellProps } from './types'
 
 const flightOrderCrossSellRootProps = createWidgetRootProps(

@@ -1,5 +1,5 @@
-export { getRemainingPromoSeconds } from './countdown'
 export { FlightOrderCrossSell } from './FlightOrderCrossSell'
+export { getRemainingPromoSeconds } from './lib/countdown'
 export { flightOrderCrossSellSampleData } from './sampleData'
 export type {
   FlightOrderCrossSellAddon,
