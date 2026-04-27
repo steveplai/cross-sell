@@ -73,12 +73,8 @@ describe('FlightOrderCrossSell', () => {
     ).toBeInTheDocument()
 
     expect(screen.getAllByRole('button', { name: /探索更多/ }).length).toBe(3)
-    expect(
-      screen.getByRole('button', { name: '前往加購' }),
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole('button', { name: /網路服務/ }),
-    ).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '前往加購' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /網路服務/ })).toBeInTheDocument()
   })
 
   it('shows the full duration before the promo starts', () => {

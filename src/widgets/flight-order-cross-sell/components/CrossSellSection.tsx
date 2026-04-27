@@ -260,10 +260,7 @@ export function CrossSellSection({
           data-testid={`section-${section.id}-items`}
         >
           {section.items.map((item) => (
-            <CarouselItem
-              className={carouselItemClassName}
-              key={item.id}
-            >
+            <CarouselItem className={carouselItemClassName} key={item.id}>
               <ProductCard
                 currency={currency}
                 isPromoActive={isPromoActive}

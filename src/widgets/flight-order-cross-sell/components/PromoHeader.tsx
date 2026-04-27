@@ -43,7 +43,7 @@ export function PromoHeader({
         'md:via-(--lion-header-gradient-via) md:bg-size-[100%_100%]',
         {
           'pb-2.5 md:pb-11.25': !isPromoActive,
-        }
+        },
       )}
     >
       <CountdownBackground />
