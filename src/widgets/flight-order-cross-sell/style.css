@@ -9,7 +9,12 @@
 
   color-scheme: light;
 
+  --lion-header-gradient-from: #fff5eb;
+  --lion-header-gradient-via: #fff8f1;
+  --lion-header-gradient-to: #ffffff;
+
   /* Lion Design Token */
+  --lion-gray-50: #f4f4f4;
   --lion-gray-100: var(--accent);
   --lion-gray-200: var(--muted);
   --lion-gray-300: #ececec;
@@ -36,6 +41,11 @@
 :host(.dark) [data-csc-widget][data-csc-widget-name='flight-order-cross-sell'] {
   color-scheme: dark;
 
+  --lion-header-gradient-from: #241813;
+  --lion-header-gradient-via: #1c1512;
+  --lion-header-gradient-to: var(--background);
+
+  --lion-gray-50: #232626;
   --lion-gray-300: #2a2f2d;
   --lion-gray-700: #a1a5a5;
   --lion-gray-800: #c8cccc;

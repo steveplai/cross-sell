@@ -39,18 +39,20 @@ export function CrossSellSection({
   }
 
   return (
-    <section className="bg-white px-5 py-5 md:px-12 md:py-7.5">
+    <section className="bg-background px-5 py-5 md:px-12 md:py-7.5">
       <header className="mb-5 flex items-start justify-between gap-4 md:mb-6">
         <div className="min-w-0">
-          <h2 className="text-base leading-6 font-bold text-[#222] md:text-xl">
+          <h2 className="text-base leading-6 font-bold text-foreground md:text-xl">
             {section.title}
           </h2>
           {section.subtitle ? (
-            <p className="mt-3 text-xs text-[#666]">{section.subtitle}</p>
+            <p className="mt-3 text-xs text-(--lion-gray-700)">
+              {section.subtitle}
+            </p>
           ) : null}
         </div>
         <button
-          className="flex shrink-0 items-center gap-1 border-0 bg-transparent p-0 text-sm leading-5.5 font-bold text-[#f03742]"
+          className="flex shrink-0 items-center gap-1 border-0 bg-transparent p-0 text-sm leading-5.5 font-bold text-primary"
           onClick={onViewMore}
           type="button"
         >
@@ -63,7 +65,7 @@ export function CrossSellSection({
         <div className="mb-4 flex gap-2 overflow-x-auto pb-1">
           {section.categories.map((category, index) => (
             <span
-              className="shrink-0 rounded-full bg-[#f4f4f4] px-3 py-1 text-xs leading-5 text-[#666]"
+              className="shrink-0 rounded-full bg-(--lion-gray-50) px-3 py-1 text-xs leading-5 text-(--lion-gray-700)"
               key={`${category}-${index}`}
             >
               {category}

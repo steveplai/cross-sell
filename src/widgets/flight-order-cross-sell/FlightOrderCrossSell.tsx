@@ -68,20 +68,20 @@ function FlightOrderCrossSellContent({
     <section
       className={cn(
         'w-full text-foreground',
-        'bg-linear-to-b from-[#fff5ec] to-white',
+        'bg-linear-to-b from-(--lion-header-gradient-from) to-(--lion-header-gradient-to)',
       )}
       data-promo-state={isPromoActive ? 'active' : 'expired'}
       {...flightOrderCrossSellRootProps}
     >
-      <div className="h-4.5 w-full bg-white md:h-12.5" />
-      <div className="mx-auto flex w-full max-w-297.5 flex-col gap-2.5 bg-white py-0 md:py-0">
+      <div className="h-4.5 w-full bg-background md:h-12.5" />
+      <div className="mx-auto flex w-full max-w-297.5 flex-col gap-2.5 bg-background py-0 md:py-0">
         <PromoHeader
           isPromoActive={isPromoActive}
           promo={data.promo}
           remainingSeconds={remainingSeconds}
         />
-        <div className="overflow-hidden rounded-none bg-white md:rounded-[10px]">
-          <div className="flex flex-col divide-y divide-[#f4f4f4]">
+        <div className="overflow-hidden rounded-none bg-background md:rounded-[10px]">
+          <div className="flex flex-col divide-y divide-(--lion-gray-50)">
             {data.sections.map((section) => (
               <CrossSellSection
                 currency={currency}
@@ -99,7 +99,7 @@ function FlightOrderCrossSellContent({
         </div>
 
         {hsrAddon ? (
-          <div className="overflow-hidden rounded-none bg-white md:rounded-[10px]">
+          <div className="overflow-hidden rounded-none bg-background md:rounded-[10px]">
             <HsrAddonBanner
               addon={hsrAddon}
               onSelectAddon={() => onSelectAddon?.({ addonId: hsrAddon.id })}
@@ -108,7 +108,7 @@ function FlightOrderCrossSellContent({
         ) : null}
 
         {data.reminders ? (
-          <div className="overflow-hidden rounded-none bg-white md:rounded-[10px]">
+          <div className="overflow-hidden rounded-none bg-background md:rounded-[10px]">
             <ReminderCards
               items={data.reminders.items}
               onSelectAddon={(addonId) => onSelectAddon?.({ addonId })}

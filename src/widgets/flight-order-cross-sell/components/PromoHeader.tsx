@@ -39,14 +39,14 @@ export function PromoHeader({
       className={cn(
         'relative overflow-visible text-center',
         'px-3 pt-9 md:px-0 md:pt-11.25',
-        'bg-linear-to-b from-[#fff5eb] to-white bg-size-[100%_60%] bg-no-repeat',
-        'md:via-[#fff8f1] md:bg-size-[100%_100%]',
+        'bg-linear-to-b from-(--lion-header-gradient-from) to-(--lion-header-gradient-to) bg-size-[100%_60%] bg-no-repeat',
+        'md:via-(--lion-header-gradient-via) md:bg-size-[100%_100%]',
       )}
     >
       <CountdownBackground />
 
       <div className="relative mx-auto flex max-w-90 flex-col items-center gap-3 md:gap-6">
-        <p className="m-0 text-xl leading-7.5 font-bold text-[#ff8400] md:text-[32px]">
+        <p className="m-0 text-xl leading-7.5 font-bold text-(--lion-orange-600) md:text-[32px]">
           {isPromoActive ? promo.activeTitle : promo.expiredTitle}
         </p>
 
@@ -54,7 +54,7 @@ export function PromoHeader({
           <>
             <PromoCountdown remainingSeconds={remainingSeconds} digitDivider={{ visible: false }} />
             <div className="rounded-[10px] border border-(--lion-gray-300) bg-transparent p-2">
-              <p className="m-0 text-sm leading-5.5 text-(--lion-gray-900)">
+              <p className="m-0 text-sm leading-5.5 text-foreground">
                 {promo.serviceLabel ?? '加訂住宿、高鐵與票券享專屬折扣'}
               </p>
               {promo.benefits && promo.benefits.length > 0 ? (
@@ -67,10 +67,10 @@ export function PromoHeader({
                         className="inline-flex items-center gap-1"
                         key={getBenefitKey(benefit, index)}
                       >
-                        <Check className="size-5 text-(--lion-red-600)" />
+                        <Check className="size-5 text-primary" />
                         {tagLabel ? (
                           <Badge
-                            className="rounded bg-(--lion-red-100) px-2 py-0.5 text-xs leading-4.75 font-medium text-(--lion-red-600) shadow-none"
+                            className="rounded bg-(--lion-red-100) px-2 py-0.5 text-xs leading-4.75 font-medium text-primary shadow-none"
                             variant="ghost"
                           >
                             {tagLabel}
