@@ -4,9 +4,9 @@ import { describe, expect, it } from 'vitest'
 import {
   widgetRootNameAttribute,
   widgetRootSelector,
-} from '../../../src/runtime/widgetRoot'
-import { DemoProductBanner } from '../../../src/widgets/demo-product-banner'
-import { ThemedDemoProductBanner } from '../../../src/widgets/themed-demo-product-banner'
+} from '../../../../src/runtime/widgetRoot'
+import { DemoProductBanner } from '../../../../src/widgets/demo-product-banner'
+import { ThemedDemoProductBanner } from '../../../../src/widgets/themed-demo-product-banner'
 
 const products = [{ id: 'p1', name: '商品 A', price: 1200 }]
 

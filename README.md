@@ -103,7 +103,7 @@ pnpm build:emails:production
 pnpm build:storybook
 pnpm typecheck
 pnpm lint
-pnpm test:unit
+pnpm test:app:unit
 pnpm test:internal
 pnpm test:internal:handoff
 pnpm test:coverage
@@ -342,6 +342,16 @@ behave like real handoff artifacts, without Vite dev-server transforms.
 - Internal Vitest tests protect project-level runtime contracts.
 - Playwright opens built examples and verifies real `dist` artifacts.
 - Storybook executable tests are intentionally deferred.
+
+Test folders under `tests/` are organized by runner first, then responsibility:
+
+```txt
+tests/vitest/internal/contracts/
+tests/playwright/app/widgets/
+tests/playwright/internal/handoff/
+```
+
+Source-level Vitest app tests stay near the code they cover as `src/**/*.test.*`.
 
 Do not add tests to every `src/components/ui` primitive mechanically. Add focused
 tests when a primitive contains project-owned behavior, custom variants,

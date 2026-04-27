@@ -1,8 +1,8 @@
 import { render as renderEmail } from '@react-email/render'
 import { describe, expect, it } from 'vitest'
 
-import { DemoProductOfferEmail } from '../../../src/emails/demo-product-offer/DemoProductOfferEmail'
-import { sampleProducts } from '../../../src/emails/demo-product-offer/sample-data'
+import { DemoProductOfferEmail } from '../../../../src/emails/demo-product-offer/DemoProductOfferEmail'
+import { sampleProducts } from '../../../../src/emails/demo-product-offer/sample-data'
 
 function parseEmailHtml(html: string) {
   return new DOMParser().parseFromString(html, 'text/html')

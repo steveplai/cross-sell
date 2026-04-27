@@ -248,12 +248,13 @@ Use internal tests for:
 Internal test locations:
 
 ```txt
-tests/internal/vitest/
-tests/playwright/internal/
+tests/vitest/internal/contracts/
+tests/playwright/internal/handoff/
 ```
 
-Internal Vitest tests should stay in `tests/internal/vitest/`. Playwright handoff
-tests should stay in `tests/playwright/internal/handoff/`.
+Internal test folders are organized by runner first, then responsibility. Vitest
+contract tests should stay in `tests/vitest/internal/contracts/`. Playwright
+handoff tests should stay in `tests/playwright/internal/handoff/`.
 
 Do not add detailed widget layout, carousel, or visual interaction assertions to
 handoff tests. Handoff tests should verify that the built example can be consumed

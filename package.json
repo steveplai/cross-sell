@@ -24,7 +24,7 @@
     "test:app:unit": "vitest run src",
     "test:app:widgets": "pnpm build && playwright test tests/playwright/app/widgets",
     "test:app": "pnpm test:app:unit && pnpm test:app:widgets",
-    "test:internal:contracts": "vitest run tests/internal/vitest",
+    "test:internal:contracts": "vitest run tests/vitest/internal/contracts",
     "test:internal:handoff": "pnpm build && playwright test tests/playwright/internal/handoff",
     "test:internal": "pnpm test:internal:contracts && pnpm test:internal:handoff",
     "test:watch": "vitest",
