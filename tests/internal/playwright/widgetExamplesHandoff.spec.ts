@@ -122,22 +122,25 @@ const mountApiExamples: MountApiExample[] = [
   },
 ] as const
 
+const darkBackgroundColor = 'rgb(10, 11, 11)'
+const lightBackgroundColor = 'rgb(255, 255, 255)'
+
 function normalizeCssValue(value: string) {
   return value.trim().replace(/\s+/g, ' ')
 }
 
 function normalizeThemeState(
-  state: { background: string; colorScheme: string } | null,
+  state: { backgroundColor: string; colorScheme: string } | null,
 ) {
   if (!state) {
     return null
   }
 
+  const backgroundColor = normalizeCssValue(state.backgroundColor).toLowerCase()
+
   return {
-    hasDarkBackground:
-      state.background.includes('18%') || state.background.includes('0.18'),
-    hasLightBackground:
-      state.background.includes('100%') || state.background.includes('1 0 0'),
+    hasDarkBackground: backgroundColor === darkBackgroundColor,
+    hasLightBackground: backgroundColor === lightBackgroundColor,
     hasDarkColorScheme: state.colorScheme.includes('dark'),
     hasLightColorScheme: state.colorScheme.includes('light'),
   }
@@ -167,9 +170,11 @@ async function getWebComponentWidgetState(page: Page, selector: string) {
         return null
       }
 
+      const styles = getComputedStyle(root)
+
       return {
-        background: getComputedStyle(root).getPropertyValue('--background'),
-        colorScheme: getComputedStyle(root).colorScheme,
+        backgroundColor: styles.backgroundColor,
+        colorScheme: styles.colorScheme,
       }
     }, widgetRootSelector)
 
@@ -237,9 +242,11 @@ async function expectWebComponentExampleRenders(
 
 async function getLightDomWidgetState(page: Page, selector: string) {
   const state = await page.locator(selector).evaluate((root) => {
+    const styles = getComputedStyle(root)
+
     return {
-      background: getComputedStyle(root).getPropertyValue('--background'),
-      colorScheme: getComputedStyle(root).colorScheme,
+      backgroundColor: styles.backgroundColor,
+      colorScheme: styles.colorScheme,
     }
   })
 

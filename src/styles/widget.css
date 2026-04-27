@@ -9,23 +9,23 @@
 /* shadcn/tailwind.css provides data-open, data-closed, data-checked, data-unchecked,
    data-selected, data-disabled, data-active, data-horizontal, and data-vertical. */
 @custom-variant data-visible {
-  &:where([data-state="visible"]),
-  &:where([data-visible]:not([data-visible="false"])) {
+  &:where([data-state='visible']),
+  &:where([data-visible]:not([data-visible='false'])) {
     @slot;
   }
 }
 
 @custom-variant data-hidden {
-  &:where([data-state="hidden"]),
-  &:where([data-hidden]:not([data-hidden="false"])) {
+  &:where([data-state='hidden']),
+  &:where([data-hidden]:not([data-hidden='false'])) {
     @slot;
   }
 }
 
 @custom-variant data-inactive {
-  &:where([data-state="inactive"]),
-  &:where([data-active="false"]),
-  &:where([data-inactive]:not([data-inactive="false"])) {
+  &:where([data-state='inactive']),
+  &:where([data-active='false']),
+  &:where([data-inactive]:not([data-inactive='false'])) {
     @slot;
   }
 }
@@ -34,7 +34,7 @@
 @theme inline {
   --font-sans: var(
     --csc-font-sans,
-    var(--font-noto-sans-tc, "Noto Sans TC"),
+    var(--font-noto-sans-tc, 'Noto Sans TC'),
     ui-sans-serif,
     system-ui,
     sans-serif

@@ -52,7 +52,10 @@ export function PromoHeader({
 
         {isPromoActive ? (
           <>
-            <PromoCountdown remainingSeconds={remainingSeconds} digitDivider={{ visible: false }} />
+            <PromoCountdown
+              remainingSeconds={remainingSeconds}
+              digitDivider={{ visible: false }}
+            />
             <div className="rounded-[10px] border border-(--lion-gray-300) bg-transparent p-2">
               <p className="m-0 text-sm leading-5.5 text-foreground">
                 {promo.serviceLabel ?? '加訂住宿、高鐵與票券享專屬折扣'}
