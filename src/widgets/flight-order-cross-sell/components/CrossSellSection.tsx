@@ -251,7 +251,7 @@ export function CrossSellSection({
       >
         <CarouselPrevious
           aria-label="上一組推薦"
-          className="left-0 z-10 hidden size-10 border-0 bg-card p-0 text-(--lion-gray-800) shadow-(--lion-carousel-control-shadow) hover:bg-card hover:text-primary md:flex"
+          className="-left-10 z-10 hidden size-10 border-0 bg-card p-0 text-(--lion-gray-800) shadow-(--lion-carousel-control-shadow) hover:bg-card hover:text-primary md:flex"
           data-testid={`section-${section.id}-previous`}
           hideWhenUnavailable
         />
@@ -288,7 +288,7 @@ export function CrossSellSection({
         </CarouselContent>
         <CarouselNext
           aria-label="下一組推薦"
-          className="right-0 z-10 hidden size-10 border-0 bg-card p-0 text-(--lion-gray-800) shadow-(--lion-carousel-control-shadow) hover:bg-card hover:text-primary md:flex"
+          className="-right-10 z-10 hidden size-10 border-0 bg-card p-0 text-(--lion-gray-800) shadow-(--lion-carousel-control-shadow) hover:bg-card hover:text-primary md:flex"
           data-testid={`section-${section.id}-next`}
           hideWhenUnavailable
         />
