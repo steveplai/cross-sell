@@ -9,34 +9,42 @@
 
   color-scheme: light;
 
-  --background: #fff5eb;
-  --foreground: var(--lion-gray-900);
-
   /* Lion Design Token */
-  --lion-gray-100: #f5f5f5;
-  --lion-gray-200: #f1f1f1;
+  --lion-gray-100: var(--accent);
+  --lion-gray-200: var(--muted);
   --lion-gray-300: #ececec;
-  --lion-gray-600: #999999;
+  --lion-gray-600: var(--muted-foreground);
   --lion-gray-700: #666666;
   --lion-gray-800: #444444;
-  --lion-gray-900: #222222;
-  --lion-stone-300: #dddddd;
-  --lion-stone-400: #bbbbbb;
+  --lion-gray-900: var(--foreground);
+  --lion-stone-300: var(--border);
+  --lion-stone-400: var(--ring);
   --lion-red-100: #ffefef;
   --lion-red-200: #ffe8e9;
   --lion-red-300: #fcd7d9;
-  --lion-red-600: #f03742;
+  --lion-red-600: var(--primary);
   --lion-orange-100: #fff3e5;
   --lion-orange-200: #ffe7ca;
   --lion-orange-300: #ffd9ac;
   --lion-orange-400: #ff9166;
-  --lion-orange-500: #ff7238;
+  --lion-orange-500: var(--warning);
   --lion-orange-600: #ff8400;
-  --lion-blue-600: #3ea5d9;
+  --lion-blue-600: var(--info);
 }
 
 .dark [data-csc-widget][data-csc-widget-name='flight-order-cross-sell'],
 :host(.dark) [data-csc-widget][data-csc-widget-name='flight-order-cross-sell'] {
   color-scheme: dark;
-  /* Wait for implement */
+
+  --lion-gray-300: #2a2f2d;
+  --lion-gray-700: #a1a5a5;
+  --lion-gray-800: #c8cccc;
+  --lion-red-100: #3a171a;
+  --lion-red-200: #4a1d22;
+  --lion-red-300: #64262d;
+  --lion-orange-100: #332017;
+  --lion-orange-200: #44281b;
+  --lion-orange-300: #5c3320;
+  --lion-orange-400: #ff9162;
+  --lion-orange-600: #ff9a1f;
 }
