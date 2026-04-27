@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test'
 import { expect, test } from '@playwright/test'
 
-import { widgetRootSelector } from '../../../src/runtime/widgetRoot'
+import { widgetRootSelector } from '../../../../src/runtime/widgetRoot'
 
 const demoProductBannerThemeTokens = {
   primary: 'oklch(52% .18 250)',
@@ -87,6 +87,16 @@ const webComponentExamples: WebComponentExample[] = [
       },
     ],
   },
+  {
+    name: 'flight order cross sell web component basic',
+    path: '/examples/web-component/flight-order-cross-sell.basic.html',
+    widgets: [
+      {
+        selector: 'flight-order-cross-sell',
+        text: '探索東京飯店',
+      },
+    ],
+  },
 ] as const
 
 const mountApiExamples: MountApiExample[] = [
@@ -119,6 +129,12 @@ const mountApiExamples: MountApiExample[] = [
     path: '/examples/mount-api/demo-product-banner.update.html',
     rootSelector: '#demo-product-root',
     text: '推薦商品',
+  },
+  {
+    name: 'flight order cross sell mount API basic',
+    path: '/examples/mount-api/flight-order-cross-sell.basic.html',
+    rootSelector: '#flight-order-cross-sell-root',
+    text: '探索東京飯店',
   },
 ] as const
 

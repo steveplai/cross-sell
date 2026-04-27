@@ -46,6 +46,41 @@ describe('FlightOrderCrossSell', () => {
     ).toBeInTheDocument()
   })
 
+  it('renders sections, products, and action CTAs', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-04-21T10:00:00Z'))
+
+    render(<FlightOrderCrossSell data={cloneSampleData()} />)
+
+    expect(
+      screen.getByRole('heading', { name: '探索東京飯店' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: '探索東京 景點不錯過' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: '當地交通 一次搞定' }),
+    ).toBeInTheDocument()
+
+    expect(
+      screen.getByRole('button', { name: /LA VISTA 東京灣/ }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: /東京迪士尼門票/ }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: /東京成田\/羽田機場至東京都市區/ }),
+    ).toBeInTheDocument()
+
+    expect(screen.getAllByRole('button', { name: /探索更多/ }).length).toBe(3)
+    expect(
+      screen.getByRole('button', { name: '前往加購' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: /網路服務/ }),
+    ).toBeInTheDocument()
+  })
+
   it('shows the full duration before the promo starts', () => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date('2026-04-21T10:00:00Z'))

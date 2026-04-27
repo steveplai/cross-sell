@@ -37,8 +37,8 @@ The first version intentionally includes one complete example widget and one com
 - Mount API for JS-driven embedding
 - React Email for static HTML email output
 - Storybook as the component playground
-- Vitest + Testing Library for component/unit tests and internal contract tests
-- Playwright for internal built-artifact handoff tests
+- Vitest + Testing Library for app-level component tests and internal contract tests
+- Playwright for browser-only widget behavior tests and built-artifact handoff tests
 - pnpm for package management
 
 ## Important Architecture
@@ -195,6 +195,83 @@ More detail:
 docs/react-web-component-considerations.md
 ```
 
+## Testing Taxonomy
+
+Tests are split into two high-level responsibilities: app tests and internal tests.
+
+### App Tests
+
+App tests protect the behavior of developed widgets, email components, and shared
+UI logic so future changes do not break the intended component behavior.
+
+Use app tests for:
+
+- component render output
+- callback payloads and public component props
+- deterministic logic such as countdowns, formatting, and expired/active states
+- browser-only widget behavior such as real layout, overflow, keyboard operation,
+  responsive exposure, and carousel movement
+
+App test locations:
+
+```txt
+src/**/*.test.tsx
+src/**/*.test.ts
+tests/playwright/app/
+```
+
+Prefer Vitest under `src/` when jsdom is enough. Use Testing Library and user-event
+for component behavior such as visible text, ARIA labels, buttons, callbacks, and
+state transitions.
+
+Use Playwright under `tests/playwright/app/` only when the behavior depends on a
+real browser. Examples include `getBoundingClientRect()`, flex/grid layout, real
+CSS overflow, responsive viewport behavior, keyboard focus behavior, or a library
+such as Embla that relies on browser layout.
+
+Do not put app-level widget behavior tests under internal handoff tests.
+
+### Internal Tests
+
+Internal tests protect project mechanics and delivery contracts rather than a
+specific widget's product behavior.
+
+Use internal tests for:
+
+- runtime markers and shared runtime contracts
+- email renderer or build helper contracts
+- built `dist/` artifacts loading from `examples/`
+- Web Component and Mount API handoff behavior
+- external integration contracts such as tag names, globals, custom events, and
+  example pages
+
+Internal test locations:
+
+```txt
+tests/internal/vitest/
+tests/playwright/internal/
+```
+
+Internal Vitest tests should stay in `tests/internal/vitest/`. Playwright handoff
+tests should stay in `tests/playwright/internal/handoff/`.
+
+Do not add detailed widget layout, carousel, or visual interaction assertions to
+handoff tests. Handoff tests should verify that the built example can be consumed
+as delivered.
+
+### Vitest Setup
+
+Vitest runs in jsdom and uses:
+
+```txt
+tests/setup.ts
+```
+
+This setup may provide missing browser APIs required by component tests. For
+example, Embla/shadcn Carousel needs `ResizeObserver` and `IntersectionObserver`
+mocks when rendered in jsdom. Keep these mocks minimal and only add APIs needed by
+source-level tests.
+
 ## Internal Handoff Testing Design
 
 Playwright internal handoff tests intentionally do not use Vite dev server.
@@ -237,7 +314,8 @@ Future role:
 ```txt
 Storybook = visual/component playground
 Storybook tests = protect playground states
-Vitest = component logic tests
+App Vitest = component logic and deterministic behavior tests
+App Playwright = browser-only widget behavior tests
 Internal Vitest = project contract tests
 Internal Playwright = dist/examples handoff tests
 ```
@@ -274,22 +352,40 @@ Serve examples and dist through the static server:
 pnpm serve:examples
 ```
 
-Run unit/component tests:
+Run app unit/component tests:
 
 ```bash
-pnpm test:unit
+pnpm test:app:unit
 ```
 
-Run internal project contract and handoff tests:
+Run app browser widget tests:
 
 ```bash
-pnpm test:internal
+pnpm test:app:widgets
 ```
 
-Run built widget handoff tests:
+Run all app tests:
+
+```bash
+pnpm test:app
+```
+
+Run internal project contract tests:
+
+```bash
+pnpm test:internal:contracts
+```
+
+Run internal handoff tests:
 
 ```bash
 pnpm test:internal:handoff
+```
+
+Run all internal tests:
+
+```bash
+pnpm test:internal
 ```
 
 Run all tests:
@@ -304,8 +400,8 @@ At initial scaffold completion, these passed:
 
 ```txt
 pnpm build
-pnpm test:unit
-pnpm test:examples
+pnpm test:app:unit
+pnpm test:internal:handoff
 pnpm test:all
 pnpm build:storybook
 ```

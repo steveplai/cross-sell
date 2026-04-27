@@ -21,14 +21,15 @@
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit",
     "test": "vitest",
-    "test:unit": "vitest run src",
+    "test:app:unit": "vitest run src",
+    "test:app:widgets": "pnpm build && playwright test tests/playwright/app/widgets",
+    "test:app": "pnpm test:app:unit && pnpm test:app:widgets",
     "test:internal:contracts": "vitest run tests/internal/vitest",
-    "test:internal:handoff": "pnpm build && playwright test tests/internal/playwright",
+    "test:internal:handoff": "pnpm build && playwright test tests/playwright/internal/handoff",
     "test:internal": "pnpm test:internal:contracts && pnpm test:internal:handoff",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "test:examples": "pnpm test:internal:handoff",
-    "test:all": "pnpm test:unit && pnpm test:internal"
+    "test:all": "pnpm test:app && pnpm test:internal"
   },
   "dependencies": {
     "@react-email/components": "^1.0.12",
