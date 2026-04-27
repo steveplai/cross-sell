@@ -28,7 +28,7 @@ export function ProductCard({
   const reviewCount = formatReviewCount(item.reviewCount)
 
   return (
-    <article className="w-50 shrink-0 overflow-hidden rounded-[5px] bg-white shadow-[0_0_8px_rgba(0,0,0,0.18)] md:w-52.75">
+    <article className="h-full min-w-0 overflow-hidden rounded-[5px] bg-white shadow-[0_0_8px_rgba(0,0,0,0.18)]">
       <button
         className="block w-full border-0 bg-transparent p-0 text-left text-inherit"
         onClick={onSelect}
