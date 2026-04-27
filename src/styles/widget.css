@@ -6,15 +6,73 @@
 /* Make Tailwind dark: utilities follow the same .dark contract used by shadcn tokens. */
 @custom-variant dark (&:where(.dark, .dark *, :host(.dark) *));
 
-/* Map shadcn semantic color utilities to the widget-local CSS variables below. */
+/* shadcn/tailwind.css provides data-open, data-closed, data-checked, data-unchecked,
+   data-selected, data-disabled, data-active, data-horizontal, and data-vertical. */
+@custom-variant data-visible {
+  &:where([data-state="visible"]),
+  &:where([data-visible]:not([data-visible="false"])) {
+    @slot;
+  }
+}
+
+@custom-variant data-hidden {
+  &:where([data-state="hidden"]),
+  &:where([data-hidden]:not([data-hidden="false"])) {
+    @slot;
+  }
+}
+
+@custom-variant data-inactive {
+  &:where([data-state="inactive"]),
+  &:where([data-active="false"]),
+  &:where([data-inactive]:not([data-inactive="false"])) {
+    @slot;
+  }
+}
+
+/* Map Tailwind utilities to widget-local CSS variables below. */
 @theme inline {
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --font-sans: var(
+    --csc-font-sans,
+    var(--font-noto-sans-tc, "Noto Sans TC"),
+    ui-sans-serif,
+    system-ui,
+    sans-serif
+  );
+
+  --radius-sm: calc(var(--radius, 0.3rem) * 0.5);
+  --radius-md: calc(var(--radius, 0.3rem) * 0.75);
+  --radius-lg: var(--radius, 0.3rem);
+  --radius-xl: calc(var(--radius, 0.3rem) * 1.5);
+  --radius-2xl: calc(var(--radius, 0.3rem) * 2);
+  --radius-3xl: calc(var(--radius, 0.3rem) * 2.5);
+  --radius-4xl: calc(var(--radius, 0.3rem) * 3);
+
+  --text-11px: calc(0.6875rem * var(--text-scale, 1));
+  --text-xs: calc(0.75rem * var(--text-scale, 1));
+  --text-md: calc(0.8125rem * var(--text-scale, 1));
+  --text-sm: calc(0.875rem * var(--text-scale, 1));
+  --text-base: calc(1rem * var(--text-scale, 1));
+  --text-lg: calc(1.125rem * var(--text-scale, 1));
+  --text-xl: calc(1.25rem * var(--text-scale, 1));
+  --text-2xl: calc(1.5rem * var(--text-scale, 1));
+  --text-3xl: calc(1.875rem * var(--text-scale, 1));
+  --text-4xl: calc(2.25rem * var(--text-scale, 1));
+
+  --font-size-xs: var(--text-xs);
+  --font-size-sm: var(--text-sm);
+  --font-size-md: var(--text-md);
+  --font-size-base: var(--text-base);
+  --font-size-lg: var(--text-lg);
+  --font-size-xl: var(--text-xl);
+  --font-size-2xl: var(--text-2xl);
+  --font-size-3xl: var(--text-3xl);
+  --font-size-4xl: var(--text-4xl);
+
+  --border-width: calc(1px * var(--border-scale, 1));
+  --border-width-2: calc(2px * var(--border-scale, 1));
+  --border-width-4: calc(4px * var(--border-scale, 1));
+  --border-width-8: calc(8px * var(--border-scale, 1));
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -26,11 +84,17 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-neutral: var(--neutral);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -57,54 +121,81 @@
   font-family: inherit;
 }
 
+[data-csc-widget] {
+  display: block;
+  font-family: inherit;
+}
+
 /* Shared light theme tokens for both Web Component (:host) and Mount API roots. */
 :host,
 [data-csc-widget] {
   color-scheme: light;
 
-  --radius: 0.5rem;
+  --radius: 0.3rem;
 
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.141 0.005 285.823);
+  --background: #ffffff;
+  --foreground: #222222;
 
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.141 0.005 285.823);
+  --card: #ffffff;
+  --card-foreground: #222222;
 
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.141 0.005 285.823);
+  --popover: #ffffff;
+  --popover-foreground: #222222;
 
-  --primary: oklch(0.448 0.119 151.328);
-  --primary-foreground: oklch(0.982 0.018 155.826);
+  --primary: #f03742;
+  --primary-foreground: #ffffff;
 
-  --secondary: oklch(0.967 0.001 286.375);
-  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --secondary: #9d2235;
+  --secondary-foreground: #ffffff;
 
-  --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
+  --info: #3ea5d9;
+  --info-foreground: #ffffff;
 
-  --accent: oklch(0.967 0.001 286.375);
-  --accent-foreground: oklch(0.21 0.006 285.885);
+  --warning: #ff7238;
+  --warning-foreground: #ffffff;
 
-  --destructive: oklch(0.577 0.245 27.325);
+  --neutral: #898d8d;
 
-  --border: oklch(0.92 0.004 286.32);
-  --input: oklch(0.92 0.004 286.32);
-  --ring: oklch(0.448 0.119 151.328);
+  --muted: #f1f1f1;
+  --muted-foreground: #999999;
 
-  --chart-1: oklch(0.448 0.119 151.328);
-  --chart-2: oklch(0.577 0.245 27.325);
-  --chart-3: oklch(0.552 0.016 285.938);
-  --chart-4: oklch(0.7 0.12 80);
-  --chart-5: oklch(0.62 0.18 220);
+  --accent: #f5f5f5;
+  --accent-foreground: #222222;
 
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.141 0.005 285.823);
-  --sidebar-primary: oklch(0.448 0.119 151.328);
-  --sidebar-primary-foreground: oklch(0.982 0.018 155.826);
-  --sidebar-accent: oklch(0.967 0.001 286.375);
-  --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
-  --sidebar-border: oklch(0.92 0.004 286.32);
-  --sidebar-ring: oklch(0.448 0.119 151.328);
+  --destructive: #bb0400;
+  --destructive-foreground: #ffffff;
+
+  --border: #dddddd;
+  --input: #dddddd;
+  --ring: #bbbbbb;
+
+  --chart-1: oklch(0.837 0.128 66.29);
+  --chart-2: oklch(0.705 0.213 47.604);
+  --chart-3: oklch(0.6273 0.2193 23.57);
+  --chart-4: oklch(0.553 0.195 38.402);
+  --chart-5: oklch(0.47 0.157 37.304);
+
+  --text-scale: 1;
+  --border-scale: 1;
+  --text-11px: calc(0.6875rem * var(--text-scale));
+  --text-xs: calc(0.75rem * var(--text-scale));
+  --text-md: calc(0.8125rem * var(--text-scale));
+  --text-sm: calc(0.875rem * var(--text-scale));
+  --text-base: calc(1rem * var(--text-scale));
+  --text-lg: calc(1.125rem * var(--text-scale));
+  --text-xl: calc(1.25rem * var(--text-scale));
+  --text-2xl: calc(1.5rem * var(--text-scale));
+  --text-3xl: calc(1.875rem * var(--text-scale));
+  --text-4xl: calc(2.25rem * var(--text-scale));
+
+  --sidebar: oklch(0.985 0.001 106.423);
+  --sidebar-foreground: oklch(0.147 0.004 49.25);
+  --sidebar-primary: oklch(0.6273 0.2193 23.57);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.97 0.001 106.424);
+  --sidebar-accent-foreground: oklch(0.216 0.006 56.043);
+  --sidebar-border: oklch(0.923 0.003 48.717);
+  --sidebar-ring: oklch(0.709 0.01 56.259);
 }
 
 /* Shared dark theme tokens: Mount API inherits .dark ancestors; Web Components use host.dark. */
@@ -113,47 +204,56 @@
 :host(.dark) [data-csc-widget] {
   color-scheme: dark;
 
-  --background: oklch(0.18 0.01 285);
-  --foreground: oklch(0.96 0.01 286);
+  --background: #0a0b0b;
+  --foreground: #eaedf1;
 
-  --card: oklch(0.22 0.01 285);
-  --card-foreground: oklch(0.96 0.01 286);
+  --card: #141616;
+  --card-foreground: #eaedf1;
 
-  --popover: oklch(0.22 0.01 285);
-  --popover-foreground: oklch(0.96 0.01 286);
+  --popover: #141616;
+  --popover-foreground: #eaedf1;
 
-  --primary: oklch(0.72 0.14 151.328);
-  --primary-foreground: oklch(0.18 0.03 155);
+  --primary: #f03742;
+  --primary-foreground: #ffffff;
 
-  --secondary: oklch(0.28 0.01 286);
-  --secondary-foreground: oklch(0.96 0.01 286);
+  --secondary: #7a1a28;
+  --secondary-foreground: #ffffff;
 
-  --muted: oklch(0.28 0.01 286);
-  --muted-foreground: oklch(0.74 0.015 286);
+  --info: #5fc1f5;
+  --info-foreground: #0a0b0b;
 
-  --accent: oklch(0.28 0.01 286);
-  --accent-foreground: oklch(0.96 0.01 286);
+  --warning: #ff9162;
+  --warning-foreground: #0a0b0b;
 
-  --destructive: oklch(0.68 0.22 27.325);
+  --neutral: #898d8d;
 
-  --border: oklch(1 0 0 / 12%);
-  --input: oklch(1 0 0 / 16%);
-  --ring: oklch(0.72 0.14 151.328);
+  --muted: #1a1c1c;
+  --muted-foreground: #a1a5a5;
 
-  --chart-1: oklch(0.72 0.14 151.328);
-  --chart-2: oklch(0.68 0.22 27.325);
-  --chart-3: oklch(0.74 0.08 220);
-  --chart-4: oklch(0.78 0.14 80);
-  --chart-5: oklch(0.7 0.16 310);
+  --accent: #232626;
+  --accent-foreground: #eaedf1;
 
-  --sidebar: oklch(0.22 0.01 285);
-  --sidebar-foreground: oklch(0.96 0.01 286);
-  --sidebar-primary: oklch(0.72 0.14 151.328);
-  --sidebar-primary-foreground: oklch(0.18 0.03 155);
-  --sidebar-accent: oklch(0.28 0.01 286);
-  --sidebar-accent-foreground: oklch(0.96 0.01 286);
-  --sidebar-border: oklch(1 0 0 / 12%);
-  --sidebar-ring: oklch(0.72 0.14 151.328);
+  --destructive: #bb0400;
+  --destructive-foreground: #ffffff;
+
+  --border: #2a2f2d;
+  --input: #2a2f2d;
+  --ring: #f03742;
+
+  --chart-1: oklch(0.7 0.15 66);
+  --chart-2: oklch(0.6 0.18 47);
+  --chart-3: oklch(0.5 0.2 23);
+  --chart-4: oklch(0.45 0.18 38);
+  --chart-5: oklch(0.4 0.15 37);
+
+  --sidebar: #141616;
+  --sidebar-foreground: #eaedf1;
+  --sidebar-primary: #f03742;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #232626;
+  --sidebar-accent-foreground: #eaedf1;
+  --sidebar-border: #2a2f2d;
+  --sidebar-ring: #f03742;
 }
 
 @layer base {
@@ -180,4 +280,25 @@
     background-color: var(--background);
     color: var(--foreground);
   }
+
+  :host,
+  [data-csc-widget] {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+/* Keep input-number chrome reset scoped to rendered widgets. */
+:host input::-webkit-outer-spin-button,
+:host input::-webkit-inner-spin-button,
+[data-csc-widget] input::-webkit-outer-spin-button,
+[data-csc-widget] input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+:host input[type='number'],
+[data-csc-widget] input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
 }
