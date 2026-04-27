@@ -1,0 +1,64 @@
+@layer components {
+  .csc-flip-number-digit::after {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: 50%;
+    z-index: 3;
+    height: var(--csc-flip-number-divider-thickness, 1px);
+    background: var(--csc-flip-number-divider-color, rgb(0 0 0));
+    content: '';
+    opacity: var(--csc-flip-number-divider-opacity, 0.08);
+    transform: translateY(-50%);
+  }
+
+  .csc-flip-number[data-flip-number-divider='hidden']
+    .csc-flip-number-digit::after {
+    display: none;
+  }
+
+  .csc-flip-number-digit-face-enter {
+    animation: csc-flip-number-digit-enter 520ms
+      cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+    transform-origin: top center;
+    will-change: transform;
+  }
+
+  .csc-flip-number-digit-flipper {
+    animation: csc-flip-number-digit-exit 520ms
+      cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+    transform-origin: bottom center;
+    will-change: transform;
+  }
+}
+
+@keyframes csc-flip-number-digit-enter {
+  0% {
+    transform: rotateX(90deg);
+  }
+
+  48% {
+    transform: rotateX(90deg);
+  }
+
+  100% {
+    transform: rotateX(0);
+  }
+}
+
+@keyframes csc-flip-number-digit-exit {
+  0% {
+    transform: rotateX(0);
+  }
+
+  48%,
+  100% {
+    transform: rotateX(-90deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .csc-flip-number-digit-face-enter,
+  .csc-flip-number-digit-flipper {
+    animation: none;
+  }
+}
