@@ -120,12 +120,12 @@ function ViewMorePlaceholder({
   return (
     <button
       aria-label={label}
-      className="flex h-full min-h-70.75 w-full flex-col items-center justify-center gap-3 rounded-[5px] border border-[#ddd] bg-white p-4 text-primary"
+      className="flex h-full min-h-70.75 w-full flex-col items-center justify-center gap-3 rounded-lg border border-border bg-card p-4 text-primary"
       data-testid="cross-sell-view-more-placeholder"
       onClick={onViewMore}
       type="button"
     >
-      <span className="flex size-12 items-center justify-center rounded-full bg-[#ffefef]">
+      <span className="flex size-12 items-center justify-center rounded-full bg-(--lion-red-100)">
         <ChevronRight aria-hidden="true" className="size-6" />
       </span>
       <span className="text-xs leading-5.5 font-bold">{label}</span>
@@ -251,7 +251,7 @@ export function CrossSellSection({
       >
         <CarouselPrevious
           aria-label="上一組推薦"
-          className="left-0 z-10 hidden size-10 border-0 bg-white p-0 text-[#444] shadow-[0_0_4px_rgba(0,0,0,0.25)] hover:bg-white hover:text-[#f03742] md:flex"
+          className="left-0 z-10 hidden size-10 border-0 bg-card p-0 text-(--lion-gray-800) shadow-(--lion-carousel-control-shadow) hover:bg-card hover:text-primary md:flex"
           data-testid={`section-${section.id}-previous`}
           hideWhenUnavailable
         />
@@ -288,7 +288,7 @@ export function CrossSellSection({
         </CarouselContent>
         <CarouselNext
           aria-label="下一組推薦"
-          className="right-0 z-10 hidden size-10 border-0 bg-white p-0 text-[#444] shadow-[0_0_4px_rgba(0,0,0,0.25)] hover:bg-white hover:text-[#f03742] md:flex"
+          className="right-0 z-10 hidden size-10 border-0 bg-card p-0 text-(--lion-gray-800) shadow-(--lion-carousel-control-shadow) hover:bg-card hover:text-primary md:flex"
           data-testid={`section-${section.id}-next`}
           hideWhenUnavailable
         />
