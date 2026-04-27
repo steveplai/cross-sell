@@ -61,10 +61,10 @@ export function CrossSellSection({
 
       {section.categories && section.categories.length > 0 ? (
         <div className="mb-4 flex gap-2 overflow-x-auto pb-1">
-          {section.categories.map((category) => (
+          {section.categories.map((category, index) => (
             <span
               className="shrink-0 rounded-full bg-[#f4f4f4] px-3 py-1 text-xs leading-5 text-[#666]"
-              key={category}
+              key={`${category}-${index}`}
             >
               {category}
             </span>
