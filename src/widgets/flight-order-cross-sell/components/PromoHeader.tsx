@@ -41,6 +41,9 @@ export function PromoHeader({
         'px-3 pt-9 md:px-0 md:pt-11.25',
         'bg-linear-to-b from-(--lion-header-gradient-from) to-(--lion-header-gradient-to) bg-size-[100%_60%] bg-no-repeat',
         'md:via-(--lion-header-gradient-via) md:bg-size-[100%_100%]',
+        {
+          'pb-2.5 md:pb-11.25': !isPromoActive,
+        }
       )}
     >
       <CountdownBackground />
