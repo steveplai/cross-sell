@@ -46,17 +46,17 @@ export function ProductCard({
   return (
     <article className="h-full min-w-0">
       <Button
-        className="block h-full w-full rounded-[5px] bg-transparent p-0 text-left font-normal whitespace-normal text-card-foreground shadow-none hover:bg-transparent hover:text-card-foreground"
+        className="group block h-full w-full rounded-[5px] bg-transparent p-0 text-left font-normal whitespace-normal text-card-foreground shadow-none hover:bg-transparent hover:text-card-foreground"
         onClick={onSelect}
         type="button"
         variant="ghost"
       >
-        <Card className="h-full gap-0 overflow-hidden rounded-[5px] border border-(--lion-gray-200) bg-card py-0 shadow-(--lion-product-card-shadow)">
+        <Card className="h-full gap-0 overflow-hidden rounded-[5px] border border-(--lion-gray-200) bg-card py-0 shadow-(--lion-product-card-shadow) transition-shadow duration-300 ease-out group-hover:shadow-(--lion-product-card-shadow-hover)">
           <div className="relative h-29.25 w-full overflow-hidden rounded-t-[5px] bg-(--lion-gray-50)">
             {item.imageUrl ? (
               <img
                 alt=""
-                className="h-full w-full object-cover"
+                className="h-full w-full origin-center object-cover transition-transform duration-300 ease-out group-hover:scale-125"
                 src={item.imageUrl}
               />
             ) : (
