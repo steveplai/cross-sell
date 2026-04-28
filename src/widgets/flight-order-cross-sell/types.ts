@@ -21,8 +21,10 @@ export interface FlightOrderCrossSellItem {
   title: string
   imageUrl?: string
   location?: string
+  detailLocation?: string
   badge?: string
   promoBadge?: string
+  starRating?: number
   rating?: string
   ratingLabel?: string
   reviewCount?: number

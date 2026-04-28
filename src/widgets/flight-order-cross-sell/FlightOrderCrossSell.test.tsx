@@ -71,6 +71,10 @@ describe('FlightOrderCrossSell', () => {
     expect(
       screen.getByRole('button', { name: /東京成田\/羽田機場至東京都市區/ }),
     ).toBeInTheDocument()
+    expect(screen.getAllByLabelText('飯店星等 5 顆星').length).toBeGreaterThan(
+      0,
+    )
+    expect(screen.getAllByText('江東區').length).toBeGreaterThan(0)
 
     expect(screen.getAllByRole('button', { name: /探索更多/ }).length).toBe(3)
     expect(screen.getByRole('button', { name: '前往加購' })).toBeInTheDocument()

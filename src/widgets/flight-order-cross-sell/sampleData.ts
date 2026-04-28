@@ -64,8 +64,10 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
           imageUrl:
             'https://www.figma.com/api/mcp/asset/e33aa4b4-2d1e-469a-88fd-0c48ac9d27be',
           location: '距離市場前站0.2公里',
+          detailLocation: '江東區',
           badge: '熱銷 TOP1',
           promoBadge: '86%東京旅客喜愛',
+          starRating: 5,
           rating: '4.5',
           ratingLabel: '太讚了',
           reviewCount: 1132,
@@ -81,7 +83,9 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
           imageUrl:
             'https://www.figma.com/api/mcp/asset/8fff3a21-aeee-4b9b-b0be-aa6c40150095',
           location: '江東區',
+          detailLocation: '江東區',
           promoBadge: '86%東京旅客喜愛',
+          starRating: 5,
           rating: '4.5',
           ratingLabel: '太讚了',
           reviewCount: 1132,
@@ -97,7 +101,9 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
           imageUrl:
             'https://www.figma.com/api/mcp/asset/aa9427a0-f62c-4cd4-b3aa-1d68f9ebbaff',
           location: '江東區',
+          detailLocation: '江東區',
           promoBadge: '86%東京旅客喜愛',
+          starRating: 5,
           rating: '4.5',
           ratingLabel: '太讚了',
           reviewCount: 1132,
@@ -113,7 +119,9 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
           imageUrl:
             'https://www.figma.com/api/mcp/asset/69b0139d-978a-4ec6-876e-16a7643fdc45',
           location: '距離市場前站0.2公里',
+          detailLocation: '江東區',
           promoBadge: '86%東京旅客喜愛',
+          starRating: 5,
           rating: '4.5',
           ratingLabel: '太讚了',
           reviewCount: 1132,
@@ -129,7 +137,9 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
           imageUrl:
             'https://www.figma.com/api/mcp/asset/3c5ffeb7-d423-4737-85ab-94a787eb3524',
           location: '江東區',
+          detailLocation: '江東區',
           promoBadge: '86%東京旅客喜愛',
+          starRating: 5,
           rating: '4.5',
           ratingLabel: '太讚了',
           reviewCount: 1132,
@@ -145,7 +155,9 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
           imageUrl:
             'https://www.figma.com/api/mcp/asset/e33aa4b4-2d1e-469a-88fd-0c48ac9d27be',
           location: '銀座',
+          detailLocation: '銀座',
           promoBadge: '86%東京旅客喜愛',
+          starRating: 5,
           rating: '4.6',
           ratingLabel: '很棒',
           reviewCount: 856,
@@ -161,7 +173,9 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
           imageUrl:
             'https://www.figma.com/api/mcp/asset/8fff3a21-aeee-4b9b-b0be-aa6c40150095',
           location: '新宿區',
+          detailLocation: '新宿區',
           promoBadge: '熱門加購',
+          starRating: 5,
           rating: '4.4',
           ratingLabel: '太讚了',
           reviewCount: 2041,
@@ -177,7 +191,9 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
           imageUrl:
             'https://www.figma.com/api/mcp/asset/aa9427a0-f62c-4cd4-b3aa-1d68f9ebbaff',
           location: '上野',
+          detailLocation: '上野',
           promoBadge: '親子首選',
+          starRating: 5,
           rating: '4.3',
           ratingLabel: '很棒',
           reviewCount: 624,

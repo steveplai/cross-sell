@@ -36,6 +36,8 @@
   --lion-orange-600: #ff8400;
   --lion-blue-600: var(--info);
   --lion-carousel-control-shadow: 0 0 4px rgb(0 0 0 / 0.25);
+  --lion-product-card-price-foreground: #383838;
+  --lion-product-card-shadow: 0 0 8px rgb(0 0 0 / 0.3);
 }
 
 .dark [data-csc-widget][data-csc-widget-name='flight-order-cross-sell'],
@@ -58,4 +60,6 @@
   --lion-orange-300: #5c3320;
   --lion-orange-400: #ff9162;
   --lion-orange-600: #ff9a1f;
+  --lion-product-card-price-foreground: var(--lion-gray-800);
+  --lion-product-card-shadow: 0 0 8px rgb(0 0 0 / 0.45);
 }
