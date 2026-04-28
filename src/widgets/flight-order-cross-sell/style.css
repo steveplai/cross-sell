@@ -37,7 +37,7 @@
   --lion-blue-600: var(--info);
   --lion-carousel-control-shadow: 0 0 4px rgb(0 0 0 / 0.25);
   --lion-product-card-price-foreground: #383838;
-  --lion-product-card-shadow: 0 0 8px rgb(0 0 0 / 0.3);
+  --lion-product-card-shadow: 0 0 8px 0 rgb(0 0 0 / 0.3);
 }
 
 .dark [data-csc-widget][data-csc-widget-name='flight-order-cross-sell'],

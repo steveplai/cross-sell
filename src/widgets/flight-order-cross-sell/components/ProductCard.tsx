@@ -94,7 +94,7 @@ export function ProductCard({
                       {Array.from({ length: 5 }, (_, index) => (
                         <Star
                           aria-hidden="true"
-                          className="size-3 fill-[var(--lion-orange-400)] text-(--lion-orange-400)"
+                          className="size-3 fill-(--lion-orange-400) text-(--lion-orange-400)"
                           key={index}
                         />
                       )).slice(0, starRating)}
@@ -124,7 +124,7 @@ export function ProductCard({
                   ) : (
                     <Star
                       aria-hidden="true"
-                      className="size-3 fill-[var(--lion-orange-600)] text-(--lion-orange-600)"
+                      className="size-3 fill-(--lion-orange-600) text-(--lion-orange-600)"
                     />
                   )}
                   {reviewCount ? (
