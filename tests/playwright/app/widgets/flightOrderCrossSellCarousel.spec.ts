@@ -114,6 +114,12 @@ async function clickFlightOrderCarouselNext(page: Page) {
   })
 }
 
+async function gotoFlightOrderCrossSellExample(page: Page) {
+  await page.goto('/examples/web-component/flight-order-cross-sell.basic.html', {
+    waitUntil: 'domcontentloaded',
+  })
+}
+
 async function focusFirstFlightOrderProduct(page: Page) {
   await page.locator('flight-order-cross-sell').evaluate((element) => {
     const button = element.shadowRoot?.querySelector(
@@ -130,7 +136,7 @@ test('flight order carousel uses browser scrolling without a visible scrollbar',
   page,
 }) => {
   await page.setViewportSize({ height: 900, width: 768 })
-  await page.goto('/examples/web-component/flight-order-cross-sell.basic.html')
+  await gotoFlightOrderCrossSellExample(page)
 
   await expect
     .poll(() => getFlightOrderCarouselState(page))
@@ -181,7 +187,7 @@ test('flight order carousel moves one desktop page and fills the final page with
   page,
 }) => {
   await page.setViewportSize({ height: 900, width: 1190 })
-  await page.goto('/examples/web-component/flight-order-cross-sell.basic.html')
+  await gotoFlightOrderCrossSellExample(page)
 
   await expect
     .poll(async () => {
@@ -261,7 +267,7 @@ test('flight order carousel supports mobile exposure and keyboard navigation', a
   page,
 }) => {
   await page.setViewportSize({ height: 900, width: 390 })
-  await page.goto('/examples/web-component/flight-order-cross-sell.basic.html')
+  await gotoFlightOrderCrossSellExample(page)
 
   await expect
     .poll(async () => {

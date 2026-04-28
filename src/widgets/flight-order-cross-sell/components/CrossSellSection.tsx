@@ -20,7 +20,7 @@ import { ProductCard } from './ProductCard'
 const carouselMaxPageSize = 5
 const carouselPageSizeRoundingTolerance = 0.05
 const carouselItemClassName =
-  'min-w-[208px] basis-[65%] pl-2 sm:basis-1/2 md:min-w-[219px] md:basis-1/3 lg:basis-1/5'
+  'min-w-52 basis-[65%] pl-2 sm:basis-1/2 md:min-w-54.75 md:basis-1/3 lg:basis-1/5'
 const initialCarouselLayout = {
   pageSize: carouselMaxPageSize,
   slideWidth: 0,
@@ -120,7 +120,7 @@ function ViewMorePlaceholder({
   return (
     <button
       aria-label={label}
-      className="flex h-full min-h-70.75 w-full flex-col items-center justify-center gap-3 rounded-lg border border-border bg-card p-4 text-primary"
+      className="flex h-full min-h-70.75 w-full flex-col items-center justify-center gap-3 rounded-[5px] border border-(--lion-gray-200) bg-card p-4 text-primary shadow-(--lion-product-card-shadow)"
       data-testid="cross-sell-view-more-placeholder"
       onClick={onViewMore}
       type="button"

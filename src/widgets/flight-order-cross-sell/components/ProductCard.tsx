@@ -51,7 +51,7 @@ export function ProductCard({
         type="button"
         variant="ghost"
       >
-        <Card className="h-full gap-0 overflow-hidden rounded-[5px] border-0 bg-card py-0 shadow-(--lion-product-card-shadow)">
+        <Card className="h-full gap-0 overflow-hidden rounded-[5px] border border-(--lion-gray-200) bg-card py-0 shadow-(--lion-product-card-shadow)">
           <div className="relative h-29.25 w-full overflow-hidden rounded-t-[5px] bg-(--lion-gray-50)">
             {item.imageUrl ? (
               <img
