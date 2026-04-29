@@ -1,10 +1,9 @@
 import { ChevronRight } from 'lucide-react'
-import { type CSSProperties, useCallback, useEffect, useState } from 'react'
+import { useCallback } from 'react'
 
 import { Button } from '@/components/ui/button'
 import {
   Carousel,
-  type CarouselApi,
   CarouselContent,
   CarouselItem,
   CarouselNext,
@@ -15,14 +14,8 @@ import type {
   FlightOrderCrossSellItem,
   FlightOrderCrossSellSection as FlightOrderCrossSellSectionData,
 } from '../../types'
-import {
-  getPlaceholderBasis,
-  getPlaceholderLabel,
-  getPlaceholderSpan,
-  getVisiblePageSize,
-  initialCarouselLayout,
-} from './carouselPlaceholderLayout'
 import { ProductCard } from './ProductCard'
+import { useCarouselPlaceholderLayout } from './useCarouselPlaceholderLayout'
 import { ViewMorePlaceholder } from './ViewMorePlaceholder'
 
 const carouselItemClassName =
@@ -38,6 +31,22 @@ interface CrossSellSectionProps {
   onViewMore?: () => void
 }
 
+function getPlaceholderLabel(section: FlightOrderCrossSellSectionData) {
+  if (section.title.includes('飯店')) {
+    return '更多精選飯店'
+  }
+
+  if (section.title.includes('景點')) {
+    return '更多精選景點'
+  }
+
+  if (section.title.includes('交通')) {
+    return '更多交通選擇'
+  }
+
+  return section.viewMoreLabel ?? '探索更多'
+}
+
 export function CrossSellSection({
   currency,
   isPromoActive,
@@ -46,69 +55,16 @@ export function CrossSellSection({
   onSelectItem,
   onViewMore,
 }: CrossSellSectionProps) {
-  const [carouselApi, setCarouselApi] = useState<CarouselApi>()
-  const [carouselLayout, setCarouselLayout] = useState(initialCarouselLayout)
-
-  const updateCarouselLayout = useCallback((api: CarouselApi) => {
-    if (!api) {
-      return
-    }
-
-    const nextLayout = getVisiblePageSize(api)
-
-    setCarouselLayout((currentLayout) => {
-      if (
-        currentLayout.pageSize === nextLayout.pageSize &&
-        currentLayout.slideWidth === nextLayout.slideWidth &&
-        currentLayout.viewportWidth === nextLayout.viewportWidth
-      ) {
-        return currentLayout
-      }
-
-      return nextLayout
-    })
-  }, [])
-
-  useEffect(() => {
-    if (!carouselApi) {
-      return
-    }
-
-    const ownerWindow = carouselApi.rootNode().ownerDocument.defaultView
-    const animationFrameId = ownerWindow?.requestAnimationFrame(() => {
-      updateCarouselLayout(carouselApi)
-    })
-
-    carouselApi.on('resize', updateCarouselLayout)
-    carouselApi.on('reInit', updateCarouselLayout)
-
-    return () => {
-      if (animationFrameId !== undefined) {
-        ownerWindow?.cancelAnimationFrame(animationFrameId)
-      }
-
-      carouselApi.off('resize', updateCarouselLayout)
-      carouselApi.off('reInit', updateCarouselLayout)
-    }
-  }, [carouselApi, updateCarouselLayout])
-
   const handleViewMore = useCallback(() => {
     onViewMore?.()
   }, [onViewMore])
+  const { placeholderBasis, placeholderSpan, setCarouselApi } =
+    useCarouselPlaceholderLayout(section.items.length)
 
   if (section.items.length === 0) {
     return null
   }
 
-  const placeholderSpan = getPlaceholderSpan(
-    section.items.length,
-    carouselLayout.pageSize,
-  )
-  const placeholderBasis = getPlaceholderBasis(
-    section.items.length,
-    placeholderSpan,
-    carouselLayout,
-  )
   const placeholderLabel = getPlaceholderLabel(section)
 
   return (
@@ -188,11 +144,7 @@ export function CrossSellSection({
           {placeholderSpan > 0 ? (
             <CarouselItem
               className="min-w-52 pl-2 md:min-w-54.75"
-              style={
-                {
-                  flexBasis: placeholderBasis,
-                } as CSSProperties
-              }
+              style={{ flexBasis: placeholderBasis }}
             >
               <ViewMorePlaceholder
                 href={viewMoreDestinationUrl}

@@ -1,5 +1,4 @@
 import { cn } from '../../../../lib/utils'
-
 import { CountdownBackgroundDesktop } from './CountdownBackgroundDesktop'
 import { CountdownBackgroundMobile } from './CountdownBackgroundMobile'
 

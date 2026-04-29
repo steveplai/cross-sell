@@ -115,9 +115,12 @@ async function clickFlightOrderCarouselNext(page: Page) {
 }
 
 async function gotoFlightOrderCrossSellExample(page: Page) {
-  await page.goto('/examples/web-component/flight-order-cross-sell.basic.html', {
-    waitUntil: 'domcontentloaded',
-  })
+  await page.goto(
+    '/examples/web-component/flight-order-cross-sell.basic.html',
+    {
+      waitUntil: 'domcontentloaded',
+    },
+  )
 }
 
 async function focusFirstFlightOrderProduct(page: Page) {
