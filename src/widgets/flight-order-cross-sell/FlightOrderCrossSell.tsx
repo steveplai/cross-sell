@@ -80,7 +80,7 @@ function FlightOrderCrossSellContent({
           promo={data.promo}
           remainingSeconds={remainingSeconds}
         />
-        <div className="overflow-hidden rounded-none bg-background md:rounded-[10px]">
+        <div className="overflow-hidden rounded-none bg-background md:rounded-3xl">
           <div className="flex flex-col divide-y divide-(--lion-gray-50)">
             {data.sections.map((section) => (
               <CrossSellSection
@@ -99,7 +99,7 @@ function FlightOrderCrossSellContent({
         </div>
 
         {hsrAddon ? (
-          <div className="overflow-hidden rounded-none bg-background md:rounded-[10px]">
+          <div className="overflow-hidden rounded-none bg-background md:rounded-3xl">
             <HsrAddonBanner
               addon={hsrAddon}
               onSelectAddon={() => onSelectAddon?.({ addonId: hsrAddon.id })}
@@ -108,7 +108,7 @@ function FlightOrderCrossSellContent({
         ) : null}
 
         {data.reminders ? (
-          <div className="overflow-hidden rounded-none bg-background md:rounded-[10px]">
+          <div className="overflow-hidden rounded-none bg-background md:rounded-3xl">
             <ReminderCards
               items={data.reminders.items}
               onSelectAddon={(addonId) => onSelectAddon?.({ addonId })}

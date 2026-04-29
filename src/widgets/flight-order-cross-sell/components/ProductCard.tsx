@@ -46,12 +46,12 @@ export function ProductCard({
   return (
     <article className="h-full min-w-0">
       <Button
-        className="group block h-full w-full rounded-[5px] bg-transparent p-0 text-left font-normal whitespace-normal text-card-foreground shadow-none hover:bg-transparent hover:text-card-foreground"
+        className="group block h-full w-full rounded-lg bg-transparent p-0 text-left font-normal whitespace-normal text-card-foreground shadow-none hover:bg-transparent hover:text-card-foreground"
         onClick={onSelect}
         type="button"
         variant="ghost"
       >
-        <Card className="h-full gap-0 overflow-hidden rounded-[5px] border border-(--lion-gray-200) bg-card py-0 shadow-(--lion-product-card-shadow) transition-shadow duration-300 ease-out group-hover:shadow-(--lion-product-card-shadow-hover)">
+        <Card className="h-full gap-0 overflow-hidden rounded-lg border border-(--lion-gray-200) bg-card py-0 shadow-(--lion-product-card-shadow) transition-shadow duration-300 ease-out group-hover:shadow-(--lion-product-card-shadow-hover)">
           <div className="relative h-29.25 w-full overflow-hidden rounded-t-[5px] bg-(--lion-gray-50)">
             {item.imageUrl ? (
               <img
@@ -66,7 +66,7 @@ export function ProductCard({
             )}
             <div className="absolute inset-x-0 bottom-0 h-6.75 bg-linear-to-b from-black/0 to-black/80" />
             {imageBadge ? (
-              <Badge className="absolute top-1.25 left-1.25 h-5.5 rounded-[5px] bg-primary px-1.25 py-0 text-xs leading-5.5 font-normal text-primary-foreground shadow-none hover:bg-primary">
+              <Badge className="absolute top-1.25 left-1.25 h-5.5 rounded-lg bg-primary px-1.25 py-0 text-xs leading-5.5 font-normal text-primary-foreground shadow-none hover:bg-primary">
                 {imageBadge}
               </Badge>
             ) : null}

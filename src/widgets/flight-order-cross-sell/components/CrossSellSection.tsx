@@ -120,7 +120,7 @@ function ViewMorePlaceholder({
   return (
     <button
       aria-label={label}
-      className="flex h-full min-h-70.75 w-full flex-col items-center justify-center gap-3 rounded-[5px] border border-(--lion-gray-200) bg-card p-4 text-primary shadow-(--lion-product-card-shadow)"
+      className="flex h-full min-h-70.75 w-full flex-col items-center justify-center gap-3 rounded-lg border border-(--lion-gray-200) bg-card p-4 text-primary shadow-(--lion-product-card-shadow)"
       data-testid="cross-sell-view-more-placeholder"
       onClick={onViewMore}
       type="button"
