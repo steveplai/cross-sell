@@ -26,6 +26,7 @@ const initialCarouselLayout = {
   slideWidth: 0,
   viewportWidth: 0,
 }
+const viewMoreDestinationUrl = 'https://www.liontravel.com/'
 
 interface CrossSellSectionProps {
   currency: string
@@ -111,25 +112,29 @@ function getPlaceholderLabel(section: FlightOrderCrossSellSectionData) {
 }
 
 function ViewMorePlaceholder({
+  href,
   label,
   onViewMore,
 }: {
+  href: string
   label: string
   onViewMore?: () => void
 }) {
   return (
-    <button
+    <a
       aria-label={label}
       className="flex h-full min-h-70.75 w-full flex-col items-center justify-center gap-3 rounded-lg border border-(--lion-gray-200) bg-card p-4 text-primary shadow-(--lion-product-card-shadow)"
       data-testid="cross-sell-view-more-placeholder"
+      href={href}
       onClick={onViewMore}
-      type="button"
+      rel="noopener noreferrer"
+      target="_blank"
     >
       <span className="flex size-12 items-center justify-center rounded-full bg-(--lion-red-100)">
         <ChevronRight aria-hidden="true" className="size-6" />
       </span>
       <span className="text-xs leading-5.5 font-bold">{label}</span>
-    </button>
+    </a>
   )
 }
 
@@ -187,6 +192,10 @@ export function CrossSellSection({
     }
   }, [carouselApi, updateCarouselLayout])
 
+  const handleViewMore = useCallback(() => {
+    onViewMore?.()
+  }, [onViewMore])
+
   if (section.items.length === 0) {
     return null
   }
@@ -216,13 +225,19 @@ export function CrossSellSection({
           ) : null}
         </div>
         <Button
+          asChild
           className="h-auto shrink-0 gap-1 bg-transparent p-0 text-sm leading-5.5 font-bold text-primary hover:bg-transparent hover:text-primary"
-          onClick={onViewMore}
-          type="button"
           variant="ghost"
         >
-          {section.viewMoreLabel ?? '探索更多'}
-          <ChevronRight aria-hidden="true" className="size-4" />
+          <a
+            href={viewMoreDestinationUrl}
+            onClick={handleViewMore}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            {section.viewMoreLabel ?? '探索更多'}
+            <ChevronRight aria-hidden="true" className="size-4" />
+          </a>
         </Button>
       </header>
 
@@ -280,8 +295,9 @@ export function CrossSellSection({
               }
             >
               <ViewMorePlaceholder
+                href={viewMoreDestinationUrl}
                 label={placeholderLabel}
-                onViewMore={onViewMore}
+                onViewMore={handleViewMore}
               />
             </CarouselItem>
           ) : null}

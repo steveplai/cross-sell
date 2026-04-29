@@ -76,7 +76,7 @@ describe('FlightOrderCrossSell', () => {
     )
     expect(screen.getAllByText('江東區').length).toBeGreaterThan(0)
 
-    expect(screen.getAllByRole('button', { name: /探索更多/ }).length).toBe(3)
+    expect(screen.getAllByRole('link', { name: /探索更多/ }).length).toBe(3)
     expect(screen.getByRole('button', { name: '前往加購' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /網路服務/ })).toBeInTheDocument()
   })
@@ -175,7 +175,13 @@ describe('FlightOrderCrossSell', () => {
       />,
     )
 
-    await user.click(screen.getAllByRole('button', { name: /探索更多/ })[0])
+    const viewMoreLink = screen.getAllByRole('link', { name: /探索更多/ })[0]
+
+    expect(viewMoreLink).toHaveAttribute('href', 'https://www.liontravel.com/')
+    expect(viewMoreLink).toHaveAttribute('target', '_blank')
+    expect(viewMoreLink).toHaveAttribute('rel', 'noopener noreferrer')
+
+    await user.click(viewMoreLink)
     await user.click(screen.getByRole('button', { name: /LA VISTA 東京灣/ }))
     await user.click(screen.getByRole('button', { name: /前往加購/ }))
 
