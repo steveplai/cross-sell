@@ -31,6 +31,9 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
     ctaLabel: '前往加購',
     helperLabel: '住宿1：大阪',
   },
+  attractionDecor: {
+    title: '探索東京 景點不錯過',
+  },
   reminders: {
     title: '別忘了 加購一份安心與便利',
     subtitle: '即將出門？',
@@ -55,6 +58,7 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
   sections: [
     {
       id: 'tokyo-hotels',
+      kind: 'hotel',
       title: '探索東京飯店',
       viewMoreLabel: '探索更多',
       items: [
@@ -207,6 +211,7 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
     },
     {
       id: 'tokyo-attractions',
+      kind: 'attraction',
       title: '探索東京 景點不錯過',
       subtitle: '大家都在搜尋',
       viewMoreLabel: '探索更多',
@@ -275,6 +280,7 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
     },
     {
       id: 'local-transport',
+      kind: 'transport',
       title: '當地交通 一次搞定',
       viewMoreLabel: '探索更多',
       items: [

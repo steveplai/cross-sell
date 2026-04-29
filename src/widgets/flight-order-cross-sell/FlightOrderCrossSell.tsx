@@ -6,13 +6,84 @@ import { createWidgetRootProps } from '../../runtime/widgetRoot'
 import { HsrAddonBanner } from './components/addons/HsrAddonBanner'
 import { ReminderCards } from './components/addons/ReminderCards'
 import { PromoHeader } from './components/promo/PromoHeader'
+import { AttractionDecorBanner } from './components/recommendations/AttractionDecorBanner'
 import { CrossSellSection } from './components/recommendations/CrossSellSection'
 import { getRemainingPromoSeconds } from './lib/countdown'
-import type { FlightOrderCrossSellProps } from './types'
+import type {
+  FlightOrderCrossSellProps,
+  FlightOrderCrossSellSection,
+  FlightOrderCrossSellSectionKind,
+} from './types'
 
 const flightOrderCrossSellRootProps = createWidgetRootProps(
   'flight-order-cross-sell',
 )
+
+type SectionGroups = Record<
+  FlightOrderCrossSellSectionKind,
+  FlightOrderCrossSellSection[]
+> & {
+  other: FlightOrderCrossSellSection[]
+}
+
+function getFallbackSectionKind(
+  section: FlightOrderCrossSellSection,
+): FlightOrderCrossSellSectionKind | undefined {
+  if (section.kind) {
+    return section.kind
+  }
+
+  const sectionText = `${section.id} ${section.title}`.toLowerCase()
+
+  if (sectionText.includes('hotel') || sectionText.includes('飯店')) {
+    return 'hotel'
+  }
+
+  if (
+    sectionText.includes('attraction') ||
+    sectionText.includes('景點') ||
+    sectionText.includes('票券')
+  ) {
+    return 'attraction'
+  }
+
+  if (
+    sectionText.includes('transport') ||
+    sectionText.includes('交通') ||
+    sectionText.includes('transfer')
+  ) {
+    return 'transport'
+  }
+
+  if (sectionText.includes('flight') || sectionText.includes('機票')) {
+    return 'flight'
+  }
+
+  return undefined
+}
+
+function groupSections(sections: FlightOrderCrossSellSection[]): SectionGroups {
+  const groups: SectionGroups = {
+    hotel: [],
+    attraction: [],
+    transport: [],
+    flight: [],
+    other: [],
+  }
+
+  sections.forEach((section) => {
+    const kind = getFallbackSectionKind(section)
+
+    if (kind) {
+      groups[kind].push(section)
+      return
+    }
+
+    groups.other.push(section)
+  })
+
+  return groups
+}
 
 function useCurrentTime(promoKey: string) {
   const [now, setNow] = useState(() => Date.now())
@@ -63,6 +134,36 @@ function FlightOrderCrossSellContent({
   const hsrAddon = data.hsrAddon
   const remainingSeconds = getRemainingPromoSeconds(data.promo, now)
   const isPromoActive = remainingSeconds > 0
+  const attractionDecor = data.attractionDecor
+  const sectionGroups = groupSections(data.sections)
+  const showAttractionDecor =
+    !!attractionDecor && sectionGroups.attraction.length > 0
+
+  function renderSections(sections: FlightOrderCrossSellSection[]) {
+    if (sections.length === 0) {
+      return null
+    }
+
+    return (
+      <div className="overflow-hidden rounded-none bg-background md:rounded-3xl">
+        <div className="flex flex-col divide-y divide-(--lion-gray-50)">
+          {sections.map((section) => (
+            <CrossSellSection
+              currency={currency}
+              isPromoActive={isPromoActive}
+              key={section.id}
+              locale={locale}
+              onSelectItem={(item) =>
+                onSelectItem?.({ item, sectionId: section.id })
+              }
+              onViewMore={() => onViewMore?.({ sectionId: section.id })}
+              section={section}
+            />
+          ))}
+        </div>
+      </div>
+    )
+  }
 
   return (
     <section
@@ -80,23 +181,7 @@ function FlightOrderCrossSellContent({
           promo={data.promo}
           remainingSeconds={remainingSeconds}
         />
-        <div className="overflow-hidden rounded-none bg-background md:rounded-3xl">
-          <div className="flex flex-col divide-y divide-(--lion-gray-50)">
-            {data.sections.map((section) => (
-              <CrossSellSection
-                currency={currency}
-                isPromoActive={isPromoActive}
-                key={section.id}
-                locale={locale}
-                onSelectItem={(item) =>
-                  onSelectItem?.({ item, sectionId: section.id })
-                }
-                onViewMore={() => onViewMore?.({ sectionId: section.id })}
-                section={section}
-              />
-            ))}
-          </div>
-        </div>
+        {renderSections(sectionGroups.hotel)}
 
         {hsrAddon ? (
           <div className="overflow-hidden rounded-none bg-background md:rounded-3xl">
@@ -106,6 +191,34 @@ function FlightOrderCrossSellContent({
             />
           </div>
         ) : null}
+
+        {sectionGroups.attraction.length > 0 ? (
+          <div className="overflow-hidden rounded-none bg-background md:rounded-3xl">
+            <div className="flex flex-col divide-y divide-(--lion-gray-50)">
+              {attractionDecor ? (
+                <AttractionDecorBanner decor={attractionDecor} />
+              ) : null}
+              {sectionGroups.attraction.map((section) => (
+                <CrossSellSection
+                  currency={currency}
+                  hideTitle={showAttractionDecor}
+                  isPromoActive={isPromoActive}
+                  key={section.id}
+                  locale={locale}
+                  onSelectItem={(item) =>
+                    onSelectItem?.({ item, sectionId: section.id })
+                  }
+                  onViewMore={() => onViewMore?.({ sectionId: section.id })}
+                  section={section}
+                />
+              ))}
+            </div>
+          </div>
+        ) : null}
+
+        {renderSections(sectionGroups.transport)}
+        {renderSections(sectionGroups.flight)}
+        {renderSections(sectionGroups.other)}
 
         {data.reminders ? (
           <div className="overflow-hidden rounded-none bg-background md:rounded-3xl">

@@ -4,6 +4,7 @@ export { flightOrderCrossSellSampleData } from './sampleData'
 export type {
   FlightOrderCrossSellAddon,
   FlightOrderCrossSellAddonEvent,
+  FlightOrderCrossSellAttractionDecor,
   FlightOrderCrossSellData,
   FlightOrderCrossSellItem,
   FlightOrderCrossSellItemEvent,
@@ -11,5 +12,6 @@ export type {
   FlightOrderCrossSellProps,
   FlightOrderCrossSellReminder,
   FlightOrderCrossSellSection,
+  FlightOrderCrossSellSectionKind,
   FlightOrderCrossSellViewMoreEvent,
 } from './types'

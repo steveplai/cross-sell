@@ -37,8 +37,15 @@ export interface FlightOrderCrossSellItem {
   priceSuffix?: string
 }
 
+export type FlightOrderCrossSellSectionKind =
+  | 'hotel'
+  | 'attraction'
+  | 'transport'
+  | 'flight'
+
 export interface FlightOrderCrossSellSection {
   id: string
+  kind?: FlightOrderCrossSellSectionKind
   title: string
   subtitle?: string
   viewMoreLabel?: string
@@ -62,9 +69,16 @@ export interface FlightOrderCrossSellReminder {
   icon: 'wifi' | 'gift'
 }
 
+export interface FlightOrderCrossSellAttractionDecor {
+  title: string
+  imageAlt?: string
+  imageUrl?: string
+}
+
 export interface FlightOrderCrossSellData {
   promo: FlightOrderCrossSellPromo
   sections: FlightOrderCrossSellSection[]
+  attractionDecor?: FlightOrderCrossSellAttractionDecor
   hsrAddon?: FlightOrderCrossSellAddon
   reminders?: {
     title: string

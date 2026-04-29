@@ -9,6 +9,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel'
+import { cn } from '@/lib/utils'
 
 import type {
   FlightOrderCrossSellItem,
@@ -27,11 +28,28 @@ interface CrossSellSectionProps {
   isPromoActive: boolean
   locale: string
   section: FlightOrderCrossSellSectionData
+  hideTitle?: boolean
   onSelectItem?: (item: FlightOrderCrossSellItem) => void
   onViewMore?: () => void
 }
 
 function getPlaceholderLabel(section: FlightOrderCrossSellSectionData) {
+  if (section.kind === 'hotel') {
+    return '更多精選飯店'
+  }
+
+  if (section.kind === 'attraction') {
+    return '更多精選景點'
+  }
+
+  if (section.kind === 'transport') {
+    return '更多交通選擇'
+  }
+
+  if (section.kind === 'flight') {
+    return '更多精選機票'
+  }
+
   if (section.title.includes('飯店')) {
     return '更多精選飯店'
   }
@@ -44,11 +62,16 @@ function getPlaceholderLabel(section: FlightOrderCrossSellSectionData) {
     return '更多交通選擇'
   }
 
+  if (section.title.includes('機票')) {
+    return '更多精選機票'
+  }
+
   return section.viewMoreLabel ?? '探索更多'
 }
 
 export function CrossSellSection({
   currency,
+  hideTitle = false,
   isPromoActive,
   locale,
   section,
@@ -71,11 +94,18 @@ export function CrossSellSection({
     <section className="bg-background px-5 py-5 md:px-12 md:py-7.5">
       <header className="mb-5 flex items-start justify-between gap-4 md:mb-6">
         <div className="min-w-0">
-          <h2 className="text-base leading-6 font-bold text-foreground md:text-xl">
-            {section.title}
-          </h2>
+          {hideTitle ? null : (
+            <h2 className="text-base leading-6 font-bold text-foreground md:text-xl">
+              {section.title}
+            </h2>
+          )}
           {section.subtitle ? (
-            <p className="mt-3 text-xs text-(--lion-gray-700)">
+            <p
+              className={cn(
+                'text-xs text-(--lion-gray-700)',
+                hideTitle ? 'mt-0' : 'mt-3',
+              )}
+            >
               {section.subtitle}
             </p>
           ) : null}

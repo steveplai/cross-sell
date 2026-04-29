@@ -17,6 +17,15 @@ function cloneSampleData(overrides: Partial<FlightOrderCrossSellData> = {}) {
   }
 }
 
+function expectElementsInDocumentOrder(elements: Element[]) {
+  elements.slice(0, -1).forEach((element, index) => {
+    expect(
+      element.compareDocumentPosition(elements[index + 1]) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBe(Node.DOCUMENT_POSITION_FOLLOWING)
+  })
+}
+
 describe('FlightOrderCrossSell', () => {
   afterEach(() => {
     cleanup()
@@ -79,6 +88,35 @@ describe('FlightOrderCrossSell', () => {
     expect(screen.getAllByRole('link', { name: /探索更多/ }).length).toBe(3)
     expect(screen.getByRole('button', { name: '前往加購' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /網路服務/ })).toBeInTheDocument()
+  })
+
+  it('renders product slots in the new layout order', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-04-21T10:00:00Z'))
+
+    render(<FlightOrderCrossSell data={cloneSampleData()} />)
+
+    const hotelHeading = screen.getByRole('heading', {
+      name: '探索東京飯店',
+    })
+    const hsrButton = screen.getByRole('button', { name: '前往加購' })
+    const attractionDecor = screen.getByTestId('attraction-decor')
+    const attractionProduct = screen.getByRole('button', {
+      name: /東京迪士尼門票/,
+    })
+    const transportHeading = screen.getByRole('heading', {
+      name: '當地交通 一次搞定',
+    })
+    const reminderButton = screen.getByRole('button', { name: /網路服務/ })
+
+    expectElementsInDocumentOrder([
+      hotelHeading,
+      hsrButton,
+      attractionDecor,
+      attractionProduct,
+      transportHeading,
+      reminderButton,
+    ])
   })
 
   it('shows the full duration before the promo starts', () => {
@@ -193,5 +231,31 @@ describe('FlightOrderCrossSell', () => {
       }),
     )
     expect(onSelectAddon).toHaveBeenCalledWith({ addonId: 'hsr' })
+  })
+
+  it('falls back to legacy section id and title classification without section kind', () => {
+    const legacySections = cloneSampleData().sections.map((section) => ({
+      ...section,
+      kind: undefined,
+    }))
+
+    render(
+      <FlightOrderCrossSell
+        data={cloneSampleData({
+          sections: legacySections,
+        })}
+      />,
+    )
+
+    expect(
+      screen.getByRole('heading', { name: '探索東京飯店' }),
+    ).toBeInTheDocument()
+    expect(screen.getByTestId('attraction-decor')).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: /東京迪士尼門票/ }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: '當地交通 一次搞定' }),
+    ).toBeInTheDocument()
   })
 })
