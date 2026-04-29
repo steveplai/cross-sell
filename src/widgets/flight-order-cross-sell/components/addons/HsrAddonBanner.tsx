@@ -1,6 +1,6 @@
 import { Check, MapPin } from 'lucide-react'
 
-import type { FlightOrderCrossSellAddon } from '../types'
+import type { FlightOrderCrossSellAddon } from '../../types'
 import { HsrBackground } from './HsrBackground'
 
 interface HsrAddonBannerProps {

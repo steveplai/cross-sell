@@ -4,7 +4,7 @@ import {
 } from '@/components/animated/FlipNumber'
 import { cn } from '@/lib/utils'
 
-import { getCountdownParts } from '../lib/countdown'
+import { getCountdownParts } from '../../lib/countdown'
 
 interface PromoCountdownProps {
   digitDivider?: FlipNumberDivider

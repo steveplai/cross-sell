@@ -14,18 +14,19 @@ import {
 import type {
   FlightOrderCrossSellItem,
   FlightOrderCrossSellSection as FlightOrderCrossSellSectionData,
-} from '../types'
+} from '../../types'
+import {
+  getPlaceholderBasis,
+  getPlaceholderLabel,
+  getPlaceholderSpan,
+  getVisiblePageSize,
+  initialCarouselLayout,
+} from './carouselPlaceholderLayout'
 import { ProductCard } from './ProductCard'
+import { ViewMorePlaceholder } from './ViewMorePlaceholder'
 
-const carouselMaxPageSize = 5
-const carouselPageSizeRoundingTolerance = 0.05
 const carouselItemClassName =
   'min-w-52 basis-[65%] pl-2 sm:basis-1/2 md:min-w-54.75 md:basis-1/3 lg:basis-1/5'
-const initialCarouselLayout = {
-  pageSize: carouselMaxPageSize,
-  slideWidth: 0,
-  viewportWidth: 0,
-}
 const viewMoreDestinationUrl = 'https://www.liontravel.com/'
 
 interface CrossSellSectionProps {
@@ -35,107 +36,6 @@ interface CrossSellSectionProps {
   section: FlightOrderCrossSellSectionData
   onSelectItem?: (item: FlightOrderCrossSellItem) => void
   onViewMore?: () => void
-}
-
-function getVisiblePageSize(api: CarouselApi) {
-  const viewportWidth = api?.rootNode().getBoundingClientRect().width ?? 0
-  const slideWidth = api?.slideNodes()[0]?.getBoundingClientRect().width ?? 0
-
-  if (viewportWidth <= 0 || slideWidth <= 0) {
-    return initialCarouselLayout
-  }
-
-  return {
-    pageSize: Math.min(
-      carouselMaxPageSize,
-      Math.max(
-        1,
-        Math.floor(
-          viewportWidth / slideWidth + carouselPageSizeRoundingTolerance,
-        ),
-      ),
-    ),
-    slideWidth,
-    viewportWidth,
-  }
-}
-
-function getPlaceholderSpan(itemCount: number, pageSize: number) {
-  if (pageSize <= 1) {
-    return 1
-  }
-
-  const remainder = itemCount % pageSize
-
-  return remainder === 0 ? 0 : pageSize - remainder
-}
-
-function getPlaceholderBasis(
-  itemCount: number,
-  placeholderSpan: number,
-  layout: typeof initialCarouselLayout,
-) {
-  if (placeholderSpan <= 0) {
-    return '0px'
-  }
-
-  if (layout.slideWidth <= 0 || layout.viewportWidth <= 0) {
-    return `${placeholderSpan * 20}%`
-  }
-
-  if (layout.pageSize <= 1) {
-    return `${layout.slideWidth}px`
-  }
-
-  const finalPageItemCount = itemCount % layout.pageSize
-  const occupiedWidth = finalPageItemCount * layout.slideWidth
-  const remainingWidth = layout.viewportWidth - occupiedWidth
-  const minimumPlaceholderWidth = layout.slideWidth * placeholderSpan
-
-  return `${Math.max(minimumPlaceholderWidth, remainingWidth)}px`
-}
-
-function getPlaceholderLabel(section: FlightOrderCrossSellSectionData) {
-  if (section.title.includes('飯店')) {
-    return '更多精選飯店'
-  }
-
-  if (section.title.includes('景點')) {
-    return '更多精選景點'
-  }
-
-  if (section.title.includes('交通')) {
-    return '更多交通選擇'
-  }
-
-  return section.viewMoreLabel ?? '探索更多'
-}
-
-function ViewMorePlaceholder({
-  href,
-  label,
-  onViewMore,
-}: {
-  href: string
-  label: string
-  onViewMore?: () => void
-}) {
-  return (
-    <a
-      aria-label={label}
-      className="flex h-full min-h-70.75 w-full flex-col items-center justify-center gap-3 rounded-lg border border-(--lion-gray-200) bg-card p-4 text-primary shadow-(--lion-product-card-shadow)"
-      data-testid="cross-sell-view-more-placeholder"
-      href={href}
-      onClick={onViewMore}
-      rel="noopener noreferrer"
-      target="_blank"
-    >
-      <span className="flex size-12 items-center justify-center rounded-full bg-(--lion-red-100)">
-        <ChevronRight aria-hidden="true" className="size-6" />
-      </span>
-      <span className="text-xs leading-5.5 font-bold">{label}</span>
-    </a>
-  )
 }
 
 export function CrossSellSection({

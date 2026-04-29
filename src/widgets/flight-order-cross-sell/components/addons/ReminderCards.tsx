@@ -1,6 +1,6 @@
 import { ChevronRight, Gift, Wifi } from 'lucide-react'
 
-import type { FlightOrderCrossSellReminder } from '../types'
+import type { FlightOrderCrossSellReminder } from '../../types'
 
 interface ReminderCardsProps {
   items: FlightOrderCrossSellReminder[]

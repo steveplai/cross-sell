@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 import type {
   FlightOrderCrossSellBenefit,
   FlightOrderCrossSellPromo,
-} from '../types'
+} from '../../types'
 import { CountdownBackground } from './CountdownBackground'
 import { PromoCountdown } from './PromoCountdown'
 
