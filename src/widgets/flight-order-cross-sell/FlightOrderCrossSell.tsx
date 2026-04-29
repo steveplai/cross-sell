@@ -19,21 +19,158 @@ const flightOrderCrossSellRootProps = createWidgetRootProps(
   'flight-order-cross-sell',
 )
 
+//#region - Sub Components
+
 function ContentPanel({
+  allowOverflow = false,
   children,
-  className,
 }: {
+  allowOverflow?: boolean
   children: ReactNode
-  className?: string
 }) {
   return (
     <div
-      className={cn('overflow-hidden rounded-none md:rounded-[10px]', className)}
+      className={cn(
+        'rounded-none md:rounded-[10px]',
+        allowOverflow ? 'overflow-visible' : 'overflow-hidden',
+      )}
     >
       {children}
     </div>
   )
 }
+
+function FlightOrderCrossSellContent({
+  data,
+  onSelectAddon,
+  onSelectItem,
+  onViewMore,
+  promoKey,
+}: FlightOrderCrossSellProps & { promoKey: string }) {
+  const now = useCurrentTime(promoKey)
+  const locale = data.locale ?? 'zh-TW'
+  const currency = data.currency ?? 'TWD'
+  const hsrAddon = data.hsrAddon
+  const remainingSeconds = getRemainingPromoSeconds(data.promo, now)
+  const isPromoActive = remainingSeconds > 0
+  const attractionDecor = data.attractionDecor
+  const sectionGroups = groupFlightOrderCrossSellSections(data.sections)
+
+  function getRenderableSections(sections: FlightOrderCrossSellSection[]) {
+    return sections.filter((section) => section.items.length > 0)
+  }
+
+  const renderableAttractionSections = getRenderableSections(
+    sectionGroups.attraction,
+  )
+  const showAttractionDecor =
+    !!attractionDecor && renderableAttractionSections.length > 0
+
+  function renderSectionList(
+    sections: FlightOrderCrossSellSection[],
+    options: { hideTitle?: boolean } = {},
+  ) {
+    return (
+      <div className="flex flex-col divide-y divide-(--lion-gray-50)">
+        {sections.map((section) => (
+          <CrossSellSection
+            currency={currency}
+            hideTitle={options.hideTitle}
+            isPromoActive={isPromoActive}
+            key={section.id}
+            locale={locale}
+            onSelectItem={(item) =>
+              onSelectItem?.({ item, sectionId: section.id })
+            }
+            onViewMore={() => onViewMore?.({ sectionId: section.id })}
+            section={section}
+          />
+        ))}
+      </div>
+    )
+  }
+
+  function renderSections(sections: FlightOrderCrossSellSection[]) {
+    const renderableSections = getRenderableSections(sections)
+
+    if (renderableSections.length === 0) {
+      return null
+    }
+
+    return <ContentPanel>{renderSectionList(renderableSections)}</ContentPanel>
+  }
+
+  function renderPromoHotelPanel() {
+    const renderableHotelSections = getRenderableSections(sectionGroups.hotel)
+
+    return (
+      <ContentPanel allowOverflow>
+        <PromoHeader
+          isPromoActive={isPromoActive}
+          promo={data.promo}
+          remainingSeconds={remainingSeconds}
+        />
+        {renderableHotelSections.length > 0
+          ? renderSectionList(renderableHotelSections)
+          : null}
+      </ContentPanel>
+    )
+  }
+
+  return (
+    <section
+      className={cn(
+        'w-full text-foreground',
+        'bg-linear-to-b from-(--lion-page-gradient-from) to-(--lion-page-gradient-to)',
+      )}
+      data-promo-state={isPromoActive ? 'active' : 'expired'}
+      {...flightOrderCrossSellRootProps}
+    >
+      <div className="mx-auto flex w-full max-w-297.5 flex-col gap-2.5 py-0 md:py-0">
+        {renderPromoHotelPanel()}
+
+        {hsrAddon ? (
+          <ContentPanel>
+            <HsrAddonBanner
+              addon={hsrAddon}
+              onSelectAddon={() => onSelectAddon?.({ addonId: hsrAddon.id })}
+            />
+          </ContentPanel>
+        ) : null}
+
+        {renderableAttractionSections.length > 0 ? (
+          <ContentPanel>
+            <div className="flex flex-col divide-y divide-(--lion-gray-50)">
+              {attractionDecor ? (
+                <AttractionDecorBanner decor={attractionDecor} />
+              ) : null}
+              {renderSectionList(renderableAttractionSections, {
+                hideTitle: showAttractionDecor,
+              })}
+            </div>
+          </ContentPanel>
+        ) : null}
+
+        {renderSections(sectionGroups.transport)}
+        {renderSections(sectionGroups.flight)}
+        {renderSections(sectionGroups.other)}
+
+        {data.reminders ? (
+          <ContentPanel>
+            <ReminderCards
+              items={data.reminders.items}
+              onSelectAddon={(addonId) => onSelectAddon?.({ addonId })}
+              subtitle={data.reminders.subtitle}
+              title={data.reminders.title}
+            />
+          </ContentPanel>
+        ) : null}
+      </div>
+    </section>
+  )
+}
+
+//#endregion - Sub Components
 
 function useCurrentTime(promoKey: string) {
   const [now, setNow] = useState(() => Date.now())
@@ -68,130 +205,5 @@ export function FlightOrderCrossSell({
       onViewMore={onViewMore}
       promoKey={promoKey}
     />
-  )
-}
-
-function FlightOrderCrossSellContent({
-  data,
-  onSelectAddon,
-  onSelectItem,
-  onViewMore,
-  promoKey,
-}: FlightOrderCrossSellProps & { promoKey: string }) {
-  const now = useCurrentTime(promoKey)
-  const locale = data.locale ?? 'zh-TW'
-  const currency = data.currency ?? 'TWD'
-  const hsrAddon = data.hsrAddon
-  const remainingSeconds = getRemainingPromoSeconds(data.promo, now)
-  const isPromoActive = remainingSeconds > 0
-  const attractionDecor = data.attractionDecor
-  const sectionGroups = groupFlightOrderCrossSellSections(data.sections)
-  const showAttractionDecor =
-    !!attractionDecor && sectionGroups.attraction.length > 0
-
-  function renderSectionList(sections: FlightOrderCrossSellSection[]) {
-    return (
-      <div className="flex flex-col divide-y divide-(--lion-gray-50)">
-        {sections.map((section) => (
-          <CrossSellSection
-            currency={currency}
-            isPromoActive={isPromoActive}
-            key={section.id}
-            locale={locale}
-            onSelectItem={(item) =>
-              onSelectItem?.({ item, sectionId: section.id })
-            }
-            onViewMore={() => onViewMore?.({ sectionId: section.id })}
-            section={section}
-          />
-        ))}
-      </div>
-    )
-  }
-
-  function renderSections(sections: FlightOrderCrossSellSection[]) {
-    if (sections.length === 0) {
-      return null
-    }
-
-    return <ContentPanel>{renderSectionList(sections)}</ContentPanel>
-  }
-
-  function renderPromoHotelPanel() {
-    return (
-      <ContentPanel className="overflow-visible">
-        <PromoHeader
-          isPromoActive={isPromoActive}
-          promo={data.promo}
-          remainingSeconds={remainingSeconds}
-        />
-        {sectionGroups.hotel.length > 0
-          ? renderSectionList(sectionGroups.hotel)
-          : null}
-      </ContentPanel>
-    )
-  }
-
-  return (
-    <section
-      className={cn(
-        'w-full text-foreground',
-        'bg-linear-to-b from-(--lion-page-gradient-from) to-(--lion-page-gradient-to)',
-      )}
-      data-promo-state={isPromoActive ? 'active' : 'expired'}
-      {...flightOrderCrossSellRootProps}
-    >
-      <div className="mx-auto flex w-full max-w-297.5 flex-col gap-2.5 py-0 md:py-0">
-        {renderPromoHotelPanel()}
-
-        {hsrAddon ? (
-          <ContentPanel>
-            <HsrAddonBanner
-              addon={hsrAddon}
-              onSelectAddon={() => onSelectAddon?.({ addonId: hsrAddon.id })}
-            />
-          </ContentPanel>
-        ) : null}
-
-        {sectionGroups.attraction.length > 0 ? (
-          <ContentPanel>
-            <div className="flex flex-col divide-y divide-(--lion-gray-50)">
-              {attractionDecor ? (
-                <AttractionDecorBanner decor={attractionDecor} />
-              ) : null}
-              {sectionGroups.attraction.map((section) => (
-                <CrossSellSection
-                  currency={currency}
-                  hideTitle={showAttractionDecor}
-                  isPromoActive={isPromoActive}
-                  key={section.id}
-                  locale={locale}
-                  onSelectItem={(item) =>
-                    onSelectItem?.({ item, sectionId: section.id })
-                  }
-                  onViewMore={() => onViewMore?.({ sectionId: section.id })}
-                  section={section}
-                />
-              ))}
-            </div>
-          </ContentPanel>
-        ) : null}
-
-        {renderSections(sectionGroups.transport)}
-        {renderSections(sectionGroups.flight)}
-        {renderSections(sectionGroups.other)}
-
-        {data.reminders ? (
-          <ContentPanel>
-            <ReminderCards
-              items={data.reminders.items}
-              onSelectAddon={(addonId) => onSelectAddon?.({ addonId })}
-              subtitle={data.reminders.subtitle}
-              title={data.reminders.title}
-            />
-          </ContentPanel>
-        ) : null}
-      </div>
-    </section>
   )
 }
