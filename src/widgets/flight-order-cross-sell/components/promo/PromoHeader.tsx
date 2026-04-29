@@ -37,15 +37,17 @@ export function PromoHeader({
   return (
     <div
       className={cn(
-        'relative overflow-visible text-center',
+        'relative overflow-visible bg-background text-center',
         'px-3 pt-9 md:px-0 md:pt-11.25',
-        'bg-linear-to-b from-(--lion-header-gradient-from) to-(--lion-header-gradient-to) bg-size-[100%_60%] bg-no-repeat',
-        'md:via-(--lion-header-gradient-via) md:bg-size-[100%_100%]',
         {
           'pb-2.5 md:pb-11.25': !isPromoActive,
         },
       )}
     >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-linear-to-b from-(--lion-promo-header-gradient-from) from-[65.49%] to-(--lion-promo-header-gradient-to) to-[97.74%] md:h-full"
+      />
       <CountdownBackground />
 
       <div className="relative mx-auto flex max-w-90 flex-col items-center gap-3 md:gap-6">

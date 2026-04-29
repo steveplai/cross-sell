@@ -19,9 +19,17 @@ const flightOrderCrossSellRootProps = createWidgetRootProps(
   'flight-order-cross-sell',
 )
 
-function ContentPanel({ children }: { children: ReactNode }) {
+function ContentPanel({
+  children,
+  className,
+}: {
+  children: ReactNode
+  className?: string
+}) {
   return (
-    <div className="overflow-hidden rounded-none bg-background md:rounded-3xl">
+    <div
+      className={cn('overflow-hidden rounded-none md:rounded-[10px]', className)}
+    >
       {children}
     </div>
   )
@@ -81,28 +89,45 @@ function FlightOrderCrossSellContent({
   const showAttractionDecor =
     !!attractionDecor && sectionGroups.attraction.length > 0
 
+  function renderSectionList(sections: FlightOrderCrossSellSection[]) {
+    return (
+      <div className="flex flex-col divide-y divide-(--lion-gray-50)">
+        {sections.map((section) => (
+          <CrossSellSection
+            currency={currency}
+            isPromoActive={isPromoActive}
+            key={section.id}
+            locale={locale}
+            onSelectItem={(item) =>
+              onSelectItem?.({ item, sectionId: section.id })
+            }
+            onViewMore={() => onViewMore?.({ sectionId: section.id })}
+            section={section}
+          />
+        ))}
+      </div>
+    )
+  }
+
   function renderSections(sections: FlightOrderCrossSellSection[]) {
     if (sections.length === 0) {
       return null
     }
 
+    return <ContentPanel>{renderSectionList(sections)}</ContentPanel>
+  }
+
+  function renderPromoHotelPanel() {
     return (
-      <ContentPanel>
-        <div className="flex flex-col divide-y divide-(--lion-gray-50)">
-          {sections.map((section) => (
-            <CrossSellSection
-              currency={currency}
-              isPromoActive={isPromoActive}
-              key={section.id}
-              locale={locale}
-              onSelectItem={(item) =>
-                onSelectItem?.({ item, sectionId: section.id })
-              }
-              onViewMore={() => onViewMore?.({ sectionId: section.id })}
-              section={section}
-            />
-          ))}
-        </div>
+      <ContentPanel className="overflow-visible">
+        <PromoHeader
+          isPromoActive={isPromoActive}
+          promo={data.promo}
+          remainingSeconds={remainingSeconds}
+        />
+        {sectionGroups.hotel.length > 0
+          ? renderSectionList(sectionGroups.hotel)
+          : null}
       </ContentPanel>
     )
   }
@@ -111,19 +136,13 @@ function FlightOrderCrossSellContent({
     <section
       className={cn(
         'w-full text-foreground',
-        'bg-linear-to-b from-(--lion-header-gradient-from) to-(--lion-header-gradient-to)',
+        'bg-linear-to-b from-(--lion-page-gradient-from) to-(--lion-page-gradient-to)',
       )}
       data-promo-state={isPromoActive ? 'active' : 'expired'}
       {...flightOrderCrossSellRootProps}
     >
-      <div className="h-4.5 w-full bg-background md:h-12.5" />
-      <div className="mx-auto flex w-full max-w-297.5 flex-col gap-2.5 bg-background py-0 md:py-0">
-        <PromoHeader
-          isPromoActive={isPromoActive}
-          promo={data.promo}
-          remainingSeconds={remainingSeconds}
-        />
-        {renderSections(sectionGroups.hotel)}
+      <div className="mx-auto flex w-full max-w-297.5 flex-col gap-2.5 py-0 md:py-0">
+        {renderPromoHotelPanel()}
 
         {hsrAddon ? (
           <ContentPanel>

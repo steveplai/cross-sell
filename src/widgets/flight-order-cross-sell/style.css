@@ -9,9 +9,10 @@
 
   color-scheme: light;
 
-  --lion-header-gradient-from: #fff5eb;
-  --lion-header-gradient-via: #fff8f1;
-  --lion-header-gradient-to: #ffffff;
+  --lion-page-gradient-from: #fff5eb;
+  --lion-page-gradient-to: #ffffff;
+  --lion-promo-header-gradient-from: #fff5eb;
+  --lion-promo-header-gradient-to: #ffffff;
 
   /* Lion Design Token */
   --lion-gray-50: #f4f4f4;
@@ -47,9 +48,10 @@
 :host(.dark) [data-csc-widget][data-csc-widget-name='flight-order-cross-sell'] {
   color-scheme: dark;
 
-  --lion-header-gradient-from: #241813;
-  --lion-header-gradient-via: #1c1512;
-  --lion-header-gradient-to: var(--background);
+  --lion-page-gradient-from: #241813;
+  --lion-page-gradient-to: var(--background);
+  --lion-promo-header-gradient-from: #241813;
+  --lion-promo-header-gradient-to: var(--background);
 
   --lion-gray-50: #232626;
   --lion-gray-300: #2a2f2d;
