@@ -38,20 +38,20 @@ export function PromoHeader({
     <div
       className={cn(
         'relative overflow-visible bg-background text-center',
-        'px-3 pt-9 md:px-0 md:pt-11.25',
+        'px-3 pt-9 min-[980px]:px-0 min-[980px]:pt-11.25',
         {
-          'pb-2.5 md:pb-11.25': !isPromoActive,
+          'pb-2.5 min-[980px]:pb-11.25': !isPromoActive,
         },
       )}
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-linear-to-b from-(--lion-promo-header-gradient-from) from-[65.49%] to-(--lion-promo-header-gradient-to) to-[97.74%] md:h-full"
+        className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-linear-to-b from-(--lion-promo-header-gradient-from) from-[65.49%] to-(--lion-promo-header-gradient-to) to-[97.74%] min-[980px]:h-full"
       />
       <CountdownBackground />
 
-      <div className="relative mx-auto flex max-w-90 flex-col items-center gap-3 md:gap-6">
-        <p className="m-0 text-xl leading-7.5 font-bold text-(--lion-orange-600) md:text-[32px]">
+      <div className="relative mx-auto flex max-w-90 flex-col items-center gap-3 min-[980px]:gap-6">
+        <p className="m-0 text-xl leading-7.5 font-bold text-(--lion-orange-600) min-[980px]:text-[32px]">
           {isPromoActive ? promo.activeTitle : promo.expiredTitle}
         </p>
 

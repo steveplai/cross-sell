@@ -20,7 +20,7 @@ import { useCarouselPlaceholderLayout } from './useCarouselPlaceholderLayout'
 import { ViewMorePlaceholder } from './ViewMorePlaceholder'
 
 const carouselItemClassName =
-  'min-w-52 basis-[65%] pl-2 sm:basis-1/2 md:min-w-54.75 md:basis-1/3 lg:basis-1/5'
+  'basis-[65%] pl-2 min-[488px]:max-[711.98px]:basis-1/2 min-[712px]:max-[935.98px]:basis-1/3 min-[936px]:max-[1189.98px]:basis-1/4 min-[1190px]:basis-1/5'
 const viewMoreDestinationUrl = 'https://www.liontravel.com/'
 
 interface CrossSellSectionProps {
@@ -91,11 +91,11 @@ export function CrossSellSection({
   const placeholderLabel = getPlaceholderLabel(section)
 
   return (
-    <section className="bg-background px-5 py-5 md:px-12 md:py-7.5">
-      <header className="mb-5 flex items-start justify-between gap-4 md:mb-6">
+    <section className="bg-background px-5 py-5 min-[980px]:px-12 min-[980px]:py-7.5">
+      <header className="mb-5 flex items-start justify-between gap-4 min-[980px]:mb-6">
         <div className="min-w-0">
           {hideTitle ? null : (
-            <h2 className="text-base leading-6 font-bold text-foreground md:text-xl">
+            <h2 className="text-base leading-6 font-bold text-foreground min-[980px]:text-xl">
               {section.title}
             </h2>
           )}
@@ -152,7 +152,7 @@ export function CrossSellSection({
       >
         <CarouselPrevious
           aria-label="上一組推薦"
-          className="-left-10 z-10 hidden size-10 border-0 bg-card p-0 text-(--lion-gray-800) shadow-(--lion-carousel-control-shadow) hover:bg-card hover:text-primary md:flex"
+          className="-left-10 z-10 hidden size-10 border-0 bg-card p-0 text-(--lion-gray-800) shadow-(--lion-carousel-control-shadow) hover:bg-card hover:text-primary min-[980px]:flex"
           data-testid={`section-${section.id}-previous`}
           hideWhenUnavailable
         />
@@ -173,7 +173,7 @@ export function CrossSellSection({
           ))}
           {placeholderSpan > 0 ? (
             <CarouselItem
-              className="min-w-52 pl-2 md:min-w-54.75"
+              className="pl-2"
               style={{ flexBasis: placeholderBasis }}
             >
               <ViewMorePlaceholder
@@ -186,7 +186,7 @@ export function CrossSellSection({
         </CarouselContent>
         <CarouselNext
           aria-label="下一組推薦"
-          className="-right-10 z-10 hidden size-10 border-0 bg-card p-0 text-(--lion-gray-800) shadow-(--lion-carousel-control-shadow) hover:bg-card hover:text-primary md:flex"
+          className="-right-10 z-10 hidden size-10 border-0 bg-card p-0 text-(--lion-gray-800) shadow-(--lion-carousel-control-shadow) hover:bg-card hover:text-primary min-[980px]:flex"
           data-testid={`section-${section.id}-next`}
           hideWhenUnavailable
         />

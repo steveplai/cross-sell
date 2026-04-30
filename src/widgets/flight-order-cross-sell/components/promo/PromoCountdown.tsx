@@ -31,15 +31,15 @@ export function PromoCountdown({
         <div className="flex items-center gap-1" key={countdownLabels[index]}>
           <FlipNumber
             className={cn(
-              'flex h-7 min-w-7 items-center justify-center gap-px p-1 md:h-10 md:min-w-10',
+              'flex h-7 min-w-7 items-center justify-center gap-px p-1 min-[980px]:h-10 min-[980px]:min-w-10',
               'overflow-hidden rounded-lg bg-(--lion-gray-200) text-(--lion-gray-900)',
-              'text-center text-sm leading-5.5 font-bold md:text-xl md:leading-8',
+              'text-center text-sm leading-5.5 font-bold min-[980px]:text-xl min-[980px]:leading-8',
             )}
             divider={digitDivider}
             minDigits={2}
             value={value}
           />
-          <span className="text-xs leading-5.5 text-(--lion-gray-800) md:text-sm">
+          <span className="text-xs leading-5.5 text-(--lion-gray-800) min-[980px]:text-sm">
             {countdownLabels[index]}
           </span>
         </div>

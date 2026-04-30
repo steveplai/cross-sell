@@ -17,8 +17,8 @@ function ReminderIcon({
   const Icon = icon === 'wifi' ? Wifi : Gift
 
   return (
-    <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#ffefef] text-[#f03742] md:size-14">
-      <Icon aria-hidden="true" className="size-5 md:size-8" />
+    <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#ffefef] text-[#f03742] min-[980px]:size-14">
+      <Icon aria-hidden="true" className="size-5 min-[980px]:size-8" />
     </span>
   )
 }
@@ -34,22 +34,22 @@ export function ReminderCards({
   }
 
   return (
-    <section className="bg-white px-5 py-8 md:px-12 md:py-10">
+    <section className="bg-white px-5 py-8 min-[980px]:px-12 min-[980px]:py-10">
       <header className="mb-5 text-center">
-        <h2 className="text-lg leading-6 font-bold text-[#222] md:text-xl">
+        <h2 className="text-lg leading-6 font-bold text-[#222] min-[980px]:text-xl">
           {title}
         </h2>
         {subtitle ? (
-          <p className="mt-2 text-sm leading-6 text-[#666] md:text-base">
+          <p className="mt-2 text-sm leading-6 text-[#666] min-[980px]:text-base">
             {subtitle}
           </p>
         ) : null}
       </header>
 
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-5">
+      <div className="grid grid-cols-1 gap-3 min-[980px]:grid-cols-2 min-[980px]:gap-5">
         {items.map((item) => (
           <button
-            className="flex min-h-22.5 items-center gap-4 rounded-[10px] border border-[#ececec] bg-white px-3 py-4 text-left text-inherit transition hover:border-[#f03742]/40 hover:shadow-sm md:min-h-25.25 md:gap-5 md:px-5 md:py-3.75"
+            className="flex min-h-22.5 items-center gap-4 rounded-[10px] border border-[#ececec] bg-white px-3 py-4 text-left text-inherit transition hover:border-[#f03742]/40 hover:shadow-sm min-[980px]:min-h-25.25 min-[980px]:gap-5 min-[980px]:px-5 min-[980px]:py-3.75"
             key={item.id}
             onClick={() => onSelectAddon?.(item.id)}
             type="button"
