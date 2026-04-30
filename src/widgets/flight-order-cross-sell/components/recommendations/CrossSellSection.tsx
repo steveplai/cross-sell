@@ -19,8 +19,15 @@ import { ProductCard } from './ProductCard'
 import { useCarouselPlaceholderLayout } from './useCarouselPlaceholderLayout'
 import { ViewMorePlaceholder } from './ViewMorePlaceholder'
 
-const carouselItemClassName =
-  'basis-[65%] pl-2 min-[488px]:max-[711.98px]:basis-1/2 min-[712px]:max-[935.98px]:basis-1/3 min-[936px]:max-[1189.98px]:basis-1/4 min-[1190px]:basis-1/5'
+// Keep carousel density breakpoints in sync with ../../docs/breakpoints.md.
+const carouselItemClassName = cn(
+  'pl-2',
+  'basis-[65%]',
+  'min-[488px]:max-[711.98px]:basis-1/2',
+  'min-[712px]:max-[935.98px]:basis-1/3',
+  'min-[936px]:max-[1189.98px]:basis-1/4',
+  'min-[1190px]:basis-1/5',
+)
 const viewMoreDestinationUrl = 'https://www.liontravel.com/'
 
 interface CrossSellSectionProps {

@@ -1,6 +1,9 @@
 import type { Page } from '@playwright/test'
 import { expect, test } from '@playwright/test'
 
+const desktopCarouselViewportWidth = 980
+const maxDensityCarouselViewportWidth = 1190
+
 async function getFlightOrderCarouselState(page: Page) {
   return page.locator('flight-order-cross-sell').evaluate((element) => {
     const root = element.shadowRoot
@@ -138,7 +141,10 @@ async function focusFirstFlightOrderProduct(page: Page) {
 test('flight order carousel uses browser scrolling without a visible scrollbar', async ({
   page,
 }) => {
-  await page.setViewportSize({ height: 900, width: 980 })
+  await page.setViewportSize({
+    height: 900,
+    width: desktopCarouselViewportWidth,
+  })
   await gotoFlightOrderCrossSellExample(page)
 
   await expect
@@ -189,7 +195,10 @@ test('flight order carousel uses browser scrolling without a visible scrollbar',
 test('flight order carousel moves one desktop page and fills the final page with a placeholder', async ({
   page,
 }) => {
-  await page.setViewportSize({ height: 900, width: 1190 })
+  await page.setViewportSize({
+    height: 900,
+    width: maxDensityCarouselViewportWidth,
+  })
   await gotoFlightOrderCrossSellExample(page)
 
   await expect
