@@ -23,7 +23,11 @@ export function HsrAddonBanner({ addon, onSelectAddon }: HsrAddonBannerProps) {
 
   return (
     <section className="relative overflow-hidden bg-background px-5 py-5 md:px-12 md:py-10">
-      <HsrBackground className="pointer-events-none absolute right-0 bottom-0 hidden h-18.5 w-90 md:block" />
+      <HsrBackground
+        className="pointer-events-none absolute top-3.75 right-0 block h-auto w-39 md:hidden"
+        cropRight={39}
+      />
+      <HsrBackground className="pointer-events-none absolute top-3.75 right-0 hidden h-auto w-56.75 md:block" />
 
       <div className="relative flex flex-col gap-5 md:flex-row md:items-center md:gap-12">
         <div className="flex min-w-0 flex-col gap-2 md:flex-row md:items-center md:gap-5">
