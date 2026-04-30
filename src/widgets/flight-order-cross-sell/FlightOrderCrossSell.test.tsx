@@ -6,6 +6,12 @@ import { FlightOrderCrossSell } from './FlightOrderCrossSell'
 import { flightOrderCrossSellSampleData } from './sampleData'
 import type { FlightOrderCrossSellData } from './types'
 
+interface JsdomGlobal {
+  jsdom?: {
+    reconfigure(options: { url: string }): void
+  }
+}
+
 function cloneSampleData(overrides: Partial<FlightOrderCrossSellData> = {}) {
   const sampleData = JSON.parse(
     JSON.stringify(flightOrderCrossSellSampleData),
@@ -15,6 +21,22 @@ function cloneSampleData(overrides: Partial<FlightOrderCrossSellData> = {}) {
     ...sampleData,
     ...overrides,
   }
+}
+
+function reconfigureTestUrl(url: string) {
+  const jsdom = (globalThis as typeof globalThis & JsdomGlobal).jsdom
+
+  if (!jsdom) {
+    throw new Error('Expected Vitest jsdom environment to expose jsdom global.')
+  }
+
+  jsdom.reconfigure({ url })
+}
+
+function resetTestUrl() {
+  const jsdom = (globalThis as typeof globalThis & JsdomGlobal).jsdom
+
+  jsdom?.reconfigure({ url: 'http://localhost/' })
 }
 
 function expectElementsInDocumentOrder(elements: Element[]) {
@@ -29,6 +51,7 @@ function expectElementsInDocumentOrder(elements: Element[]) {
 describe('FlightOrderCrossSell', () => {
   afterEach(() => {
     cleanup()
+    resetTestUrl()
     vi.useRealTimers()
     vi.restoreAllMocks()
   })
@@ -198,6 +221,8 @@ describe('FlightOrderCrossSell', () => {
   })
 
   it('renders the HSR addon CTA as a production link when production domain mode is provided', () => {
+    reconfigureTestUrl('https://uflight.liontravel.com/orders')
+
     render(
       <FlightOrderCrossSell
         data={cloneSampleData({
@@ -213,6 +238,27 @@ describe('FlightOrderCrossSell', () => {
     expect(screen.getByRole('link', { name: '前往加購' })).toHaveAttribute(
       'href',
       'https://vacation.liontravel.com/thsrdetail?sYear=2026&sOrdr=16575',
+    )
+  })
+
+  it('infers the HSR addon CTA domain mode from a supported flight hostname', () => {
+    reconfigureTestUrl('https://uflight.liontravel.com/orders')
+
+    render(
+      <FlightOrderCrossSell
+        data={cloneSampleData({
+          domainMode: undefined,
+          order: {
+            orderNumber: '16575',
+            orderYear: '2026',
+          },
+        })}
+      />,
+    )
+
+    expect(screen.getByRole('link', { name: '前往加購' })).toHaveAttribute(
+      'href',
+      'https://uvacation.liontravel.com/thsrdetail?sYear=2026&sOrdr=16575',
     )
   })
 
@@ -239,9 +285,10 @@ describe('FlightOrderCrossSell', () => {
     expect(onSelectAddon).toHaveBeenCalledWith({ addonId: 'hsr' })
   })
 
-  it('falls back to the HSR addon button when domain mode is missing', async () => {
+  it('falls back to the HSR addon button when domain mode and hostname inference are unavailable', async () => {
     const user = userEvent.setup()
     const onSelectAddon = vi.fn()
+    reconfigureTestUrl('https://holiday.xxx.com/orders')
 
     render(
       <FlightOrderCrossSell

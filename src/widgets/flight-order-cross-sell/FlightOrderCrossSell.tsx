@@ -3,7 +3,7 @@ import { type ReactNode, useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
 import {
   createLiontravelUrl,
-  isLiontravelDomainMode,
+  resolveLiontravelDomainMode,
 } from '@/shared/utils/liontravelUrl'
 
 import { createWidgetRootProps } from '../../runtime/widgetRoot'
@@ -183,16 +183,17 @@ function FlightOrderCrossSellContent({
 //#endregion - Sub Components
 
 function createHsrAddonHref(data: FlightOrderCrossSellData) {
-  if (
-    !isLiontravelDomainMode(data.domainMode) ||
-    !data.order?.orderYear ||
-    !data.order.orderNumber
-  ) {
+  const domainMode = resolveLiontravelDomainMode(
+    data.domainMode,
+    getCurrentHostname(),
+  )
+
+  if (!domainMode || !data.order?.orderYear || !data.order.orderNumber) {
     return undefined
   }
 
   return createLiontravelUrl({
-    domainMode: data.domainMode,
+    domainMode,
     pathname: hsrAddonPathname,
     productionHostname: hsrAddonProductionHostname,
     query: {
@@ -200,6 +201,14 @@ function createHsrAddonHref(data: FlightOrderCrossSellData) {
       sOrdr: data.order.orderNumber,
     },
   })
+}
+
+function getCurrentHostname() {
+  if (typeof window === 'undefined') {
+    return undefined
+  }
+
+  return window.location.hostname
 }
 
 function useCurrentTime(promoKey: string) {

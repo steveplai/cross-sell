@@ -4,6 +4,7 @@ import {
   createLiontravelOrigin,
   createLiontravelUrl,
   isLiontravelDomainMode,
+  resolveLiontravelDomainMode,
 } from './liontravelUrl'
 
 describe('liontravel URL helpers', () => {
@@ -38,4 +39,27 @@ describe('liontravel URL helpers', () => {
     expect(isLiontravelDomainMode('production')).toBe(true)
     expect(isLiontravelDomainMode('staging')).toBe(false)
   })
+
+  it('prefers an explicit domain mode over hostname inference', () => {
+    expect(resolveLiontravelDomainMode('uat', 'flight.liontravel.com')).toBe(
+      'uat',
+    )
+    expect(
+      resolveLiontravelDomainMode('production', 'uflight.liontravel.com'),
+    ).toBe('production')
+  })
+
+  it.each([
+    ['uflight.liontravel.com', 'uat'],
+    ['flight.liontravel.com', 'production'],
+  ] as const)('infers %s as %s', (hostname, expectedMode) => {
+    expect(resolveLiontravelDomainMode(undefined, hostname)).toBe(expectedMode)
+  })
+
+  it.each(['holiday.xxx.com', 'localhost', 'www.liontravel.com'] as const)(
+    'does not infer unknown hostname %s',
+    (hostname) => {
+      expect(resolveLiontravelDomainMode(undefined, hostname)).toBeUndefined()
+    },
+  )
 })

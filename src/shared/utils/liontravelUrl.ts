@@ -1,5 +1,7 @@
 export type LiontravelDomainMode = 'uat' | 'production'
 
+const inferableLiontravelProductionHostnames = ['flight.liontravel.com']
+
 interface CreateLiontravelUrlOptions {
   domainMode: LiontravelDomainMode
   productionHostname: string
@@ -21,6 +23,35 @@ export function isLiontravelDomainMode(
   value: unknown,
 ): value is LiontravelDomainMode {
   return value === 'uat' || value === 'production'
+}
+
+export function resolveLiontravelDomainMode(
+  explicitMode?: unknown,
+  hostname?: string,
+): LiontravelDomainMode | undefined {
+  if (isLiontravelDomainMode(explicitMode)) {
+    return explicitMode
+  }
+
+  const normalizedHostname = hostname?.toLowerCase()
+
+  if (!normalizedHostname) {
+    return undefined
+  }
+
+  if (inferableLiontravelProductionHostnames.includes(normalizedHostname)) {
+    return 'production'
+  }
+
+  const uatHostnames = inferableLiontravelProductionHostnames.map(
+    (productionHostname) => `u${productionHostname}`,
+  )
+
+  if (uatHostnames.includes(normalizedHostname)) {
+    return 'uat'
+  }
+
+  return undefined
 }
 
 export function createLiontravelUrl({
