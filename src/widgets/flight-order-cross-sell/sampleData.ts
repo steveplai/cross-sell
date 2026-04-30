@@ -29,7 +29,6 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
     title: '加購高鐵 行程更順暢',
     description: '購買國內外行程，最高享 8 折優惠',
     ctaLabel: '前往加購',
-    helperLabel: '住宿1：大阪',
   },
   attractionDecor: {
     title: '探索東京 景點不錯過',

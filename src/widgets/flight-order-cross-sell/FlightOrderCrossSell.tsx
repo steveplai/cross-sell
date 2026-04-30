@@ -18,6 +18,7 @@ import type {
 const flightOrderCrossSellRootProps = createWidgetRootProps(
   'flight-order-cross-sell',
 )
+const hsrAddonId = 'hsr'
 
 //#region - Sub Components
 
@@ -129,14 +130,14 @@ function FlightOrderCrossSellContent({
       <div className="mx-auto flex w-full max-w-297.5 flex-col gap-2.5 py-0 md:py-0">
         {renderPromoHotelPanel()}
 
-        {hsrAddon ? (
-          <ContentPanel>
-            <HsrAddonBanner
-              addon={hsrAddon}
-              onSelectAddon={() => onSelectAddon?.({ addonId: hsrAddon.id })}
-            />
-          </ContentPanel>
-        ) : null}
+        <ContentPanel>
+          <HsrAddonBanner
+            addon={hsrAddon}
+            onSelectAddon={() =>
+              onSelectAddon?.({ addonId: hsrAddon?.id ?? hsrAddonId })
+            }
+          />
+        </ContentPanel>
 
         {renderableAttractionSections.length > 0 ? (
           <ContentPanel>

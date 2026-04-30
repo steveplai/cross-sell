@@ -119,6 +119,53 @@ describe('FlightOrderCrossSell', () => {
     ])
   })
 
+  it('renders HSR addon defaults and partial overrides', async () => {
+    const user = userEvent.setup()
+    const onSelectAddon = vi.fn()
+    const { rerender } = render(
+      <FlightOrderCrossSell
+        data={cloneSampleData({ hsrAddon: undefined })}
+        onSelectAddon={onSelectAddon}
+      />,
+    )
+
+    expect(
+      screen.getByRole('heading', { name: '加購高鐵 行程更順暢' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText('購買國內外行程，最高享 8 折優惠'),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '前往加購' })).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: '前往加購' }))
+
+    expect(onSelectAddon).toHaveBeenLastCalledWith({ addonId: 'hsr' })
+
+    rerender(
+      <FlightOrderCrossSell
+        data={cloneSampleData({
+          hsrAddon: {
+            id: 'custom-hsr',
+            title: '高鐵加購提醒',
+          },
+        })}
+        onSelectAddon={onSelectAddon}
+      />,
+    )
+
+    expect(
+      screen.getByRole('heading', { name: '高鐵加購提醒' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText('購買國內外行程，最高享 8 折優惠'),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '前往加購' })).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: '前往加購' }))
+
+    expect(onSelectAddon).toHaveBeenLastCalledWith({ addonId: 'custom-hsr' })
+  })
+
   it('shows the full duration before the promo starts', () => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date('2026-04-21T10:00:00Z'))

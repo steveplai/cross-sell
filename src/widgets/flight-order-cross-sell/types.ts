@@ -53,14 +53,6 @@ export interface FlightOrderCrossSellSection {
   items: FlightOrderCrossSellItem[]
 }
 
-export interface FlightOrderCrossSellAddon {
-  id: string
-  title: string
-  description: string
-  ctaLabel?: string
-  helperLabel?: string
-}
-
 export interface FlightOrderCrossSellReminder {
   id: string
   title: string
@@ -73,6 +65,13 @@ export interface FlightOrderCrossSellAttractionDecor {
   title: string
   imageAlt?: string
   imageUrl?: string
+}
+
+export interface FlightOrderCrossSellAddon {
+  id?: string
+  title?: string
+  description?: string
+  ctaLabel?: string
 }
 
 export interface FlightOrderCrossSellData {
