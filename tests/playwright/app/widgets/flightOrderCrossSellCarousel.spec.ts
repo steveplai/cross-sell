@@ -138,7 +138,7 @@ async function focusFirstFlightOrderProduct(page: Page) {
 test('flight order carousel uses browser scrolling without a visible scrollbar', async ({
   page,
 }) => {
-  await page.setViewportSize({ height: 900, width: 768 })
+  await page.setViewportSize({ height: 900, width: 980 })
   await gotoFlightOrderCrossSellExample(page)
 
   await expect
