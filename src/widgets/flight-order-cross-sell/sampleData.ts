@@ -5,6 +5,11 @@ const activeStartsAt = new Date(Date.now() - 10 * 60 * 1000).toISOString()
 export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
   locale: 'zh-TW',
   currency: 'TWD',
+  domainMode: 'uat',
+  order: {
+    orderYear: '2026',
+    orderNumber: '16575',
+  },
   promo: {
     id: 'limited-offer',
     activeTitle: '您已解鎖限時優惠！',

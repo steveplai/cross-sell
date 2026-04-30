@@ -140,6 +140,8 @@ const mountApiExamples: MountApiExample[] = [
 
 const darkBackgroundColor = 'rgb(10, 11, 11)'
 const lightBackgroundColor = 'rgb(255, 255, 255)'
+const flightOrderHsrAddonUrl =
+  'https://uvacation.liontravel.com/thsrdetail?sYear=2026&sOrdr=16575'
 
 function normalizeCssValue(value: string) {
   return value.trim().replace(/\s+/g, ' ')
@@ -238,6 +240,25 @@ async function getWebComponentWidgetTokenState(page: Page, selector: string) {
   return normalizeTokenState(state)
 }
 
+async function getFlightOrderWebComponentHsrLinkState(page: Page) {
+  return page.locator('flight-order-cross-sell').evaluate((element) => {
+    const anchors = element.shadowRoot?.querySelectorAll('a') ?? []
+    const link = Array.from(anchors).find(
+      (candidate) => candidate.textContent?.trim() === '前往加購',
+    )
+
+    if (!(link instanceof HTMLAnchorElement)) {
+      return null
+    }
+
+    return {
+      href: link.href,
+      rel: link.rel,
+      target: link.target,
+    }
+  })
+}
+
 async function expectWebComponentExampleRenders(
   page: Page,
   example: WebComponentExample,
@@ -334,6 +355,36 @@ test('web component example renders and emits event', async ({ page }) => {
   )
 })
 
+test('flight order web component handoff exposes HSR addon link and event', async ({
+  page,
+}) => {
+  await page.goto('/examples/web-component/flight-order-cross-sell.basic.html')
+
+  await expect
+    .poll(() => getFlightOrderWebComponentHsrLinkState(page))
+    .toEqual({
+      href: flightOrderHsrAddonUrl,
+      rel: 'noopener noreferrer',
+      target: '_blank',
+    })
+
+  await page.locator('flight-order-cross-sell').evaluate((element) => {
+    const anchors = element.shadowRoot?.querySelectorAll('a') ?? []
+    const link = Array.from(anchors).find(
+      (candidate) => candidate.textContent?.trim() === '前往加購',
+    )
+
+    if (link instanceof HTMLAnchorElement) {
+      link.addEventListener('click', (event) => event.preventDefault())
+      link.click()
+    }
+  })
+
+  await expect(page.getByTestId('flight-cross-sell-event-log')).toContainText(
+    'flight-order-cross-sell:addon-select: hsr',
+  )
+})
+
 test('web component host dark class controls shadow DOM theme', async ({
   page,
 }) => {
@@ -384,6 +435,27 @@ test('mount API example can update and unmount', async ({ page }) => {
 
   await page.getByRole('button', { name: '卸載元件' }).click()
   await expect(page.getByRole('heading', { name: '更新後商品' })).toHaveCount(0)
+})
+
+test('flight order mount API handoff exposes HSR addon link and callback', async ({
+  page,
+}) => {
+  await page.goto('/examples/mount-api/flight-order-cross-sell.basic.html')
+
+  const hsrLink = page.getByRole('link', { name: '前往加購' })
+
+  await expect(hsrLink).toHaveAttribute('href', flightOrderHsrAddonUrl)
+  await expect(hsrLink).toHaveAttribute('target', '_blank')
+  await expect(hsrLink).toHaveAttribute('rel', 'noopener noreferrer')
+
+  await hsrLink.evaluate((link) => {
+    link.addEventListener('click', (event) => event.preventDefault())
+  })
+  await hsrLink.click()
+
+  await expect(page.getByTestId('flight-cross-sell-mount-log')).toContainText(
+    'addon-select: hsr',
+  )
 })
 
 test('mount API applies widget-specific theme tokens', async ({ page }) => {

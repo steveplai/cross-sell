@@ -47,6 +47,12 @@
           log.textContent = `${event.type}: ${event.detail.sectionId}/${event.detail.item.id}`
         },
       )
+      widget.addEventListener(
+        'flight-order-cross-sell:addon-select',
+        (event) => {
+          log.textContent = `${event.type}: ${event.detail.addonId}`
+        },
+      )
     </script>
   </body>
 </html>

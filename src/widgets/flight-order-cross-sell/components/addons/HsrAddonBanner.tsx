@@ -1,5 +1,7 @@
 import { Check } from 'lucide-react'
 
+import { Button } from '@/components/ui/button'
+
 import type { FlightOrderCrossSellAddon } from '../../types'
 import { HsrBackground } from './HsrBackground'
 
@@ -13,10 +15,18 @@ const defaultHsrAddon: Required<
 
 interface HsrAddonBannerProps {
   addon?: FlightOrderCrossSellAddon
+  href?: string
   onSelectAddon?: () => void
 }
 
-export function HsrAddonBanner({ addon, onSelectAddon }: HsrAddonBannerProps) {
+const ctaClassName =
+  'h-9 rounded-full border-primary bg-background px-6 font-bold text-primary shadow-none hover:bg-(--lion-red-100) hover:text-primary lion-desktop:w-auto'
+
+export function HsrAddonBanner({
+  addon,
+  href,
+  onSelectAddon,
+}: HsrAddonBannerProps) {
   const title = addon?.title ?? defaultHsrAddon.title
   const description = addon?.description ?? defaultHsrAddon.description
   const ctaLabel = addon?.ctaLabel ?? defaultHsrAddon.ctaLabel
@@ -42,13 +52,27 @@ export function HsrAddonBanner({ addon, onSelectAddon }: HsrAddonBannerProps) {
             <p>{description}</p>
           </div>
         </div>
-        <button
-          className="h-9 rounded-full border border-primary bg-background px-6 text-sm font-bold text-primary transition hover:bg-(--lion-red-100) lion-desktop:w-auto"
-          onClick={onSelectAddon}
-          type="button"
-        >
-          {ctaLabel}
-        </button>
+        {href ? (
+          <Button asChild className={ctaClassName} variant="outline">
+            <a
+              href={href}
+              onClick={onSelectAddon}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              {ctaLabel}
+            </a>
+          </Button>
+        ) : (
+          <Button
+            className={ctaClassName}
+            onClick={onSelectAddon}
+            type="button"
+            variant="outline"
+          >
+            {ctaLabel}
+          </Button>
+        )}
       </div>
     </section>
   )

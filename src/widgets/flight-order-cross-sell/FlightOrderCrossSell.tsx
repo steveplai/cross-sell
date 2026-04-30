@@ -1,6 +1,10 @@
 import { type ReactNode, useEffect, useState } from 'react'
 
 import { cn } from '@/lib/utils'
+import {
+  createLiontravelUrl,
+  isLiontravelDomainMode,
+} from '@/shared/utils/liontravelUrl'
 
 import { createWidgetRootProps } from '../../runtime/widgetRoot'
 import { HsrAddonBanner } from './components/addons/HsrAddonBanner'
@@ -11,6 +15,7 @@ import { CrossSellSection } from './components/recommendations/CrossSellSection'
 import { getRemainingPromoSeconds } from './lib/countdown'
 import { groupFlightOrderCrossSellSections } from './lib/groupSections'
 import type {
+  FlightOrderCrossSellData,
   FlightOrderCrossSellProps,
   FlightOrderCrossSellSection,
 } from './types'
@@ -19,6 +24,8 @@ const flightOrderCrossSellRootProps = createWidgetRootProps(
   'flight-order-cross-sell',
 )
 const hsrAddonId = 'hsr'
+const hsrAddonProductionHostname = 'vacation.liontravel.com'
+const hsrAddonPathname = '/thsrdetail'
 
 //#region - Sub Components
 
@@ -52,6 +59,7 @@ function FlightOrderCrossSellContent({
   const locale = data.locale ?? 'zh-TW'
   const currency = data.currency ?? 'TWD'
   const hsrAddon = data.hsrAddon
+  const hsrAddonHref = createHsrAddonHref(data)
   const remainingSeconds = getRemainingPromoSeconds(data.promo, now)
   const isPromoActive = remainingSeconds > 0
   const attractionDecor = data.attractionDecor
@@ -133,6 +141,7 @@ function FlightOrderCrossSellContent({
         <ContentPanel>
           <HsrAddonBanner
             addon={hsrAddon}
+            href={hsrAddonHref}
             onSelectAddon={() =>
               onSelectAddon?.({ addonId: hsrAddon?.id ?? hsrAddonId })
             }
@@ -172,6 +181,26 @@ function FlightOrderCrossSellContent({
 }
 
 //#endregion - Sub Components
+
+function createHsrAddonHref(data: FlightOrderCrossSellData) {
+  if (
+    !isLiontravelDomainMode(data.domainMode) ||
+    !data.order?.orderYear ||
+    !data.order.orderNumber
+  ) {
+    return undefined
+  }
+
+  return createLiontravelUrl({
+    domainMode: data.domainMode,
+    pathname: hsrAddonPathname,
+    productionHostname: hsrAddonProductionHostname,
+    query: {
+      sYear: data.order.orderYear,
+      sOrdr: data.order.orderNumber,
+    },
+  })
+}
 
 function useCurrentTime(promoKey: string) {
   const [now, setNow] = useState(() => Date.now())

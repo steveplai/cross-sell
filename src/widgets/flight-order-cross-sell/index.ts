@@ -8,6 +8,7 @@ export type {
   FlightOrderCrossSellData,
   FlightOrderCrossSellItem,
   FlightOrderCrossSellItemEvent,
+  FlightOrderCrossSellOrder,
   FlightOrderCrossSellPromo,
   FlightOrderCrossSellProps,
   FlightOrderCrossSellReminder,
@@ -15,3 +16,4 @@ export type {
   FlightOrderCrossSellSectionKind,
   FlightOrderCrossSellViewMoreEvent,
 } from './types'
+export type { LiontravelDomainMode } from '@/shared/utils/liontravelUrl'

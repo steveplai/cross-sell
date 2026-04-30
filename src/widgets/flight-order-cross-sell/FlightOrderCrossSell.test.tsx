@@ -86,7 +86,7 @@ describe('FlightOrderCrossSell', () => {
     expect(screen.getAllByText('江東區').length).toBeGreaterThan(0)
 
     expect(screen.getAllByRole('link', { name: /探索更多/ }).length).toBe(3)
-    expect(screen.getByRole('button', { name: '前往加購' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '前往加購' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /網路服務/ })).toBeInTheDocument()
   })
 
@@ -99,7 +99,7 @@ describe('FlightOrderCrossSell', () => {
     const hotelHeading = screen.getByRole('heading', {
       name: '探索東京飯店',
     })
-    const hsrButton = screen.getByRole('button', { name: '前往加購' })
+    const hsrCta = screen.getByRole('link', { name: '前往加購' })
     const attractionDecor = screen.getByTestId('attraction-decor')
     const attractionProduct = screen.getByRole('button', {
       name: /東京迪士尼門票/,
@@ -111,7 +111,7 @@ describe('FlightOrderCrossSell', () => {
 
     expectElementsInDocumentOrder([
       hotelHeading,
-      hsrButton,
+      hsrCta,
       attractionDecor,
       attractionProduct,
       transportHeading,
@@ -135,9 +135,9 @@ describe('FlightOrderCrossSell', () => {
     expect(
       screen.getByText('購買國內外行程，最高享 8 折優惠'),
     ).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: '前往加購' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '前往加購' })).toBeInTheDocument()
 
-    await user.click(screen.getByRole('button', { name: '前往加購' }))
+    await user.click(screen.getByRole('link', { name: '前往加購' }))
 
     expect(onSelectAddon).toHaveBeenLastCalledWith({ addonId: 'hsr' })
 
@@ -159,11 +159,110 @@ describe('FlightOrderCrossSell', () => {
     expect(
       screen.getByText('購買國內外行程，最高享 8 折優惠'),
     ).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: '前往加購' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '前往加購' })).toBeInTheDocument()
+
+    await user.click(screen.getByRole('link', { name: '前往加購' }))
+
+    expect(onSelectAddon).toHaveBeenLastCalledWith({ addonId: 'custom-hsr' })
+  })
+
+  it('renders the HSR addon CTA as a UAT link when order data is provided', async () => {
+    const user = userEvent.setup()
+    const onSelectAddon = vi.fn()
+
+    render(
+      <FlightOrderCrossSell
+        data={cloneSampleData({
+          domainMode: 'uat',
+          order: {
+            orderNumber: '16575',
+            orderYear: '2026',
+          },
+        })}
+        onSelectAddon={onSelectAddon}
+      />,
+    )
+
+    const hsrLink = screen.getByRole('link', { name: '前往加購' })
+
+    expect(hsrLink).toHaveAttribute(
+      'href',
+      'https://uvacation.liontravel.com/thsrdetail?sYear=2026&sOrdr=16575',
+    )
+    expect(hsrLink).toHaveAttribute('target', '_blank')
+    expect(hsrLink).toHaveAttribute('rel', 'noopener noreferrer')
+
+    await user.click(hsrLink)
+
+    expect(onSelectAddon).toHaveBeenCalledWith({ addonId: 'hsr' })
+  })
+
+  it('renders the HSR addon CTA as a production link when production domain mode is provided', () => {
+    render(
+      <FlightOrderCrossSell
+        data={cloneSampleData({
+          domainMode: 'production',
+          order: {
+            orderNumber: '16575',
+            orderYear: '2026',
+          },
+        })}
+      />,
+    )
+
+    expect(screen.getByRole('link', { name: '前往加購' })).toHaveAttribute(
+      'href',
+      'https://vacation.liontravel.com/thsrdetail?sYear=2026&sOrdr=16575',
+    )
+  })
+
+  it('falls back to the HSR addon button when order data is incomplete', async () => {
+    const user = userEvent.setup()
+    const onSelectAddon = vi.fn()
+
+    render(
+      <FlightOrderCrossSell
+        data={cloneSampleData({
+          domainMode: 'uat',
+          order: undefined,
+        })}
+        onSelectAddon={onSelectAddon}
+      />,
+    )
+
+    expect(
+      screen.queryByRole('link', { name: '前往加購' }),
+    ).not.toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: '前往加購' }))
 
-    expect(onSelectAddon).toHaveBeenLastCalledWith({ addonId: 'custom-hsr' })
+    expect(onSelectAddon).toHaveBeenCalledWith({ addonId: 'hsr' })
+  })
+
+  it('falls back to the HSR addon button when domain mode is missing', async () => {
+    const user = userEvent.setup()
+    const onSelectAddon = vi.fn()
+
+    render(
+      <FlightOrderCrossSell
+        data={cloneSampleData({
+          domainMode: undefined,
+          order: {
+            orderNumber: '16575',
+            orderYear: '2026',
+          },
+        })}
+        onSelectAddon={onSelectAddon}
+      />,
+    )
+
+    expect(
+      screen.queryByRole('link', { name: '前往加購' }),
+    ).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: '前往加購' }))
+
+    expect(onSelectAddon).toHaveBeenCalledWith({ addonId: 'hsr' })
   })
 
   it('shows the full duration before the promo starts', () => {
@@ -268,7 +367,7 @@ describe('FlightOrderCrossSell', () => {
 
     await user.click(viewMoreLink)
     await user.click(screen.getByRole('button', { name: /LA VISTA 東京灣/ }))
-    await user.click(screen.getByRole('button', { name: /前往加購/ }))
+    await user.click(screen.getByRole('link', { name: /前往加購/ }))
 
     expect(onViewMore).toHaveBeenCalledWith({ sectionId: 'tokyo-hotels' })
     expect(onSelectItem).toHaveBeenCalledWith(

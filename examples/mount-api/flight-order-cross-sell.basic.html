@@ -186,6 +186,11 @@
       const data = {
         locale: 'zh-TW',
         currency: 'TWD',
+        domainMode: 'uat',
+        order: {
+          orderYear: '2026',
+          orderNumber: '16575',
+        },
         promo: {
           id: 'limited-offer',
           activeTitle: '您已解鎖限時優惠！',
@@ -246,6 +251,9 @@
         data,
         onSelectItem(event) {
           log.textContent = `item-select: ${event.sectionId}/${event.item.id}`
+        },
+        onSelectAddon(event) {
+          log.textContent = `addon-select: ${event.addonId}`
         },
       })
     </script>

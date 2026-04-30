@@ -1,3 +1,5 @@
+import type { LiontravelDomainMode } from '@/shared/utils/liontravelUrl'
+
 export type FlightOrderCrossSellBenefit =
   | string
   | {
@@ -74,11 +76,18 @@ export interface FlightOrderCrossSellAddon {
   ctaLabel?: string
 }
 
+export interface FlightOrderCrossSellOrder {
+  orderYear: string
+  orderNumber: string
+}
+
 export interface FlightOrderCrossSellData {
   promo: FlightOrderCrossSellPromo
   sections: FlightOrderCrossSellSection[]
   attractionDecor?: FlightOrderCrossSellAttractionDecor
+  domainMode?: LiontravelDomainMode
   hsrAddon?: FlightOrderCrossSellAddon
+  order?: FlightOrderCrossSellOrder
   reminders?: {
     title: string
     subtitle?: string
