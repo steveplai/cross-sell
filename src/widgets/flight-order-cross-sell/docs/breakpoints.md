@@ -4,7 +4,7 @@
 
 此 widget 目前刻意分成兩套斷點策略：
 
-- 整體版面使用單一桌機斷點：`980px`。
+- 整體版面使用 Lion 品牌桌機斷點：`lion-desktop`，對應 `980px`。
 - Carousel 使用依卡片可容納數量反推的斷點，讓跑馬燈在不同寬度下盡可能維持合理密度。
 
 ## 整體 Widget 斷點
@@ -12,12 +12,26 @@
 `src/widgets/flight-order-cross-sell/` 內多數版面切換使用：
 
 ```txt
-min-[980px]:
+lion-desktop:
 ```
 
-這是只針對此 widget 將原本的 Tailwind `md:` 行為改成 `980px`。Tailwind 全域 theme 沒有被修改，所以其他 widgets 仍維持既有的 `sm`、`md`、`lg` 等斷點行為。
+這個 breakpoint 定義在 shared widget stylesheet：
 
-`980px` 主要控制大範圍版面切換，例如：
+```css
+--breakpoint-lion-desktop: 61.25rem;
+```
+
+目前定義位置：
+
+```txt
+src/styles/widget.css
+```
+
+`61.25rem` 在預設 `16px` root font size 下等於 `980px`。這裡使用 `rem` 是為了與 Tailwind 預設斷點單位一致，避免自訂 `px` breakpoint 與預設 `rem` breakpoint 混用時產生排序問題。
+
+這不是覆寫 Tailwind 原本的 `md:` 或 `lg:`。其他 widgets 仍可維持既有的 `sm`、`md`、`lg` 等斷點行為；若未來其他 Lion widgets 也需要同一個品牌桌機斷點，則可以共用 `lion-desktop:`。
+
+`lion-desktop` 主要控制大範圍版面切換，例如：
 
 - panel 圓角
 - section padding
@@ -37,7 +51,7 @@ min-[980px]:
 實作上的重要原則：
 
 ```txt
-不重新定義全域 sm: 或 lg:
+不重新定義 Tailwind 既有的 sm:、md: 或 lg:
 ```
 
 若單一元件需要更細的區間，應使用 Tailwind arbitrary breakpoint，例如：
@@ -46,7 +60,7 @@ min-[980px]:
 min-[712px]:max-[935.98px]:...
 ```
 
-避免為了此 widget 修改全域 Tailwind breakpoint。
+避免為了此 widget 覆寫 Tailwind 既有 breakpoint。
 
 ## Carousel 斷點策略
 
@@ -55,7 +69,7 @@ min-[712px]:max-[935.98px]:...
 原因是兩者回答的問題不同：
 
 ```txt
-整體 980px 斷點：
+整體 lion-desktop 斷點：
 是否切換成 desktop layout？
 
 Carousel 斷點：
@@ -142,7 +156,7 @@ Carousel item 與 placeholder item 目前避免使用固定 `min-w-*` class。
 
 ```txt
 min-w-52
-min-[980px]:min-w-54.75
+lion-desktop:min-w-54.75
 ```
 
 這些最小寬度可能會壓過 `basis-1/5`，導致即使設定了 5 張，也不一定能完整顯示 5 張。
@@ -179,4 +193,5 @@ src/widgets/flight-order-cross-sell/components/promo/PromoHeader.tsx
 src/widgets/flight-order-cross-sell/components/recommendations/AttractionDecorBanner.tsx
 src/widgets/flight-order-cross-sell/components/recommendations/CrossSellSection.tsx
 src/widgets/flight-order-cross-sell/components/recommendations/useCarouselPlaceholderLayout.ts
+src/styles/widget.css
 ```

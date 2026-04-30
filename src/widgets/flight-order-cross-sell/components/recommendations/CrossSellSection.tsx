@@ -98,11 +98,11 @@ export function CrossSellSection({
   const placeholderLabel = getPlaceholderLabel(section)
 
   return (
-    <section className="bg-background px-5 py-5 min-[980px]:px-12 min-[980px]:py-7.5">
-      <header className="mb-5 flex items-start justify-between gap-4 min-[980px]:mb-6">
+    <section className="bg-background px-5 py-5 lion-desktop:px-12 lion-desktop:py-7.5">
+      <header className="mb-5 flex items-start justify-between gap-4 lion-desktop:mb-6">
         <div className="min-w-0">
           {hideTitle ? null : (
-            <h2 className="text-base leading-6 font-bold text-foreground min-[980px]:text-xl">
+            <h2 className="text-base leading-6 font-bold text-foreground lion-desktop:text-xl">
               {section.title}
             </h2>
           )}
@@ -159,7 +159,7 @@ export function CrossSellSection({
       >
         <CarouselPrevious
           aria-label="上一組推薦"
-          className="-left-10 z-10 hidden size-10 border-0 bg-card p-0 text-(--lion-gray-800) shadow-(--lion-carousel-control-shadow) hover:bg-card hover:text-primary min-[980px]:flex"
+          className="-left-10 z-10 hidden size-10 border-0 bg-card p-0 text-(--lion-gray-800) shadow-(--lion-carousel-control-shadow) hover:bg-card hover:text-primary lion-desktop:flex"
           data-testid={`section-${section.id}-previous`}
           hideWhenUnavailable
         />
@@ -193,7 +193,7 @@ export function CrossSellSection({
         </CarouselContent>
         <CarouselNext
           aria-label="下一組推薦"
-          className="-right-10 z-10 hidden size-10 border-0 bg-card p-0 text-(--lion-gray-800) shadow-(--lion-carousel-control-shadow) hover:bg-card hover:text-primary min-[980px]:flex"
+          className="-right-10 z-10 hidden size-10 border-0 bg-card p-0 text-(--lion-gray-800) shadow-(--lion-carousel-control-shadow) hover:bg-card hover:text-primary lion-desktop:flex"
           data-testid={`section-${section.id}-next`}
           hideWhenUnavailable
         />

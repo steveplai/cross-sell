@@ -40,6 +40,8 @@
     sans-serif
   );
 
+  --breakpoint-lion-desktop: 61.25rem;
+
   --radius-sm: calc(var(--radius, 0.3rem) * 0.5);
   --radius-md: calc(var(--radius, 0.3rem) * 0.75);
   --radius-lg: var(--radius, 0.3rem);

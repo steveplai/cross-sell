@@ -32,7 +32,7 @@ function ContentPanel({
   return (
     <div
       className={cn(
-        'rounded-none min-[980px]:rounded-[10px]',
+        'rounded-none lion-desktop:rounded-[10px]',
         allowOverflow ? 'overflow-visible' : 'overflow-hidden',
       )}
     >
@@ -127,7 +127,7 @@ function FlightOrderCrossSellContent({
       data-promo-state={isPromoActive ? 'active' : 'expired'}
       {...flightOrderCrossSellRootProps}
     >
-      <div className="mx-auto flex w-full max-w-297.5 flex-col gap-2.5 py-0 min-[980px]:py-0">
+      <div className="mx-auto flex w-full max-w-297.5 flex-col gap-2.5 py-0 lion-desktop:py-0">
         {renderPromoHotelPanel()}
 
         <ContentPanel>
