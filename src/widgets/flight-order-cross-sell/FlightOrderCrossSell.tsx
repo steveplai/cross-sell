@@ -73,7 +73,7 @@ function FlightOrderCrossSellContent({
     sectionGroups.attraction,
   )
 
-  function renderSectionList(
+  function renderCrossSellSections(
     sections: FlightOrderCrossSellSection[],
     options: { hideTitle?: boolean } = {},
   ) {
@@ -97,14 +97,16 @@ function FlightOrderCrossSellContent({
     )
   }
 
-  function renderSections(sections: FlightOrderCrossSellSection[]) {
+  function renderDefaultSectionPanel(sections: FlightOrderCrossSellSection[]) {
     const renderableSections = getRenderableSections(sections)
 
     if (renderableSections.length === 0) {
       return null
     }
 
-    return <ContentPanel>{renderSectionList(renderableSections)}</ContentPanel>
+    return (
+      <ContentPanel>{renderCrossSellSections(renderableSections)}</ContentPanel>
+    )
   }
 
   function renderPromoHotelPanel() {
@@ -118,7 +120,7 @@ function FlightOrderCrossSellContent({
           remainingSeconds={remainingSeconds}
         />
         {renderableHotelSections.length > 0
-          ? renderSectionList(renderableHotelSections)
+          ? renderCrossSellSections(renderableHotelSections)
           : null}
       </ContentPanel>
     )
@@ -153,7 +155,7 @@ function FlightOrderCrossSellContent({
                 contentOverrides={attractionBannerOverrides}
               />
               <div className="relative z-10 -mt-5 overflow-hidden rounded-t-[20px] bg-background lion-desktop:-mt-6 lion-desktop:rounded-t-[24px]">
-                {renderSectionList(renderableAttractionSections, {
+                {renderCrossSellSections(renderableAttractionSections, {
                   hideTitle: true,
                 })}
               </div>
@@ -161,9 +163,9 @@ function FlightOrderCrossSellContent({
           </ContentPanel>
         ) : null}
 
-        {renderSections(sectionGroups.transport)}
-        {renderSections(sectionGroups.flight)}
-        {renderSections(sectionGroups.other)}
+        {renderDefaultSectionPanel(sectionGroups.transport)}
+        {renderDefaultSectionPanel(sectionGroups.flight)}
+        {renderDefaultSectionPanel(sectionGroups.other)}
 
         {data.reminders ? (
           <ContentPanel>
