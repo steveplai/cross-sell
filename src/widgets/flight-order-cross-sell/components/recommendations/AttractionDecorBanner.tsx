@@ -26,7 +26,7 @@ export function AttractionDecorBanner({
       )}
       data-testid="attraction-decor"
     >
-      <div className="flex flex-row items-center">
+      <div className="relative inline-block">
         <h2
           className={cn(
             'text-base leading-6',
@@ -36,15 +36,14 @@ export function AttractionDecorBanner({
         >
           {title}
         </h2>
-        <div
+        <AttractionTicketsDecor
           className={cn(
-            'pointer-events-none relative shrink-0 overflow-hidden',
-            '-mt-5 -mr-5 -mb-9 aspect-214/132 h-20',
-            'lion-desktop:-mt-7.5 lion-desktop:-mr-12 lion-desktop:-mb-11.25 lion-desktop:h-25.75',
+            'pointer-events-none',
+            'absolute -top-5 left-full',
+            'h-20 w-auto object-contain',
+            'lion-desktop:-top-7.5 lion-desktop:h-25.75',
           )}
-        >
-          <AttractionTicketsDecor className="h-full w-full object-contain" />
-        </div>
+        />
       </div>
     </section>
   )
