@@ -44,7 +44,7 @@ describe('TravelPlanCrossSellEmail', () => {
     {
       name: 'sales',
       createContent: createSalesCrossSellEmailContent,
-      expectedCtaLabel: '立即搜尋東京飯店',
+      expectedCtaLabel: '立即搜尋飯店',
       expectedCtaUrl: 'https://example.com/sales-cross-sell/hotels',
       expectedRecommendation: 'OMO5 東京大塚 by 星野集團',
     },
@@ -100,4 +100,25 @@ describe('TravelPlanCrossSellEmail', () => {
       }
     },
   )
+
+  it('enables header description and CTA only for the configured featured content', () => {
+    const assetUrls = createTravelPlanCrossSellAssetUrls('production')
+    const orderContent = createOrderCrossSellEmailContent(assetUrls)
+    const salesContent = createSalesCrossSellEmailContent(assetUrls)
+    const insuranceContent = createInsuranceCrossSellEmailContent(assetUrls)
+
+    expect(
+      orderContent.sections.find((section) => section.variant === 'featured')
+        ?.showHeaderDescriptionAndCta,
+    ).toBeUndefined()
+    expect(
+      salesContent.sections.find((section) => section.variant === 'featured')
+        ?.showHeaderDescriptionAndCta,
+    ).toBe(true)
+    expect(
+      insuranceContent.sections.filter(
+        (section) => section.showHeaderDescriptionAndCta,
+      ),
+    ).toHaveLength(0)
+  })
 })

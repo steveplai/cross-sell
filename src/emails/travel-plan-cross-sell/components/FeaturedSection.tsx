@@ -15,18 +15,41 @@ interface FeaturedSectionProps {
 }
 
 export function FeaturedSection({ section }: FeaturedSectionProps) {
+  const showHeaderDescriptionAndCta = section.showHeaderDescriptionAndCta
+
   return (
     <>
       <Section className="bg-brand-red-soft m-0 w-full rounded-[5px] px-3.75 py-2.5">
-        <Row>
+        <Row
+          className={showHeaderDescriptionAndCta ? 'table-fixed' : undefined}
+        >
           <Column className="w-11.75">
             <IconBadge section={section} />
           </Column>
-          <Column>
+          <Column className={showHeaderDescriptionAndCta ? 'w-18' : undefined}>
             <Text className="text-ink m-0 text-[16px] leading-6 font-bold whitespace-nowrap">
               {section.title}
             </Text>
           </Column>
+          {showHeaderDescriptionAndCta ? (
+            <>
+              <Column className="w-60.25 pr-3">
+                <Text className="m-0 text-[14px] leading-5.5 whitespace-nowrap text-black">
+                  {section.description}
+                </Text>
+              </Column>
+              <Column className="w-42.5 text-right">
+                <Button
+                  className="border-brand-red text-brand-red inline-block rounded-[5px] border border-solid bg-white px-2.5 py-1.25 text-center text-[16px] leading-6 whitespace-nowrap no-underline"
+                  href={section.ctaUrl}
+                >
+                  <span className="inline-block whitespace-nowrap">
+                    <span>{section.ctaLabel}</span>
+                  </span>
+                </Button>
+              </Column>
+            </>
+          ) : null}
         </Row>
       </Section>
 

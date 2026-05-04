@@ -26,6 +26,7 @@ export interface TravelPlanCrossSellSection {
   iconUrl: string
   iconAlt: string
   variant?: TravelPlanCrossSellSectionVariant
+  showHeaderDescriptionAndCta?: boolean
   recommendationsTitle?: string
   recommendations?: TravelPlanCrossSellRecommendation[]
 }

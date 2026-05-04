@@ -30,11 +30,36 @@ describe('FeaturedSection', () => {
       document.querySelector(`a[href="${section.ctaUrl}"]`)?.textContent,
     ).toContain(section.ctaLabel)
     expect(
+      document.querySelectorAll(`a[href="${section.ctaUrl}"]`),
+    ).toHaveLength(1)
+    expect(
       document.querySelector(
         'img[src="https://example.com/transportIcon.png"]',
       ),
     ).not.toBeNull()
     expect(document.querySelector('img[src$="searchIcon.png"]')).toBeNull()
     expect(html).not.toContain('推薦熱門')
+  })
+
+  it('can repeat description and CTA in the header for configured featured sections', async () => {
+    const section = {
+      ctaLabel: '立即查看',
+      ctaUrl: 'https://example.com/featured-section',
+      description: '落地第一步，先搞定交通',
+      iconAlt: '交通',
+      iconUrl: 'https://example.com/transportIcon.png',
+      id: 'transportation',
+      showHeaderDescriptionAndCta: true,
+      title: '抵達啟程',
+      variant: 'featured',
+    } satisfies TravelPlanCrossSellSection
+
+    const html = await renderEmail(<FeaturedSection section={section} />)
+    const document = parseEmailHtml(html)
+
+    expect(html.match(new RegExp(section.description, 'g'))).toHaveLength(2)
+    expect(
+      document.querySelectorAll(`a[href="${section.ctaUrl}"]`),
+    ).toHaveLength(2)
   })
 })
