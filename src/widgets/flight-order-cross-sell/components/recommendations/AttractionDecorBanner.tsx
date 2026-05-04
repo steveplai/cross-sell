@@ -13,7 +13,7 @@ export function AttractionDecorBanner({
 
   return (
     <section
-      className="relative overflow-hidden bg-linear-to-b from-[#fff8f8] to-background px-5 pt-8 pb-5 lion-desktop:px-12 lion-desktop:pt-10 lion-desktop:pb-6"
+      className="relative overflow-hidden bg-background bg-linear-to-b from-(--lion-attraction-banner-gradient-from) from-[9.67%] to-(--lion-attraction-banner-gradient-to) to-[111.71%] px-5 pt-8 pb-10 lion-desktop:px-12 lion-desktop:pt-10 lion-desktop:pb-12"
       data-testid="attraction-decor"
     >
       {contentOverrides?.imageUrl ? (

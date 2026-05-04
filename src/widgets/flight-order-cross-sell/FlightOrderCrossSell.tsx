@@ -148,13 +148,15 @@ function FlightOrderCrossSellContent({
 
         {renderableAttractionSections.length > 0 ? (
           <ContentPanel>
-            <div className="flex flex-col divide-y divide-(--lion-gray-50)">
+            <div className="overflow-hidden bg-background">
               <AttractionDecorBanner
                 contentOverrides={attractionBannerOverrides}
               />
-              {renderSectionList(renderableAttractionSections, {
-                hideTitle: true,
-              })}
+              <div className="relative z-10 -mt-5 overflow-hidden rounded-t-[20px] bg-background lion-desktop:-mt-6 lion-desktop:rounded-t-[24px]">
+                {renderSectionList(renderableAttractionSections, {
+                  hideTitle: true,
+                })}
+              </div>
             </div>
           </ContentPanel>
         ) : null}
