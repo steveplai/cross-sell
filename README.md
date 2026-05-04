@@ -28,8 +28,14 @@ dist/
   emails/
     demo-product-offer.html
     order-cross-sell.html
+    order-cross-sell.fragment.html
+    order-cross-sell.head.html
     sales-cross-sell.html
+    sales-cross-sell.fragment.html
+    sales-cross-sell.head.html
     insurance-cross-sell.html
+    insurance-cross-sell.fragment.html
+    insurance-cross-sell.head.html
 ```
 
 `dist/` is generated output and should not be committed.
@@ -302,8 +308,19 @@ Current generated email files:
 
 - `demo-product-offer.html`
 - `order-cross-sell.html`
+- `order-cross-sell.fragment.html`
+- `order-cross-sell.head.html`
 - `sales-cross-sell.html`
+- `sales-cross-sell.fragment.html`
+- `sales-cross-sell.head.html`
 - `insurance-cross-sell.html`
+- `insurance-cross-sell.fragment.html`
+- `insurance-cross-sell.head.html`
+
+For travel plan cross-sell emails, use the full `.html` file for preview and
+handoff review. Use `.fragment.html` when another email template needs a body
+snippet to paste into its existing `<body>`, and use `.head.html` only when that
+host template accepts additional `<head>` metadata.
 
 Travel plan cross-sell emails support two asset domain modes:
 

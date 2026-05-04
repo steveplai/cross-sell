@@ -14,6 +14,11 @@ import {
 } from '../src/emails/travel-plan-cross-sell/content/shared-assets'
 import { TravelPlanCrossSellEmail } from '../src/emails/travel-plan-cross-sell/TravelPlanCrossSellEmail'
 
+interface EmailOutput {
+  fileName: string
+  html: string
+}
+
 function getDomainModeArg(args: string[]) {
   const domainModeFlag = '--domain-mode'
 
@@ -38,6 +43,49 @@ function getDomainModeArg(args: string[]) {
   return undefined
 }
 
+function extractHtmlTagContent(html: string, tagName: 'body' | 'head') {
+  const tagPattern = new RegExp(
+    `<${tagName}\\b[^>]*>([\\s\\S]*)<\\/${tagName}>`,
+    'i',
+  )
+  const match = html.match(tagPattern)
+
+  if (!match) {
+    throw new Error(
+      `Unable to extract <${tagName}> content from rendered email.`,
+    )
+  }
+
+  return `${match[1].trim()}\n`
+}
+
+function createFragmentOutput(fileName: string, html: string): EmailOutput {
+  return {
+    fileName,
+    html: extractHtmlTagContent(html, 'body'),
+  }
+}
+
+function createHeadOutput(fileName: string, html: string): EmailOutput {
+  return {
+    fileName,
+    html: extractHtmlTagContent(html, 'head'),
+  }
+}
+
+function createTravelPlanCrossSellOutputs(
+  baseFileName: string,
+  html: string,
+): EmailOutput[] {
+  const baseName = baseFileName.replace(/\.html$/, '')
+
+  return [
+    { fileName: baseFileName, html },
+    createFragmentOutput(`${baseName}.fragment.html`, html),
+    createHeadOutput(`${baseName}.head.html`, html),
+  ]
+}
+
 const outDir = resolve(process.cwd(), 'dist/emails')
 const travelPlanCrossSellEmailDomainMode =
   resolveTravelPlanCrossSellEmailDomainMode(
@@ -49,7 +97,23 @@ const travelPlanCrossSellAssetUrls = createTravelPlanCrossSellAssetUrls(
 
 await mkdir(outDir, { recursive: true })
 
-const emails = [
+const orderCrossSellHtml = await render(
+  <TravelPlanCrossSellEmail
+    {...createOrderCrossSellEmailContent(travelPlanCrossSellAssetUrls)}
+  />,
+)
+const salesCrossSellHtml = await render(
+  <TravelPlanCrossSellEmail
+    {...createSalesCrossSellEmailContent(travelPlanCrossSellAssetUrls)}
+  />,
+)
+const insuranceCrossSellHtml = await render(
+  <TravelPlanCrossSellEmail
+    {...createInsuranceCrossSellEmailContent(travelPlanCrossSellAssetUrls)}
+  />,
+)
+
+const emails: EmailOutput[] = [
   {
     fileName: 'demo-product-offer.html',
     html: await render(
@@ -60,30 +124,18 @@ const emails = [
       />,
     ),
   },
-  {
-    fileName: 'order-cross-sell.html',
-    html: await render(
-      <TravelPlanCrossSellEmail
-        {...createOrderCrossSellEmailContent(travelPlanCrossSellAssetUrls)}
-      />,
-    ),
-  },
-  {
-    fileName: 'sales-cross-sell.html',
-    html: await render(
-      <TravelPlanCrossSellEmail
-        {...createSalesCrossSellEmailContent(travelPlanCrossSellAssetUrls)}
-      />,
-    ),
-  },
-  {
-    fileName: 'insurance-cross-sell.html',
-    html: await render(
-      <TravelPlanCrossSellEmail
-        {...createInsuranceCrossSellEmailContent(travelPlanCrossSellAssetUrls)}
-      />,
-    ),
-  },
+  ...createTravelPlanCrossSellOutputs(
+    'order-cross-sell.html',
+    orderCrossSellHtml,
+  ),
+  ...createTravelPlanCrossSellOutputs(
+    'sales-cross-sell.html',
+    salesCrossSellHtml,
+  ),
+  ...createTravelPlanCrossSellOutputs(
+    'insurance-cross-sell.html',
+    insuranceCrossSellHtml,
+  ),
 ]
 
 await Promise.all(

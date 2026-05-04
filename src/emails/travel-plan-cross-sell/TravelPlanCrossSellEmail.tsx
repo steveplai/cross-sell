@@ -22,12 +22,33 @@ export type {
   TravelPlanCrossSellSectionVariant,
 } from './types'
 
-export function TravelPlanCrossSellEmail({
-  previewText,
+export type TravelPlanCrossSellContentProps = Omit<
+  TravelPlanCrossSellEmailProps,
+  'previewText'
+>
+
+export function TravelPlanCrossSellContent({
   title,
   deadlineText,
   highlights = [],
   sections,
+}: TravelPlanCrossSellContentProps) {
+  return (
+    <Container className="text-ink mx-auto w-150 max-w-150 rounded-[5px] bg-white p-5 font-sans">
+      <Header title={title} deadlineText={deadlineText} />
+      {highlights.length ? <Highlights highlights={highlights} /> : null}
+      <Section className="m-0">
+        {sections.map((section) => (
+          <CrossSellSection key={section.id} section={section} />
+        ))}
+      </Section>
+    </Container>
+  )
+}
+
+export function TravelPlanCrossSellEmail({
+  previewText,
+  ...contentProps
 }: TravelPlanCrossSellEmailProps) {
   return (
     <Html lang="zh-TW">
@@ -35,15 +56,7 @@ export function TravelPlanCrossSellEmail({
         <Head />
         <Preview>{previewText}</Preview>
         <Body className="m-0 bg-white p-0">
-          <Container className="text-ink mx-auto w-150 max-w-150 rounded-[5px] bg-white p-5 font-sans">
-            <Header title={title} deadlineText={deadlineText} />
-            {highlights.length ? <Highlights highlights={highlights} /> : null}
-            <Section className="m-0">
-              {sections.map((section) => (
-                <CrossSellSection key={section.id} section={section} />
-              ))}
-            </Section>
-          </Container>
+          <TravelPlanCrossSellContent {...contentProps} />
         </Body>
       </Tailwind>
     </Html>
