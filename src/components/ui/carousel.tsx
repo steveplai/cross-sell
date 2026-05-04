@@ -31,6 +31,10 @@ type CarouselContextProps = {
 
 const CarouselContext = React.createContext<CarouselContextProps | null>(null)
 
+function getUnavailableScrollSnapshot() {
+  return false
+}
+
 function useCarousel() {
   const context = React.useContext(CarouselContext)
 
@@ -57,17 +61,43 @@ function Carousel({
     },
     plugins,
   )
-  const [canScrollPrev, setCanScrollPrev] = React.useState(false)
-  const [canScrollNext, setCanScrollNext] = React.useState(false)
+  const subscribeToCarouselSelection = React.useCallback(
+    (onStoreChange: () => void) => {
+      if (!api) {
+        return () => {}
+      }
 
-  const onSelect = React.useCallback((api: CarouselApi) => {
-    if (!api) {
-      return
-    }
+      api.on('reInit', onStoreChange)
+      api.on('select', onStoreChange)
 
-    setCanScrollPrev(api.canScrollPrev())
-    setCanScrollNext(api.canScrollNext())
-  }, [])
+      return () => {
+        api.off('select', onStoreChange)
+        api.off('reInit', onStoreChange)
+      }
+    },
+    [api],
+  )
+
+  const getCanScrollPrevSnapshot = React.useCallback(
+    () => api?.canScrollPrev() ?? false,
+    [api],
+  )
+
+  const getCanScrollNextSnapshot = React.useCallback(
+    () => api?.canScrollNext() ?? false,
+    [api],
+  )
+
+  const canScrollPrev = React.useSyncExternalStore(
+    subscribeToCarouselSelection,
+    getCanScrollPrevSnapshot,
+    getUnavailableScrollSnapshot,
+  )
+  const canScrollNext = React.useSyncExternalStore(
+    subscribeToCarouselSelection,
+    getCanScrollNextSnapshot,
+    getUnavailableScrollSnapshot,
+  )
 
   const scrollPrev = React.useCallback(() => {
     api?.scrollPrev()
@@ -97,21 +127,6 @@ function Carousel({
 
     setApi(api)
   }, [api, setApi])
-
-  React.useEffect(() => {
-    if (!api) {
-      return
-    }
-
-    onSelect(api)
-    api.on('reInit', onSelect)
-    api.on('select', onSelect)
-
-    return () => {
-      api?.off('select', onSelect)
-      api?.off('reInit', onSelect)
-    }
-  }, [api, onSelect])
 
   return (
     <CarouselContext.Provider
