@@ -1,27 +1,23 @@
 import { pixelBasedPreset } from '@react-email/components'
 
-const travelPlanCrossSellEmailSpacing = {
-  '0.75': '3px',
-  '1.25': '5px',
-  '3.75': '15px',
-  '5.5': '22px',
-  '7.5': '30px',
-  '11.75': '47px',
-  '18': '72px',
-  '25': '100px',
-  '42.5': '170px',
-  '48.5': '194px',
-  '74.75': '299px',
-  '75': '300px',
-  '115': '460px',
-  '150': '600px',
+function createEmailPixelSpacingScale(max = 200) {
+  const spacing: Record<string, string> = { px: '1px' }
+
+  for (let quarterStep = 0; quarterStep <= max * 4; quarterStep += 1) {
+    const spacingValue = quarterStep / 4
+    const key = `${spacingValue}`
+
+    spacing[key] = `${quarterStep}px`
+  }
+
+  return spacing
 }
 
 export const travelPlanCrossSellTailwindConfig = {
   presets: [pixelBasedPreset],
   theme: {
     extend: {
-      spacing: travelPlanCrossSellEmailSpacing,
+      spacing: createEmailPixelSpacingScale(),
       colors: {
         ink: '#222222',
         muted: '#666666',
