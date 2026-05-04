@@ -36,12 +36,25 @@
     <script src="../../dist/widgets/flight-order-cross-sell.mount.js"></script>
     <script>
       const startsAt = new Date(Date.now() - 10 * 60 * 1000).toISOString()
+      const sampleImageUrls = {
+        cityHotel:
+          'https://picsum.photos/seed/liontravel-city-hotel/640/426',
+        familyStay:
+          'https://picsum.photos/seed/liontravel-family-stay/640/426',
+        hotelBay:
+          'https://picsum.photos/seed/liontravel-tokyo-bay-hotel/640/426',
+        hotelLounge:
+          'https://picsum.photos/seed/liontravel-hotel-lounge/640/426',
+        hotelRoom:
+          'https://picsum.photos/seed/liontravel-hotel-room/640/426',
+        seasideHotel:
+          'https://picsum.photos/seed/liontravel-seaside-hotel/640/426',
+      }
       const hotelItems = [
         {
           id: 'la-vista-tokyo-bay',
           title: 'LA VISTA 東京灣',
-          imageUrl:
-            'https://www.figma.com/api/mcp/asset/e33aa4b4-2d1e-469a-88fd-0c48ac9d27be',
+          imageUrl: sampleImageUrls.hotelLounge,
           location: '距離市場前站0.2公里',
           detailLocation: '江東區',
           badge: '熱銷 TOP1',
@@ -59,8 +72,7 @@
         {
           id: 'hotel-metropolitan',
           title: '東京灣舒適飯店',
-          imageUrl:
-            'https://www.figma.com/api/mcp/asset/8fff3a21-aeee-4b9b-b0be-aa6c40150095',
+          imageUrl: sampleImageUrls.hotelRoom,
           location: '江東區',
           detailLocation: '江東區',
           promoBadge: '86%東京旅客喜愛',
@@ -77,8 +89,7 @@
         {
           id: 'tokyo-bay-stay',
           title: '東京灣景觀旅宿',
-          imageUrl:
-            'https://www.figma.com/api/mcp/asset/aa9427a0-f62c-4cd4-b3aa-1d68f9ebbaff',
+          imageUrl: sampleImageUrls.hotelBay,
           location: '江東區',
           detailLocation: '江東區',
           promoBadge: '86%東京旅客喜愛',
@@ -95,8 +106,7 @@
         {
           id: 'market-front-hotel',
           title: '市場前站高評價飯店',
-          imageUrl:
-            'https://www.figma.com/api/mcp/asset/69b0139d-978a-4ec6-876e-16a7643fdc45',
+          imageUrl: sampleImageUrls.cityHotel,
           location: '距離市場前站0.2公里',
           detailLocation: '江東區',
           promoBadge: '86%東京旅客喜愛',
@@ -113,8 +123,7 @@
         {
           id: 'odaiba-hotel',
           title: '台場親子精選飯店',
-          imageUrl:
-            'https://www.figma.com/api/mcp/asset/3c5ffeb7-d423-4737-85ab-94a787eb3524',
+          imageUrl: sampleImageUrls.seasideHotel,
           location: '江東區',
           detailLocation: '江東區',
           promoBadge: '86%東京旅客喜愛',
@@ -131,8 +140,7 @@
         {
           id: 'ginza-design-hotel',
           title: '銀座設計旅店',
-          imageUrl:
-            'https://www.figma.com/api/mcp/asset/e33aa4b4-2d1e-469a-88fd-0c48ac9d27be',
+          imageUrl: sampleImageUrls.cityHotel,
           location: '銀座',
           detailLocation: '銀座',
           promoBadge: '86%東京旅客喜愛',
@@ -149,8 +157,7 @@
         {
           id: 'shinjuku-city-hotel',
           title: '新宿城市飯店',
-          imageUrl:
-            'https://www.figma.com/api/mcp/asset/8fff3a21-aeee-4b9b-b0be-aa6c40150095',
+          imageUrl: sampleImageUrls.hotelRoom,
           location: '新宿區',
           detailLocation: '新宿區',
           promoBadge: '熱門加購',
@@ -167,8 +174,7 @@
         {
           id: 'ueno-family-stay',
           title: '上野家庭友善旅宿',
-          imageUrl:
-            'https://www.figma.com/api/mcp/asset/aa9427a0-f62c-4cd4-b3aa-1d68f9ebbaff',
+          imageUrl: sampleImageUrls.familyStay,
           location: '上野',
           detailLocation: '上野',
           promoBadge: '親子首選',

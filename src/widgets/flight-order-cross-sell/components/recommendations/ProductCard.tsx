@@ -1,4 +1,5 @@
 import { MapPin, Star, Users } from 'lucide-react'
+import type { SyntheticEvent } from 'react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -13,6 +14,17 @@ interface ProductCardProps {
   item: FlightOrderCrossSellItem
   locale: string
   onSelect: () => void
+}
+
+const defaultProductImageUrl =
+  'https://static.liontech.com.tw/CommonResources/images/lionTravel/default_img.png'
+
+function handleProductImageError(event: SyntheticEvent<HTMLImageElement>) {
+  const image = event.currentTarget
+
+  if (image.src !== defaultProductImageUrl) {
+    image.src = defaultProductImageUrl
+  }
 }
 
 function formatReviewCount(reviewCount?: number) {
@@ -42,6 +54,7 @@ export function ProductCard({
   const formattedPrice = new Intl.NumberFormat(locale, {
     maximumFractionDigits: 0,
   }).format(item.price)
+  const imageUrl = item.imageUrl || defaultProductImageUrl
 
   return (
     <article className="h-full min-w-0">
@@ -53,17 +66,12 @@ export function ProductCard({
       >
         <Card className="h-full gap-0 overflow-hidden rounded-lg border border-(--lion-gray-200) bg-card py-0 shadow-(--lion-product-card-shadow) transition-shadow duration-300 ease-out group-hover:shadow-(--lion-product-card-shadow-hover)">
           <div className="relative h-29.25 w-full overflow-hidden rounded-t-[5px] bg-(--lion-gray-50)">
-            {item.imageUrl ? (
-              <img
-                alt=""
-                className="h-full w-full origin-center object-cover transition-transform duration-300 ease-out group-hover:scale-125"
-                src={item.imageUrl}
-              />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center bg-(--lion-gray-50) text-sm font-bold text-muted-foreground">
-                {item.title.slice(0, 1)}
-              </div>
-            )}
+            <img
+              alt=""
+              className="h-full w-full origin-center object-cover transition-transform duration-300 ease-out group-hover:scale-125"
+              onError={handleProductImageError}
+              src={imageUrl}
+            />
             <div className="absolute inset-x-0 bottom-0 h-6.75 bg-linear-to-b from-black/0 to-black/80" />
             {imageBadge ? (
               <Badge className="absolute top-1.25 left-1.25 h-5.5 rounded-lg bg-primary px-1.25 py-0 text-xs leading-5.5 font-normal text-primary-foreground shadow-none hover:bg-primary">

@@ -1,6 +1,22 @@
 import type { FlightOrderCrossSellData } from './types'
 
 const activeStartsAt = new Date(Date.now() - 10 * 60 * 1000).toISOString()
+const sampleImageUrls = {
+  airportTransfer:
+    'https://picsum.photos/seed/liontravel-airport-transfer/640/426',
+  cityHotel: 'https://picsum.photos/seed/liontravel-city-hotel/640/426',
+  familyStay: 'https://picsum.photos/seed/liontravel-family-stay/640/426',
+  hotelBay: 'https://picsum.photos/seed/liontravel-tokyo-bay-hotel/640/426',
+  hotelLounge: 'https://picsum.photos/seed/liontravel-hotel-lounge/640/426',
+  hotelRoom: 'https://picsum.photos/seed/liontravel-hotel-room/640/426',
+  railPass: 'https://picsum.photos/seed/liontravel-rail-pass/640/426',
+  seasideHotel:
+    'https://picsum.photos/seed/liontravel-seaside-hotel/640/426',
+  themePark: 'https://picsum.photos/seed/liontravel-theme-park/640/426',
+  tokyoCulture: 'https://picsum.photos/seed/liontravel-tokyo-culture/640/426',
+  tokyoRail: 'https://picsum.photos/seed/liontravel-tokyo-rail/640/426',
+  travelPass: 'https://picsum.photos/seed/liontravel-travel-pass/640/426',
+}
 
 export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
   locale: 'zh-TW',
@@ -69,8 +85,7 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
         {
           id: 'la-vista-tokyo-bay',
           title: 'LA VISTA 東京灣',
-          imageUrl:
-            'https://www.figma.com/api/mcp/asset/e33aa4b4-2d1e-469a-88fd-0c48ac9d27be',
+          imageUrl: sampleImageUrls.hotelLounge,
           location: '距離市場前站0.2公里',
           detailLocation: '江東區',
           badge: '熱銷 TOP1',
@@ -88,8 +103,7 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
         {
           id: 'hotel-metropolitan',
           title: '東京灣舒適飯店',
-          imageUrl:
-            'https://www.figma.com/api/mcp/asset/8fff3a21-aeee-4b9b-b0be-aa6c40150095',
+          imageUrl: sampleImageUrls.hotelRoom,
           location: '江東區',
           detailLocation: '江東區',
           promoBadge: '86%東京旅客喜愛',
@@ -106,8 +120,7 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
         {
           id: 'tokyo-bay-stay',
           title: '東京灣景觀旅宿',
-          imageUrl:
-            'https://www.figma.com/api/mcp/asset/aa9427a0-f62c-4cd4-b3aa-1d68f9ebbaff',
+          imageUrl: sampleImageUrls.hotelBay,
           location: '江東區',
           detailLocation: '江東區',
           promoBadge: '86%東京旅客喜愛',
@@ -124,8 +137,7 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
         {
           id: 'market-front-hotel',
           title: '市場前站高評價飯店',
-          imageUrl:
-            'https://www.figma.com/api/mcp/asset/69b0139d-978a-4ec6-876e-16a7643fdc45',
+          imageUrl: sampleImageUrls.cityHotel,
           location: '距離市場前站0.2公里',
           detailLocation: '江東區',
           promoBadge: '86%東京旅客喜愛',
@@ -142,8 +154,7 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
         {
           id: 'odaiba-hotel',
           title: '台場親子精選飯店',
-          imageUrl:
-            'https://www.figma.com/api/mcp/asset/3c5ffeb7-d423-4737-85ab-94a787eb3524',
+          imageUrl: sampleImageUrls.seasideHotel,
           location: '江東區',
           detailLocation: '江東區',
           promoBadge: '86%東京旅客喜愛',
@@ -160,8 +171,7 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
         {
           id: 'ginza-design-hotel',
           title: '銀座設計旅店',
-          imageUrl:
-            'https://www.figma.com/api/mcp/asset/e33aa4b4-2d1e-469a-88fd-0c48ac9d27be',
+          imageUrl: sampleImageUrls.cityHotel,
           location: '銀座',
           detailLocation: '銀座',
           promoBadge: '86%東京旅客喜愛',
@@ -178,8 +188,7 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
         {
           id: 'shinjuku-city-hotel',
           title: '新宿城市飯店',
-          imageUrl:
-            'https://www.figma.com/api/mcp/asset/8fff3a21-aeee-4b9b-b0be-aa6c40150095',
+          imageUrl: sampleImageUrls.hotelRoom,
           location: '新宿區',
           detailLocation: '新宿區',
           promoBadge: '熱門加購',
@@ -196,8 +205,7 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
         {
           id: 'ueno-family-stay',
           title: '上野家庭友善旅宿',
-          imageUrl:
-            'https://www.figma.com/api/mcp/asset/aa9427a0-f62c-4cd4-b3aa-1d68f9ebbaff',
+          imageUrl: sampleImageUrls.familyStay,
           location: '上野',
           detailLocation: '上野',
           promoBadge: '親子首選',
@@ -231,8 +239,7 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
         {
           id: 'tokyo-disney-ticket',
           title: '東京迪士尼門票東京迪士尼門票',
-          imageUrl:
-            'https://www.figma.com/api/mcp/asset/aaa6142b-e784-4e34-a666-1d4fe5ce33e1',
+          imageUrl: sampleImageUrls.themePark,
           location: '江東區',
           badge: '熱銷 TOP1',
           promoBadge: '86%東京旅客喜愛',
@@ -249,8 +256,7 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
         {
           id: 'tokyo-theme-park-pass',
           title: '東京上野門票・景點套票',
-          imageUrl:
-            'https://www.figma.com/api/mcp/asset/6ebdc93c-5f36-4435-88ce-07ecc83859fe',
+          imageUrl: sampleImageUrls.travelPass,
           location: '江東區',
           promoBadge: '86%東京旅客喜愛',
           rating: '4.5',
@@ -266,8 +272,7 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
         {
           id: 'tokyo-culture-pass',
           title: '東京上野周邊一日通行票',
-          imageUrl:
-            'https://www.figma.com/api/mcp/asset/a6e21cd0-954e-42eb-8f1d-69734bddec07',
+          imageUrl: sampleImageUrls.tokyoCulture,
           location: '江東區',
           promoBadge: '86%東京旅客喜愛',
           rating: '4.5',
@@ -291,8 +296,7 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
         {
           id: 'narita-express',
           title: '東京成田/羽田機場至東京都市區',
-          imageUrl:
-            'https://www.figma.com/api/mcp/asset/d319b79d-a244-4b6c-9ae7-d747381c7350',
+          imageUrl: sampleImageUrls.tokyoRail,
           location: '江東區',
           rating: '4.5',
           ratingLabel: '太讚了',
@@ -307,8 +311,7 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
         {
           id: 'tokyo-airport-transfer',
           title: '東京成田/羽田機場接送',
-          imageUrl:
-            'https://www.figma.com/api/mcp/asset/d1dc625e-9ec7-4ec5-870c-42c8a691f16b',
+          imageUrl: sampleImageUrls.airportTransfer,
           location: '江東區',
           rating: '4.5',
           ratingLabel: '太讚了',
@@ -323,8 +326,7 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
         {
           id: 'tokyo-rail-pass',
           title: '東京周遊交通票券',
-          imageUrl:
-            'https://www.figma.com/api/mcp/asset/cd180ad5-4b2f-430f-88e1-3ae340e2ea6f',
+          imageUrl: sampleImageUrls.railPass,
           location: '江東區',
           rating: '4.5',
           ratingLabel: '太讚了',

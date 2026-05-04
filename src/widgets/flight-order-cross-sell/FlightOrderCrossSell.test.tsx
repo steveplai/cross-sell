@@ -1,4 +1,4 @@
-import { act, cleanup, render, screen } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
@@ -47,6 +47,9 @@ function expectElementsInDocumentOrder(elements: Element[]) {
     ).toBe(Node.DOCUMENT_POSITION_FOLLOWING)
   })
 }
+
+const defaultProductImageUrl =
+  'https://static.liontech.com.tw/CommonResources/images/lionTravel/default_img.png'
 
 describe('FlightOrderCrossSell', () => {
   afterEach(() => {
@@ -140,6 +143,32 @@ describe('FlightOrderCrossSell', () => {
       transportHeading,
       reminderButton,
     ])
+  })
+
+  it('renders the default product image when item image data is missing', () => {
+    const data = cloneSampleData()
+    data.sections[0].items[0].imageUrl = undefined
+
+    const { container } = render(<FlightOrderCrossSell data={data} />)
+
+    expect(
+      container.querySelector(`img[src="${defaultProductImageUrl}"]`),
+    ).toBeInTheDocument()
+  })
+
+  it('replaces a failed product image with the default image', () => {
+    const brokenImageUrl = 'https://example.com/missing-product.jpg'
+    const data = cloneSampleData()
+    data.sections[0].items[0].imageUrl = brokenImageUrl
+
+    const { container } = render(<FlightOrderCrossSell data={data} />)
+    const image = container.querySelector(`img[src="${brokenImageUrl}"]`)
+
+    expect(image).toBeInTheDocument()
+
+    fireEvent.error(image as HTMLImageElement)
+
+    expect(image).toHaveAttribute('src', defaultProductImageUrl)
   })
 
   it('renders HSR addon defaults and partial overrides', async () => {
