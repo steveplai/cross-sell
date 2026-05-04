@@ -10,8 +10,7 @@ const sampleImageUrls = {
   hotelLounge: 'https://picsum.photos/seed/liontravel-hotel-lounge/640/426',
   hotelRoom: 'https://picsum.photos/seed/liontravel-hotel-room/640/426',
   railPass: 'https://picsum.photos/seed/liontravel-rail-pass/640/426',
-  seasideHotel:
-    'https://picsum.photos/seed/liontravel-seaside-hotel/640/426',
+  seasideHotel: 'https://picsum.photos/seed/liontravel-seaside-hotel/640/426',
   themePark: 'https://picsum.photos/seed/liontravel-theme-park/640/426',
   tokyoCulture: 'https://picsum.photos/seed/liontravel-tokyo-culture/640/426',
   tokyoRail: 'https://picsum.photos/seed/liontravel-tokyo-rail/640/426',

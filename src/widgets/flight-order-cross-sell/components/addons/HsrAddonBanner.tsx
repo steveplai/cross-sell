@@ -77,10 +77,7 @@ export function HsrAddonBanner({
   return (
     <section className={sectionClassName}>
       <div className={layoutClassName}>
-        <HsrBackground
-          className={mobileBackgroundClassName}
-          cropRight={39}
-        />
+        <HsrBackground className={mobileBackgroundClassName} cropRight={39} />
         <HsrBackground className={desktopBackgroundClassName} />
         <div className={textGroupClassName}>
           <h2 className={titleClassName}>{title}</h2>
