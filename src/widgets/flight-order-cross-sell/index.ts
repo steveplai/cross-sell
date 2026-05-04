@@ -4,7 +4,7 @@ export { flightOrderCrossSellSampleData } from './sampleData'
 export type {
   FlightOrderCrossSellAddon,
   FlightOrderCrossSellAddonEvent,
-  FlightOrderCrossSellAttractionDecor,
+  FlightOrderCrossSellAttractionBannerOverrides,
   FlightOrderCrossSellData,
   FlightOrderCrossSellItem,
   FlightOrderCrossSellItemEvent,

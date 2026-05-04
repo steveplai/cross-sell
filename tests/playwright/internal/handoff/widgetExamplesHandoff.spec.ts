@@ -178,6 +178,10 @@ function normalizeTokenState(
   }
 }
 
+async function gotoHandoffExample(page: Page, path: string) {
+  await page.goto(path, { waitUntil: 'domcontentloaded' })
+}
+
 async function getWebComponentWidgetState(page: Page, selector: string) {
   const state = await page
     .locator(selector)
@@ -263,7 +267,7 @@ async function expectWebComponentExampleRenders(
   page: Page,
   example: WebComponentExample,
 ) {
-  await page.goto(example.path)
+  await gotoHandoffExample(page, example.path)
 
   for (const widget of example.widgets) {
     const locator = page.locator(widget.selector).nth(widget.index ?? 0)
@@ -308,7 +312,7 @@ async function expectMountApiExampleRenders(
   page: Page,
   example: MountApiExample,
 ) {
-  await page.goto(example.path)
+  await gotoHandoffExample(page, example.path)
 
   await expect(
     page.locator(`${example.rootSelector} ${widgetRootSelector}`),
@@ -330,7 +334,10 @@ test.describe('all widget examples render', () => {
 })
 
 test('web component example renders and emits event', async ({ page }) => {
-  await page.goto('/examples/web-component/demo-product-banner.events.html')
+  await gotoHandoffExample(
+    page,
+    '/examples/web-component/demo-product-banner.events.html',
+  )
 
   await expect(page.locator('demo-product-banner')).toHaveJSProperty(
     'localName',
@@ -358,7 +365,10 @@ test('web component example renders and emits event', async ({ page }) => {
 test('flight order web component handoff exposes HSR addon link and event', async ({
   page,
 }) => {
-  await page.goto('/examples/web-component/flight-order-cross-sell.basic.html')
+  await gotoHandoffExample(
+    page,
+    '/examples/web-component/flight-order-cross-sell.basic.html',
+  )
 
   await expect
     .poll(() => getFlightOrderWebComponentHsrLinkState(page))
@@ -388,7 +398,10 @@ test('flight order web component handoff exposes HSR addon link and event', asyn
 test('web component host dark class controls shadow DOM theme', async ({
   page,
 }) => {
-  await page.goto('/examples/web-component/demo-product-banner.dark.html')
+  await gotoHandoffExample(
+    page,
+    '/examples/web-component/demo-product-banner.dark.html',
+  )
 
   await expect
     .poll(() => getWebComponentWidgetState(page, '#explicit-dark'))
@@ -410,7 +423,8 @@ test('web component host dark class controls shadow DOM theme', async ({
 })
 
 test('web component applies widget-specific theme tokens', async ({ page }) => {
-  await page.goto(
+  await gotoHandoffExample(
+    page,
     '/examples/web-component/demo-product-banner.custom-theme.html',
   )
 
@@ -426,7 +440,10 @@ test('web component applies widget-specific theme tokens', async ({ page }) => {
 })
 
 test('mount API example can update and unmount', async ({ page }) => {
-  await page.goto('/examples/mount-api/demo-product-banner.update.html')
+  await gotoHandoffExample(
+    page,
+    '/examples/mount-api/demo-product-banner.update.html',
+  )
 
   await expect(page.getByText('推薦商品')).toBeVisible()
 
@@ -440,7 +457,10 @@ test('mount API example can update and unmount', async ({ page }) => {
 test('flight order mount API handoff exposes HSR addon link and callback', async ({
   page,
 }) => {
-  await page.goto('/examples/mount-api/flight-order-cross-sell.basic.html')
+  await gotoHandoffExample(
+    page,
+    '/examples/mount-api/flight-order-cross-sell.basic.html',
+  )
 
   const hsrLink = page.getByRole('link', { name: '前往加購' })
 
@@ -459,7 +479,10 @@ test('flight order mount API handoff exposes HSR addon link and callback', async
 })
 
 test('mount API applies widget-specific theme tokens', async ({ page }) => {
-  await page.goto('/examples/mount-api/demo-product-banner.custom-theme.html')
+  await gotoHandoffExample(
+    page,
+    '/examples/mount-api/demo-product-banner.custom-theme.html',
+  )
 
   await expect
     .poll(() =>
@@ -472,7 +495,10 @@ test('mount API applies widget-specific theme tokens', async ({ page }) => {
 })
 
 test('mount API inherits host dark class', async ({ page }) => {
-  await page.goto('/examples/mount-api/demo-product-banner.dark.html')
+  await gotoHandoffExample(
+    page,
+    '/examples/mount-api/demo-product-banner.dark.html',
+  )
 
   await expect
     .poll(() =>
@@ -489,7 +515,10 @@ test('mount API inherits host dark class', async ({ page }) => {
 test('mount API defaults to light theme without dark ancestor', async ({
   page,
 }) => {
-  await page.goto('/examples/mount-api/demo-product-banner.basic.html')
+  await gotoHandoffExample(
+    page,
+    '/examples/mount-api/demo-product-banner.basic.html',
+  )
 
   await expect
     .poll(() =>

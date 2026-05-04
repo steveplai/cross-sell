@@ -63,8 +63,8 @@ export interface FlightOrderCrossSellReminder {
   icon: 'wifi' | 'gift'
 }
 
-export interface FlightOrderCrossSellAttractionDecor {
-  title: string
+export interface FlightOrderCrossSellAttractionBannerOverrides {
+  title?: string
   imageAlt?: string
   imageUrl?: string
 }
@@ -84,7 +84,7 @@ export interface FlightOrderCrossSellOrder {
 export interface FlightOrderCrossSellData {
   promo: FlightOrderCrossSellPromo
   sections: FlightOrderCrossSellSection[]
-  attractionDecor?: FlightOrderCrossSellAttractionDecor
+  attractionBannerOverrides?: FlightOrderCrossSellAttractionBannerOverrides
   domainMode?: LiontravelDomainMode
   hsrAddon?: FlightOrderCrossSellAddon
   order?: FlightOrderCrossSellOrder

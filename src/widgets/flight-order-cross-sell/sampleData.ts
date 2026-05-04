@@ -50,9 +50,6 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
     description: '購買國內外行程，最高享 8 折優惠',
     ctaLabel: '前往加購',
   },
-  attractionDecor: {
-    title: '探索東京 景點不錯過',
-  },
   reminders: {
     title: '別忘了 加購一份安心與便利',
     subtitle: '即將出門？',

@@ -126,7 +126,7 @@ describe('FlightOrderCrossSell', () => {
       name: '探索東京飯店',
     })
     const hsrCta = screen.getByRole('link', { name: '前往加購' })
-    const attractionDecor = screen.getByTestId('attraction-decor')
+    const attractionBanner = screen.getByTestId('attraction-decor')
     const attractionProduct = screen.getByRole('button', {
       name: /東京迪士尼門票/,
     })
@@ -138,11 +138,30 @@ describe('FlightOrderCrossSell', () => {
     expectElementsInDocumentOrder([
       hotelHeading,
       hsrCta,
-      attractionDecor,
+      attractionBanner,
       attractionProduct,
       transportHeading,
       reminderButton,
     ])
+  })
+
+  it('uses the attraction banner title override when provided', () => {
+    render(
+      <FlightOrderCrossSell
+        data={cloneSampleData({
+          attractionBannerOverrides: {
+            title: '東京票券精選推薦',
+          },
+        })}
+      />,
+    )
+
+    expect(
+      screen.getByRole('heading', { name: '東京票券精選推薦' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByRole('heading', { name: '探索東京 景點不錯過' }),
+    ).not.toBeInTheDocument()
   })
 
   it('renders the default product image when item image data is missing', () => {

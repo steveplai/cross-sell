@@ -62,7 +62,7 @@ function FlightOrderCrossSellContent({
   const hsrAddonHref = createHsrAddonHref(data)
   const remainingSeconds = getRemainingPromoSeconds(data.promo, now)
   const isPromoActive = remainingSeconds > 0
-  const attractionDecor = data.attractionDecor
+  const attractionBannerOverrides = data.attractionBannerOverrides
   const sectionGroups = groupFlightOrderCrossSellSections(data.sections)
 
   function getRenderableSections(sections: FlightOrderCrossSellSection[]) {
@@ -72,8 +72,6 @@ function FlightOrderCrossSellContent({
   const renderableAttractionSections = getRenderableSections(
     sectionGroups.attraction,
   )
-  const showAttractionDecor =
-    !!attractionDecor && renderableAttractionSections.length > 0
 
   function renderSectionList(
     sections: FlightOrderCrossSellSection[],
@@ -151,11 +149,11 @@ function FlightOrderCrossSellContent({
         {renderableAttractionSections.length > 0 ? (
           <ContentPanel>
             <div className="flex flex-col divide-y divide-(--lion-gray-50)">
-              {attractionDecor ? (
-                <AttractionDecorBanner decor={attractionDecor} />
-              ) : null}
+              <AttractionDecorBanner
+                contentOverrides={attractionBannerOverrides}
+              />
               {renderSectionList(renderableAttractionSections, {
-                hideTitle: showAttractionDecor,
+                hideTitle: true,
               })}
             </div>
           </ContentPanel>
