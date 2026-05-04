@@ -37,7 +37,7 @@ src/styles/widget.css
 - section padding
 - 標題與輔助文字字級
 - mobile / desktop 裝飾圖切換
-- 高鐵加購 banner 的橫向排列
+- 高鐵加購 banner 的 desktop 間距、字級、裝飾圖切換
 - desktop carousel 控制按鈕顯示
 - reminder cards 雙欄排列
 
@@ -60,7 +60,32 @@ src/styles/widget.css
 min-[712px]:max-[935.98px]:...
 ```
 
-避免為了此 widget 覆寫 Tailwind 既有 breakpoint。
+或使用元件自己的 container query。避免為了此 widget 覆寫 Tailwind 既有 breakpoint。
+
+## 高鐵加購 Banner Container Query
+
+高鐵加購 banner 的橫向排列沒有完全跟著 `lion-desktop`。
+
+原因是這個 banner 的可讀性主要取決於自身可用寬度，而不是整個 viewport 是否已經進入桌機規格。因此目前使用命名 container query：
+
+```txt
+@container/hsr
+@min-[590px]/hsr
+```
+
+目前行為：
+
+```txt
+<590px container content width   title / description / CTA 直向排列
+>=590px container content width  title / description / CTA 橫向排列
+>=980px viewport width           套用 lion-desktop 的 padding、gap、字級與 desktop 裝飾圖
+```
+
+這裡的 `590px` 不是新的全域斷點。它來自設計上希望在 section 整體約 `630px` 時切成橫向排列；但 CSS container query 判斷的是 container content box，不包含 section 左右 padding。mobile padding 是左右各 `20px`，因此：
+
+```txt
+630px - 20px - 20px = 590px
+```
 
 ## Carousel 斷點策略
 
