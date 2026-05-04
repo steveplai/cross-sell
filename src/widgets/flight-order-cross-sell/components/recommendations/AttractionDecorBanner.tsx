@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils'
 
 import type { FlightOrderCrossSellAttractionBannerOverrides } from '../../types'
+import { AttractionTicketsDecor } from './AttractionTicketsDecor'
 
 const defaultAttractionBannerTitle = '探索東京 景點不錯過'
 
@@ -25,16 +26,26 @@ export function AttractionDecorBanner({
       )}
       data-testid="attraction-decor"
     >
-      {contentOverrides?.imageUrl ? (
-        <img
-          alt={contentOverrides.imageAlt ?? ''}
-          className="pointer-events-none absolute top-0 left-1/2 hidden h-31 w-auto -translate-x-1/2 object-contain lion-desktop:block"
-          src={contentOverrides.imageUrl}
-        />
-      ) : null}
-      <h2 className="relative text-base leading-6 font-bold text-foreground lion-desktop:text-xl">
-        {title}
-      </h2>
+      <div className="flex flex-row items-center">
+        <h2
+          className={cn(
+            'text-base leading-6',
+            'font-bold text-foreground',
+            'lion-desktop:text-xl lion-desktop:leading-7',
+          )}
+        >
+          {title}
+        </h2>
+        <div
+          className={cn(
+            'pointer-events-none relative shrink-0 overflow-hidden',
+            '-mt-5 -mr-5 -mb-9 aspect-214/132 h-20',
+            'lion-desktop:-mt-7.5 lion-desktop:-mr-12 lion-desktop:-mb-11.25 lion-desktop:h-25.75',
+          )}
+        >
+          <AttractionTicketsDecor className="h-full w-full object-contain" />
+        </div>
+      </div>
     </section>
   )
 }

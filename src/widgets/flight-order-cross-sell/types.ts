@@ -65,8 +65,6 @@ export interface FlightOrderCrossSellReminder {
 
 export interface FlightOrderCrossSellAttractionBannerOverrides {
   title?: string
-  imageAlt?: string
-  imageUrl?: string
 }
 
 export interface FlightOrderCrossSellAddon {
