@@ -1,3 +1,5 @@
+import { cn } from '@/lib/utils'
+
 import type { FlightOrderCrossSellAttractionBannerOverrides } from '../../types'
 
 const defaultAttractionBannerTitle = '探索東京 景點不錯過'
@@ -13,7 +15,14 @@ export function AttractionDecorBanner({
 
   return (
     <section
-      className="relative overflow-hidden bg-background bg-linear-to-b from-(--lion-attraction-banner-gradient-from) from-[9.67%] to-(--lion-attraction-banner-gradient-to) to-[111.71%] px-5 pt-8 pb-10 lion-desktop:px-12 lion-desktop:pt-10 lion-desktop:pb-12"
+      className={cn(
+        'relative overflow-hidden',
+        'bg-background bg-linear-to-b',
+        'from-(--lion-attraction-banner-gradient-from) from-[9.67%]',
+        'to-(--lion-attraction-banner-gradient-to) to-[111.71%]',
+        'px-5 pt-5 pb-9',
+        'lion-desktop:px-12 lion-desktop:pt-7.5 lion-desktop:pb-11.25',
+      )}
       data-testid="attraction-decor"
     >
       {contentOverrides?.imageUrl ? (

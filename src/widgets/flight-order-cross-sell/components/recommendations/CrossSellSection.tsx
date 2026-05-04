@@ -35,6 +35,7 @@ interface CrossSellSectionProps {
   isPromoActive: boolean
   locale: string
   section: FlightOrderCrossSellSectionData
+  className?: string
   hideTitle?: boolean
   onSelectItem?: (item: FlightOrderCrossSellItem) => void
   onViewMore?: () => void
@@ -77,6 +78,7 @@ function getPlaceholderLabel(section: FlightOrderCrossSellSectionData) {
 }
 
 export function CrossSellSection({
+  className,
   currency,
   hideTitle = false,
   isPromoActive,
@@ -98,7 +100,12 @@ export function CrossSellSection({
   const placeholderLabel = getPlaceholderLabel(section)
 
   return (
-    <section className="bg-background px-5 py-5 lion-desktop:px-12 lion-desktop:py-7.5">
+    <section
+      className={cn(
+        'bg-background px-5 py-5 lion-desktop:px-12 lion-desktop:py-7.5',
+        className,
+      )}
+    >
       <header className="mb-5 flex items-start justify-between gap-4 lion-desktop:mb-6">
         <div className="min-w-0">
           {hideTitle ? null : (

@@ -75,12 +75,13 @@ function FlightOrderCrossSellContent({
 
   function renderCrossSellSections(
     sections: FlightOrderCrossSellSection[],
-    options: { hideTitle?: boolean } = {},
+    options: { hideTitle?: boolean; sectionClassName?: string } = {},
   ) {
     return (
       <div className="flex flex-col divide-y divide-(--lion-gray-50)">
         {sections.map((section) => (
           <CrossSellSection
+            className={options.sectionClassName}
             currency={currency}
             hideTitle={options.hideTitle}
             isPromoActive={isPromoActive}
@@ -154,9 +155,10 @@ function FlightOrderCrossSellContent({
               <AttractionDecorBanner
                 contentOverrides={attractionBannerOverrides}
               />
-              <div className="relative z-10 -mt-5 overflow-hidden rounded-t-[20px] bg-background lion-desktop:-mt-6 lion-desktop:rounded-t-[24px]">
+              <div className="relative z-10 -mt-5 overflow-hidden rounded-t-[20px] bg-background lion-desktop:rounded-t-[24px]">
                 {renderCrossSellSections(renderableAttractionSections, {
                   hideTitle: true,
+                  sectionClassName: cn('pt-3 lion-desktop:pt-3.75'),
                 })}
               </div>
             </div>
