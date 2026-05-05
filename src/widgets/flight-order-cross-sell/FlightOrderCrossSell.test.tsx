@@ -157,6 +157,82 @@ describe('FlightOrderCrossSell', () => {
     )
   })
 
+  it('keeps category overflow hints hidden when categories fit', () => {
+    render(<FlightOrderCrossSell data={cloneSampleData()} />)
+
+    const categoryScroller = screen.getByTestId(
+      'section-tokyo-attractions-categories',
+    )
+
+    Object.defineProperties(categoryScroller, {
+      clientWidth: { configurable: true, value: 320 },
+      scrollWidth: { configurable: true, value: 320 },
+    })
+
+    fireEvent.scroll(categoryScroller)
+
+    expect(
+      screen.getByTestId('section-tokyo-attractions-categories-overflow-start'),
+    ).toHaveClass('opacity-0')
+    expect(
+      screen.getByTestId('section-tokyo-attractions-categories-overflow-end'),
+    ).toHaveClass('opacity-0')
+  })
+
+  it('updates category overflow hints while dragging horizontally', () => {
+    render(<FlightOrderCrossSell data={cloneSampleData()} />)
+
+    const categoryScroller = screen.getByTestId(
+      'section-tokyo-attractions-categories',
+    )
+    let scrollLeft = 0
+
+    Object.defineProperties(categoryScroller, {
+      clientWidth: { configurable: true, value: 100 },
+      scrollLeft: {
+        configurable: true,
+        get: () => scrollLeft,
+        set: (value: number) => {
+          scrollLeft = value
+        },
+      },
+      scrollWidth: { configurable: true, value: 320 },
+    })
+
+    fireEvent.scroll(categoryScroller)
+
+    const startOverflow = screen.getByTestId(
+      'section-tokyo-attractions-categories-overflow-start',
+    )
+    const endOverflow = screen.getByTestId(
+      'section-tokyo-attractions-categories-overflow-end',
+    )
+
+    expect(startOverflow).toHaveClass('opacity-0')
+    expect(endOverflow).toHaveClass('opacity-100')
+
+    fireEvent.pointerDown(categoryScroller, {
+      button: 0,
+      clientX: 120,
+      pointerId: 1,
+    })
+    fireEvent.pointerMove(categoryScroller, {
+      clientX: 60,
+      pointerId: 1,
+    })
+    fireEvent.pointerUp(categoryScroller, { pointerId: 1 })
+
+    expect(scrollLeft).toBe(60)
+    expect(startOverflow).toHaveClass('opacity-0')
+    expect(endOverflow).toHaveClass('opacity-100')
+
+    scrollLeft = 220
+    fireEvent.scroll(categoryScroller)
+
+    expect(startOverflow).toHaveClass('opacity-100')
+    expect(endOverflow).toHaveClass('opacity-0')
+  })
+
   it('falls back to the insurance reminder button when service agent email is missing', () => {
     render(
       <FlightOrderCrossSell

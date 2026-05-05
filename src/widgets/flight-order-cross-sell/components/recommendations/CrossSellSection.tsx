@@ -1,5 +1,12 @@
 import { ChevronRight } from 'lucide-react'
-import { useCallback } from 'react'
+import {
+  type MouseEvent as ReactMouseEvent,
+  type PointerEvent as ReactPointerEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -29,6 +36,13 @@ const carouselItemClassName = cn(
   'min-[1190px]:basis-1/5',
 )
 const viewMoreDestinationUrl = 'https://www.liontravel.com/'
+const categoryDragThresholdPx = 5
+const categoryOverflowIndicatorClassName =
+  'pointer-events-none absolute top-0 h-5.75 transition-opacity duration-200 ease-out'
+const emptyCategoryOverflow = {
+  end: false,
+  start: false,
+}
 
 interface CrossSellSectionProps {
   currency: string
@@ -77,6 +91,176 @@ function getPlaceholderLabel(section: FlightOrderCrossSellSectionData) {
   return section.viewMoreLabel ?? '探索更多'
 }
 
+function useCategoryDragScroll(itemsCount: number) {
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const dragStateRef = useRef({
+    hasDragged: false,
+    isPointerDown: false,
+    pointerId: null as number | null,
+    startScrollLeft: 0,
+    startX: 0,
+  })
+  const [isDragging, setIsDragging] = useState(false)
+  const [overflow, setOverflow] = useState(emptyCategoryOverflow)
+
+  const updateOverflowState = useCallback(() => {
+    const scrollElement = scrollRef.current
+
+    if (!scrollElement) {
+      return
+    }
+
+    const maxScrollLeft = Math.max(
+      0,
+      scrollElement.scrollWidth - scrollElement.clientWidth,
+    )
+    const scrollLeft = Math.min(
+      maxScrollLeft,
+      Math.max(0, scrollElement.scrollLeft),
+    )
+    const nextOverflow = {
+      // Show the right hint while there is still content available to the right.
+      end: maxScrollLeft > 1 && scrollLeft < maxScrollLeft - 1,
+      // Show the left hint only after the row reaches the far-right edge.
+      start: maxScrollLeft > 1 && scrollLeft >= maxScrollLeft - 1,
+    }
+
+    setOverflow((currentOverflow) => {
+      if (
+        currentOverflow.end === nextOverflow.end &&
+        currentOverflow.start === nextOverflow.start
+      ) {
+        return currentOverflow
+      }
+
+      return nextOverflow
+    })
+  }, [])
+
+  useEffect(() => {
+    updateOverflowState()
+  }, [itemsCount, updateOverflowState])
+
+  useEffect(() => {
+    const scrollElement = scrollRef.current
+
+    if (!scrollElement) {
+      return undefined
+    }
+
+    const handleScroll = () => {
+      updateOverflowState()
+    }
+    const resizeObserver =
+      typeof ResizeObserver === 'undefined'
+        ? undefined
+        : new ResizeObserver(updateOverflowState)
+
+    scrollElement.addEventListener('scroll', handleScroll, { passive: true })
+    resizeObserver?.observe(scrollElement)
+    window.addEventListener('resize', updateOverflowState)
+
+    return () => {
+      scrollElement.removeEventListener('scroll', handleScroll)
+      resizeObserver?.disconnect()
+      window.removeEventListener('resize', updateOverflowState)
+    }
+  }, [updateOverflowState])
+
+  const handlePointerDown = useCallback(
+    (event: ReactPointerEvent<HTMLDivElement>) => {
+      const scrollElement = scrollRef.current
+
+      if (!scrollElement || event.button !== 0) {
+        return
+      }
+
+      dragStateRef.current = {
+        hasDragged: false,
+        isPointerDown: true,
+        pointerId: event.pointerId,
+        startScrollLeft: scrollElement.scrollLeft,
+        startX: event.clientX,
+      }
+      scrollElement.setPointerCapture?.(event.pointerId)
+      setIsDragging(true)
+    },
+    [],
+  )
+
+  const handlePointerMove = useCallback(
+    (event: ReactPointerEvent<HTMLDivElement>) => {
+      const scrollElement = scrollRef.current
+      const dragState = dragStateRef.current
+
+      if (!scrollElement || !dragState.isPointerDown) {
+        return
+      }
+
+      const deltaX = event.clientX - dragState.startX
+
+      if (Math.abs(deltaX) > categoryDragThresholdPx) {
+        dragState.hasDragged = true
+      }
+
+      if (!dragState.hasDragged) {
+        return
+      }
+
+      event.preventDefault()
+      scrollElement.scrollLeft = dragState.startScrollLeft - deltaX
+      updateOverflowState()
+    },
+    [updateOverflowState],
+  )
+
+  const stopDragging = useCallback(
+    (_event: ReactPointerEvent<HTMLDivElement>) => {
+      const scrollElement = scrollRef.current
+      const dragState = dragStateRef.current
+
+      if (!dragState.isPointerDown) {
+        return
+      }
+
+      if (dragState.pointerId !== null) {
+        scrollElement?.releasePointerCapture?.(dragState.pointerId)
+      }
+
+      dragState.isPointerDown = false
+      dragState.pointerId = null
+      setIsDragging(false)
+      updateOverflowState()
+    },
+    [updateOverflowState],
+  )
+
+  const handleClickCapture = useCallback(
+    (event: ReactMouseEvent<HTMLDivElement>) => {
+      const dragState = dragStateRef.current
+
+      if (!dragState.hasDragged) {
+        return
+      }
+
+      event.preventDefault()
+      event.stopPropagation()
+      dragState.hasDragged = false
+    },
+    [],
+  )
+
+  return {
+    handleClickCapture,
+    handlePointerDown,
+    handlePointerMove,
+    isDragging,
+    overflow,
+    scrollRef,
+    stopDragging,
+  }
+}
+
 export function CrossSellSection({
   className,
   currency,
@@ -90,6 +274,15 @@ export function CrossSellSection({
   const handleViewMore = useCallback(() => {
     onViewMore?.()
   }, [onViewMore])
+  const {
+    handleClickCapture,
+    handlePointerDown,
+    handlePointerMove,
+    isDragging,
+    overflow: categoryOverflow,
+    scrollRef: categoryScrollRef,
+    stopDragging,
+  } = useCategoryDragScroll(section.categories?.length ?? 0)
   const { placeholderBasis, placeholderSpan, setCarouselApi } =
     useCarouselPlaceholderLayout(section.items.length)
 
@@ -142,28 +335,65 @@ export function CrossSellSection({
       </header>
 
       {section.categories && section.categories.length > 0 ? (
-        <div className="mb-4 flex gap-2 overflow-x-auto pb-1">
-          {section.categories.map((category, index) => (
-            <Button
-              asChild
-              className={cn(
-                'h-7 shrink-0 rounded-full bg-(--lion-gray-50) px-3 py-1',
-                'text-xs leading-5 font-normal text-(--lion-gray-700) shadow-none',
-                'hover:bg-(--lion-orange-100) hover:text-primary',
-              )}
-              key={category.id ?? `${category.label}-${index}`}
-              size="xs"
-              variant="ghost"
-            >
-              <a
-                href={category.href}
-                rel="noopener noreferrer"
-                target="_blank"
+        <div className="relative mb-4">
+          <div
+            className={cn(
+              'flex touch-pan-y gap-2 overflow-x-auto overscroll-x-contain pb-1 select-none',
+              '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+              isDragging ? 'cursor-grabbing' : 'cursor-grab',
+            )}
+            data-testid={`section-${section.id}-categories`}
+            onClickCapture={handleClickCapture}
+            onLostPointerCapture={stopDragging}
+            onPointerCancel={stopDragging}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={stopDragging}
+            ref={categoryScrollRef}
+          >
+            {section.categories.map((category, index) => (
+              <Button
+                asChild
+                className={cn(
+                  'h-5.75 shrink-0 rounded-[4px] bg-(--lion-gray-100) px-2 py-0.5',
+                  'text-xs leading-4.75 font-normal text-(--lion-gray-800) shadow-none',
+                  'hover:bg-(--lion-gray-100) hover:text-primary',
+                )}
+                key={category.id ?? `${category.label}-${index}`}
+                size="xs"
+                variant="ghost"
               >
-                {category.label}
-              </a>
-            </Button>
-          ))}
+                <a
+                  draggable={false}
+                  href={category.href}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  {category.label}
+                </a>
+              </Button>
+            ))}
+          </div>
+          <div
+            aria-hidden="true"
+            className={cn(
+              categoryOverflowIndicatorClassName,
+              'left-0 w-18 bg-linear-to-r from-background/90 via-background/50 to-background/0',
+              'shadow-[8px_0_10px_-12px_rgba(0,0,0,0.1)]',
+              categoryOverflow.start ? 'opacity-100' : 'opacity-0',
+            )}
+            data-testid={`section-${section.id}-categories-overflow-start`}
+          />
+          <div
+            aria-hidden="true"
+            className={cn(
+              categoryOverflowIndicatorClassName,
+              'right-0 w-18 bg-linear-to-l from-background/90 via-background/50 to-background/0',
+              'shadow-[-8px_0_10px_-12px_rgba(0,0,0,0.1)]',
+              categoryOverflow.end ? 'opacity-100' : 'opacity-0',
+            )}
+            data-testid={`section-${section.id}-categories-overflow-end`}
+          />
         </div>
       ) : null}
 
