@@ -113,7 +113,7 @@ describe('FlightOrderCrossSell', () => {
 
     expect(screen.getAllByRole('link', { name: /探索更多/ }).length).toBe(3)
     expect(screen.getByRole('link', { name: '前往加購' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /網路服務/ })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /簽證護照/ })).toBeInTheDocument()
   })
 
   it('renders product slots in the new layout order', () => {
@@ -133,7 +133,7 @@ describe('FlightOrderCrossSell', () => {
     const transportHeading = screen.getByRole('heading', {
       name: '當地交通 一次搞定',
     })
-    const reminderButton = screen.getByRole('button', { name: /網路服務/ })
+    const reminderButton = screen.getByRole('button', { name: /簽證護照/ })
 
     expectElementsInDocumentOrder([
       hotelHeading,

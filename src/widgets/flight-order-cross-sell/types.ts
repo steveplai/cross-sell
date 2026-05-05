@@ -60,7 +60,7 @@ export interface FlightOrderCrossSellReminder {
   title: string
   description: string
   accentText?: string
-  icon: 'wifi' | 'gift'
+  icon: 'gift' | 'insurance' | 'passport' | 'wifi'
 }
 
 export interface FlightOrderCrossSellAttractionBannerOverrides {

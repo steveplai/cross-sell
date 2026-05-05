@@ -51,23 +51,22 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
     ctaLabel: '前往加購',
   },
   reminders: {
-    title: '別忘了 加購一份安心與便利',
+    title: '別忘了加購一份安心與便利',
     subtitle: '即將出門？',
     items: [
       {
-        id: 'internet-service',
-        icon: 'wifi',
-        title: '網路服務',
+        id: 'visa-passport',
+        icon: 'passport',
+        title: '簽證護照',
         description:
-          '提供超過50個國家以上的 WiFi 分享器及上網 SIM 卡，多種領取方式，立即預訂享有最佳優惠。',
+          '受理代辦中華民國護照、台胞證、各國簽證、國際學生證辦理等，雄獅帶你輕鬆玩遍全球。',
       },
       {
-        id: 'member-order',
-        icon: 'gift',
-        title: '還在猶豫嗎？',
+        id: 'travel-insurance',
+        icon: 'insurance',
+        title: '旅遊綜合險',
         description:
-          '擔心錯過專屬優惠，可以從會員訂單中加購，14天內皆可享加購價。',
-        accentText: '會員訂單、14天',
+          '於出發前七個工作天聯繫業務專員，為您的旅行提供全方位的保障！',
       },
     ],
   },
