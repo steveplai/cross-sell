@@ -1,5 +1,5 @@
-import { MapPin, Star, Users } from 'lucide-react'
-import type { SyntheticEvent } from 'react'
+import { MapPin, Star } from 'lucide-react'
+import type { SVGProps, SyntheticEvent } from 'react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -18,6 +18,24 @@ interface ProductCardProps {
 
 const defaultProductImageUrl =
   'https://static.liontech.com.tw/CommonResources/images/lionTravel/default_img.png'
+
+function SolidFlameIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      fill="none"
+      focusable="false"
+      viewBox="0 0 12 12"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M1.07785 3.6615L1.07685 3.6625L1.07485 3.664L1.06985 3.668C1.04813 3.68444 1.02711 3.70179 1.00685 3.72C0.954313 3.76616 0.903926 3.81471 0.855852 3.8655C0.735852 3.992 0.581852 4.18 0.437352 4.4315C0.146352 4.939 -0.0981476 5.6955 0.0393524 6.707C0.174852 7.7055 0.594352 8.54 1.30335 9.122C2.01035 9.702 2.96735 10 4.12485 10C5.31835 10 6.27135 9.5525 6.90185 8.785C7.52685 8.0245 7.80585 6.987 7.73935 5.853C7.67535 4.765 7.08285 3.9395 6.55935 3.2105L6.40985 3.002C5.83885 2.196 5.38835 1.4535 5.49785 0.4145C5.50339 0.362208 5.49787 0.309335 5.48165 0.259315C5.46543 0.209294 5.43886 0.163245 5.40369 0.124157C5.36852 0.0850684 5.32551 0.0538147 5.27747 0.0324251C5.22944 0.0110354 5.17744 -1.20688e-05 5.12485 9.89394e-09C4.93385 9.89394e-09 4.71485 0.059 4.50385 0.148C4.2595 0.252709 4.02894 0.387049 3.81735 0.548C3.35485 0.897 2.89235 1.423 2.64585 2.126C2.39985 2.827 2.52485 3.495 2.70485 3.9815C2.82335 4.301 2.69485 4.6165 2.50135 4.7085C2.41902 4.74745 2.32482 4.75307 2.23844 4.72418C2.15206 4.6953 2.08019 4.63414 2.03785 4.5535L1.63485 3.788C1.60963 3.73998 1.57429 3.698 1.53127 3.66496C1.48825 3.63192 1.43857 3.60861 1.38567 3.59663C1.33276 3.58465 1.27789 3.58429 1.22483 3.59558C1.17178 3.60686 1.1218 3.62953 1.07835 3.662"
+        fill="currentColor"
+        transform="translate(2 1)"
+      />
+    </svg>
+  )
+}
 
 function handleProductImageError(event: SyntheticEvent<HTMLImageElement>) {
   const image = event.currentTarget
@@ -145,16 +163,16 @@ export function ProductCard({
 
               {item.interestLabel ? (
                 <p className="flex items-center gap-0.75 text-xs leading-5.5 text-(--lion-gray-800)">
-                  <Users
+                  <SolidFlameIcon
                     aria-hidden="true"
-                    className="size-3 text-(--lion-gray-700)"
+                    className="size-3 shrink-0 text-(--lion-gray-700)"
                   />
                   {item.interestLabel}
                 </p>
               ) : null}
 
               {item.cancellationLabel ? (
-                <p className="text-[10px] leading-5.5 text-info">
+                <p className="text-[10px] leading-5.5 text-(--lion-gray-700)">
                   {item.cancellationLabel}
                 </p>
               ) : null}
