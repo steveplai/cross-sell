@@ -17,6 +17,7 @@ import { groupFlightOrderCrossSellSections } from './lib/groupSections'
 import type {
   FlightOrderCrossSellData,
   FlightOrderCrossSellProps,
+  FlightOrderCrossSellReminder,
   FlightOrderCrossSellSection,
 } from './types'
 
@@ -26,6 +27,8 @@ const flightOrderCrossSellRootProps = createWidgetRootProps(
 const hsrAddonId = 'hsr'
 const hsrAddonProductionHostname = 'vacation.liontravel.com'
 const hsrAddonPathname = '/thsrdetail'
+const visaPassportProductionHostname = 'visa.liontravel.com'
+const visaPassportPathname = '/search'
 
 //#region - Sub Components
 
@@ -60,6 +63,7 @@ function FlightOrderCrossSellContent({
   const currency = data.currency ?? 'TWD'
   const hsrAddon = data.hsrAddon
   const hsrAddonHref = createHsrAddonHref(data)
+  const visaPassportHref = createVisaPassportHref(data)
   const remainingSeconds = getRemainingPromoSeconds(data.promo, now)
   const isPromoActive = remainingSeconds > 0
   const attractionBannerOverrides = data.attractionBannerOverrides
@@ -172,7 +176,9 @@ function FlightOrderCrossSellContent({
         {data.reminders ? (
           <ContentPanel>
             <ReminderCards
-              items={data.reminders.items}
+              items={createReminderItems(data.reminders.items, {
+                visaPassportHref,
+              })}
               onSelectAddon={(addonId) => onSelectAddon?.({ addonId })}
               subtitle={data.reminders.subtitle}
               title={data.reminders.title}
@@ -205,6 +211,37 @@ function createHsrAddonHref(data: FlightOrderCrossSellData) {
       sOrdr: data.order.orderNumber,
     },
   })
+}
+
+function createVisaPassportHref(data: FlightOrderCrossSellData) {
+  const domainMode = resolveLiontravelDomainMode(
+    data.domainMode,
+    getCurrentHostname(),
+  )
+
+  if (!domainMode) {
+    return undefined
+  }
+
+  return createLiontravelUrl({
+    domainMode,
+    pathname: visaPassportPathname,
+    productionHostname: visaPassportProductionHostname,
+    query: {
+      Countrylicensing: 'TW',
+    },
+  })
+}
+
+function createReminderItems(
+  items: FlightOrderCrossSellReminder[],
+  options: { visaPassportHref?: string },
+) {
+  return items.map((item) =>
+    item.icon === 'passport' && options.visaPassportHref
+      ? { ...item, href: options.visaPassportHref }
+      : item,
+  )
 }
 
 function getCurrentHostname() {

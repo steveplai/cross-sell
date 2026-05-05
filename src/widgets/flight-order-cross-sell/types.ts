@@ -60,6 +60,7 @@ export interface FlightOrderCrossSellReminder {
   title: string
   description: string
   accentText?: string
+  href?: string
   icon: 'gift' | 'insurance' | 'passport' | 'wifi'
 }
 

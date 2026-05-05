@@ -1,4 +1,4 @@
-import { Gift, Wifi } from 'lucide-react'
+import { ChevronRight, Gift, Wifi } from 'lucide-react'
 import type { SVGProps } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -32,17 +32,6 @@ function InsuranceIcon(props: SVGProps<SVGSVGElement>) {
     <svg fill="none" viewBox="0 0 22 27" {...props}>
       <path
         d="M10.667 0C10.9781 0 11.2895 0.0549045 11.6006 0.166016L19.6006 3.16602C20.1116 3.36602 20.5284 3.68842 20.8506 4.13281C21.1728 4.57722 21.334 5.07731 21.334 5.63281V11.9326C21.334 15.0437 20.4447 17.9494 18.667 20.6494C16.8892 23.3494 14.5 25.1992 11.5 26.1992C11.3668 26.2436 11.2338 26.2776 11.1006 26.2998C10.9673 26.322 10.8225 26.333 10.667 26.333C10.5114 26.333 10.3667 26.322 10.2334 26.2998C10.1002 26.2776 9.96718 26.2436 9.83398 26.1992C6.83398 25.1992 4.44477 23.3494 2.66699 20.6494C0.889244 17.9494 0 15.0437 0 11.9326V5.63281C6.29997e-6 5.07731 0.161232 4.57722 0.483398 4.13281C0.805585 3.68842 1.22237 3.36602 1.7334 3.16602L9.7334 0.166016C10.0445 0.0549045 10.3559 4.25827e-8 10.667 0ZM2.66699 5.63281V11.9326C2.66699 14.6215 3.42248 17.0666 4.93359 19.2666C6.44467 21.4664 8.35599 22.9327 10.667 23.666C12.978 22.9327 14.8893 21.4664 16.4004 19.2666C17.9115 17.0666 18.667 14.6215 18.667 11.9326V5.63281L10.667 2.63281L2.66699 5.63281ZM13.0674 8.73242C13.8672 8.73252 14.5561 9.02193 15.1338 9.59961C15.7115 10.1773 16 10.8661 16 11.666C16 12.866 15.3891 14.0492 14.167 15.2158C12.9448 16.3825 11.9338 17.3331 11.1338 18.0664C11.0005 18.1775 10.8502 18.2324 10.6836 18.2324C10.517 18.2324 10.3667 18.1775 10.2334 18.0664C9.41118 17.3109 8.3892 16.3657 7.16699 15.2324C5.94491 14.0991 5.33398 12.9104 5.33398 11.666C5.33402 10.8661 5.62253 10.1773 6.2002 9.59961C6.77788 9.02193 7.46677 8.73252 8.2666 8.73242C8.75549 8.73242 9.21157 8.82771 9.63379 9.0166C10.0559 9.20548 10.4004 9.46654 10.667 9.7998C10.9336 9.46655 11.2836 9.20548 11.7168 9.0166C12.1501 8.82771 12.6007 8.73242 13.0674 8.73242Z"
-        fill="currentColor"
-      />
-    </svg>
-  )
-}
-
-function ReminderChevronIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg fill="none" viewBox="0 0 7 12" {...props}>
-      <path
-        d="M4.175 5.575L0.275 1.675C0.0916667 1.49167 0 1.25833 0 0.975C0 0.691667 0.0916667 0.458333 0.275 0.275C0.458333 0.0916667 0.691667 0 0.975 0C1.25833 0 1.49167 0.0916667 1.675 0.275L6.275 4.875C6.375 4.975 6.44583 5.08333 6.4875 5.2C6.52917 5.31667 6.55 5.44167 6.55 5.575C6.55 5.70833 6.52917 5.83333 6.4875 5.95C6.44583 6.06667 6.375 6.175 6.275 6.275L1.675 10.875C1.49167 11.0583 1.25833 11.15 0.975 11.15C0.691667 11.15 0.458333 11.0583 0.275 10.875C0.0916667 10.6917 0 10.4583 0 10.175C0 9.89167 0.0916667 9.65833 0.275 9.475L4.175 5.575Z"
         fill="currentColor"
       />
     </svg>
@@ -86,6 +75,33 @@ function ReminderIcon({
   )
 }
 
+function ReminderCardContent({ item }: { item: FlightOrderCrossSellReminder }) {
+  return (
+    <>
+      <ReminderIcon icon={item.icon} />
+      <span className="flex min-w-0 flex-1 flex-col gap-1.25 leading-5.5">
+        <span className="block text-base font-bold text-foreground">
+          {item.title}
+        </span>
+        <span className="block text-sm text-(--lion-gray-700)">
+          {item.description}
+        </span>
+      </span>
+      <ChevronRight
+        aria-hidden="true"
+        className="size-6 shrink-0 text-primary"
+      />
+    </>
+  )
+}
+
+const reminderCardClassName = cn(
+  'flex items-center rounded-[10px] border bg-white text-left text-inherit no-underline',
+  'min-h-22.5 gap-4 border-(--lion-gray-300) px-3 py-4',
+  'transition hover:border-primary/40 hover:shadow-sm',
+  'lion-desktop:min-h-25.25 lion-desktop:gap-5 lion-desktop:px-5 lion-desktop:py-3.75',
+)
+
 export function ReminderCards({
   items,
   subtitle,
@@ -110,33 +126,29 @@ export function ReminderCards({
       </header>
 
       <div className="grid grid-cols-1 gap-3 lion-desktop:grid-cols-2 lion-desktop:gap-5">
-        {items.map((item) => (
-          <button
-            className={cn(
-              'flex items-center rounded-[10px] border bg-white text-left text-inherit',
-              'min-h-22.5 gap-4 border-(--lion-gray-300) px-3 py-4',
-              'transition hover:border-primary/40 hover:shadow-sm',
-              'lion-desktop:min-h-25.25 lion-desktop:gap-5 lion-desktop:px-5 lion-desktop:py-3.75',
-            )}
-            key={item.id}
-            onClick={() => onSelectAddon?.(item.id)}
-            type="button"
-          >
-            <ReminderIcon icon={item.icon} />
-            <span className="flex min-w-0 flex-1 flex-col gap-1.25 leading-5.5">
-              <span className="block text-base font-bold text-foreground">
-                {item.title}
-              </span>
-              <span className="block text-sm text-(--lion-gray-700)">
-                {item.description}
-              </span>
-            </span>
-            <ReminderChevronIcon
-              aria-hidden="true"
-              className="size-6 shrink-0 text-primary"
-            />
-          </button>
-        ))}
+        {items.map((item) =>
+          item.href ? (
+            <a
+              className={reminderCardClassName}
+              href={item.href}
+              key={item.id}
+              onClick={() => onSelectAddon?.(item.id)}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <ReminderCardContent item={item} />
+            </a>
+          ) : (
+            <button
+              className={reminderCardClassName}
+              key={item.id}
+              onClick={() => onSelectAddon?.(item.id)}
+              type="button"
+            >
+              <ReminderCardContent item={item} />
+            </button>
+          ),
+        )}
       </div>
     </section>
   )
