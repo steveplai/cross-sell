@@ -146,8 +146,8 @@ function FlightOrderCrossSellContent({
   return (
     <section
       className={cn(
-        'w-full text-foreground',
-        'bg-linear-to-b from-(--lion-page-gradient-from) to-(--lion-page-gradient-to)',
+        'w-full text-foreground bg-(--lion-gray-100)',
+        'lion-desktop:bg-linear-to-b lion-desktop:from-(--lion-page-gradient-from) lion-desktop:to-(--lion-page-gradient-to)',
       )}
       data-promo-state={isPromoActive ? 'active' : 'expired'}
       {...flightOrderCrossSellRootProps}
@@ -204,6 +204,8 @@ function FlightOrderCrossSellContent({
 }
 
 //#endregion - Sub Components
+
+//#region - Functions
 
 function createHsrAddonHref(data: FlightOrderCrossSellData) {
   const domainMode = resolveLiontravelDomainMode(
@@ -304,6 +306,8 @@ function useCurrentTime(promoKey: string) {
 
   return now
 }
+
+//#endregion - Functions
 
 export function FlightOrderCrossSell({
   data,
