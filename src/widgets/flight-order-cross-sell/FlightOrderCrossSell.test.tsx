@@ -112,6 +112,17 @@ describe('FlightOrderCrossSell', () => {
     expect(screen.getAllByText('江東區').length).toBeGreaterThan(0)
 
     expect(screen.getAllByRole('link', { name: /探索更多/ }).length).toBe(3)
+    const categoryLink = screen.getAllByRole('link', {
+      name: '東京迪士尼',
+    })[0]
+
+    expect(categoryLink).toHaveAttribute(
+      'href',
+      'https://www.liontravel.com/search?keyword=%E6%9D%B1%E4%BA%AC%E8%BF%AA%E5%A3%AB%E5%B0%BC',
+    )
+    expect(categoryLink).toHaveAttribute('target', '_blank')
+    expect(categoryLink).toHaveAttribute('rel', 'noopener noreferrer')
+
     expect(screen.getByRole('link', { name: '前往加購' })).toBeInTheDocument()
     const passportLink = screen.getByRole('link', { name: /簽證護照/ })
 

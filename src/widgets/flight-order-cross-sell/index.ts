@@ -5,6 +5,7 @@ export type {
   FlightOrderCrossSellAddon,
   FlightOrderCrossSellAddonEvent,
   FlightOrderCrossSellAttractionBannerOverrides,
+  FlightOrderCrossSellCategory,
   FlightOrderCrossSellData,
   FlightOrderCrossSellItem,
   FlightOrderCrossSellItemEvent,

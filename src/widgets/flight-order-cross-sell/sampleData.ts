@@ -1,6 +1,7 @@
 import type { FlightOrderCrossSellData } from './types'
 
 const activeStartsAt = new Date(Date.now() - 10 * 60 * 1000).toISOString()
+const categorySearchBaseUrl = 'https://www.liontravel.com/search'
 const sampleImageUrls = {
   airportTransfer:
     'https://picsum.photos/seed/liontravel-airport-transfer/640/426',
@@ -15,6 +16,12 @@ const sampleImageUrls = {
   tokyoCulture: 'https://picsum.photos/seed/liontravel-tokyo-culture/640/426',
   tokyoRail: 'https://picsum.photos/seed/liontravel-tokyo-rail/640/426',
   travelPass: 'https://picsum.photos/seed/liontravel-travel-pass/640/426',
+}
+
+function createCategorySearchUrl(keyword: string) {
+  const searchParams = new URLSearchParams({ keyword })
+
+  return `${categorySearchBaseUrl}?${searchParams.toString()}`
 }
 
 export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
@@ -226,12 +233,36 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
       subtitle: '大家都在搜尋',
       viewMoreLabel: '探索更多',
       categories: [
-        '東京迪士尼',
-        '日本環球影城',
-        '周遊券',
-        '日本 eSim',
-        '東京迪士尼',
-        '日本環球影城',
+        {
+          id: 'tokyo-disney',
+          label: '東京迪士尼',
+          href: createCategorySearchUrl('東京迪士尼'),
+        },
+        {
+          id: 'universal-studios-japan',
+          label: '日本環球影城',
+          href: createCategorySearchUrl('日本環球影城'),
+        },
+        {
+          id: 'travel-pass',
+          label: '周遊券',
+          href: createCategorySearchUrl('周遊券'),
+        },
+        {
+          id: 'japan-esim',
+          label: '日本 eSim',
+          href: createCategorySearchUrl('日本 eSim'),
+        },
+        {
+          id: 'tokyo-disney-ticket',
+          label: '東京迪士尼',
+          href: createCategorySearchUrl('東京迪士尼門票'),
+        },
+        {
+          id: 'universal-studios-japan-ticket',
+          label: '日本環球影城',
+          href: createCategorySearchUrl('日本環球影城門票'),
+        },
       ],
       items: [
         {

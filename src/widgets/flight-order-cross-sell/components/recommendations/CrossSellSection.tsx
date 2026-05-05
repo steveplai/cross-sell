@@ -144,12 +144,25 @@ export function CrossSellSection({
       {section.categories && section.categories.length > 0 ? (
         <div className="mb-4 flex gap-2 overflow-x-auto pb-1">
           {section.categories.map((category, index) => (
-            <span
-              className="shrink-0 rounded-full bg-(--lion-gray-50) px-3 py-1 text-xs leading-5 text-(--lion-gray-700)"
-              key={`${category}-${index}`}
+            <Button
+              asChild
+              className={cn(
+                'h-7 shrink-0 rounded-full bg-(--lion-gray-50) px-3 py-1',
+                'text-xs leading-5 font-normal text-(--lion-gray-700) shadow-none',
+                'hover:bg-(--lion-orange-100) hover:text-primary',
+              )}
+              key={category.id ?? `${category.label}-${index}`}
+              size="xs"
+              variant="ghost"
             >
-              {category}
-            </span>
+              <a
+                href={category.href}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {category.label}
+              </a>
+            </Button>
           ))}
         </div>
       ) : null}
