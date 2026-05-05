@@ -96,9 +96,9 @@ function ReminderCardContent({ item }: { item: FlightOrderCrossSellReminder }) {
 }
 
 const reminderCardClassName = cn(
-  'flex items-center rounded-[10px] border bg-white text-left text-inherit no-underline',
+  'flex items-center rounded-[10px] border bg-card text-left text-inherit no-underline',
   'min-h-22.5 gap-4 border-(--lion-gray-300) px-3 py-4',
-  'transition hover:border-primary/40 hover:shadow-sm',
+  'transition hover:border-primary/40 hover:bg-card hover:shadow-sm',
   'lion-desktop:min-h-25.25 lion-desktop:gap-5 lion-desktop:px-5 lion-desktop:py-3.75',
 )
 
@@ -113,7 +113,7 @@ export function ReminderCards({
   }
 
   return (
-    <section className="flex flex-col gap-5 bg-white px-5 py-8 lion-desktop:px-12 lion-desktop:py-10">
+    <section className="flex flex-col gap-5 bg-background px-5 py-8 lion-desktop:px-12 lion-desktop:py-10">
       <header className="flex flex-col items-center gap-2.5 text-center">
         <h2 className="text-lg leading-6 font-bold text-foreground lion-desktop:text-xl">
           {title}
