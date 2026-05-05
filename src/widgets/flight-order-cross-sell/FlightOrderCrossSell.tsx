@@ -29,6 +29,17 @@ const hsrAddonProductionHostname = 'vacation.liontravel.com'
 const hsrAddonPathname = '/thsrdetail'
 const visaPassportProductionHostname = 'visa.liontravel.com'
 const visaPassportPathname = '/search'
+const insuranceMailBody = [
+  '要保人資訊',
+  '姓名：',
+  '居住地址：',
+  '',
+  '所有旅客資訊',
+  '旅客1：',
+  '身分證字號：',
+  '生日：',
+  '關係：',
+].join('\n')
 
 //#region - Sub Components
 
@@ -63,6 +74,7 @@ function FlightOrderCrossSellContent({
   const currency = data.currency ?? 'TWD'
   const hsrAddon = data.hsrAddon
   const hsrAddonHref = createHsrAddonHref(data)
+  const insuranceMailtoHref = createInsuranceMailtoHref(data)
   const visaPassportHref = createVisaPassportHref(data)
   const remainingSeconds = getRemainingPromoSeconds(data.promo, now)
   const isPromoActive = remainingSeconds > 0
@@ -177,6 +189,7 @@ function FlightOrderCrossSellContent({
           <ContentPanel>
             <ReminderCards
               items={createReminderItems(data.reminders.items, {
+                insuranceMailtoHref,
                 visaPassportHref,
               })}
               onSelectAddon={(addonId) => onSelectAddon?.({ addonId })}
@@ -233,15 +246,39 @@ function createVisaPassportHref(data: FlightOrderCrossSellData) {
   })
 }
 
+function createInsuranceMailtoHref(data: FlightOrderCrossSellData) {
+  const agentEmail = data.serviceAgent?.email?.trim()
+  const orderYear = data.order?.orderYear
+  const orderNumber = data.order?.orderNumber
+
+  if (!agentEmail || !orderYear || !orderNumber) {
+    return undefined
+  }
+
+  const subject = `加購保險【訂單編號: ${orderYear}-${orderNumber}】`
+  const searchParams = [
+    `subject=${encodeURIComponent(subject)}`,
+    `body=${encodeURIComponent(insuranceMailBody)}`,
+  ].join('&')
+
+  return `mailto:${agentEmail}?${searchParams}`
+}
+
 function createReminderItems(
   items: FlightOrderCrossSellReminder[],
-  options: { visaPassportHref?: string },
+  options: { insuranceMailtoHref?: string; visaPassportHref?: string },
 ) {
-  return items.map((item) =>
-    item.icon === 'passport' && options.visaPassportHref
-      ? { ...item, href: options.visaPassportHref }
-      : item,
-  )
+  return items.map((item) => {
+    if (item.icon === 'passport' && options.visaPassportHref) {
+      return { ...item, href: options.visaPassportHref }
+    }
+
+    if (item.icon === 'insurance' && options.insuranceMailtoHref) {
+      return { ...item, href: options.insuranceMailtoHref }
+    }
+
+    return item
+  })
 }
 
 function getCurrentHostname() {

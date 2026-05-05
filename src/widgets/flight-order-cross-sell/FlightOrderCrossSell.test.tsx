@@ -113,10 +113,54 @@ describe('FlightOrderCrossSell', () => {
 
     expect(screen.getAllByRole('link', { name: /探索更多/ }).length).toBe(3)
     expect(screen.getByRole('link', { name: '前往加購' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /簽證護照/ })).toHaveAttribute(
+    const passportLink = screen.getByRole('link', { name: /簽證護照/ })
+
+    expect(passportLink).toHaveAttribute(
       'href',
       'https://uvisa.liontravel.com/search?Countrylicensing=TW',
     )
+    expect(passportLink).toHaveAttribute('target', '_blank')
+    expect(passportLink).toHaveAttribute('rel', 'noopener noreferrer')
+
+    const insuranceLink = screen.getByRole('link', { name: /旅遊綜合險/ })
+    const insuranceHref = insuranceLink.getAttribute('href') ?? ''
+    const insuranceSearchParams = new URLSearchParams(
+      insuranceHref.split('?')[1],
+    )
+
+    expect(
+      insuranceHref.startsWith('mailto:customer-service@liontravel.com?'),
+    ).toBe(true)
+    expect(insuranceLink).not.toHaveAttribute('target')
+    expect(insuranceLink).not.toHaveAttribute('rel')
+    expect(insuranceSearchParams.get('subject')).toBe(
+      '加購保險【訂單編號: 2026-16575】',
+    )
+    expect(insuranceSearchParams.get('body')).toContain(
+      ['要保人資訊', '姓名：', '居住地址：'].join('\n'),
+    )
+    expect(insuranceSearchParams.get('body')).toContain(
+      ['所有旅客資訊', '旅客1：', '身分證字號：', '生日：', '關係：'].join(
+        '\n',
+      ),
+    )
+  })
+
+  it('falls back to the insurance reminder button when service agent email is missing', () => {
+    render(
+      <FlightOrderCrossSell
+        data={cloneSampleData({
+          serviceAgent: undefined,
+        })}
+      />,
+    )
+
+    expect(
+      screen.queryByRole('link', { name: /旅遊綜合險/ }),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: /旅遊綜合險/ }),
+    ).toBeInTheDocument()
   })
 
   it('renders product slots in the new layout order', () => {

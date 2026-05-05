@@ -102,6 +102,10 @@ const reminderCardClassName = cn(
   'lion-desktop:min-h-25.25 lion-desktop:gap-5 lion-desktop:px-5 lion-desktop:py-3.75',
 )
 
+function isExternalWebHref(href: string) {
+  return href.startsWith('http://') || href.startsWith('https://')
+}
+
 export function ReminderCards({
   items,
   subtitle,
@@ -126,15 +130,19 @@ export function ReminderCards({
       </header>
 
       <div className="grid grid-cols-1 gap-3 lion-desktop:grid-cols-2 lion-desktop:gap-5">
-        {items.map((item) =>
-          item.href ? (
+        {items.map((item) => {
+          const shouldOpenInNewTab = item.href
+            ? isExternalWebHref(item.href)
+            : false
+
+          return item.href ? (
             <a
               className={reminderCardClassName}
               href={item.href}
               key={item.id}
               onClick={() => onSelectAddon?.(item.id)}
-              rel="noopener noreferrer"
-              target="_blank"
+              rel={shouldOpenInNewTab ? 'noopener noreferrer' : undefined}
+              target={shouldOpenInNewTab ? '_blank' : undefined}
             >
               <ReminderCardContent item={item} />
             </a>
@@ -147,8 +155,8 @@ export function ReminderCards({
             >
               <ReminderCardContent item={item} />
             </button>
-          ),
-        )}
+          )
+        })}
       </div>
     </section>
   )

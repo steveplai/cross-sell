@@ -25,6 +25,9 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
     orderYear: '2026',
     orderNumber: '16575',
   },
+  serviceAgent: {
+    email: 'customer-service@liontravel.com',
+  },
   promo: {
     id: 'limited-offer',
     activeTitle: '您已解鎖限時優惠！',

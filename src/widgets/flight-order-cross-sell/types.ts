@@ -80,6 +80,10 @@ export interface FlightOrderCrossSellOrder {
   orderNumber: string
 }
 
+export interface FlightOrderCrossSellServiceAgent {
+  email?: string
+}
+
 export interface FlightOrderCrossSellData {
   promo: FlightOrderCrossSellPromo
   sections: FlightOrderCrossSellSection[]
@@ -87,6 +91,7 @@ export interface FlightOrderCrossSellData {
   domainMode?: LiontravelDomainMode
   hsrAddon?: FlightOrderCrossSellAddon
   order?: FlightOrderCrossSellOrder
+  serviceAgent?: FlightOrderCrossSellServiceAgent
   reminders?: {
     title: string
     subtitle?: string
