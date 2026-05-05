@@ -171,7 +171,11 @@ function useCategoryDragScroll(itemsCount: number) {
     (event: ReactPointerEvent<HTMLDivElement>) => {
       const scrollElement = scrollRef.current
 
-      if (!scrollElement || event.button !== 0) {
+      if (
+        !scrollElement ||
+        event.button !== 0 ||
+        scrollElement.scrollWidth - scrollElement.clientWidth <= 1
+      ) {
         return
       }
 
@@ -291,6 +295,7 @@ export function CrossSellSection({
   }
 
   const placeholderLabel = getPlaceholderLabel(section)
+  const canDragCategories = categoryOverflow.start || categoryOverflow.end
 
   return (
     <section
@@ -340,7 +345,8 @@ export function CrossSellSection({
             className={cn(
               'flex touch-pan-y gap-2 overflow-x-auto overscroll-x-contain pb-1 select-none',
               '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
-              isDragging ? 'cursor-grabbing' : 'cursor-grab',
+              canDragCategories &&
+                (isDragging ? 'cursor-grabbing' : 'cursor-grab'),
             )}
             data-testid={`section-${section.id}-categories`}
             onClickCapture={handleClickCapture}
