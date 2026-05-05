@@ -53,7 +53,7 @@ function ContentPanel({
   return (
     <div
       className={cn(
-        'rounded-none lion-desktop:rounded-[10px]',
+        'rounded-none lion-desktop:rounded-(--lion-panel-radius)',
         allowOverflow ? 'overflow-visible' : 'overflow-hidden',
       )}
     >
@@ -146,7 +146,7 @@ function FlightOrderCrossSellContent({
   return (
     <section
       className={cn(
-        'w-full text-foreground bg-(--lion-gray-100)',
+        'w-full bg-(--lion-gray-100) text-foreground',
         'lion-desktop:bg-linear-to-b lion-desktop:from-(--lion-page-gradient-from) lion-desktop:to-(--lion-page-gradient-to)',
       )}
       data-promo-state={isPromoActive ? 'active' : 'expired'}

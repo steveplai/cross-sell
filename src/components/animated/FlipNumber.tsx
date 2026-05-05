@@ -28,7 +28,7 @@ interface FlipNumberDividerCssVariables extends CSSProperties {
 
 const flipAnimationDurationMs = 520
 const flipNumberDigitFaceClassName =
-  'absolute inset-0 grid place-items-center rounded-[2px] bg-inherit [backface-visibility:hidden]'
+  'absolute inset-0 grid place-items-center rounded-xs bg-inherit backface-hidden'
 
 function formatCssLength(value: number | string | undefined) {
   if (typeof value === 'number') {

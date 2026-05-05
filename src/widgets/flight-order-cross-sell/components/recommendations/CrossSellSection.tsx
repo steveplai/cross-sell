@@ -379,7 +379,7 @@ export function CrossSellSection({
             className={cn(
               categoryOverflowIndicatorClassName,
               'left-0 w-18 bg-linear-to-r from-background/90 via-background/50 to-background/0',
-              'shadow-[8px_0_10px_-12px_rgba(0,0,0,0.1)]',
+              'shadow-(--lion-category-overflow-shadow-start)',
               categoryOverflow.start ? 'opacity-100' : 'opacity-0',
             )}
             data-testid={`section-${section.id}-categories-overflow-start`}
@@ -389,7 +389,7 @@ export function CrossSellSection({
             className={cn(
               categoryOverflowIndicatorClassName,
               'right-0 w-18 bg-linear-to-l from-background/90 via-background/50 to-background/0',
-              'shadow-[-8px_0_10px_-12px_rgba(0,0,0,0.1)]',
+              'shadow-(--lion-category-overflow-shadow-end)',
               categoryOverflow.end ? 'opacity-100' : 'opacity-0',
             )}
             data-testid={`section-${section.id}-categories-overflow-end`}

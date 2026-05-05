@@ -96,7 +96,7 @@ function ReminderCardContent({ item }: { item: FlightOrderCrossSellReminder }) {
 }
 
 const reminderCardClassName = cn(
-  'flex items-center rounded-[10px] border bg-card text-left text-inherit no-underline',
+  'flex items-center rounded-(--lion-panel-radius) border bg-card text-left text-inherit no-underline',
   'min-h-22.5 gap-4 border-(--lion-gray-300) px-3 py-4',
   'transition hover:border-primary/40 hover:bg-card hover:shadow-sm',
   'lion-desktop:min-h-25.25 lion-desktop:gap-5 lion-desktop:px-5 lion-desktop:py-3.75',

@@ -115,7 +115,7 @@ export function ProductCard({
                   {starRating !== undefined ? (
                     <span
                       aria-label={`飯店星等 ${starRating} 顆星`}
-                      className="flex items-center gap-[1.5px]"
+                      className="gap-0.375 flex items-center"
                     >
                       {Array.from({ length: 5 }, (_, index) => (
                         <Star
@@ -154,7 +154,7 @@ export function ProductCard({
                     />
                   )}
                   {reviewCount ? (
-                    <span className="text-[10px] text-muted-foreground">
+                    <span className="text-2xs text-muted-foreground">
                       {reviewCount}
                     </span>
                   ) : null}
@@ -172,7 +172,7 @@ export function ProductCard({
               ) : null}
 
               {item.cancellationLabel ? (
-                <p className="text-[10px] leading-5.5 text-(--lion-gray-700)">
+                <p className="text-2xs leading-5.5 text-(--lion-gray-700)">
                   {item.cancellationLabel}
                 </p>
               ) : null}
@@ -182,7 +182,7 @@ export function ProductCard({
               {isPromoActive && (item.originalPrice || item.discountLabel) ? (
                 <div className="flex w-full items-center justify-end gap-1 text-right">
                   {item.originalPrice ? (
-                    <span className="text-[10px] leading-5.5 text-muted-foreground line-through">
+                    <span className="text-2xs leading-5.5 text-muted-foreground line-through">
                       {formatCurrency(item.originalPrice, locale, currency)}
                     </span>
                   ) : null}
