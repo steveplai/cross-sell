@@ -8,6 +8,7 @@ import {
 } from '@react-email/components'
 
 import type { TravelPlanCrossSellSection } from '../types'
+import { HeaderCtaButton } from './HeaderCtaButton'
 import { IconBadge } from './IconBadge'
 
 interface FeaturedSectionProps {
@@ -39,14 +40,11 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
                 </Text>
               </Column>
               <Column className="w-42.5 text-right">
-                <Button
-                  className="border-brand-red text-brand-red inline-block rounded-[5px] border border-solid bg-white px-2.5 py-1.25 text-center text-[16px] leading-6 whitespace-nowrap no-underline"
+                <HeaderCtaButton
                   href={section.ctaUrl}
-                >
-                  <span className="inline-block whitespace-nowrap">
-                    <span>{section.ctaLabel}</span>
-                  </span>
-                </Button>
+                  label={section.ctaLabel}
+                  variant="red"
+                />
               </Column>
             </>
           ) : null}
