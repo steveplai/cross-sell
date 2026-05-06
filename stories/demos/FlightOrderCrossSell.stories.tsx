@@ -9,11 +9,6 @@ import {
 
 const activeData = {
   ...flightOrderCrossSellSampleData,
-  promo: {
-    ...flightOrderCrossSellSampleData.promo,
-    startsAt: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
-    durationSeconds: 40 * 60 * 60,
-  },
 }
 
 const expiredData = {

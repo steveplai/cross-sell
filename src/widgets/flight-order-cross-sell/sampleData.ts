@@ -1,6 +1,6 @@
 import type { FlightOrderCrossSellData } from './types'
 
-const activeStartsAt = new Date(Date.now() - 10 * 60 * 1000).toISOString()
+const activeStartsAt = new Date(Date.now() -  15 * 24 * 60 * 60 * 1000).toISOString()
 const categorySearchBaseUrl = 'https://www.liontravel.com/search'
 const sampleImageUrls = {
   airportTransfer:
@@ -40,7 +40,7 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
     activeTitle: '您已解鎖限時優惠！',
     expiredTitle: '發現更多旅遊靈感！',
     startsAt: activeStartsAt,
-    durationSeconds: 40 * 60 * 60,
+    durationSeconds: 30 * 24 * 60 * 60,
     serviceLabel: '加訂住宿、高鐵與票券享專屬折扣',
     benefits: [
       {
