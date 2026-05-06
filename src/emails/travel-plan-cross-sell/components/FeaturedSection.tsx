@@ -1,14 +1,7 @@
-import {
-  Button,
-  Column,
-  Img,
-  Row,
-  Section,
-  Text,
-} from '@react-email/components'
+import { Column, Img, Row, Section, Text } from '@react-email/components'
 
 import type { TravelPlanCrossSellSection } from '../types'
-import { HeaderCtaButton } from './HeaderCtaButton'
+import { CtaButton } from './CtaButton'
 import { IconBadge } from './IconBadge'
 
 interface FeaturedSectionProps {
@@ -40,10 +33,10 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
                 </Text>
               </Column>
               <Column className="w-42.5 text-right">
-                <HeaderCtaButton
+                <CtaButton
                   href={section.ctaUrl}
                   label={section.ctaLabel}
-                  variant="red"
+                  tone="red"
                 />
               </Column>
             </>
@@ -69,21 +62,13 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
                 </Text>
               </Column>
               <Column className="w-42.5 text-right">
-                <Button
-                  className="border-brand-red text-brand-red inline-block rounded-[5px] border border-solid bg-white px-2.5 py-1.25 text-center text-[16px] leading-6 whitespace-nowrap no-underline"
+                <CtaButton
                   href={section.ctaUrl}
-                >
-                  <span className="inline-block whitespace-nowrap">
-                    {section.ctaIconUrl ? (
-                      <Img
-                        alt=""
-                        className="mr-1.25 inline-block size-4 align-bottom"
-                        src={section.ctaIconUrl}
-                      />
-                    ) : null}
-                    <span>{section.ctaLabel}</span>
-                  </span>
-                </Button>
+                  iconUrl={section.ctaIconUrl}
+                  label={section.ctaLabel}
+                  tone="red"
+                  variant="regular"
+                />
               </Column>
             </Row>
 

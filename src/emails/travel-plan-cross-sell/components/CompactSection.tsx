@@ -1,7 +1,7 @@
 import { Column, Row, Section, Text } from '@react-email/components'
 
 import type { TravelPlanCrossSellSection } from '../types'
-import { HeaderCtaButton } from './HeaderCtaButton'
+import { CtaButton } from './CtaButton'
 import { IconBadge } from './IconBadge'
 
 interface CompactSectionProps {
@@ -34,10 +34,10 @@ export function CompactSection({
           </Text>
         </Column>
         <Column className="w-28 text-right">
-          <HeaderCtaButton
+          <CtaButton
             href={section.ctaUrl}
             label={section.ctaLabel}
-            variant={emphasis ? 'red' : 'gray'}
+            tone={emphasis ? 'red' : 'gray'}
           />
         </Column>
       </Row>
