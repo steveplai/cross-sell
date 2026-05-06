@@ -35,6 +35,7 @@ export interface PreviewEmailDefaults {
   apiKey?: string
   domainMode?: TravelPlanCrossSellEmailDomainMode
   from?: string
+  fromOptions?: string[]
   source?: PreviewEmailSource
   subject?: string
   template?: PreviewEmailTemplateKey
@@ -204,12 +205,45 @@ export function resolvePreviewEmailDefaults(
   return {
     apiKey: env.RESEND_API_KEY,
     domainMode,
-    from: cliOptions.from ?? env.RESEND_FROM,
+    from: cliOptions.from,
+    fromOptions: cliOptions.from
+      ? []
+      : resolvePreviewEmailFromOptions(env.RESEND_FROM_OPTIONS),
     source,
     subject: cliOptions.subject,
     template,
     to: cliOptions.to ?? env.RESEND_TO,
   }
+}
+
+export function resolvePreviewEmailFromOptions(value?: string) {
+  const rawValue = value?.trim()
+
+  if (!rawValue) {
+    return []
+  }
+
+  let parsed: unknown
+
+  try {
+    parsed = JSON.parse(rawValue)
+  } catch (error) {
+    throw new Error(
+      'Invalid RESEND_FROM_OPTIONS. Expected a JSON array of sender strings.',
+      { cause: error },
+    )
+  }
+
+  if (
+    !Array.isArray(parsed) ||
+    parsed.some((option) => typeof option !== 'string' || !option.trim())
+  ) {
+    throw new Error(
+      'Invalid RESEND_FROM_OPTIONS. Expected a JSON array of sender strings.',
+    )
+  }
+
+  return parsed.map((option) => option.trim())
 }
 
 export function resolvePreviewEmailTemplateKey(
@@ -291,13 +325,13 @@ Options:
   --source <source>           dist | react
   --domain-mode <mode>        uat | production
   --to <email>                Recipient email. Defaults to RESEND_TO.
-  --from <sender>             Sender email. Defaults to RESEND_FROM.
+  --from <sender>             Sender email. Skips RESEND_FROM_OPTIONS prompt.
   --subject <subject>         Email subject.
   --help                      Show this help.
 
 Optional environment:
   RESEND_API_KEY (prompted if missing)
-  RESEND_FROM
+  RESEND_FROM_OPTIONS (JSON array of sender choices)
   RESEND_TO
 `
 }

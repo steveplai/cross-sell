@@ -11,6 +11,7 @@ import {
   previewEmailTemplates,
   readDistEmailHtml,
   resolvePreviewEmailDefaults,
+  resolvePreviewEmailFromOptions,
   resolvePreviewEmailSource,
   resolvePreviewEmailTemplateKey,
 } from '../../../../scripts/send-email-preview-core'
@@ -49,14 +50,14 @@ describe('send email preview contracts', () => {
     ])
     const defaults = resolvePreviewEmailDefaults(cliOptions, {
       RESEND_API_KEY: 'key',
-      RESEND_FROM: 'sender@example.com',
+      RESEND_FROM_OPTIONS: '["sender@example.com","other-sender@example.com"]',
       RESEND_TO: 'env-to@example.com',
     })
 
     expect(defaults).toMatchObject({
       apiKey: 'key',
       domainMode: 'production',
-      from: 'sender@example.com',
+      fromOptions: ['sender@example.com', 'other-sender@example.com'],
       source: 'react',
       template: 'order-cross-sell',
       to: 'cli-to@example.com',
@@ -76,6 +77,24 @@ describe('send email preview contracts', () => {
         {},
       ),
     ).toThrow('Invalid EMAIL_DOMAIN_MODE "staging"')
+    expect(() => resolvePreviewEmailFromOptions('sender@example.com')).toThrow(
+      'Invalid RESEND_FROM_OPTIONS',
+    )
+  })
+
+  it('ignores RESEND_FROM_OPTIONS when --from is provided', () => {
+    const defaults = resolvePreviewEmailDefaults(
+      parsePreviewEmailArgs(['--from=cli-sender@example.com']),
+      {
+        RESEND_FROM_OPTIONS:
+          '["env-sender@example.com","other-sender@example.com"]',
+      },
+    )
+
+    expect(defaults).toMatchObject({
+      from: 'cli-sender@example.com',
+      fromOptions: [],
+    })
   })
 
   it('returns a clear error when a dist email file is missing', async () => {

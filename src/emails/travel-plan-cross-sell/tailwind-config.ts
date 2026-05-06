@@ -24,7 +24,7 @@ export const travelPlanCrossSellTailwindConfig = {
         nature: '#f7f7f7',
         orange: '#ff5b1a',
         'brand-red': '#f03742',
-        'brand-red-soft': 'rgba(240, 55, 66, 0.1)',
+        'brand-red-soft': '#feebec',
       },
       fontFamily: {
         sans: ['Noto Sans TC', 'Arial', 'sans-serif'],

@@ -1,6 +1,7 @@
 import { stdin as input, stdout as output } from 'node:process'
 import { createInterface } from 'node:readline/promises'
 
+import { config as loadDotenv } from 'dotenv'
 import { Resend } from 'resend'
 
 import {
@@ -19,6 +20,8 @@ import {
   resolvePreviewEmailDefaults,
 } from './send-email-preview-core'
 
+loadDotenv({ quiet: true })
+
 async function main() {
   const cliOptions = parsePreviewEmailArgs(process.argv.slice(2))
 
@@ -29,6 +32,9 @@ async function main() {
 
   const defaults = resolvePreviewEmailDefaults(cliOptions)
   const apiKey = await promptForResendApiKey(defaults.apiKey)
+
+  console.log(`Loaded RESEND_API_KEY: ${formatSecretPreview(apiKey)}`)
+
   const draft = await promptForPreviewEmailDraft(defaults)
 
   printSummary(draft)
@@ -90,7 +96,7 @@ async function promptForPreviewEmailDraft(
         ? await promptDomainMode(rl, defaults.domainMode)
         : undefined
     const to = await promptRequiredInput(rl, 'To', defaults.to)
-    const from = await promptRequiredInput(rl, 'From', defaults.from)
+    const from = await promptFrom(rl, defaults)
     const subject = await promptRequiredInput(
       rl,
       'Subject',
@@ -250,6 +256,61 @@ async function promptDomainMode(
   return resolveTravelPlanCrossSellEmailDomainMode(value)
 }
 
+async function promptFrom(
+  rl: ReturnType<typeof createInterface>,
+  defaults: PreviewEmailDefaults,
+) {
+  if (defaults.from) {
+    return defaults.from
+  }
+
+  const options = defaults.fromOptions ?? []
+
+  if (options.length > 0) {
+    return promptSelectOrCustomInput(rl, 'From', options, 'Custom sender')
+  }
+
+  return promptRequiredInput(rl, 'From')
+}
+
+async function promptSelectOrCustomInput(
+  rl: ReturnType<typeof createInterface>,
+  label: string,
+  options: readonly string[],
+  customLabel: string,
+) {
+  const customIndex = options.length
+
+  console.log(`\n${label}:`)
+
+  options.forEach((option, index) => {
+    console.log(`  ${index + 1}. ${option}`)
+  })
+  console.log(`  ${customIndex + 1}. ${customLabel}`)
+
+  while (true) {
+    const answer = (
+      await rl.question(`Choose ${label.toLowerCase()} [1]: `)
+    ).trim()
+
+    if (!answer) {
+      return options[0]
+    }
+
+    const selectedIndex = Number(answer) - 1
+
+    if (Number.isInteger(selectedIndex) && options[selectedIndex]) {
+      return options[selectedIndex]
+    }
+
+    if (selectedIndex === customIndex) {
+      return promptRequiredInput(rl, label)
+    }
+
+    console.log(`Enter a number from 1 to ${options.length + 1}.`)
+  }
+}
+
 async function promptRequiredInput(
   rl: ReturnType<typeof createInterface>,
   label: string,
@@ -295,6 +356,16 @@ function printSummary(draft: PreviewEmailDraft) {
   console.log(`  To: ${draft.to}`)
   console.log(`  From: ${draft.from}`)
   console.log(`  Subject: ${draft.subject}`)
+}
+
+function formatSecretPreview(value: string) {
+  const secret = value.trim()
+
+  if (secret.length <= 4) {
+    return `${'*'.repeat(secret.length)} (${secret.length} chars)`
+  }
+
+  return `${secret.slice(0, 4)}... (${secret.length} chars)`
 }
 
 main().catch((error: unknown) => {
