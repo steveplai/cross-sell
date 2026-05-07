@@ -31,6 +31,50 @@ function expectImage(document: Document, src: string) {
   expect(imageSrcs).toContain(src)
 }
 
+function expectImagesHaveSize(
+  document: Document,
+  src: string,
+  width: string,
+  height: string,
+) {
+  const images = Array.from(document.querySelectorAll(`img[src="${src}"]`))
+
+  expect(images.length).toBeGreaterThan(0)
+
+  images.forEach((image) => {
+    expect(image.getAttribute('width')).toBe(width)
+    expect(image.getAttribute('height')).toBe(height)
+  })
+}
+
+function expectLinksAndSpansDoNotUseCssEllipsis(document: Document) {
+  const riskyElements = Array.from(
+    document.querySelectorAll('a[style], span[style]'),
+  ).filter((element) => {
+    const style = element.getAttribute('style')?.replace(/\s/g, '') ?? ''
+
+    return (
+      style.includes('text-overflow') ||
+      style.includes('overflow:hidden') ||
+      style.includes('max-width')
+    )
+  })
+
+  expect(riskyElements).toHaveLength(0)
+}
+
+function expectLinksDoNotRenderUnderlineStyles(document: Document) {
+  const underlinedLinks = Array.from(document.querySelectorAll('a')).filter(
+    (link) => {
+      const style = link.getAttribute('style')?.toLowerCase() ?? ''
+
+      return style.includes('underline')
+    },
+  )
+
+  expect(underlinedLinks).toHaveLength(0)
+}
+
 describe('TravelPlanCrossSellEmail', () => {
   it.each([
     {
@@ -85,9 +129,12 @@ describe('TravelPlanCrossSellEmail', () => {
       expect(html).toContain('高鐵加購')
       expectLink(document, expectedCtaLabel, expectedCtaUrl)
       expectImage(document, assetUrls.transportIconUrl)
+      expectLinksAndSpansDoNotUseCssEllipsis(document)
+      expectLinksDoNotRenderUnderlineStyles(document)
 
       if (content.highlights?.length) {
         expectImage(document, assetUrls.checkIconUrl)
+        expectImagesHaveSize(document, assetUrls.checkIconUrl, '16', '16')
       }
 
       if (content.deadlineText) {
@@ -97,6 +144,11 @@ describe('TravelPlanCrossSellEmail', () => {
       if (expectedRecommendation) {
         expect(html).toContain(expectedRecommendation)
         expectImage(document, assetUrls.arrowIconUrl)
+        expectImagesHaveSize(document, assetUrls.arrowIconUrl, '16', '16')
+      }
+
+      if (content.sections.some((section) => section.ctaIconUrl)) {
+        expectImagesHaveSize(document, assetUrls.searchIconUrl, '16', '16')
       }
     },
   )

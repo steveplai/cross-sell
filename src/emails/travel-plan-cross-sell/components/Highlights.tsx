@@ -1,4 +1,4 @@
-import { Column, Img, Row, Section, Text } from '@react-email/components'
+import { Column, Img, Row, Section } from '@react-email/components'
 
 import type { TravelPlanCrossSellHighlight } from '../types'
 
@@ -19,17 +19,27 @@ export function Highlights({ highlights }: HighlightsProps) {
                 whiteSpace: 'nowrap',
               }}
             >
-              <Text className="text-ink m-0 text-[12px] leading-5.5">
-                <Img
-                  className="inline size-4 align-text-bottom"
-                  src={highlight.checkIconSrc}
-                  alt=""
-                />
-                {highlight.label ? (
-                  <span className="text-orange pr-0.5">{highlight.label}</span>
-                ) : null}
-                {highlight.text}
-              </Text>
+              <Section align="left" className="m-0 w-auto" width="auto">
+                <Row>
+                  <Column className="w-4 pr-0.5 align-middle text-[0px] leading-none">
+                    <Img
+                      alt=""
+                      className="block"
+                      height="16"
+                      src={highlight.checkIconSrc}
+                      width="16"
+                    />
+                  </Column>
+                  {highlight.label ? (
+                    <Column className="text-orange pr-0.5 align-middle font-sans text-[12px] leading-5.5 whitespace-nowrap">
+                      {highlight.label}
+                    </Column>
+                  ) : null}
+                  <Column className="text-ink align-middle font-sans text-[12px] leading-5.5 whitespace-nowrap">
+                    {highlight.text}
+                  </Column>
+                </Row>
+              </Section>
             </Column>
           )
         })}

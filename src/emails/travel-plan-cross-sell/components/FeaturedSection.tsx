@@ -1,4 +1,4 @@
-import { Column, Img, Row, Section, Text } from '@react-email/components'
+import { Column, Img, Link, Row, Section, Text } from '@react-email/components'
 
 import type { TravelPlanCrossSellSection } from '../types'
 import { CtaButton } from './CtaButton'
@@ -47,12 +47,20 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
       <Section className="mb-2.5 w-full p-0">
         <Row>
           <Column className="w-9 pt-2.5 pr-1.25 pb-0 pl-7.5">
-            <Text className="bg-ink mx-auto my-0 block h-48.5 w-px text-[0px] leading-none">
-              &nbsp;
-            </Text>
-            <Text className="text-ink -mt-px mb-0 text-center text-[10px] leading-2.5">
-              ▼
-            </Text>
+            <Section align="center" className="m-0 w-px" width="1">
+              <Row>
+                <Column className="bg-ink h-48.5 w-px text-[0px] leading-none">
+                  &nbsp;
+                </Column>
+              </Row>
+            </Section>
+            <Section className="m-0 w-full">
+              <Row>
+                <Column className="text-ink text-center font-sans text-[10px] leading-2.5">
+                  ▼
+                </Column>
+              </Row>
+            </Section>
           </Column>
           <Column className="pt-2.5 pb-5">
             <Row>
@@ -77,29 +85,49 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
                 <Text className="text-brand-red m-0 mb-1.25 text-[16px] leading-6">
                   {section.recommendationsTitle}
                 </Text>
-                {section.recommendations.map((recommendation, index) => (
-                  <Text
-                    className="m-0 text-[16px] leading-6 whitespace-nowrap"
-                    key={recommendation.url}
-                    style={{ marginTop: index === 0 ? 0 : 5 }}
-                  >
-                    <a
-                      className="text-ink inline-block no-underline"
-                      href={recommendation.url}
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
-                      <span className="inline-block max-w-115 truncate align-middle hover:underline">
-                        {recommendation.text}
-                      </span>
-                      <Img
-                        alt=""
-                        className="inline-block size-4 align-text-bottom"
-                        src={recommendation.arrowIconUrl}
-                      />
-                    </a>
-                  </Text>
-                ))}
+                <Section className="m-0 w-full">
+                  {section.recommendations.map((recommendation, index) => (
+                    <Row key={recommendation.url}>
+                      <Column
+                        className={`align-top font-sans text-[16px] leading-6 ${
+                          index === 0 ? 'pt-0' : 'pt-1.25'
+                        }`}
+                      >
+                        <Link
+                          className="text-ink no-underline"
+                          href={recommendation.url}
+                          rel="noopener noreferrer"
+                          style={{ textDecoration: 'none' }}
+                          target="_blank"
+                        >
+                          {recommendation.text}
+                        </Link>
+                      </Column>
+                      <Column
+                        className={`w-4 pl-1 align-top text-[0px] leading-none ${
+                          index === 0 ? 'pt-1' : 'pt-2.25'
+                        }`}
+                        width="16"
+                      >
+                        <Link
+                          className="no-underline"
+                          href={recommendation.url}
+                          rel="noopener noreferrer"
+                          style={{ textDecoration: 'none' }}
+                          target="_blank"
+                        >
+                          <Img
+                            alt=""
+                            className="block"
+                            height="16"
+                            src={recommendation.arrowIconUrl}
+                            width="16"
+                          />
+                        </Link>
+                      </Column>
+                    </Row>
+                  ))}
+                </Section>
               </Section>
             ) : null}
           </Column>
