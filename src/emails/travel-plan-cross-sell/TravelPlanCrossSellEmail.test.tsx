@@ -83,16 +83,18 @@ function expectHeaderCellsUseFixedMiddleAlignment(
   const titleCell = Array.from(document.querySelectorAll('td')).find(
     (cell) => cell.textContent?.trim() === title,
   )
-  const deadlineSpan = Array.from(document.querySelectorAll('span')).find(
+  const deadlineTextSpans = Array.from(document.querySelectorAll('span')).filter(
     (span) => span.textContent?.trim() === deadlineText,
   )
+  const deadlineSpan = deadlineTextSpans[0]
   const deadlineWrapperCell = deadlineSpan?.closest('td')
 
   expect(titleCell?.getAttribute('height')).toBe('30')
   expect(titleCell?.getAttribute('valign')).toBe('middle')
   expect(titleCell?.getAttribute('style')).toContain('vertical-align:middle')
-  expect(deadlineWrapperCell?.getAttribute('height')).toBe('30')
+  expect(deadlineTextSpans).toHaveLength(1)
   expect(deadlineWrapperCell?.getAttribute('valign')).toBe('middle')
+  expect(deadlineWrapperCell?.getAttribute('style')).toContain('height:30px')
   expect(deadlineWrapperCell?.getAttribute('style')).toContain(
     'vertical-align:middle',
   )
@@ -100,6 +102,8 @@ function expectHeaderCellsUseFixedMiddleAlignment(
     'display:inline-block',
   )
   expect(deadlineSpan?.getAttribute('style')).toContain('height:24px')
+  expect(deadlineSpan?.getAttribute('style')).toContain('padding-left:6px')
+  expect(deadlineSpan?.getAttribute('style')).toContain('padding-right:6px')
   expect(deadlineSpan?.getAttribute('style')).toContain(
     'vertical-align:middle',
   )

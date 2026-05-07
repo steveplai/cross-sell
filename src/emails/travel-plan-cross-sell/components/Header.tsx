@@ -10,8 +10,7 @@ export function Header({ title, deadlineText }: HeaderProps) {
     <Section className="mb-2.5">
       <Row>
         <Column
-          className="w-25"
-          height="30"
+          className="h-7.5 w-25"
           style={{ verticalAlign: 'middle' }}
           valign="middle"
         >
@@ -28,8 +27,7 @@ export function Header({ title, deadlineText }: HeaderProps) {
         </Column>
         {deadlineText ? (
           <Column
-            className="pl-4 align-middle"
-            height="30"
+            className="h-7.5 pl-4 align-middle"
             style={{ verticalAlign: 'middle' }}
             valign="middle"
           >
