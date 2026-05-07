@@ -10,6 +10,8 @@ const orderCrossSellUtmQuery = {
   localExperience:
     '?utm_source=orderconfirmation&utm_medium=email&utm_campaign=activity-addon&utm_content=flight',
   rail: '?utm_source=orderconfirmation&utm_medium=email&utm_campaign=thsrc-addon&utm_content=flight',
+  visaPassport:
+    '?utm_source=insurance&utm_medium=email&utm_campaign=visa-addon&utm_content=flight',
 } as const
 
 export function createOrderCrossSellEmailContent(
@@ -20,6 +22,7 @@ export function createOrderCrossSellEmailContent(
     bedIconUrl,
     checkIconUrl,
     mountainIconUrl,
+    passportIconUrl,
     searchIconUrl,
     trainIconUrl,
     transportIconUrl,
@@ -103,6 +106,15 @@ export function createOrderCrossSellEmailContent(
         ctaUrl: `https://example.com/order-cross-sell/rail${orderCrossSellUtmQuery.rail}`,
         iconAlt: '台灣高鐵',
         iconUrl: trainIconUrl,
+      },
+      {
+        id: 'visa-passport',
+        title: '簽證護照',
+        description: '出發前最重要的事！確認效期與簽證早安心',
+        ctaLabel: '申請簽證代辦',
+        ctaUrl: `https://example.com/insurance-cross-sell/visa-passport${orderCrossSellUtmQuery.visaPassport}`,
+        iconAlt: '簽證護照',
+        iconUrl: passportIconUrl,
       },
     ],
   }
