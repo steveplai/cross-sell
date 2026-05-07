@@ -27,7 +27,7 @@ export interface PreviewEmailCliOptions {
   help?: boolean
   source?: string
   subject?: string
-  template?: string
+  templates?: string[]
   to?: string
 }
 
@@ -38,7 +38,7 @@ export interface PreviewEmailDefaults {
   fromOptions?: string[]
   source?: PreviewEmailSource
   subject?: string
-  template?: PreviewEmailTemplateKey
+  templates?: PreviewEmailTemplateKey[]
   to?: string
 }
 
@@ -46,8 +46,8 @@ export interface PreviewEmailDraft {
   domainMode?: TravelPlanCrossSellEmailDomainMode
   from: string
   source: PreviewEmailSource
-  subject: string
-  template: PreviewEmailTemplateKey
+  subjects: Partial<Record<PreviewEmailTemplateKey, string>>
+  templates: PreviewEmailTemplateKey[]
   to: string
 }
 
@@ -106,6 +106,45 @@ export const previewEmailTemplates = {
     distFileName: 'insurance-cross-sell.html',
     isTravelPlan: true,
     label: 'Insurance cross-sell',
+    createReactEmail: (domainMode) => (
+      <TravelPlanCrossSellEmail
+        {...createInsuranceCrossSellEmailContent(
+          createTravelPlanCrossSellAssetUrls(domainMode),
+        )}
+      />
+    ),
+  },
+  'full-order-cross-sell': {
+    defaultSubject: '旅遊計劃書與限時加購優惠',
+    distFileName: 'full-order-cross-sell.html',
+    isTravelPlan: true,
+    label: 'Full Order cross-sell',
+    createReactEmail: (domainMode) => (
+      <TravelPlanCrossSellEmail
+        {...createInsuranceCrossSellEmailContent(
+          createTravelPlanCrossSellAssetUrls(domainMode),
+        )}
+      />
+    ),
+  },
+  'full-sale-cross-sell': {
+    defaultSubject: '旅遊計劃書與限時加購優惠',
+    distFileName: 'full-sale-cross-sell.html',
+    isTravelPlan: true,
+    label: 'Full Sale cross-sell',
+    createReactEmail: (domainMode) => (
+      <TravelPlanCrossSellEmail
+        {...createInsuranceCrossSellEmailContent(
+          createTravelPlanCrossSellAssetUrls(domainMode),
+        )}
+      />
+    ),
+  },
+  'full-insurance-cross-sell': {
+    defaultSubject: '旅遊計劃書與簽證護照提醒',
+    distFileName: 'full-insurance-cross-sell.html',
+    isTravelPlan: true,
+    label: 'Full Insurance cross-sell',
     createReactEmail: (domainMode) => (
       <TravelPlanCrossSellEmail
         {...createInsuranceCrossSellEmailContent(
@@ -177,7 +216,10 @@ export function parsePreviewEmailArgs(args: string[]): PreviewEmailCliOptions {
         options.subject = value
         break
       case 'template':
-        options.template = value
+        options.templates = [
+          ...(options.templates ?? []),
+          ...parsePreviewEmailTemplateOption(value),
+        ]
         break
       case 'to':
         options.to = value
@@ -188,12 +230,25 @@ export function parsePreviewEmailArgs(args: string[]): PreviewEmailCliOptions {
   return options
 }
 
+function parsePreviewEmailTemplateOption(value: string) {
+  const templates = value
+    .split(',')
+    .map((template) => template.trim())
+    .filter(Boolean)
+
+  if (templates.length === 0) {
+    throw new Error('Missing value for "--template".')
+  }
+
+  return templates
+}
+
 export function resolvePreviewEmailDefaults(
   cliOptions: PreviewEmailCliOptions,
   env: NodeJS.ProcessEnv = process.env,
 ): PreviewEmailDefaults {
-  const template = cliOptions.template
-    ? resolvePreviewEmailTemplateKey(cliOptions.template)
+  const templates = cliOptions.templates
+    ? resolvePreviewEmailTemplateKeys(cliOptions.templates)
     : undefined
   const source = cliOptions.source
     ? resolvePreviewEmailSource(cliOptions.source)
@@ -211,7 +266,7 @@ export function resolvePreviewEmailDefaults(
       : resolvePreviewEmailFromOptions(env.RESEND_FROM_OPTIONS),
     source,
     subject: cliOptions.subject,
-    template,
+    templates,
     to: cliOptions.to ?? env.RESEND_TO,
   }
 }
@@ -260,6 +315,14 @@ export function resolvePreviewEmailTemplateKey(
   )
 }
 
+export function resolvePreviewEmailTemplateKeys(
+  values: readonly string[],
+): PreviewEmailTemplateKey[] {
+  const templates = values.map((value) => resolvePreviewEmailTemplateKey(value))
+
+  return [...new Set(templates)]
+}
+
 export function resolvePreviewEmailSource(value: string): PreviewEmailSource {
   if (previewEmailSources.includes(value as PreviewEmailSource)) {
     return value as PreviewEmailSource
@@ -271,7 +334,10 @@ export function resolvePreviewEmailSource(value: string): PreviewEmailSource {
 }
 
 export async function createPreviewEmailPayload(
-  draft: PreviewEmailDraft,
+  draft: Omit<PreviewEmailDraft, 'subjects' | 'templates'> & {
+    subject: string
+    template: PreviewEmailTemplateKey
+  },
   root = process.cwd(),
 ): Promise<CreateEmailOptions> {
   const basePayload = {
@@ -293,6 +359,39 @@ export async function createPreviewEmailPayload(
       draft.domainMode ?? 'uat',
     ),
   }
+}
+
+export async function createPreviewEmailPayloads(
+  draft: PreviewEmailDraft,
+  root = process.cwd(),
+): Promise<CreateEmailOptions[]> {
+  const { subjects, templates, ...sendSettings } = draft
+
+  return Promise.all(
+    templates.map((template) =>
+      createPreviewEmailPayload(
+        {
+          ...sendSettings,
+          subject: resolvePreviewEmailDraftSubject(subjects, template),
+          template,
+        },
+        root,
+      ),
+    ),
+  )
+}
+
+function resolvePreviewEmailDraftSubject(
+  subjects: PreviewEmailDraft['subjects'],
+  template: PreviewEmailTemplateKey,
+) {
+  const subject = subjects[template]?.trim()
+
+  if (!subject) {
+    throw new Error(`Missing subject for template "${template}".`)
+  }
+
+  return subject
 }
 
 export async function readDistEmailHtml(
@@ -322,11 +421,12 @@ export function getPreviewEmailUsage() {
 
 Options:
   --template <template>       ${previewEmailTemplateKeys.join(' | ')}
+                              May be comma-separated or repeated.
   --source <source>           dist | react
   --domain-mode <mode>        uat | production
   --to <email>                Recipient email. Defaults to RESEND_TO.
   --from <sender>             Sender email. Skips RESEND_FROM_OPTIONS prompt.
-  --subject <subject>         Email subject.
+  --subject <subject>         Default subject for each selected email.
   --help                      Show this help.
 
 Optional environment:

@@ -9,12 +9,13 @@ import {
   type TravelPlanCrossSellEmailDomainMode,
 } from '../src/emails/travel-plan-cross-sell/content/shared-assets'
 import {
-  createPreviewEmailPayload,
+  createPreviewEmailPayloads,
   getPreviewEmailUsage,
   parsePreviewEmailArgs,
   type PreviewEmailDefaults,
   type PreviewEmailDraft,
   previewEmailSources,
+  type PreviewEmailTemplateKey,
   previewEmailTemplateKeys,
   previewEmailTemplates,
   resolvePreviewEmailDefaults,
@@ -39,22 +40,33 @@ async function main() {
 
   printSummary(draft)
 
-  const confirmed = await promptConfirmation()
+  const confirmed = await promptConfirmation(draft.templates.length)
 
   if (!confirmed) {
-    console.log('Canceled. No email was sent.')
+    console.log('Canceled. No emails were sent.')
     return
   }
 
   const resend = new Resend(apiKey)
-  const payload = await createPreviewEmailPayload(draft)
-  const result = await resend.emails.send(payload)
+  const payloads = await createPreviewEmailPayloads(draft)
+  const sentIds: string[] = []
 
-  if (result.error) {
-    throw new Error(`Resend failed: ${result.error.message}`)
+  for (const [index, payload] of payloads.entries()) {
+    const template = draft.templates[index]
+    const result = await resend.emails.send(payload)
+
+    if (result.error) {
+      throw new Error(
+        `Resend failed for template "${template}": ${result.error.message}`,
+      )
+    }
+
+    sentIds.push(result.data.id)
   }
 
-  console.log(`Sent preview email. Resend email id: ${result.data.id}`)
+  console.log(
+    `Sent ${sentIds.length} preview email${sentIds.length === 1 ? '' : 's'}. Resend email id${sentIds.length === 1 ? '' : 's'}: ${sentIds.join(', ')}`,
+  )
 }
 
 async function promptForResendApiKey(defaultValue?: string) {
@@ -77,12 +89,12 @@ async function promptForPreviewEmailDraft(
   const rl = createInterface({ input, output })
 
   try {
-    const template = await promptSelect(
+    const templates = await promptMultiSelect(
       rl,
-      'Template',
+      'Templates',
       previewEmailTemplateKeys,
       (value) => `${value} - ${previewEmailTemplates[value].label}`,
-      defaults.template,
+      defaults.templates,
     )
     const source = await promptSelect(
       rl,
@@ -92,28 +104,48 @@ async function promptForPreviewEmailDraft(
       defaults.source,
     )
     const domainMode =
-      source === 'react' && previewEmailTemplates[template].isTravelPlan
+      source === 'react' &&
+      templates.some((template) => previewEmailTemplates[template].isTravelPlan)
         ? await promptDomainMode(rl, defaults.domainMode)
         : undefined
     const to = await promptRequiredInput(rl, 'To', defaults.to)
     const from = await promptFrom(rl, defaults)
-    const subject = await promptRequiredInput(
+    const subjects = await promptForPreviewEmailSubjects(
       rl,
-      'Subject',
-      defaults.subject ?? previewEmailTemplates[template].defaultSubject,
+      templates,
+      defaults.subject,
     )
 
     return {
       domainMode,
       from,
       source,
-      subject,
-      template,
+      subjects,
+      templates,
       to,
     }
   } finally {
     rl.close()
   }
+}
+
+async function promptForPreviewEmailSubjects(
+  rl: ReturnType<typeof createInterface>,
+  templates: readonly PreviewEmailTemplateKey[],
+  defaultSubject?: string,
+) {
+  const subjects: PreviewEmailDraft['subjects'] = {}
+
+  for (const template of templates) {
+    const label = templates.length === 1 ? 'Subject' : `Subject (${template})`
+    subjects[template] = await promptRequiredInput(
+      rl,
+      label,
+      defaultSubject ?? previewEmailTemplates[template].defaultSubject,
+    )
+  }
+
+  return subjects
 }
 
 async function promptHiddenRequiredInput(label: string) {
@@ -241,6 +273,86 @@ async function promptSelect<T extends string>(
   }
 }
 
+async function promptMultiSelect<T extends string>(
+  rl: ReturnType<typeof createInterface>,
+  label: string,
+  options: readonly T[],
+  formatOption: (value: T) => string,
+  defaultValues?: readonly T[],
+): Promise<T[]> {
+  const availableDefaults =
+    defaultValues?.filter((value) => options.includes(value)) ?? []
+  const defaultPrompt =
+    availableDefaults.length > 0
+      ? ` [${availableDefaults
+          .map((value) => String(options.indexOf(value) + 1))
+          .join(',')}]`
+      : ''
+
+  console.log(`\n${label}:`)
+
+  options.forEach((option, index) => {
+    console.log(`  ${index + 1}. ${formatOption(option)}`)
+  })
+
+  while (true) {
+    const answer = (
+      await rl.question(
+        `Choose ${label.toLowerCase()}${defaultPrompt} (comma-separated): `,
+      )
+    ).trim()
+
+    if (!answer && availableDefaults.length > 0) {
+      return [...availableDefaults]
+    }
+
+    const selectedOptions = parseMultiSelectAnswer(answer, options)
+
+    if (selectedOptions.length > 0) {
+      return selectedOptions
+    }
+
+    console.log(
+      `Enter one or more numbers from 1 to ${options.length}, separated by commas.`,
+    )
+  }
+}
+
+function parseMultiSelectAnswer<T extends string>(
+  answer: string,
+  options: readonly T[],
+): T[] {
+  if (answer.toLowerCase() === 'all') {
+    return [...options]
+  }
+
+  const selectedOptions: T[] = []
+  const tokens = answer
+    .split(',')
+    .map((token) => token.trim())
+    .filter(Boolean)
+
+  for (const token of tokens) {
+    const selectedIndex = Number(token) - 1
+    const selectedByIndex =
+      Number.isInteger(selectedIndex) && selectedIndex >= 0
+        ? options[selectedIndex]
+        : undefined
+    const selectedByValue = options.find((option) => option === token)
+    const selectedOption = selectedByIndex ?? selectedByValue
+
+    if (!selectedOption) {
+      return []
+    }
+
+    if (!selectedOptions.includes(selectedOption)) {
+      selectedOptions.push(selectedOption)
+    }
+  }
+
+  return selectedOptions
+}
+
 async function promptDomainMode(
   rl: ReturnType<typeof createInterface>,
   defaultValue?: TravelPlanCrossSellEmailDomainMode,
@@ -330,11 +442,14 @@ async function promptRequiredInput(
   }
 }
 
-async function promptConfirmation() {
+async function promptConfirmation(emailCount: number) {
   const rl = createInterface({ input, output })
 
   try {
-    const answer = (await rl.question('\nSend this preview email? [y/N]: '))
+    const noun = emailCount === 1 ? 'email' : 'emails'
+    const answer = (
+      await rl.question(`\nSend ${emailCount} preview ${noun}? [y/N]: `)
+    )
       .trim()
       .toLowerCase()
 
@@ -346,7 +461,7 @@ async function promptConfirmation() {
 
 function printSummary(draft: PreviewEmailDraft) {
   console.log('\nPreview email summary:')
-  console.log(`  Template: ${draft.template}`)
+  console.log(`  Templates: ${draft.templates.join(', ')}`)
   console.log(`  Source: ${draft.source}`)
 
   if (draft.source === 'react' && draft.domainMode) {
@@ -355,7 +470,11 @@ function printSummary(draft: PreviewEmailDraft) {
 
   console.log(`  To: ${draft.to}`)
   console.log(`  From: ${draft.from}`)
-  console.log(`  Subject: ${draft.subject}`)
+  console.log('  Subjects:')
+
+  for (const template of draft.templates) {
+    console.log(`    ${template}: ${draft.subjects[template]}`)
+  }
 }
 
 function formatSecretPreview(value: string) {

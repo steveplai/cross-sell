@@ -7,6 +7,7 @@ import { describe, expect, it } from 'vitest'
 
 import {
   createPreviewEmailPayload,
+  createPreviewEmailPayloads,
   parsePreviewEmailArgs,
   previewEmailTemplates,
   readDistEmailHtml,
@@ -41,7 +42,9 @@ describe('send email preview contracts', () => {
 
   it('parses CLI options and applies env defaults', () => {
     const cliOptions = parsePreviewEmailArgs([
-      '--template=order-cross-sell',
+      '--template=order-cross-sell,sales-cross-sell',
+      '--template',
+      'insurance-cross-sell',
       '--source',
       'react',
       '--to',
@@ -59,7 +62,11 @@ describe('send email preview contracts', () => {
       domainMode: 'production',
       fromOptions: ['sender@example.com', 'other-sender@example.com'],
       source: 'react',
-      template: 'order-cross-sell',
+      templates: [
+        'order-cross-sell',
+        'sales-cross-sell',
+        'insurance-cross-sell',
+      ],
       to: 'cli-to@example.com',
     })
   })
@@ -155,5 +162,54 @@ describe('send email preview contracts', () => {
     })
     expect('react' in payload).toBe(true)
     expect('html' in payload).toBe(false)
+  })
+
+  it('creates payloads for multiple templates with shared send settings and separate subjects', async () => {
+    const root = join(tmpdir(), `email-preview-multiple-${randomUUID()}`)
+
+    await mkdir(join(root, 'dist/emails'), { recursive: true })
+    await writeFile(
+      join(root, 'dist/emails/order-cross-sell.html'),
+      '<html><body>order</body></html>',
+      'utf8',
+    )
+    await writeFile(
+      join(root, 'dist/emails/sales-cross-sell.html'),
+      '<html><body>sales</body></html>',
+      'utf8',
+    )
+
+    try {
+      await expect(
+        createPreviewEmailPayloads(
+          {
+            from: 'sender@example.com',
+            source: 'dist',
+            subjects: {
+              'order-cross-sell': 'Order Preview',
+              'sales-cross-sell': 'Sales Preview',
+            },
+            templates: ['order-cross-sell', 'sales-cross-sell'],
+            to: 'recipient@example.com',
+          },
+          root,
+        ),
+      ).resolves.toMatchObject([
+        {
+          from: 'sender@example.com',
+          html: '<html><body>order</body></html>',
+          subject: 'Order Preview',
+          to: 'recipient@example.com',
+        },
+        {
+          from: 'sender@example.com',
+          html: '<html><body>sales</body></html>',
+          subject: 'Sales Preview',
+          to: 'recipient@example.com',
+        },
+      ])
+    } finally {
+      await rm(root, { force: true, recursive: true })
+    }
   })
 })
