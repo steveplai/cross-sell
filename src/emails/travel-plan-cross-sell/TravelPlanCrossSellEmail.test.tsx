@@ -75,6 +75,37 @@ function expectLinksDoNotRenderUnderlineStyles(document: Document) {
   expect(underlinedLinks).toHaveLength(0)
 }
 
+function expectHeaderCellsUseFixedMiddleAlignment(
+  document: Document,
+  title: string,
+  deadlineText: string,
+) {
+  const titleCell = Array.from(document.querySelectorAll('td')).find(
+    (cell) => cell.textContent?.trim() === title,
+  )
+  const deadlineSpan = Array.from(document.querySelectorAll('span')).find(
+    (span) => span.textContent?.trim() === deadlineText,
+  )
+  const deadlineWrapperCell = deadlineSpan?.closest('td')
+
+  expect(titleCell?.getAttribute('height')).toBe('30')
+  expect(titleCell?.getAttribute('valign')).toBe('middle')
+  expect(titleCell?.getAttribute('style')).toContain('vertical-align:middle')
+  expect(deadlineWrapperCell?.getAttribute('height')).toBe('30')
+  expect(deadlineWrapperCell?.getAttribute('valign')).toBe('middle')
+  expect(deadlineWrapperCell?.getAttribute('style')).toContain(
+    'vertical-align:middle',
+  )
+  expect(deadlineSpan?.getAttribute('style')).toContain(
+    'display:inline-block',
+  )
+  expect(deadlineSpan?.getAttribute('style')).toContain('height:24px')
+  expect(deadlineSpan?.getAttribute('style')).toContain(
+    'vertical-align:middle',
+  )
+  expect(deadlineSpan?.getAttribute('style')).toContain('line-height:24px')
+}
+
 describe('TravelPlanCrossSellEmail', () => {
   it.each([
     {
@@ -139,6 +170,11 @@ describe('TravelPlanCrossSellEmail', () => {
 
       if (content.deadlineText) {
         expect(html).toContain(content.deadlineText)
+        expectHeaderCellsUseFixedMiddleAlignment(
+          document,
+          content.title,
+          content.deadlineText,
+        )
       }
 
       if (expectedRecommendation) {
