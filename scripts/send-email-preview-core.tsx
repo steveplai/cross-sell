@@ -114,45 +114,6 @@ export const previewEmailTemplates = {
       />
     ),
   },
-  'full-order-cross-sell': {
-    defaultSubject: '旅遊計劃書與限時加購優惠',
-    distFileName: 'full-order-cross-sell.html',
-    isTravelPlan: true,
-    label: 'Full Order cross-sell',
-    createReactEmail: (domainMode) => (
-      <TravelPlanCrossSellEmail
-        {...createInsuranceCrossSellEmailContent(
-          createTravelPlanCrossSellAssetUrls(domainMode),
-        )}
-      />
-    ),
-  },
-  'full-sale-cross-sell': {
-    defaultSubject: '旅遊計劃書與限時加購優惠',
-    distFileName: 'full-sale-cross-sell.html',
-    isTravelPlan: true,
-    label: 'Full Sale cross-sell',
-    createReactEmail: (domainMode) => (
-      <TravelPlanCrossSellEmail
-        {...createInsuranceCrossSellEmailContent(
-          createTravelPlanCrossSellAssetUrls(domainMode),
-        )}
-      />
-    ),
-  },
-  'full-insurance-cross-sell': {
-    defaultSubject: '旅遊計劃書與簽證護照提醒',
-    distFileName: 'full-insurance-cross-sell.html',
-    isTravelPlan: true,
-    label: 'Full Insurance cross-sell',
-    createReactEmail: (domainMode) => (
-      <TravelPlanCrossSellEmail
-        {...createInsuranceCrossSellEmailContent(
-          createTravelPlanCrossSellAssetUrls(domainMode),
-        )}
-      />
-    ),
-  },
 } satisfies Record<string, PreviewEmailTemplate>
 
 export const previewEmailTemplateKeys = Object.keys(
