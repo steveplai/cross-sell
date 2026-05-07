@@ -195,6 +195,54 @@ More detail:
 docs/react-web-component-considerations.md
 ```
 
+## Email Compatibility
+
+Email components under `src/emails/` must be designed with Windows Outlook 2108
+desktop compatibility as a baseline requirement.
+
+Windows Outlook 2108 is a classic desktop Outlook client and renders HTML email
+through Microsoft Word's rendering engine rather than a browser engine. This
+means an email can look correct in Outlook Web while breaking badly in Windows
+Outlook desktop.
+
+React Email and Tailwind are allowed for email templates, but they do not make
+modern CSS automatically Outlook-safe. React Email's Tailwind support primarily
+turns supported class names into inline styles. If the resulting CSS property or
+HTML structure is unsupported by Outlook desktop, it can still fail.
+
+When changing or adding email components:
+
+- Prefer conservative table-based layout using React Email primitives such as
+  `Section`, `Row`, and `Column`.
+- Put critical spacing, borders, and backgrounds on table cells or table-backed
+  structures instead of relying on modern block/inline layout behavior.
+- Set `width` and `height` attributes on email images, not only CSS classes.
+- Keep critical CTA/button layout table-based. React Email `Button` renders as an
+  `<a>` tag, and Windows Outlook desktop is unreliable with padding, width,
+  `inline-block`, and rounded corners on links.
+- Treat rounded corners as progressive enhancement. Windows Outlook desktop does
+  not reliably support `border-radius`.
+- Avoid depending on `flex`, `grid`, `position`, `max-width`, `overflow`,
+  `text-overflow`, `truncate`, `line-clamp`, complex selectors, hover styles,
+  or modern responsive CSS for core email layout.
+- Avoid assuming Tailwind utility output is safe just because it is inline. Check
+  the final HTML/CSS against Outlook desktop constraints.
+- Prefer data-level text shortening or simpler fixed-column layouts over CSS
+  truncation when long text must be constrained.
+- If exact Outlook desktop rendering is required for backgrounds, rounded
+  buttons, or similar effects, consider Outlook-specific conditional comments or
+  VML. Keep these hacks isolated and documented near the component using them.
+
+Recommended email validation after email template changes:
+
+```bash
+pnpm build:emails
+pnpm typecheck
+```
+
+For visual compatibility, also manually inspect the generated HTML in Windows
+Outlook 2108 desktop when the change affects layout, buttons, images, or spacing.
+
 ## Testing Taxonomy
 
 Tests are split into two high-level responsibilities: app tests and internal tests.
