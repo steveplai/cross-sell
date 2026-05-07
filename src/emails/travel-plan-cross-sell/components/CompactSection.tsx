@@ -24,12 +24,12 @@ export function CompactSection({
           <IconBadge section={section} />
         </Column>
         <Column className="w-18">
-          <Text className="text-ink m-0 text-[16px] leading-6 font-bold whitespace-nowrap">
+          <Text className="text-ink m-0 font-sans text-[16px] leading-6 font-bold whitespace-nowrap">
             {section.title}
           </Text>
         </Column>
         <Column className="w-74.75">
-          <Text className="m-0 text-[14px] leading-5.5 whitespace-nowrap text-black">
+          <Text className="m-0 font-sans text-[14px] leading-5.5 whitespace-nowrap text-black">
             {section.description}
           </Text>
         </Column>

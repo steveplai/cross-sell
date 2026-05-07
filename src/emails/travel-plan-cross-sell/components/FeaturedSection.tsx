@@ -21,14 +21,14 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
             <IconBadge section={section} />
           </Column>
           <Column className={showHeaderDescriptionAndCta ? 'w-18' : undefined}>
-            <Text className="text-ink m-0 text-[16px] leading-6 font-bold whitespace-nowrap">
+            <Text className="text-ink m-0 font-sans text-[16px] leading-6 font-bold whitespace-nowrap">
               {section.title}
             </Text>
           </Column>
           {showHeaderDescriptionAndCta ? (
             <>
               <Column className="w-60.25 pr-3">
-                <Text className="m-0 text-[14px] leading-5.5 whitespace-nowrap text-black">
+                <Text className="m-0 font-sans text-[14px] leading-5.5 whitespace-nowrap text-black">
                   {section.description}
                 </Text>
               </Column>
@@ -65,7 +65,7 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
           <Column className="pt-2.5 pb-5">
             <Row>
               <Column className="w-75 pr-3">
-                <Text className="m-0 text-[14px] leading-5.5 text-black">
+                <Text className="m-0 font-sans text-[14px] leading-5.5 text-black">
                   {section.description}
                 </Text>
               </Column>
@@ -82,7 +82,7 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
 
             {section.recommendations?.length ? (
               <Section className="bg-nature mt-2.5 w-full rounded-[5px] px-3.75 py-2.5">
-                <Text className="text-brand-red m-0 mb-1.25 text-[16px] leading-6">
+                <Text className="text-brand-red m-0 mb-1.25 font-sans text-[16px] leading-6">
                   {section.recommendationsTitle}
                 </Text>
                 <Section className="m-0 w-full">
@@ -94,7 +94,7 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
                         }`}
                       >
                         <Link
-                          className="text-ink no-underline"
+                          className="text-ink font-sans no-underline"
                           href={recommendation.url}
                           rel="noopener noreferrer"
                           style={{ textDecoration: 'none' }}

@@ -1,6 +1,8 @@
 import type { FlightOrderCrossSellData } from './types'
 
-const activeStartsAt = new Date(Date.now() -  15 * 24 * 60 * 60 * 1000).toISOString()
+const activeStartsAt = new Date(
+  Date.now() - 15 * 24 * 60 * 60 * 1000,
+).toISOString()
 const categorySearchBaseUrl = 'https://www.liontravel.com/search'
 const sampleImageUrls = {
   airportTransfer:
