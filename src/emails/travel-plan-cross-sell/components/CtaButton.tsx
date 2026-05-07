@@ -1,4 +1,4 @@
-import { Column, Img, Link, Row, Section } from '@react-email/components'
+import { Column, Img, Link, Row } from '@react-email/components'
 
 interface CtaButtonProps {
   href: string
@@ -26,16 +26,16 @@ const variantClassNames = {
     iconCell: 'w-4 align-middle text-[0px] leading-none',
     link: 'font-sans text-[14px] leading-[22px] whitespace-nowrap no-underline',
     spacerCell: 'w-1.25 text-[0px] leading-none',
-    table: 'm-0 w-26',
+    table: 'w-26',
     width: '104',
   },
   regular: {
-    cell: 'h-9 w-42.5 rounded-[5px] border border-solid bg-white px-2.5 text-center align-middle',
+    cell: 'h-9 w-42.5 rounded-[5px] border border-solid bg-white px-0 text-center align-middle',
     height: '36',
     iconCell: 'w-4 align-middle text-[0px] leading-none',
     link: 'font-sans text-[16px] leading-6 whitespace-nowrap no-underline',
     spacerCell: 'w-1.25 text-[0px] leading-none',
-    table: 'm-0 w-42.5',
+    table: 'w-42.5',
     width: '170',
   },
 } as const
@@ -51,68 +51,82 @@ export function CtaButton({
   const variantClassName = variantClassNames[variant]
 
   return (
-    <Section
+    <Row
       align="right"
       className={variantClassName.table}
       width={variantClassName.width}
     >
-      <Row>
-        <Column
-          align="center"
-          className={`${variantClassName.cell} ${toneClassName.border}`}
-          height={variantClassName.height}
-          style={{ verticalAlign: 'middle' }}
-          valign="middle"
-          width={variantClassName.width}
-        >
-          <Section align="center" className="m-0 w-auto" width="auto">
-            <Row align="center" className="w-auto" width="auto">
-              {iconUrl ? (
-                <>
-                  <Column
-                    className={variantClassName.iconCell}
-                    height="16"
-                    style={{ verticalAlign: 'middle' }}
-                    valign="middle"
-                    width="16"
-                  >
-                    <Img
-                      alt=""
-                      className="block"
-                      height="16"
-                      src={iconUrl}
-                      width="16"
-                    />
-                  </Column>
-                  <Column
-                    className={variantClassName.spacerCell}
-                    style={{ verticalAlign: 'middle' }}
-                    valign="middle"
-                    width="5"
-                  >
-                    &nbsp;
-                  </Column>
-                </>
-              ) : null}
-              <Column
-                className="align-middle"
-                style={{ verticalAlign: 'middle' }}
-                valign="middle"
+      <Column
+        align="center"
+        className={`${variantClassName.cell} ${toneClassName.border}`}
+        height={variantClassName.height}
+        style={{ verticalAlign: 'middle' }}
+        valign="middle"
+        width={variantClassName.width}
+      >
+        {iconUrl ? (
+          <Row align="center" className="w-auto" width="auto">
+            <Column
+              className={variantClassName.iconCell}
+              height={variantClassName.height}
+              style={{ verticalAlign: 'middle' }}
+              valign="middle"
+              width="16"
+            >
+              <Img
+                alt=""
+                className="block"
+                height="16"
+                src={iconUrl}
+                width="16"
+              />
+            </Column>
+            <Column
+              className={variantClassName.spacerCell}
+              height={variantClassName.height}
+              style={{ verticalAlign: 'middle' }}
+              valign="middle"
+              width="5"
+            >
+              &nbsp;
+            </Column>
+            <Column
+              height={variantClassName.height}
+              style={{ verticalAlign: 'middle' }}
+              valign="middle"
+            >
+              <Link
+                className={`${variantClassName.link} ${toneClassName.text}`}
+                href={href}
+                rel="noopener noreferrer"
+                style={{
+                  lineHeight: `${variantClassName.height}px`,
+                  textDecoration: 'none',
+                }}
+                target="_blank"
               >
-                <Link
-                  className={`${variantClassName.link} ${toneClassName.text}`}
-                  href={href}
-                  rel="noopener noreferrer"
-                  style={{ textDecoration: 'none' }}
-                  target="_blank"
-                >
-                  {label}
-                </Link>
-              </Column>
-            </Row>
-          </Section>
-        </Column>
-      </Row>
-    </Section>
+                {label}
+              </Link>
+            </Column>
+          </Row>
+        ) : (
+          <Link
+            className={`${variantClassName.link} ${toneClassName.text}`}
+            href={href}
+            rel="noopener noreferrer"
+            style={{
+              display: 'block',
+              lineHeight: `${variantClassName.height}px`,
+              textAlign: 'center',
+              textDecoration: 'none',
+              width: `${variantClassName.width}px`,
+            }}
+            target="_blank"
+          >
+            {label}
+          </Link>
+        )}
+      </Column>
+    </Row>
   )
 }
