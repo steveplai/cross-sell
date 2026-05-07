@@ -11,7 +11,7 @@ const orderCrossSellUtmQuery = {
     '?utm_source=orderconfirmation&utm_medium=email&utm_campaign=activity-addon&utm_content=flight',
   rail: '?utm_source=orderconfirmation&utm_medium=email&utm_campaign=thsrc-addon&utm_content=flight',
   visaPassport:
-    '?utm_source=insurance&utm_medium=email&utm_campaign=visa-addon&utm_content=flight',
+    '?utm_source=orderconfirmation&utm_medium=email&utm_campaign=visa-addon&utm_content=flight',
 } as const
 
 export function createOrderCrossSellEmailContent(
