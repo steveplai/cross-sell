@@ -55,7 +55,7 @@ export function TravelPlanCrossSellEmail({
       <Tailwind config={travelPlanCrossSellTailwindConfig}>
         <Head />
         <Preview>{previewText}</Preview>
-        <Body className="m-0 bg-white p-0">
+        <Body className="m-0 bg-white p-0 rounded-[10px]">
           <TravelPlanCrossSellContent {...contentProps} />
         </Body>
       </Tailwind>
