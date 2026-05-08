@@ -74,7 +74,7 @@ export function createOrderCrossSellEmailContent(
             arrowIconUrl,
           },
           {
-            text: '日本-京成電鐵Skyliner特急券| 東京成田機場往返上野・日暮里...',
+            text: '日本-京成電鐵Skyliner特急券| 東京成田機場往返上野・日暮里',
             url: 'https://example.com/order-cross-sell/transportation/keisei-skyliner',
             arrowIconUrl,
           },

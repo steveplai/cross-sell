@@ -137,13 +137,16 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
                             width="100%"
                           >
                             <Column
-                              className="overflow-hidden align-top font-sans text-[16px] leading-6 whitespace-nowrap"
+                              className="h-6 overflow-hidden align-middle font-sans text-[16px] leading-6 whitespace-nowrap"
+                              height="24"
                               style={{
+                                height: '24px',
                                 overflow: 'hidden',
-                                verticalAlign: 'top',
+                                verticalAlign: 'middle',
                                 whiteSpace: 'nowrap',
                                 width: '100%',
                               }}
+                              valign="middle"
                               width="100%"
                             >
                               <span className="whitespace-nowrap group-hover:underline">
@@ -151,13 +154,15 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
                               </span>
                             </Column>
                             <Column
-                              className="w-5 pt-1 pl-1 align-top text-[0px] leading-none"
+                              className="h-6 w-5 pl-1 align-middle text-[0px] leading-none"
+                              height="24"
                               style={{
+                                height: '24px',
                                 paddingLeft: '4px',
-                                paddingTop: '4px',
-                                verticalAlign: 'top',
+                                verticalAlign: 'middle',
                                 width: '20px',
                               }}
+                              valign="middle"
                               width="20"
                             >
                               <Img
