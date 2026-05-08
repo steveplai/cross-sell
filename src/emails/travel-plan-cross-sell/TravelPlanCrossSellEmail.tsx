@@ -14,6 +14,13 @@ import { Highlights } from './components/Highlights'
 import { travelPlanCrossSellTailwindConfig } from './tailwind-config'
 import type { TravelPlanCrossSellEmailProps } from './types'
 
+const travelPlanCrossSellHeadStyles = `
+.recommendation-link-text-anchor:hover .recommendation-link-text,
+.x_recommendation-link-text-anchor:hover .x_recommendation-link-text {
+  text-decoration: underline !important;
+}
+`
+
 export type {
   TravelPlanCrossSellEmailProps,
   TravelPlanCrossSellHighlight,
@@ -53,7 +60,9 @@ export function TravelPlanCrossSellEmail({
   return (
     <Html lang="zh-TW">
       <Tailwind config={travelPlanCrossSellTailwindConfig}>
-        <Head />
+        <Head>
+          <style>{travelPlanCrossSellHeadStyles}</style>
+        </Head>
         <Preview>{previewText}</Preview>
         <Body className="m-0 rounded-[10px] bg-white p-0">
           <TravelPlanCrossSellContent {...contentProps} />

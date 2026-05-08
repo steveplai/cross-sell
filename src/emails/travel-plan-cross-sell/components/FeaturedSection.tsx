@@ -119,61 +119,75 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
                           index === 0 ? 'pt-0' : 'pt-1.25'
                         }`}
                       >
-                        <Link
-                          className="group text-ink block w-full font-sans whitespace-nowrap no-underline"
-                          href={recommendation.url}
-                          rel="noopener noreferrer"
-                          style={{
-                            display: 'block',
-                            textDecoration: 'none',
-                            width: '100%',
-                            whiteSpace: 'nowrap',
-                          }}
-                          target="_blank"
+                        <Row
+                          className="w-full table-fixed"
+                          style={{ tableLayout: 'fixed', width: '100%' }}
+                          width="100%"
                         >
-                          <Row
-                            className="w-full table-fixed"
-                            style={{ tableLayout: 'fixed', width: '100%' }}
+                          <Column
+                            className="h-6 overflow-hidden align-middle font-sans text-[16px] leading-6 whitespace-nowrap"
+                            height="24"
+                            style={{
+                              height: '24px',
+                              overflow: 'hidden',
+                              verticalAlign: 'middle',
+                              whiteSpace: 'nowrap',
+                              width: '100%',
+                            }}
+                            valign="middle"
                             width="100%"
                           >
-                            <Column
-                              className="h-6 overflow-hidden align-middle font-sans text-[16px] leading-6 whitespace-nowrap"
-                              height="24"
+                            <Link
+                              className="recommendation-link-text-anchor text-ink block w-full font-sans whitespace-nowrap no-underline"
+                              href={recommendation.url}
+                              rel="noopener noreferrer"
                               style={{
-                                height: '24px',
-                                overflow: 'hidden',
-                                verticalAlign: 'middle',
+                                color: '#222222',
+                                display: 'block',
+                                textDecoration: 'none',
                                 whiteSpace: 'nowrap',
                                 width: '100%',
                               }}
-                              valign="middle"
-                              width="100%"
+                              target="_blank"
                             >
                               <span
-                                className="block overflow-hidden text-ellipsis whitespace-nowrap group-hover:underline"
+                                className="recommendation-link-text inline-block overflow-hidden text-ellipsis whitespace-nowrap"
                                 data-testid="recommendation-link-text"
                                 style={{
-                                  display: 'block',
+                                  display: 'inline-block',
+                                  maxWidth: '100%',
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
+                                  verticalAlign: 'middle',
                                   whiteSpace: 'nowrap',
-                                  width: '100%',
                                 }}
                               >
                                 {recommendation.text}
                               </span>
-                            </Column>
-                            <Column
-                              className="h-6 w-5 pl-1 align-middle text-[0px] leading-none"
-                              height="24"
+                            </Link>
+                          </Column>
+                          <Column
+                            className="h-6 w-5 pl-1 align-middle text-[0px] leading-none"
+                            height="24"
+                            style={{
+                              height: '24px',
+                              paddingLeft: '4px',
+                              verticalAlign: 'middle',
+                              width: '20px',
+                            }}
+                            valign="middle"
+                            width="20"
+                          >
+                            <Link
+                              className="recommendation-link-arrow-anchor block no-underline"
+                              href={recommendation.url}
+                              rel="noopener noreferrer"
                               style={{
-                                height: '24px',
-                                paddingLeft: '4px',
-                                verticalAlign: 'middle',
-                                width: '20px',
+                                display: 'block',
+                                textDecoration: 'none',
+                                width: '16px',
                               }}
-                              valign="middle"
-                              width="20"
+                              target="_blank"
                             >
                               <Img
                                 alt=""
@@ -182,9 +196,9 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
                                 src={recommendation.arrowIconUrl}
                                 width="16"
                               />
-                            </Column>
-                          </Row>
-                        </Link>
+                            </Link>
+                          </Column>
+                        </Row>
                       </Column>
                     </Row>
                   ))}

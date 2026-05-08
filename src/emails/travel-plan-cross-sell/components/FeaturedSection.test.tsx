@@ -63,7 +63,7 @@ describe('FeaturedSection', () => {
     ).toHaveLength(2)
   })
 
-  it('renders each recommendation as one no-wrap link containing text and arrow', async () => {
+  it('renders each recommendation as no-wrap text and arrow links', async () => {
     const section = {
       ctaLabel: '立即查看',
       ctaUrl: 'https://example.com/featured-section',
@@ -87,34 +87,50 @@ describe('FeaturedSection', () => {
     const document = parseEmailHtml(html)
     const recommendation = section.recommendations[0]
     const links = document.querySelectorAll(`a[href="${recommendation.url}"]`)
-    const link = links[0]
-    const textSpan = Array.from(link.querySelectorAll('span')).find((span) =>
-      span.textContent?.includes(recommendation.text),
+    const textLink = Array.from(links).find((link) =>
+      link.textContent?.includes(recommendation.text),
     )
+    const arrowLink = Array.from(links).find((link) =>
+      link.querySelector(`img[src="${recommendation.arrowIconUrl}"]`),
+    )
+    const textSpan = textLink?.querySelector('span')
     const textCell = textSpan?.closest('td')
-    const arrowImage = link.querySelector(
+    const arrowImage = arrowLink?.querySelector(
       `img[src="${recommendation.arrowIconUrl}"]`,
     )
     const arrowCell = arrowImage?.closest('td')
 
-    expect(links).toHaveLength(1)
-    expect(link.textContent).toContain(recommendation.text)
+    expect(links).toHaveLength(2)
+    expect(textLink?.textContent).toContain(recommendation.text)
     expect(arrowImage).not.toBeNull()
-    expect(link.getAttribute('class')).toContain('whitespace-nowrap')
-    expect(link.getAttribute('style')).toContain('white-space:nowrap')
-    expect(link.getAttribute('style')).toContain('display:block')
-    expect(textSpan?.getAttribute('class')).toContain('group-hover:underline')
+    expect(textLink?.getAttribute('class')).toContain(
+      'recommendation-link-text-anchor',
+    )
+    expect(textLink?.getAttribute('class')).toContain('whitespace-nowrap')
+    expect(textLink?.getAttribute('style')).toContain('display:block')
+    expect(textLink?.getAttribute('style')).toContain('text-decoration:none')
+    expect(textLink?.getAttribute('style')).not.toContain('underline')
+    expect(textLink?.getAttribute('style')).toContain('white-space:nowrap')
+    expect(textLink?.getAttribute('style')).toContain('width:100%')
+    expect(textSpan?.getAttribute('class')).toContain(
+      'recommendation-link-text',
+    )
+    expect(textSpan?.getAttribute('class')).not.toContain(
+      'group-hover:underline',
+    )
     expect(textSpan?.getAttribute('class')).toContain('overflow-hidden')
     expect(textSpan?.getAttribute('class')).toContain('text-ellipsis')
     expect(textSpan?.getAttribute('class')).toContain('whitespace-nowrap')
     expect(textSpan?.getAttribute('data-testid')).toBe(
       'recommendation-link-text',
     )
-    expect(textSpan?.getAttribute('style')).toContain('display:block')
+    expect(textSpan?.getAttribute('style')).toContain('display:inline-block')
+    expect(textSpan?.getAttribute('style')).toContain('max-width:100%')
     expect(textSpan?.getAttribute('style')).toContain('overflow:hidden')
     expect(textSpan?.getAttribute('style')).toContain('text-overflow:ellipsis')
+    expect(textSpan?.getAttribute('style')).toContain('vertical-align:middle')
     expect(textSpan?.getAttribute('style')).toContain('white-space:nowrap')
-    expect(textSpan?.getAttribute('style')).toContain('width:100%')
+    expect(textSpan?.getAttribute('style')).not.toMatch(/(^|;)width:100%(;|$)/)
     expect(textCell?.getAttribute('height')).toBe('24')
     expect(textCell?.getAttribute('valign')).toBe('middle')
     expect(textCell?.getAttribute('width')).toBe('100%')
@@ -128,5 +144,11 @@ describe('FeaturedSection', () => {
     expect(arrowCell?.getAttribute('style')).toContain('height:24px')
     expect(arrowCell?.getAttribute('style')).toContain('vertical-align:middle')
     expect(arrowCell?.getAttribute('style')).toContain('width:20px')
+    expect(arrowLink?.getAttribute('class')).toContain(
+      'recommendation-link-arrow-anchor',
+    )
+    expect(arrowLink?.getAttribute('style')).toContain('display:block')
+    expect(arrowLink?.getAttribute('style')).toContain('text-decoration:none')
+    expect(arrowLink?.getAttribute('style')).toContain('width:16px')
   })
 })

@@ -79,6 +79,19 @@ function expectLinksDoNotRenderUnderlineStyles(document: Document) {
   expect(underlinedLinks).toHaveLength(0)
 }
 
+function expectRecommendationHoverUsesEmailSafeCss(html: string) {
+  expect(html).toContain(
+    '.recommendation-link-text-anchor:hover .recommendation-link-text',
+  )
+  expect(html).toContain(
+    '.x_recommendation-link-text-anchor:hover .x_recommendation-link-text',
+  )
+  expect(html).toContain('text-decoration: underline !important')
+  expect(html).not.toContain('group-hover_underline')
+  expect(html).not.toContain(':where(.group)')
+  expect(html).not.toContain('@media (hover:hover)')
+}
+
 function expectHeaderCellsUseFixedMiddleAlignment(
   document: Document,
   title: string,
@@ -199,6 +212,7 @@ describe('TravelPlanCrossSellEmail', () => {
       expectImage(document, assetUrls.transportIconUrl)
       expectLinksAndSpansDoNotUseCssEllipsis(document)
       expectLinksDoNotRenderUnderlineStyles(document)
+      expectRecommendationHoverUsesEmailSafeCss(html)
 
       if (content.sections.some((section) => section.variant === 'featured')) {
         expectFeaturedTimelineRailUsesFixedCentering(document)
