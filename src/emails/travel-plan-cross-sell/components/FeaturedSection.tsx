@@ -120,35 +120,55 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
                         }`}
                       >
                         <Link
-                          className="text-ink font-sans no-underline"
+                          className="group text-ink block w-full font-sans whitespace-nowrap no-underline"
                           href={recommendation.url}
                           rel="noopener noreferrer"
-                          style={{ textDecoration: 'none' }}
+                          style={{
+                            display: 'block',
+                            textDecoration: 'none',
+                            width: '100%',
+                            whiteSpace: 'nowrap',
+                          }}
                           target="_blank"
                         >
-                          {recommendation.text}
-                        </Link>
-                      </Column>
-                      <Column
-                        className={`w-4 pl-1 align-top text-[0px] leading-none ${
-                          index === 0 ? 'pt-1' : 'pt-2.25'
-                        }`}
-                        width="16"
-                      >
-                        <Link
-                          className="no-underline"
-                          href={recommendation.url}
-                          rel="noopener noreferrer"
-                          style={{ textDecoration: 'none' }}
-                          target="_blank"
-                        >
-                          <Img
-                            alt=""
-                            className="block"
-                            height="16"
-                            src={recommendation.arrowIconUrl}
-                            width="16"
-                          />
+                          <Row
+                            className="w-full table-fixed"
+                            style={{ tableLayout: 'fixed', width: '100%' }}
+                            width="100%"
+                          >
+                            <Column
+                              className="overflow-hidden align-top font-sans text-[16px] leading-6 whitespace-nowrap"
+                              style={{
+                                overflow: 'hidden',
+                                verticalAlign: 'top',
+                                whiteSpace: 'nowrap',
+                                width: '100%',
+                              }}
+                              width="100%"
+                            >
+                              <span className="whitespace-nowrap group-hover:underline">
+                                {recommendation.text}
+                              </span>
+                            </Column>
+                            <Column
+                              className="w-5 pt-1 pl-1 align-top text-[0px] leading-none"
+                              style={{
+                                paddingLeft: '4px',
+                                paddingTop: '4px',
+                                verticalAlign: 'top',
+                                width: '20px',
+                              }}
+                              width="20"
+                            >
+                              <Img
+                                alt=""
+                                className="block"
+                                height="16"
+                                src={recommendation.arrowIconUrl}
+                                width="16"
+                              />
+                            </Column>
+                          </Row>
                         </Link>
                       </Column>
                     </Row>
