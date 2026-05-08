@@ -144,6 +144,8 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
                               style={{
                                 color: '#222222',
                                 display: 'block',
+                                height: '24px',
+                                lineHeight: '24px',
                                 textDecoration: 'none',
                                 whiteSpace: 'nowrap',
                                 width: '100%',
@@ -155,10 +157,11 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
                                 data-testid="recommendation-link-text"
                                 style={{
                                   display: 'inline-block',
+                                  lineHeight: '24px',
                                   maxWidth: '100%',
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
-                                  verticalAlign: 'middle',
+                                  verticalAlign: 'top',
                                   whiteSpace: 'nowrap',
                                 }}
                               >
