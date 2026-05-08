@@ -160,7 +160,8 @@ describe('TravelPlanCrossSellEmail', () => {
       name: 'order',
       createContent: createOrderCrossSellEmailContent,
       expectedCtaLabel: '立即預訂交通票券',
-      expectedCtaUrl: 'https://example.com/order-cross-sell/transportation',
+      expectedCtaUrl:
+        'https://example.com/order-cross-sell/transportation?utm_source=orderconfirmation&utm_medium=email&utm_campaign=activity-traffic-more-addon&utm_content=flight',
       expectedRecommendation:
         '日本-東京成田/羽田機場至東京市區/郊區 | 機場接送專車',
     },
@@ -168,7 +169,8 @@ describe('TravelPlanCrossSellEmail', () => {
       name: 'sales',
       createContent: createSalesCrossSellEmailContent,
       expectedCtaLabel: '立即搜尋飯店',
-      expectedCtaUrl: 'https://example.com/sales-cross-sell/hotels',
+      expectedCtaUrl:
+        'https://example.com/sales-cross-sell/hotels?utm_source=crosssell&utm_medium=email&utm_campaign=hotel-more-addon&utm_content=flight',
       expectedRecommendation: 'OMO5 東京大塚 by 星野集團',
     },
     {

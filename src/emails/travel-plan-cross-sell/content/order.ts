@@ -10,6 +10,10 @@ const orderCrossSellUtmQuery = {
   localExperience:
     '?utm_source=orderconfirmation&utm_medium=email&utm_campaign=activity-addon&utm_content=flight',
   rail: '?utm_source=orderconfirmation&utm_medium=email&utm_campaign=thsrc-addon&utm_content=flight',
+  transportation:
+    '?utm_source=orderconfirmation&utm_medium=email&utm_campaign=activity-traffic-more-addon&utm_content=flight',
+  transportationRecommendation:
+    '?utm_source=orderconfirmation&utm_medium=email&utm_campaign=activity-traffic-addon&utm_content=flight',
   visaPassport:
     '?utm_source=orderconfirmation&utm_medium=email&utm_campaign=visa-addon&utm_content=flight',
 } as const
@@ -56,7 +60,7 @@ export function createOrderCrossSellEmailContent(
         title: '抵達啟程',
         description: '落地第一步，先搞定機場到市區交通',
         ctaLabel: '立即預訂交通票券',
-        ctaUrl: 'https://example.com/order-cross-sell/transportation',
+        ctaUrl: `https://example.com/order-cross-sell/transportation${orderCrossSellUtmQuery.transportation}`,
         ctaIconUrl: searchIconUrl,
         variant: 'featured',
         iconAlt: '交通',
@@ -65,17 +69,17 @@ export function createOrderCrossSellEmailContent(
         recommendations: [
           {
             text: '日本-東京成田/羽田機場至東京市區/郊區 | 機場接送專車',
-            url: 'https://example.com/order-cross-sell/transportation/airport-transfer',
+            url: `https://example.com/order-cross-sell/transportation/airport-transfer${orderCrossSellUtmQuery.transportationRecommendation}`,
             arrowIconUrl,
           },
           {
             text: '日本-東京地鐵乘車券 Tokyo Subway Ticket',
-            url: 'https://example.com/order-cross-sell/transportation/tokyo-subway-ticket',
+            url: `https://example.com/order-cross-sell/transportation/tokyo-subway-ticket${orderCrossSellUtmQuery.transportationRecommendation}`,
             arrowIconUrl,
           },
           {
             text: '日本-京成電鐵Skyliner特急券| 東京成田機場往返上野・日暮里',
-            url: 'https://example.com/order-cross-sell/transportation/keisei-skyliner',
+            url: `https://example.com/order-cross-sell/transportation/keisei-skyliner${orderCrossSellUtmQuery.transportationRecommendation}`,
             arrowIconUrl,
           },
         ],
