@@ -47,16 +47,42 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
       <Section className="mb-2.5 w-full p-0">
         <Row>
           <Column className="w-9 pt-2.5 pr-1.25 pb-0 pl-7.5">
-            <Section align="center" className="m-0 w-px" width="1">
+            <Section
+              align="center"
+              className="m-0 w-2.75"
+              style={{ width: '11px' }}
+              width="11"
+            >
               <Row>
-                <Column className="bg-ink h-48.5 w-px text-[0px] leading-none">
+                <Column
+                  className="h-48.5 w-1.25 text-[0px] leading-none"
+                  height="194"
+                  width="5"
+                >
+                  &nbsp;
+                </Column>
+                <Column
+                  className="bg-ink h-48.5 w-px text-[0px] leading-none"
+                  height="194"
+                  width="1"
+                >
+                  &nbsp;
+                </Column>
+                <Column
+                  className="h-48.5 w-1.25 text-[0px] leading-none"
+                  height="194"
+                  width="5"
+                >
                   &nbsp;
                 </Column>
               </Row>
-            </Section>
-            <Section className="m-0 w-full">
               <Row>
-                <Column className="text-ink text-center font-sans text-[10px] leading-2.5">
+                <Column
+                  align="center"
+                  className="text-ink w-2.75 text-center font-sans text-[10px] leading-2.5"
+                  style={{ textAlign: 'center', width: '11px' }}
+                  width="11"
+                >
                   ▼
                 </Column>
               </Row>

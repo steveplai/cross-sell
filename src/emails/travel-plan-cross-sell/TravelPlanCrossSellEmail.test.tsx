@@ -81,7 +81,9 @@ function expectHeaderCellsUseFixedMiddleAlignment(
   deadlineText: string,
 ) {
   const titleCell = Array.from(document.querySelectorAll('td')).find(
-    (cell) => cell.textContent?.trim() === title,
+    (cell) =>
+      cell.textContent?.trim() === title &&
+      cell.getAttribute('height') === '30',
   )
   const deadlineTextSpans = Array.from(
     document.querySelectorAll('span'),
@@ -104,6 +106,37 @@ function expectHeaderCellsUseFixedMiddleAlignment(
   expect(deadlineSpan?.getAttribute('style')).toContain('padding-right:6px')
   expect(deadlineSpan?.getAttribute('style')).toContain('vertical-align:middle')
   expect(deadlineSpan?.getAttribute('style')).toContain('line-height:24px')
+}
+
+function expectFeaturedTimelineRailUsesFixedCentering(document: Document) {
+  const railTable = Array.from(
+    document.querySelectorAll('table[width="11"]'),
+  ).find((table) => table.textContent?.trim() === '▼')
+  const arrowCell = railTable
+    ? Array.from(
+        railTable.querySelectorAll('td[width="11"][align="center"]'),
+      ).find((cell) => cell.textContent?.trim() === '▼')
+    : undefined
+  const lineCell = railTable
+    ? Array.from(railTable.querySelectorAll('td[width="1"]')).find((cell) => {
+        const style = cell.getAttribute('style') ?? ''
+
+        return (
+          style.includes('background-color:rgb(34,34,34)') &&
+          style.includes('height:194px') &&
+          style.includes('width:1px')
+        )
+      })
+    : undefined
+
+  expect(railTable).toBeDefined()
+  expect(railTable?.getAttribute('width')).toBe('11')
+  expect(railTable?.getAttribute('style')).toContain('width:11px')
+  expect(lineCell?.getAttribute('width')).toBe('1')
+  expect(arrowCell?.getAttribute('width')).toBe('11')
+  expect(arrowCell?.getAttribute('align')).toBe('center')
+  expect(arrowCell?.getAttribute('style')).toContain('width:11px')
+  expect(arrowCell?.getAttribute('style')).toContain('text-align:center')
 }
 
 describe('TravelPlanCrossSellEmail', () => {
@@ -162,6 +195,10 @@ describe('TravelPlanCrossSellEmail', () => {
       expectImage(document, assetUrls.transportIconUrl)
       expectLinksAndSpansDoNotUseCssEllipsis(document)
       expectLinksDoNotRenderUnderlineStyles(document)
+
+      if (content.sections.some((section) => section.variant === 'featured')) {
+        expectFeaturedTimelineRailUsesFixedCentering(document)
+      }
 
       if (content.highlights?.length) {
         expectImage(document, assetUrls.checkIconUrl)
