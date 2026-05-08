@@ -83,9 +83,7 @@ function expectRecommendationHoverUsesEmailSafeCss(html: string) {
   expect(html).toContain(
     '.recommendation-link-text-anchor:hover .recommendation-link-text',
   )
-  expect(html).toContain(
-    '.x_recommendation-link-text-anchor:hover .x_recommendation-link-text',
-  )
+  expect(html).not.toContain('x_recommendation-link-text-anchor')
   expect(html).toContain('text-decoration: underline !important')
   expect(html).not.toContain('group-hover_underline')
   expect(html).not.toContain(':where(.group)')

@@ -15,8 +15,7 @@ import { travelPlanCrossSellTailwindConfig } from './tailwind-config'
 import type { TravelPlanCrossSellEmailProps } from './types'
 
 const travelPlanCrossSellHeadStyles = `
-.recommendation-link-text-anchor:hover .recommendation-link-text,
-.x_recommendation-link-text-anchor:hover .x_recommendation-link-text {
+.recommendation-link-text-anchor:hover .recommendation-link-text {
   text-decoration: underline !important;
 }
 `
