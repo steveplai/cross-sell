@@ -104,7 +104,17 @@ describe('FeaturedSection', () => {
     expect(link.getAttribute('style')).toContain('white-space:nowrap')
     expect(link.getAttribute('style')).toContain('display:block')
     expect(textSpan?.getAttribute('class')).toContain('group-hover:underline')
+    expect(textSpan?.getAttribute('class')).toContain('overflow-hidden')
+    expect(textSpan?.getAttribute('class')).toContain('text-ellipsis')
     expect(textSpan?.getAttribute('class')).toContain('whitespace-nowrap')
+    expect(textSpan?.getAttribute('data-testid')).toBe(
+      'recommendation-link-text',
+    )
+    expect(textSpan?.getAttribute('style')).toContain('display:block')
+    expect(textSpan?.getAttribute('style')).toContain('overflow:hidden')
+    expect(textSpan?.getAttribute('style')).toContain('text-overflow:ellipsis')
+    expect(textSpan?.getAttribute('style')).toContain('white-space:nowrap')
+    expect(textSpan?.getAttribute('style')).toContain('width:100%')
     expect(textCell?.getAttribute('height')).toBe('24')
     expect(textCell?.getAttribute('valign')).toBe('middle')
     expect(textCell?.getAttribute('width')).toBe('100%')

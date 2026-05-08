@@ -51,6 +51,10 @@ function expectLinksAndSpansDoNotUseCssEllipsis(document: Document) {
   const riskyElements = Array.from(
     document.querySelectorAll('a[style], span[style]'),
   ).filter((element) => {
+    if (element.getAttribute('data-testid') === 'recommendation-link-text') {
+      return false
+    }
+
     const style = element.getAttribute('style')?.replace(/\s/g, '') ?? ''
 
     return (

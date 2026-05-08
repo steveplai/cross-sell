@@ -149,7 +149,17 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
                               valign="middle"
                               width="100%"
                             >
-                              <span className="whitespace-nowrap group-hover:underline">
+                              <span
+                                className="block overflow-hidden text-ellipsis whitespace-nowrap group-hover:underline"
+                                data-testid="recommendation-link-text"
+                                style={{
+                                  display: 'block',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
+                                  width: '100%',
+                                }}
+                              >
                                 {recommendation.text}
                               </span>
                             </Column>
