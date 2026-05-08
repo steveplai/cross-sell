@@ -13,9 +13,11 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
 
   return (
     <>
-      <Section className="bg-brand-red-soft m-0 w-full rounded-[5px] px-3.75 py-2.5">
+      <Section className="bg-brand-red-soft m-0 w-full table-fixed rounded-[5px] px-3.75 py-2.5">
         <Row
-          className={showHeaderDescriptionAndCta ? 'table-fixed' : undefined}
+          className={
+            showHeaderDescriptionAndCta ? 'w-full table-fixed' : undefined
+          }
         >
           <Column className="w-11.75">
             <IconBadge section={section} />
@@ -27,12 +29,12 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
           </Column>
           {showHeaderDescriptionAndCta ? (
             <>
-              <Column className="w-60.25 pr-3">
+              <Column className="w-74.75">
                 <Text className="m-0 font-sans text-[14px] leading-5.5 whitespace-nowrap text-black">
                   {section.description}
                 </Text>
               </Column>
-              <Column className="w-42.5 text-right">
+              <Column className="w-28 text-right">
                 <CtaButton
                   href={section.ctaUrl}
                   label={section.ctaLabel}
@@ -44,7 +46,7 @@ export function FeaturedSection({ section }: FeaturedSectionProps) {
         </Row>
       </Section>
 
-      <Section className="mb-2.5 w-full p-0">
+      <Section className="mb-2.5 w-full table-fixed p-0">
         <Row>
           <Column className="w-9 pt-2.5 pr-1.25 pb-0 pl-7.5">
             <Section

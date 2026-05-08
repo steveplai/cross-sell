@@ -14,12 +14,12 @@ export function CompactSection({
   emphasis = false,
 }: CompactSectionProps) {
   const cardClassName = emphasis
-    ? 'bg-brand-red-soft mb-[10px] w-full rounded-[5px] px-[15px] py-[10px]'
-    : 'bg-nature mb-[10px] w-full rounded-[5px] px-[15px] py-[10px]'
+    ? 'bg-brand-red-soft mb-[10px] w-full table-fixed rounded-[5px] px-[15px] py-[10px]'
+    : 'bg-nature mb-[10px] w-full table-fixed rounded-[5px] px-[15px] py-[10px]'
 
   return (
     <Section className={cardClassName}>
-      <Row className="table-fixed">
+      <Row className="w-full table-fixed">
         <Column className="w-11.75">
           <IconBadge section={section} />
         </Column>

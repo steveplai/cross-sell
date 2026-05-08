@@ -1,9 +1,11 @@
 import {
   Body,
+  Column,
   Container,
   Head,
   Html,
   Preview,
+  Row,
   Section,
   Tailwind,
 } from '@react-email/components'
@@ -40,13 +42,19 @@ export function TravelPlanCrossSellContent({
   sections,
 }: TravelPlanCrossSellContentProps) {
   return (
-    <Container className="text-ink mx-auto w-150 max-w-150 rounded-[5px] bg-white p-5 font-sans">
-      <Header title={title} deadlineText={deadlineText} />
-      {highlights.length ? <Highlights highlights={highlights} /> : null}
-      <Section className="m-0">
-        {sections.map((section) => (
-          <CrossSellSection key={section.id} section={section} />
-        ))}
+    <Container className="text-ink mx-auto w-150 max-w-150 table-fixed rounded-[5px] bg-white font-sans">
+      <Section className="m-0 w-full table-fixed">
+        <Row className="w-full table-fixed">
+          <Column className="p-5">
+            <Header title={title} deadlineText={deadlineText} />
+            {highlights.length ? <Highlights highlights={highlights} /> : null}
+            <Section className="m-0 w-full table-fixed">
+              {sections.map((section) => (
+                <CrossSellSection key={section.id} section={section} />
+              ))}
+            </Section>
+          </Column>
+        </Row>
       </Section>
     </Container>
   )
