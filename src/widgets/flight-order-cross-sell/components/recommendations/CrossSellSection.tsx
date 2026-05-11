@@ -304,7 +304,14 @@ export function CrossSellSection({
         className,
       )}
     >
-      <header className="mb-5 flex items-start justify-between gap-4 lion-desktop:mb-6">
+      <header
+        className={cn(
+          'mb-5 flex items-start justify-between gap-4 lion-desktop:mb-6',
+          {
+            'mb-2': hideTitle,
+          },
+        )}
+      >
         <div className="min-w-0">
           {hideTitle ? null : (
             <h2 className="text-base leading-6 font-bold text-foreground lion-desktop:text-xl">
@@ -314,7 +321,7 @@ export function CrossSellSection({
           {section.subtitle ? (
             <p
               className={cn(
-                'text-xs text-(--lion-gray-700)',
+                'text-sm text-(--lion-gray-700)',
                 hideTitle ? 'mt-0' : 'mt-3',
               )}
             >
@@ -361,7 +368,7 @@ export function CrossSellSection({
               <Button
                 asChild
                 className={cn(
-                  'h-5.75 shrink-0 rounded-[4px] bg-(--lion-gray-100) px-2 py-0.5',
+                  'h-5.75 shrink-0 rounded-[20px] bg-(--lion-gray-100) px-2 py-0.5',
                   'text-xs leading-4.75 font-normal text-(--lion-gray-800) shadow-none',
                   'hover:bg-(--lion-gray-100) hover:text-primary',
                 )}

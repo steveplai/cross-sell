@@ -42,13 +42,13 @@
 
   --breakpoint-lion-desktop: 61.25rem;
 
-  --radius-sm: calc(var(--radius, 0.3rem) * 0.5);
-  --radius-md: calc(var(--radius, 0.3rem) * 0.75);
-  --radius-lg: var(--radius, 0.3rem);
-  --radius-xl: calc(var(--radius, 0.3rem) * 1.5);
-  --radius-2xl: calc(var(--radius, 0.3rem) * 2);
-  --radius-3xl: calc(var(--radius, 0.3rem) * 2.5);
-  --radius-4xl: calc(var(--radius, 0.3rem) * 3);
+  --radius-sm: calc(var(--radius, 0.25rem) * 0.5);
+  --radius-md: calc(var(--radius, 0.25rem) * 0.75);
+  --radius-lg: var(--radius, 0.25rem);
+  --radius-xl: calc(var(--radius, 0.25rem) * 1.5);
+  --radius-2xl: calc(var(--radius, 0.25rem) * 2);
+  --radius-3xl: calc(var(--radius, 0.25rem) * 2.5);
+  --radius-4xl: calc(var(--radius, 0.25rem) * 3);
 
   --text-11px: calc(0.6875rem * var(--text-scale, 1));
   --text-2xs: calc(0.625rem * var(--text-scale, 1));
@@ -119,22 +119,31 @@
 }
 
 /* Web Component host defaults. Mount API roots use [data-csc-widget] instead. */
-:host {
-  display: block;
-  font-family: inherit;
-}
-
+:host,
 [data-csc-widget] {
   display: block;
   font-family: inherit;
+
+  --radius: 0.25rem;
+  --text-scale: 1;
+  --border-scale: 1;
+  --text-11px: calc(0.6875rem * var(--text-scale));
+  --text-2xs: calc(0.625rem * var(--text-scale));
+  --text-xs: calc(0.75rem * var(--text-scale));
+  --text-md: calc(0.8125rem * var(--text-scale));
+  --text-sm: calc(0.875rem * var(--text-scale));
+  --text-base: calc(1rem * var(--text-scale));
+  --text-lg: calc(1.125rem * var(--text-scale));
+  --text-xl: calc(1.25rem * var(--text-scale));
+  --text-2xl: calc(1.5rem * var(--text-scale));
+  --text-3xl: calc(1.875rem * var(--text-scale));
+  --text-4xl: calc(2.25rem * var(--text-scale));
 }
 
 /* Shared light theme tokens for both Web Component (:host) and Mount API roots. */
 :host,
 [data-csc-widget] {
   color-scheme: light;
-
-  --radius: 0.3rem;
 
   --background: #ffffff;
   --foreground: #222222;
@@ -177,20 +186,6 @@
   --chart-3: oklch(0.6273 0.2193 23.57);
   --chart-4: oklch(0.553 0.195 38.402);
   --chart-5: oklch(0.47 0.157 37.304);
-
-  --text-scale: 1;
-  --border-scale: 1;
-  --text-11px: calc(0.6875rem * var(--text-scale));
-  --text-2xs: calc(0.625rem * var(--text-scale));
-  --text-xs: calc(0.75rem * var(--text-scale));
-  --text-md: calc(0.8125rem * var(--text-scale));
-  --text-sm: calc(0.875rem * var(--text-scale));
-  --text-base: calc(1rem * var(--text-scale));
-  --text-lg: calc(1.125rem * var(--text-scale));
-  --text-xl: calc(1.25rem * var(--text-scale));
-  --text-2xl: calc(1.5rem * var(--text-scale));
-  --text-3xl: calc(1.875rem * var(--text-scale));
-  --text-4xl: calc(2.25rem * var(--text-scale));
 
   --sidebar: oklch(0.985 0.001 106.423);
   --sidebar-foreground: oklch(0.147 0.004 49.25);

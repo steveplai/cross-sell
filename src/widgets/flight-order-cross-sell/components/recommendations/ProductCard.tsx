@@ -106,7 +106,7 @@ export function ProductCard({
 
           <CardContent className="flex min-h-44.25 flex-1 flex-col gap-2.5 p-2">
             <div className="flex flex-1 flex-col gap-1">
-              <h3 className="line-clamp-2 min-h-8.5 text-xs leading-5.5 font-bold text-card-foreground">
+              <h3 className="line-clamp-2 max-h-10.75 text-sm leading-5.5 font-bold text-card-foreground">
                 {item.title}
               </h3>
 
