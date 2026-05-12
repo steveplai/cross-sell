@@ -25,6 +25,8 @@ dist/
     themed-demo-product-banner.mount.js
     flight-order-cross-sell.wc.js
     flight-order-cross-sell.mount.js
+    flight-order-cross-sell-connected.wc.js
+    flight-order-cross-sell-connected.mount.js
   emails/
     demo-product-offer.html
     order-cross-sell.html
@@ -47,6 +49,7 @@ dist/
 - Tailwind CSS + shadcn/ui tokens for widget styling
 - Web Components + Shadow DOM for cross-framework embedding
 - Mount API for JavaScript-driven embedding
+- TanStack Query for connected widget server state
 - React Email for static email HTML generation
 - Storybook for component and email previews
 - Vitest + Testing Library for unit and contract tests
@@ -58,6 +61,7 @@ dist/
 ```txt
 src/widgets/    Pure React widget components
 src/components/ Shared React UI primitives
+src/domains/    Domain API wrappers for connected widgets
 src/runtime/    Shared Web Component and Mount API runtime helpers
 src/entries/    Public widget entrypoints and external contracts
 src/emails/     React Email templates, components, and content data
@@ -177,6 +181,60 @@ Public contract:
 The `data.promo.startsAt` ISO timestamp and `data.promo.durationSeconds`
 determine whether the widget renders the active discount state or the expired
 travel-inspiration state.
+
+### `flight-order-cross-sell-connected`
+
+API-loading version of `flight-order-cross-sell`. It accepts an `orderNumber`,
+loads `{ data: FlightOrderCrossSellData }` from the flight order cross-sell API,
+then renders the same pure React widget used by the static version.
+
+Public contract:
+
+- Web Component tag: `flight-order-cross-sell-connected`
+- Mount API global: `window.FlightOrderCrossSellConnected`
+- Attributes: `order-number`, `domain-mode`, `base-url`, `error-mode`, `data`
+- `domain-mode` values: `uat`, `production`
+- `error-mode` values: `hidden`, `message`
+- Events:
+  - `flight-order-cross-sell:item-select`, detail `{ sectionId, item }`
+  - `flight-order-cross-sell:view-more`, detail `{ sectionId }`
+  - `flight-order-cross-sell:addon-select`, detail `{ addonId }`
+
+Default API origins:
+
+- `production`: `https://www.liontravel.com`
+- `uat`: `https://uwww.liontravel.com`
+
+The current endpoint path is centralized in the domain API as
+`/api/flight-orders/{orderNumber}/cross-sell`. The optional `data` attribute or
+prop bypasses API loading and is intended for demos, tests, and CMS previews.
+
+Connected Web Component usage:
+
+```html
+<flight-order-cross-sell-connected
+  order-number="202605120001"
+  domain-mode="uat"
+  error-mode="hidden"
+></flight-order-cross-sell-connected>
+
+<script src="./dist/widgets/flight-order-cross-sell-connected.wc.js"></script>
+```
+
+Connected Mount API usage:
+
+```html
+<div id="flight-cross-sell-root"></div>
+
+<script src="./dist/widgets/flight-order-cross-sell-connected.mount.js"></script>
+<script>
+  window.FlightOrderCrossSellConnected.mount('#flight-cross-sell-root', {
+    orderNumber: '202605120001',
+    domainMode: 'uat',
+    errorMode: 'message',
+  })
+</script>
+```
 
 ## Web Component Usage
 

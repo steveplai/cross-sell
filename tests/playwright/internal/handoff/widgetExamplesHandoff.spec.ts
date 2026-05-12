@@ -97,6 +97,16 @@ const webComponentExamples: WebComponentExample[] = [
       },
     ],
   },
+  {
+    name: 'flight order cross sell connected web component basic',
+    path: '/examples/web-component/flight-order-cross-sell-connected.basic.html',
+    widgets: [
+      {
+        selector: 'flight-order-cross-sell-connected',
+        text: '探索東京飯店',
+      },
+    ],
+  },
 ] as const
 
 const mountApiExamples: MountApiExample[] = [
@@ -134,6 +144,12 @@ const mountApiExamples: MountApiExample[] = [
     name: 'flight order cross sell mount API basic',
     path: '/examples/mount-api/flight-order-cross-sell.basic.html',
     rootSelector: '#flight-order-cross-sell-root',
+    text: '探索東京飯店',
+  },
+  {
+    name: 'flight order cross sell connected mount API basic',
+    path: '/examples/mount-api/flight-order-cross-sell-connected.basic.html',
+    rootSelector: '#flight-order-cross-sell-connected-root',
     text: '探索東京飯店',
   },
 ] as const
@@ -392,6 +408,37 @@ test('flight order web component handoff exposes HSR addon link and event', asyn
 
   await expect(page.getByTestId('flight-cross-sell-event-log')).toContainText(
     'flight-order-cross-sell:addon-select: hsr',
+  )
+})
+
+test('flight order connected web component handoff emits item event', async ({
+  page,
+}) => {
+  await gotoHandoffExample(
+    page,
+    '/examples/web-component/flight-order-cross-sell-connected.basic.html',
+  )
+
+  await expect
+    .poll(() =>
+      getWebComponentWidgetText(page, 'flight-order-cross-sell-connected'),
+    )
+    .toContain('探索東京飯店')
+
+  await page
+    .locator('flight-order-cross-sell-connected')
+    .evaluate((element) => {
+      const buttons = element.shadowRoot?.querySelectorAll('button') ?? []
+      const button = Array.from(buttons).find((candidate) =>
+        candidate.textContent?.includes('LA VISTA 東京灣'),
+      )
+      ;(button as HTMLButtonElement | null)?.click()
+    })
+
+  await expect(
+    page.getByTestId('flight-cross-sell-connected-event-log'),
+  ).toContainText(
+    'flight-order-cross-sell:item-select: tokyo-hotels/la-vista-tokyo-bay',
   )
 })
 

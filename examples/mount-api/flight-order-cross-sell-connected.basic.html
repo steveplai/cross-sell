@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flight Order Cross Sell Connected Mount API</title>
+    <style>
+      body {
+        margin: 0;
+        background: #fff8f4;
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          sans-serif;
+      }
+
+      .event-log {
+        margin: 16px auto;
+        max-width: 1190px;
+        border: 1px solid #ececec;
+        background: white;
+        padding: 12px;
+        color: #444;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="flight-order-cross-sell-connected-root"></div>
+    <div class="event-log" data-testid="flight-cross-sell-connected-mount-log">
+      No events yet
+    </div>
+
+    <script src="../../dist/widgets/flight-order-cross-sell-connected.mount.js"></script>
+    <script>
+      const startsAt = new Date(Date.now() - 10 * 60 * 1000).toISOString()
+      const data = {
+        locale: 'zh-TW',
+        currency: 'TWD',
+        domainMode: 'uat',
+        order: {
+          orderYear: '2026',
+          orderNumber: '16575',
+        },
+        promo: {
+          id: 'limited-offer',
+          activeTitle: '您已解鎖限時優惠！',
+          expiredTitle: '發現更多旅遊靈感！',
+          startsAt,
+          durationSeconds: 40 * 60 * 60,
+          serviceLabel: '航班周邊服務',
+        },
+        hsrAddon: {
+          id: 'hsr',
+          title: '加購高鐵 行程更順暢',
+          description: '購買國內外行程，最高享 8 折優惠',
+          ctaLabel: '前往加購',
+        },
+        sections: [
+          {
+            id: 'tokyo-hotels',
+            kind: 'hotel',
+            title: '探索東京飯店',
+            viewMoreLabel: '探索更多',
+            items: [
+              {
+                id: 'la-vista-tokyo-bay',
+                title: 'LA VISTA 東京灣',
+                location: '江東區',
+                starRating: 5,
+                rating: '4.5',
+                ratingLabel: '太讚了',
+                reviewCount: 1132,
+                cancellationLabel: '免費取消',
+                price: 1224152,
+                priceSuffix: '起',
+              },
+            ],
+          },
+        ],
+      }
+      const log = document.querySelector(
+        '[data-testid="flight-cross-sell-connected-mount-log"]',
+      )
+
+      window.FlightOrderCrossSellConnected.mount(
+        '#flight-order-cross-sell-connected-root',
+        {
+          data,
+          domainMode: 'uat',
+          errorMode: 'message',
+          orderNumber: '16575',
+          onSelectItem(event) {
+            log.textContent = `item-select: ${event.sectionId}/${event.item.id}`
+          },
+          onSelectAddon(event) {
+            log.textContent = `addon-select: ${event.addonId}`
+          },
+        },
+      )
+    </script>
+  </body>
+</html>

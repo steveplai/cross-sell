@@ -1,4 +1,9 @@
 export { FlightOrderCrossSell } from './FlightOrderCrossSell'
+export type {
+  FlightOrderCrossSellConnectedErrorMode,
+  FlightOrderCrossSellConnectedProps,
+} from './FlightOrderCrossSellConnected'
+export { FlightOrderCrossSellConnected } from './FlightOrderCrossSellConnected'
 export { getRemainingPromoSeconds } from './lib/countdown'
 export { flightOrderCrossSellSampleData } from './sampleData'
 export type {
