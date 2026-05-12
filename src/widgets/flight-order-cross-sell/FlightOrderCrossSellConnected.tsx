@@ -3,7 +3,7 @@ import {
   QueryClientProvider,
   useQuery,
 } from '@tanstack/react-query'
-import { useMemo, useState } from 'react'
+import { type ReactNode, useMemo, useState } from 'react'
 
 import {
   createFlightOrderCrossSellApi,
@@ -124,42 +124,45 @@ function FlightOrderCrossSellConnectedContent({
   return null
 }
 
-function ConnectedLoadingState() {
+function ConnectedStateShell({ children }: { children: ReactNode }) {
   return (
     <section
-      className="w-full bg-(--lion-gray-100) text-foreground"
+      className={cn(
+        'flex w-full items-center justify-center bg-(--lion-gray-100) px-4 py-6 text-foreground',
+        'lion-desktop:bg-linear-to-b lion-desktop:from-(--lion-page-gradient-from) lion-desktop:to-(--lion-page-gradient-to)',
+      )}
       {...connectedWidgetRootProps}
     >
-      <div className="mx-auto flex w-full max-w-297.5 flex-col gap-2.5 py-0">
-        <div className="bg-background p-4 lion-desktop:rounded-(--lion-panel-radius) lion-desktop:p-6">
-          <div className="h-5 w-42 animate-pulse rounded bg-(--lion-gray-100)" />
-          <div className="mt-4 grid gap-3 lion-desktop:grid-cols-3">
-            {[0, 1, 2].map((item) => (
-              <div
-                className="h-24 animate-pulse rounded-lg bg-(--lion-gray-100)"
-                key={item}
-              />
-            ))}
-          </div>
+      <div className="mx-auto w-full max-w-297.5">{children}</div>
+    </section>
+  )
+}
+
+function ConnectedLoadingState() {
+  return (
+    <ConnectedStateShell>
+      <div className="rounded-(--lion-panel-radius) border border-border bg-background p-4 shadow-sm lion-desktop:p-6">
+        <div className="h-5 w-42 animate-pulse rounded bg-(--lion-gray-100)" />
+        <div className="mt-4 grid gap-3 lion-desktop:grid-cols-3">
+          {[0, 1, 2].map((item) => (
+            <div
+              className="h-24 animate-pulse rounded-lg bg-(--lion-gray-100)"
+              key={item}
+            />
+          ))}
         </div>
       </div>
-    </section>
+    </ConnectedStateShell>
   )
 }
 
 function ConnectedStateMessage({ message }: { message: string }) {
   return (
-    <section
-      className={cn(
-        'w-full bg-(--lion-gray-100) p-4 text-foreground',
-        'lion-desktop:bg-linear-to-b lion-desktop:from-(--lion-page-gradient-from) lion-desktop:to-(--lion-page-gradient-to)',
-      )}
-      {...connectedWidgetRootProps}
-    >
-      <div className="mx-auto w-full max-w-297.5 bg-background p-4 text-sm text-muted-foreground lion-desktop:rounded-(--lion-panel-radius)">
+    <ConnectedStateShell>
+      <div className="rounded-(--lion-panel-radius) border border-border bg-background p-4 text-center text-sm text-muted-foreground shadow-sm">
         {message}
       </div>
-    </section>
+    </ConnectedStateShell>
   )
 }
 

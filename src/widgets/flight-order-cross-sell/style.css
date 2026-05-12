@@ -1,4 +1,5 @@
-[data-csc-widget][data-csc-widget-name='flight-order-cross-sell'] {
+[data-csc-widget][data-csc-widget-name='flight-order-cross-sell'],
+[data-csc-widget][data-csc-widget-name='flight-order-cross-sell-connected'] {
   font-family:
     'Noto Sans TC',
     system-ui,
@@ -50,7 +51,11 @@
 }
 
 .dark [data-csc-widget][data-csc-widget-name='flight-order-cross-sell'],
-:host(.dark) [data-csc-widget][data-csc-widget-name='flight-order-cross-sell'] {
+.dark
+  [data-csc-widget][data-csc-widget-name='flight-order-cross-sell-connected'],
+:host(.dark) [data-csc-widget][data-csc-widget-name='flight-order-cross-sell'],
+:host(.dark)
+  [data-csc-widget][data-csc-widget-name='flight-order-cross-sell-connected'] {
   color-scheme: dark;
 
   --lion-page-gradient-from: #241813;
