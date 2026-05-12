@@ -63,6 +63,7 @@ createReactWebComponent<FlightOrderCrossSellConnectedProps>({
     'domain-mode',
     'error-mode',
     'order-number',
+    'recommend-product-types',
   ],
   styles,
   mapElementToProps: (element) => {
@@ -74,6 +75,10 @@ createReactWebComponent<FlightOrderCrossSellConnectedProps>({
       domainMode: isLiontravelDomainMode(domainMode) ? domainMode : undefined,
       errorMode: parseErrorMode(getOptionalAttribute(element, 'error-mode')),
       orderNumber: getOptionalAttribute(element, 'order-number'),
+      recommendProductTypes: getOptionalAttribute(
+        element,
+        'recommend-product-types',
+      ),
       onSelectItem: (detail) => {
         element.dispatchEvent(
           new CustomEvent('flight-order-cross-sell:item-select', {

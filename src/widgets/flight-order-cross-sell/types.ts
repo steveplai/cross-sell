@@ -21,6 +21,7 @@ export interface FlightOrderCrossSellPromo {
 export interface FlightOrderCrossSellItem {
   id: string
   title: string
+  href?: string
   imageUrl?: string
   location?: string
   detailLocation?: string
@@ -57,6 +58,7 @@ export interface FlightOrderCrossSellSection {
   title: string
   subtitle?: string
   viewMoreLabel?: string
+  viewMoreHref?: string
   categories?: FlightOrderCrossSellCategory[]
   items: FlightOrderCrossSellItem[]
 }

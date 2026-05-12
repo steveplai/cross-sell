@@ -22,9 +22,47 @@ function createMockRequestClient(handler: MockRequestHandler): RequestClient {
   }
 }
 
-const successRequestClient = createMockRequestClient(async () => ({
-  data: flightOrderCrossSellSampleData,
-}))
+const ap56CrossSellingStoryResponse = [
+  {
+    Type: '訂房',
+    CombineTagList: ['東京 旅遊', '東京 鐵塔'],
+    pList: [
+      {
+        ID: 'JP-TYO-001',
+        Title: '東京灣精選飯店',
+        ProductUrl: 'https://uhotel.liontravel.com/detail/JP-TYO-001',
+        Price: 5830,
+        ImgUrl: 'https://picsum.photos/seed/liontravel-city-hotel/640/426',
+        SaleCurr: 'TWD',
+        CityName: ['東京'],
+        SalePrice: 6200,
+        Discount: 5,
+        Location: {
+          Name: '東京車站',
+          Distance: 0.5,
+          Unit: '公里',
+        },
+        Level: 5,
+        Rating: 4.5,
+        RatingCount: 156,
+        Likeability: 95,
+        CancelTag: '免費取消',
+      },
+    ],
+  },
+  {
+    Type: '訂房-看更多(搜尋頁)',
+    pList: [
+      {
+        url: 'https://uhotel.liontravel.com/search?SearchKeyword=%E6%9D%B1%E4%BA%AC',
+      },
+    ],
+  },
+]
+
+const successRequestClient = createMockRequestClient(
+  async () => ap56CrossSellingStoryResponse,
+)
 
 const errorRequestClient = createMockRequestClient(async () => {
   throw new Error('Failed to load flight order cross-sell data.')
@@ -41,7 +79,7 @@ const meta = {
   args: {
     domainMode: 'uat',
     errorMode: 'message',
-    orderNumber: '16575',
+    orderNumber: '2026-16575',
   },
   argTypes: {
     domainMode: {

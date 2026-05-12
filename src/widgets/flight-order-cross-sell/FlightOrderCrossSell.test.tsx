@@ -608,6 +608,51 @@ describe('FlightOrderCrossSell', () => {
     expect(onSelectAddon).toHaveBeenCalledWith({ addonId: 'hsr' })
   })
 
+  it('renders linked API products and still calls the select callback', async () => {
+    const user = userEvent.setup()
+    const onSelectItem = vi.fn()
+    const data = cloneSampleData()
+    data.sections[0].items[0] = {
+      ...data.sections[0].items[0],
+      href: 'https://uhotel.liontravel.com/detail/JPTYO001',
+    }
+
+    render(<FlightOrderCrossSell data={data} onSelectItem={onSelectItem} />)
+
+    const productLink = screen.getByRole('link', { name: /LA VISTA 東京灣/ })
+
+    expect(productLink).toHaveAttribute(
+      'href',
+      'https://uhotel.liontravel.com/detail/JPTYO001',
+    )
+    expect(productLink).toHaveAttribute('target', '_blank')
+    expect(productLink).toHaveAttribute('rel', 'noopener noreferrer')
+
+    await user.click(productLink)
+
+    expect(onSelectItem).toHaveBeenCalledWith(
+      expect.objectContaining({
+        sectionId: 'tokyo-hotels',
+        item: expect.objectContaining({ id: 'la-vista-tokyo-bay' }),
+      }),
+    )
+  })
+
+  it('uses the section view-more href when provided', () => {
+    const data = cloneSampleData()
+    data.sections[0].viewMoreHref =
+      'https://uhotel.liontravel.com/search?SearchKeyword=%E6%9D%B1%E4%BA%AC'
+
+    render(<FlightOrderCrossSell data={data} />)
+
+    expect(
+      screen.getAllByRole('link', { name: /探索更多/ })[0],
+    ).toHaveAttribute(
+      'href',
+      'https://uhotel.liontravel.com/search?SearchKeyword=%E6%9D%B1%E4%BA%AC',
+    )
+  })
+
   it('falls back to legacy section id and title classification without section kind', () => {
     const legacySections = cloneSampleData().sections.map((section) => ({
       ...section,

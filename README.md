@@ -185,16 +185,18 @@ travel-inspiration state.
 ### `flight-order-cross-sell-connected`
 
 API-loading version of `flight-order-cross-sell`. It accepts an `orderNumber`,
-loads `{ data: FlightOrderCrossSellData }` from the flight order cross-sell API,
-then renders the same pure React widget used by the static version.
+loads AP-56 carousel section data from the flight order cross-sell API, merges
+those sections into the static widget content, then renders the same pure React
+widget used by the static version.
 
 Public contract:
 
 - Web Component tag: `flight-order-cross-sell-connected`
 - Mount API global: `window.FlightOrderCrossSellConnected`
-- Attributes: `order-number`, `domain-mode`, `base-url`, `error-mode`, `data`
+- Attributes: `order-number`, `recommend-product-types`, `domain-mode`, `base-url`, `error-mode`, `data`
 - `domain-mode` values: `uat`, `production`
 - `error-mode` values: `hidden`, `message`
+- `recommend-product-types` default: `htl,etk`
 - Events:
   - `flight-order-cross-sell:item-select`, detail `{ sectionId, item }`
   - `flight-order-cross-sell:view-more`, detail `{ sectionId }`
@@ -206,14 +208,15 @@ Default API origins:
 - `uat`: `https://uwww.liontravel.com`
 
 The current endpoint path is centralized in the domain API as
-`/api/flight-orders/{orderNumber}/cross-sell`. The optional `data` attribute or
-prop bypasses API loading and is intended for demos, tests, and CMS previews.
+`/category/_fringe/CrossSelling?OrderNo={orderNumber}&RecommendProductType={recommendProductTypes}`.
+The optional `data` attribute or prop bypasses API loading and is intended for
+demos, tests, and CMS previews.
 
 Connected Web Component usage:
 
 ```html
 <flight-order-cross-sell-connected
-  order-number="202605120001"
+  order-number="2026-123456"
   domain-mode="uat"
   error-mode="hidden"
 ></flight-order-cross-sell-connected>
@@ -229,7 +232,8 @@ Connected Mount API usage:
 <script src="./dist/widgets/flight-order-cross-sell-connected.mount.js"></script>
 <script>
   window.FlightOrderCrossSellConnected.mount('#flight-cross-sell-root', {
-    orderNumber: '202605120001',
+    orderNumber: '2026-123456',
+    recommendProductTypes: 'htl,etk',
     domainMode: 'uat',
     errorMode: 'message',
   })

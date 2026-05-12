@@ -8,6 +8,7 @@ import { type ReactNode, useMemo, useState } from 'react'
 import {
   createFlightOrderCrossSellApi,
   type FlightOrderCrossSellApiOptions,
+  type FlightOrderCrossSellRecommendProductTypes,
 } from '@/domains/flight-order-cross-sell'
 import { cn } from '@/lib/utils'
 import type { RequestClient } from '@/shared/request'
@@ -15,9 +16,12 @@ import type { LiontravelDomainMode } from '@/shared/utils/liontravelUrl'
 
 import { createWidgetRootProps } from '../../runtime/widgetRoot'
 import { FlightOrderCrossSell } from './FlightOrderCrossSell'
+import { flightOrderCrossSellSampleData } from './sampleData'
 import type {
   FlightOrderCrossSellData,
   FlightOrderCrossSellProps,
+  FlightOrderCrossSellSection,
+  FlightOrderCrossSellSectionKind,
 } from './types'
 
 export type FlightOrderCrossSellConnectedErrorMode = 'hidden' | 'message'
@@ -31,6 +35,7 @@ export interface FlightOrderCrossSellConnectedProps {
   onSelectItem?: FlightOrderCrossSellProps['onSelectItem']
   onViewMore?: FlightOrderCrossSellProps['onViewMore']
   orderNumber?: string
+  recommendProductTypes?: FlightOrderCrossSellRecommendProductTypes
   requestClient?: RequestClient
 }
 
@@ -39,6 +44,11 @@ export interface FlightOrderCrossSellConnectedProps {
 const connectedWidgetRootProps = createWidgetRootProps(
   'flight-order-cross-sell-connected',
 )
+const apiBackedSectionKinds = new Set<FlightOrderCrossSellSectionKind>([
+  'hotel',
+  'attraction',
+  'transport',
+])
 
 function createConnectedQueryClient() {
   return new QueryClient({
@@ -49,6 +59,42 @@ function createConnectedQueryClient() {
       },
     },
   })
+}
+
+function createStaticBaseDataWithApiSections(
+  apiSections: FlightOrderCrossSellSection[],
+): FlightOrderCrossSellData {
+  const baseData = JSON.parse(
+    JSON.stringify(flightOrderCrossSellSampleData),
+  ) as FlightOrderCrossSellData
+  const apiSectionsByKind = new Map<
+    FlightOrderCrossSellSectionKind,
+    FlightOrderCrossSellSection
+  >()
+
+  apiSections.forEach((section) => {
+    if (section.kind) {
+      apiSectionsByKind.set(section.kind, section)
+    }
+  })
+
+  return {
+    ...baseData,
+    sections: baseData.sections.map((section) => {
+      if (!section.kind || !apiBackedSectionKinds.has(section.kind)) {
+        return section
+      }
+
+      const apiSection = apiSectionsByKind.get(section.kind)
+
+      return {
+        ...section,
+        categories: apiSection?.categories,
+        items: apiSection?.items ?? [],
+        viewMoreHref: apiSection?.viewMoreHref,
+      }
+    }),
+  }
 }
 
 //#endregion - Functions
@@ -64,15 +110,17 @@ function FlightOrderCrossSellConnectedContent({
   onSelectItem,
   onViewMore,
   orderNumber,
+  recommendProductTypes,
   requestClient,
 }: FlightOrderCrossSellConnectedProps) {
   const apiOptions = useMemo<FlightOrderCrossSellApiOptions>(
     () => ({
       baseUrl,
       domainMode,
+      recommendProductTypes,
       requestClient,
     }),
-    [baseUrl, domainMode, requestClient],
+    [baseUrl, domainMode, recommendProductTypes, requestClient],
   )
   const api = useMemo(
     () => createFlightOrderCrossSellApi(apiOptions),
@@ -89,10 +137,13 @@ function FlightOrderCrossSellConnectedContent({
       orderNumber,
       domainMode,
       baseUrl,
+      recommendProductTypes,
       requestClient ? 'custom-client' : 'default-client',
     ],
   })
-  const resolvedData = data ?? query.data
+  const resolvedData =
+    data ??
+    (query.data ? createStaticBaseDataWithApiSections(query.data) : undefined)
 
   if (resolvedData) {
     return (

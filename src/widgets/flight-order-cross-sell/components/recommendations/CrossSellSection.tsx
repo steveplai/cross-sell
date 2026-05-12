@@ -296,6 +296,7 @@ export function CrossSellSection({
 
   const placeholderLabel = getPlaceholderLabel(section)
   const canDragCategories = categoryOverflow.start || categoryOverflow.end
+  const viewMoreHref = section.viewMoreHref ?? viewMoreDestinationUrl
 
   return (
     <section
@@ -335,7 +336,7 @@ export function CrossSellSection({
           variant="ghost"
         >
           <a
-            href={viewMoreDestinationUrl}
+            href={viewMoreHref}
             onClick={handleViewMore}
             rel="noopener noreferrer"
             target="_blank"
@@ -447,7 +448,7 @@ export function CrossSellSection({
               style={{ flexBasis: placeholderBasis }}
             >
               <ViewMorePlaceholder
-                href={viewMoreDestinationUrl}
+                href={viewMoreHref}
                 label={placeholderLabel}
                 onViewMore={handleViewMore}
               />

@@ -32,6 +32,44 @@ function createMockRequestClient(get: MockRequestClientRequest): RequestClient {
   }
 }
 
+const ap56CrossSellingResponse = [
+  {
+    Type: '訂房',
+    CombineTagList: ['東京 旅遊', '東京 鐵塔'],
+    pList: [
+      {
+        ID: 'JPTYO001',
+        Title: '東京灣精選飯店',
+        ProductUrl: 'https://uhotel.liontravel.com/detail/JPTYO001',
+        Price: 5830,
+        ImgUrl: 'https://static.liontech.com.tw/hotel.jpg',
+        SaleCurr: 'TWD',
+        CityName: ['東京'],
+        SalePrice: 6200,
+        Discount: 5,
+        Location: {
+          Name: '東京車站',
+          Distance: 0.5,
+          Unit: '公里',
+        },
+        Level: 5,
+        Rating: 4.5,
+        RatingCount: 156,
+        Likeability: 95,
+        CancelTag: '免費取消',
+      },
+    ],
+  },
+  {
+    Type: '訂房-看更多(搜尋頁)',
+    pList: [
+      {
+        url: 'https://uhotel.liontravel.com/search?SearchKeyword=%E6%9D%B1%E4%BA%AC',
+      },
+    ],
+  },
+]
+
 describe('FlightOrderCrossSellConnected', () => {
   afterEach(() => {
     cleanup()
@@ -56,15 +94,15 @@ describe('FlightOrderCrossSellConnected', () => {
     expect(get).not.toHaveBeenCalled()
   })
 
-  it('loads API data by order number and unwraps the response data', async () => {
-    const get = vi.fn<MockRequestClientRequest>().mockResolvedValue({
-      data: cloneSampleData(),
-    })
+  it('loads AP-56 carousel data by order number and keeps static content', async () => {
+    const get = vi
+      .fn<MockRequestClientRequest>()
+      .mockResolvedValue(ap56CrossSellingResponse)
     const requestClient = createMockRequestClient(get)
 
     render(
       <FlightOrderCrossSellConnected
-        orderNumber="202605120001"
+        orderNumber="2026-123456"
         requestClient={requestClient}
       />,
     )
@@ -72,12 +110,42 @@ describe('FlightOrderCrossSellConnected', () => {
     expect(
       await screen.findByRole('heading', { name: '探索東京飯店' }),
     ).toBeInTheDocument()
+    expect(screen.getByText('您已解鎖限時優惠！')).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: /東京灣精選飯店/ }),
+    ).toHaveAttribute('href', 'https://uhotel.liontravel.com/detail/JPTYO001')
+    expect(screen.getByRole('link', { name: /東京 旅遊/ })).toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: /LA VISTA 東京灣/ }),
+    ).not.toBeInTheDocument()
     expect(get).toHaveBeenCalledWith(
-      '/api/flight-orders/202605120001/cross-sell',
+      '/category/_fringe/CrossSelling?OrderNo=2026-123456&RecommendProductType=htl%2Cetk',
       {
         signal: expect.any(AbortSignal),
       },
     )
+  })
+
+  it('passes custom recommend product types to the API', async () => {
+    const get = vi.fn<MockRequestClientRequest>().mockResolvedValue([])
+    const requestClient = createMockRequestClient(get)
+
+    render(
+      <FlightOrderCrossSellConnected
+        orderNumber="2026-123456"
+        recommendProductTypes={['htl', 'etk', 'flt']}
+        requestClient={requestClient}
+      />,
+    )
+
+    await waitFor(() => {
+      expect(get).toHaveBeenCalledWith(
+        '/category/_fringe/CrossSelling?OrderNo=2026-123456&RecommendProductType=htl%2Cetk%2Cflt',
+        {
+          signal: expect.any(AbortSignal),
+        },
+      )
+    })
   })
 
   it('hides the widget when API loading fails in hidden error mode', async () => {
