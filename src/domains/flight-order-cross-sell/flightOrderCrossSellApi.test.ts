@@ -68,6 +68,49 @@ const ap56Response = [
   },
 ]
 
+const ap56EnvelopeResponse = {
+  ProductDataList: [
+    {
+      Type: '訂房',
+      CombineTagList: null,
+      pList: [
+        {
+          ID: 'CVSID036',
+          Title: '薩梅杜薩爾青年旅舍',
+          ProductUrl:
+            'https://uhotelzkk.liontravel.com/detail/cv-island-of-sal-xamedu-sal-hostel',
+          Price: 4610,
+          ImgUrl: 'https://static.liontech.com.tw/hotelpics/TAIWAN_FANS.jpg',
+          SaleCurr: 'TWD',
+          CountryName: ['維德角'],
+          CityName: ['ISLAND OF SAL'],
+          SalePrice: 4610,
+          Discount: null,
+          Location: {
+            Name: '聖瑪莉亞市廣場',
+            Distance: 0,
+            Unit: '公里',
+          },
+          Level: 2,
+          Rating: 5,
+          RatingCount: 2,
+          Likeability: 87,
+          CancelTag: null,
+        },
+      ],
+    },
+    {
+      Type: '訂房-看更多(搜尋頁)',
+      CombineTagList: null,
+      pList: [
+        {
+          ProductUrl: 'https://uhotelzkk.liontravel.com/search?searchParam=abc',
+        },
+      ],
+    },
+  ],
+}
+
 describe('flight order cross-sell AP-56 API', () => {
   it('creates the AP-56 endpoint path with default recommend product types', () => {
     expect(createFlightOrderCrossSellPath('2026-123456')).toBe(
@@ -140,6 +183,30 @@ describe('flight order cross-sell AP-56 API', () => {
           price: 5830,
           pricePrefix: 'TWD',
           priceSuffix: '起',
+        }),
+      ],
+    })
+  })
+
+  it('maps enveloped AP-56 responses and ProductUrl view-more rows', () => {
+    const sections = mapAp56CrossSellingResponseToSections(ap56EnvelopeResponse)
+    const hotelSection = sections.find((section) => section.kind === 'hotel')
+
+    expect(hotelSection).toMatchObject({
+      kind: 'hotel',
+      viewMoreHref: 'https://uhotelzkk.liontravel.com/search?searchParam=abc',
+      items: [
+        expect.objectContaining({
+          id: 'CVSID036',
+          title: '薩梅杜薩爾青年旅舍',
+          href: 'https://uhotelzkk.liontravel.com/detail/cv-island-of-sal-xamedu-sal-hostel',
+          detailLocation: 'ISLAND OF SAL',
+          location: '距離聖瑪莉亞市廣場0公里',
+          price: 4610,
+          pricePrefix: 'TWD',
+          rating: '5',
+          ratingLabel: '太讚了',
+          reviewCount: 2,
         }),
       ],
     })

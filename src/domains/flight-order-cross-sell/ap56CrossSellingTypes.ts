@@ -6,6 +6,10 @@ export interface Ap56CrossSellingResponseSection {
   CombineTagList?: unknown
 }
 
+export interface Ap56CrossSellingResponseEnvelope {
+  ProductDataList?: unknown
+}
+
 export interface Ap56ProductInfo {
   ID?: unknown
   Title?: unknown

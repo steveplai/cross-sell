@@ -6,7 +6,10 @@ import {
 } from '@/shared/utils/liontravelUrl'
 
 import { mapAp56CrossSellingResponseToSections } from './ap56CrossSellingMapper'
-import type { Ap56CrossSellingResponseSection } from './ap56CrossSellingTypes'
+import type {
+  Ap56CrossSellingResponseEnvelope,
+  Ap56CrossSellingResponseSection,
+} from './ap56CrossSellingTypes'
 
 export interface FlightOrderCrossSellApiOptions {
   baseUrl?: string
@@ -42,7 +45,9 @@ export function createFlightOrderCrossSellApi({
 
   return {
     async getByOrderNumber(orderNumber: string, init?: RequestInit) {
-      const response = await client.get<Ap56CrossSellingResponseSection[]>(
+      const response = await client.get<
+        Ap56CrossSellingResponseEnvelope | Ap56CrossSellingResponseSection[]
+      >(
         createFlightOrderCrossSellPath(orderNumber, recommendProductTypes),
         init,
       )

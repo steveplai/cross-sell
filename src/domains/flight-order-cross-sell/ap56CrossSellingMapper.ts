@@ -6,6 +6,7 @@ import type {
 } from '@/widgets/flight-order-cross-sell'
 
 import type {
+  Ap56CrossSellingResponseEnvelope,
   Ap56CrossSellingResponseSection,
   Ap56ProductInfo,
 } from './ap56CrossSellingTypes'
@@ -15,9 +16,14 @@ const defaultCategoryHref = 'https://www.liontravel.com/'
 // Convert AP-56 sections into the widget's carousel-only section overrides.
 // Non-carousel static content is merged later by the connected widget.
 export function mapAp56CrossSellingResponseToSections(
-  response: Ap56CrossSellingResponseSection[] | unknown,
+  response:
+    | Ap56CrossSellingResponseEnvelope
+    | Ap56CrossSellingResponseSection[]
+    | unknown,
 ): FlightOrderCrossSellSection[] {
-  if (!Array.isArray(response)) {
+  const sections = getResponseSections(response)
+
+  if (!sections) {
     return []
   }
 
@@ -26,7 +32,7 @@ export function mapAp56CrossSellingResponseToSections(
     FlightOrderCrossSellSection
   >()
 
-  response.forEach((rawSection) => {
+  sections.forEach((rawSection) => {
     if (!rawSection || typeof rawSection !== 'object') {
       return
     }
@@ -123,6 +129,23 @@ function getOrCreateSectionOverride(
   return section
 }
 
+function getResponseSections(response: unknown) {
+  if (Array.isArray(response)) {
+    return response as Ap56CrossSellingResponseSection[]
+  }
+
+  if (!response || typeof response !== 'object') {
+    return undefined
+  }
+
+  const productDataList = (response as Ap56CrossSellingResponseEnvelope)
+    .ProductDataList
+
+  return Array.isArray(productDataList)
+    ? (productDataList as Ap56CrossSellingResponseSection[])
+    : undefined
+}
+
 function mapProductInfoToItem(
   product: Ap56ProductInfo,
   index: number,
@@ -199,7 +222,7 @@ function isSearchViewMoreType(type: string | undefined) {
 
 function getFirstUrl(products: Ap56ProductInfo[]) {
   for (const product of products) {
-    const url = asString(product.url)
+    const url = asString(product.url) ?? asString(product.ProductUrl)
 
     if (url) {
       return url

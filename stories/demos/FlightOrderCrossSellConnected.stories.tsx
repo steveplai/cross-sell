@@ -1,12 +1,20 @@
 import '../../src/widgets/flight-order-cross-sell/style.css'
 
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import type { ComponentProps } from 'react'
 
 import type { RequestClient } from '../../src/shared/request'
 import {
   FlightOrderCrossSellConnected,
   flightOrderCrossSellSampleData,
 } from '../../src/widgets/flight-order-cross-sell'
+
+type ConnectedStoryArgs = Omit<
+  ComponentProps<typeof FlightOrderCrossSellConnected>,
+  'requestClient'
+> & {
+  useMockResponse?: boolean
+}
 
 type MockRequestHandler = (
   pathname: string,
@@ -72,6 +80,53 @@ const loadingRequestClient = createMockRequestClient(
   () => new Promise(() => {}),
 )
 
+const storybookAp56ProxyPathnames = {
+  production: '/__liontravel-ap56-production-proxy',
+  uat: '/__liontravel-ap56-uat-proxy',
+}
+
+function createStorybookProxyRequestClient(
+  domainMode: ConnectedStoryArgs['domainMode'],
+): RequestClient {
+  const proxyPathname =
+    domainMode === 'uat'
+      ? storybookAp56ProxyPathnames.uat
+      : storybookAp56ProxyPathnames.production
+
+  return {
+    get: <T,>(pathname: string, init?: RequestInit) =>
+      proxyRequest<T>(proxyPathname, pathname, {
+        ...init,
+        method: 'GET',
+      }),
+    request: <T,>(pathname: string, init?: RequestInit) =>
+      proxyRequest<T>(proxyPathname, pathname, init),
+  }
+}
+
+async function proxyRequest<T>(
+  proxyPathname: string,
+  pathname: string,
+  init?: RequestInit,
+) {
+  const origin =
+    typeof window === 'undefined'
+      ? 'http://localhost:6006'
+      : window.location.origin
+  const response = await fetch(
+    new URL(`${proxyPathname}${pathname}`, origin),
+    init,
+  )
+
+  if (!response.ok) {
+    throw new Error(
+      `Storybook AP-56 proxy request failed: ${response.status} ${response.statusText}`,
+    )
+  }
+
+  return (await response.json()) as T
+}
+
 const meta = {
   id: 'flight-order-cross-sell-connected',
   title: 'Demos/Flight Order Cross Sell/Connected',
@@ -80,6 +135,7 @@ const meta = {
     domainMode: 'uat',
     errorMode: 'message',
     orderNumber: '2026-16575',
+    recommendProductTypes: 'htl',
   },
   argTypes: {
     domainMode: {
@@ -90,11 +146,27 @@ const meta = {
       control: 'inline-radio',
       options: ['hidden', 'message'],
     },
+    recommendProductTypes: {
+      control: 'text',
+    },
+    useMockResponse: {
+      control: 'boolean',
+    },
   },
   parameters: {
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof FlightOrderCrossSellConnected>
+  render: ({ useMockResponse, ...args }) => (
+    <FlightOrderCrossSellConnected
+      {...args}
+      requestClient={
+        useMockResponse
+          ? successRequestClient
+          : createStorybookProxyRequestClient(args.domainMode)
+      }
+    />
+  ),
+} satisfies Meta<ConnectedStoryArgs>
 
 export default meta
 
@@ -108,26 +180,48 @@ export const StaticData: Story = {
 
 export const ApiSuccess: Story = {
   args: {
-    requestClient: successRequestClient,
+    orderNumber: '2026-123456',
+    useMockResponse: false,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Toggle useMockResponse off to call the selected AP-56 domain through the Storybook dev proxy.',
+      },
+    },
   },
 }
 
 export const ApiErrorHidden: Story = {
   args: {
     errorMode: 'hidden',
-    requestClient: errorRequestClient,
   },
+  render: ({ useMockResponse: _useMockResponse, ...args }) => (
+    <FlightOrderCrossSellConnected
+      {...args}
+      requestClient={errorRequestClient}
+    />
+  ),
 }
 
 export const ApiErrorMessage: Story = {
   args: {
     errorMode: 'message',
-    requestClient: errorRequestClient,
   },
+  render: ({ useMockResponse: _useMockResponse, ...args }) => (
+    <FlightOrderCrossSellConnected
+      {...args}
+      requestClient={errorRequestClient}
+    />
+  ),
 }
 
 export const Loading: Story = {
-  args: {
-    requestClient: loadingRequestClient,
-  },
+  render: ({ useMockResponse: _useMockResponse, ...args }) => (
+    <FlightOrderCrossSellConnected
+      {...args}
+      requestClient={loadingRequestClient}
+    />
+  ),
 }
