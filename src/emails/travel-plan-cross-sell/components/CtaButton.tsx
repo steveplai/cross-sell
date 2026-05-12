@@ -1,4 +1,4 @@
-import { Button, Img } from '@react-email/components'
+import { Column, Img, Link, Row } from '@react-email/components'
 
 interface CtaButtonProps {
   href: string
@@ -9,31 +9,34 @@ interface CtaButtonProps {
 }
 
 const toneClassNames = {
-  gray: 'border-muted text-muted',
-  red: 'border-brand-red text-brand-red',
+  gray: {
+    border: 'border-muted',
+    text: 'text-muted',
+  },
+  red: {
+    border: 'border-brand-red',
+    text: 'text-brand-red',
+  },
 } as const
 
 const variantClassNames = {
   compact: {
-    button:
-      'inline-block w-26 max-w-26 overflow-hidden rounded-[5px] border border-solid bg-white px-0 py-[5px] text-center text-[14px] leading-[22px] whitespace-nowrap no-underline',
-    content:
-      'inline-block max-w-21 overflow-hidden whitespace-nowrap align-top',
-    label: {
-      withIcon:
-        'inline-block max-w-15.75 overflow-hidden text-ellipsis whitespace-nowrap align-top',
-      withoutIcon:
-        'inline-block max-w-21 overflow-hidden text-ellipsis whitespace-nowrap align-top',
-    },
+    cell: 'h-8.5 w-26 rounded-[5px] border border-solid bg-white px-0 text-center align-middle',
+    height: '34',
+    iconCell: 'w-4 align-middle text-[0px] leading-none',
+    link: 'font-sans text-[14px] leading-[22px] whitespace-nowrap no-underline',
+    spacerCell: 'w-1.25 text-[0px] leading-none',
+    table: 'w-26',
+    width: '104',
   },
   regular: {
-    button:
-      'inline-block rounded-[5px] border border-solid bg-white px-2.5 py-1.25 text-center text-[16px] leading-6 whitespace-nowrap no-underline',
-    content: 'inline-block whitespace-nowrap align-bottom',
-    label: {
-      withIcon: 'inline-block whitespace-nowrap align-bottom',
-      withoutIcon: 'inline-block whitespace-nowrap align-bottom',
-    },
+    cell: 'h-9 w-42.5 rounded-[5px] border border-solid bg-white px-0 text-center align-middle',
+    height: '36',
+    iconCell: 'w-4 align-middle text-[0px] leading-none',
+    link: 'font-sans text-[16px] leading-6 whitespace-nowrap no-underline',
+    spacerCell: 'w-1.25 text-[0px] leading-none',
+    table: 'w-42.5',
+    width: '170',
   },
 } as const
 
@@ -46,25 +49,84 @@ export function CtaButton({
 }: CtaButtonProps) {
   const toneClassName = toneClassNames[tone]
   const variantClassName = variantClassNames[variant]
-  const labelClassName = iconUrl
-    ? variantClassName.label.withIcon
-    : variantClassName.label.withoutIcon
 
   return (
-    <Button
-      className={`${variantClassName.button} ${toneClassName}`}
-      href={href}
+    <Row
+      align="right"
+      className={variantClassName.table}
+      width={variantClassName.width}
     >
-      <span className={variantClassName.content}>
+      <Column
+        align="center"
+        className={`${variantClassName.cell} ${toneClassName.border}`}
+        height={variantClassName.height}
+        style={{ verticalAlign: 'middle' }}
+        valign="middle"
+        width={variantClassName.width}
+      >
         {iconUrl ? (
-          <Img
-            alt=""
-            className="mr-1.25 inline-block size-4 align-bottom"
-            src={iconUrl}
-          />
-        ) : null}
-        <span className={labelClassName}>{label}</span>
-      </span>
-    </Button>
+          <Row align="center" className="w-auto" width="auto">
+            <Column
+              className={variantClassName.iconCell}
+              height={variantClassName.height}
+              style={{ verticalAlign: 'middle' }}
+              valign="middle"
+              width="16"
+            >
+              <Img
+                alt=""
+                className="block"
+                height="16"
+                src={iconUrl}
+                width="16"
+              />
+            </Column>
+            <Column
+              className={variantClassName.spacerCell}
+              height={variantClassName.height}
+              style={{ verticalAlign: 'middle' }}
+              valign="middle"
+              width="5"
+            >
+              &nbsp;
+            </Column>
+            <Column
+              height={variantClassName.height}
+              style={{ verticalAlign: 'middle' }}
+              valign="middle"
+            >
+              <Link
+                className={`${variantClassName.link} ${toneClassName.text}`}
+                href={href}
+                rel="noopener noreferrer"
+                style={{
+                  lineHeight: `${variantClassName.height}px`,
+                  textDecoration: 'none',
+                }}
+                target="_blank"
+              >
+                {label}
+              </Link>
+            </Column>
+          </Row>
+        ) : (
+          <Link
+            className={`${variantClassName.link} ${toneClassName.text}`}
+            href={href}
+            rel="noopener noreferrer"
+            style={{
+              display: 'block',
+              lineHeight: `${variantClassName.height}px`,
+              textAlign: 'center',
+              textDecoration: 'none',
+              width: `${variantClassName.width}px`,
+            }}
+            target="_blank"
+          >
+            {label}
+          </Link>
+        )}
+      </Column>
+    </Row>
   )
 }

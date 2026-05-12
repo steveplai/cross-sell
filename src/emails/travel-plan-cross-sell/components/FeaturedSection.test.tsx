@@ -62,4 +62,96 @@ describe('FeaturedSection', () => {
       document.querySelectorAll(`a[href="${section.ctaUrl}"]`),
     ).toHaveLength(2)
   })
+
+  it('renders each recommendation as no-wrap text and arrow links', async () => {
+    const section = {
+      ctaLabel: '立即查看',
+      ctaUrl: 'https://example.com/featured-section',
+      description: '落地第一步，先搞定交通',
+      iconAlt: '交通',
+      iconUrl: 'https://example.com/transportIcon.png',
+      id: 'transportation',
+      recommendationsTitle: '推薦熱門交通：',
+      recommendations: [
+        {
+          arrowIconUrl: 'https://example.com/arrowIcon.png',
+          text: '日本-東京成田/羽田機場至東京市區/郊區 | 機場接送專車',
+          url: 'https://example.com/featured-section/recommendation',
+        },
+      ],
+      title: '抵達啟程',
+      variant: 'featured',
+    } satisfies TravelPlanCrossSellSection
+
+    const html = await renderEmail(<FeaturedSection section={section} />)
+    const document = parseEmailHtml(html)
+    const recommendation = section.recommendations[0]
+    const links = document.querySelectorAll(`a[href="${recommendation.url}"]`)
+    const textLink = Array.from(links).find((link) =>
+      link.textContent?.includes(recommendation.text),
+    )
+    const arrowLink = Array.from(links).find((link) =>
+      link.querySelector(`img[src="${recommendation.arrowIconUrl}"]`),
+    )
+    const textSpan = textLink?.querySelector('span')
+    const textCell = textSpan?.closest('td')
+    const arrowImage = arrowLink?.querySelector(
+      `img[src="${recommendation.arrowIconUrl}"]`,
+    )
+    const arrowCell = arrowImage?.closest('td')
+
+    expect(links).toHaveLength(2)
+    expect(textLink?.textContent).toContain(recommendation.text)
+    expect(arrowImage).not.toBeNull()
+    expect(textLink?.getAttribute('class')).toContain(
+      'recommendation-link-text-anchor',
+    )
+    expect(textLink?.getAttribute('class')).toContain('whitespace-nowrap')
+    expect(textLink?.getAttribute('style')).toContain('display:block')
+    expect(textLink?.getAttribute('style')).toContain('height:24px')
+    expect(textLink?.getAttribute('style')).toContain('line-height:24px')
+    expect(textLink?.getAttribute('style')).toContain('text-decoration:none')
+    expect(textLink?.getAttribute('style')).not.toContain('underline')
+    expect(textLink?.getAttribute('style')).toContain('white-space:nowrap')
+    expect(textLink?.getAttribute('style')).toContain('width:100%')
+    expect(textSpan?.getAttribute('class')).toContain(
+      'recommendation-link-text',
+    )
+    expect(textSpan?.getAttribute('class')).not.toContain(
+      'group-hover:underline',
+    )
+    expect(textSpan?.getAttribute('class')).toContain('overflow-hidden')
+    expect(textSpan?.getAttribute('class')).toContain('text-ellipsis')
+    expect(textSpan?.getAttribute('class')).toContain('whitespace-nowrap')
+    expect(textSpan?.getAttribute('data-testid')).toBe(
+      'recommendation-link-text',
+    )
+    expect(textSpan?.getAttribute('style')).toContain('display:inline-block')
+    expect(textSpan?.getAttribute('style')).toContain('line-height:24px')
+    expect(textSpan?.getAttribute('style')).toContain('max-width:100%')
+    expect(textSpan?.getAttribute('style')).toContain('overflow:hidden')
+    expect(textSpan?.getAttribute('style')).toContain('text-overflow:ellipsis')
+    expect(textSpan?.getAttribute('style')).toContain('vertical-align:top')
+    expect(textSpan?.getAttribute('style')).toContain('white-space:nowrap')
+    expect(textSpan?.getAttribute('style')).not.toMatch(/(^|;)width:100%(;|$)/)
+    expect(textCell?.getAttribute('height')).toBe('24')
+    expect(textCell?.getAttribute('valign')).toBe('middle')
+    expect(textCell?.getAttribute('width')).toBe('100%')
+    expect(textCell?.getAttribute('style')).toContain('height:24px')
+    expect(textCell?.getAttribute('style')).toContain('overflow:hidden')
+    expect(textCell?.getAttribute('style')).toContain('vertical-align:middle')
+    expect(textCell?.getAttribute('style')).toContain('width:100%')
+    expect(arrowCell?.getAttribute('height')).toBe('24')
+    expect(arrowCell?.getAttribute('valign')).toBe('middle')
+    expect(arrowCell?.getAttribute('width')).toBe('20')
+    expect(arrowCell?.getAttribute('style')).toContain('height:24px')
+    expect(arrowCell?.getAttribute('style')).toContain('vertical-align:middle')
+    expect(arrowCell?.getAttribute('style')).toContain('width:20px')
+    expect(arrowLink?.getAttribute('class')).toContain(
+      'recommendation-link-arrow-anchor',
+    )
+    expect(arrowLink?.getAttribute('style')).toContain('display:block')
+    expect(arrowLink?.getAttribute('style')).toContain('text-decoration:none')
+    expect(arrowLink?.getAttribute('style')).toContain('width:16px')
+  })
 })
