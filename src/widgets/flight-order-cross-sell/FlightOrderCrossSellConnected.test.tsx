@@ -82,7 +82,12 @@ describe('FlightOrderCrossSellConnected', () => {
 
     render(
       <FlightOrderCrossSellConnected
-        data={cloneSampleData()}
+        data={cloneSampleData({
+          order: {
+            orderNumber: '999999',
+            orderYear: '2026',
+          },
+        })}
         orderNumber="202605120001"
         requestClient={requestClient}
       />,
@@ -91,6 +96,10 @@ describe('FlightOrderCrossSellConnected', () => {
     expect(
       screen.getByRole('heading', { name: '探索東京飯店' }),
     ).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '前往加購' })).toHaveAttribute(
+      'href',
+      'https://uvacation.liontravel.com/thsrdetail?sYear=2026&sOrdr=999999',
+    )
     expect(get).not.toHaveBeenCalled()
   })
 
@@ -118,6 +127,21 @@ describe('FlightOrderCrossSellConnected', () => {
     expect(
       screen.queryByRole('button', { name: /LA VISTA 東京灣/ }),
     ).not.toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '前往加購' })).toHaveAttribute(
+      'href',
+      'https://uvacation.liontravel.com/thsrdetail?sYear=2026&sOrdr=123456',
+    )
+
+    const insuranceHref =
+      screen.getByRole('link', { name: /旅遊綜合險/ }).getAttribute('href') ??
+      ''
+    const insuranceSearchParams = new URLSearchParams(
+      insuranceHref.split('?')[1],
+    )
+
+    expect(insuranceSearchParams.get('subject')).toBe(
+      '加購保險【訂單編號: 2026-123456】',
+    )
     expect(get).toHaveBeenCalledWith(
       '/category/_fringe/CrossSelling?OrderNo=2026-123456&RecommendProductType=htl%2Cetk',
       {
@@ -132,7 +156,7 @@ describe('FlightOrderCrossSellConnected', () => {
 
     render(
       <FlightOrderCrossSellConnected
-        orderNumber="2026-123456"
+        orderNumber="202605120001"
         recommendProductTypes={['htl', 'etk', 'flt']}
         requestClient={requestClient}
       />,
@@ -140,12 +164,18 @@ describe('FlightOrderCrossSellConnected', () => {
 
     await waitFor(() => {
       expect(get).toHaveBeenCalledWith(
-        '/category/_fringe/CrossSelling?OrderNo=2026-123456&RecommendProductType=htl%2Cetk%2Cflt',
+        '/category/_fringe/CrossSelling?OrderNo=202605120001&RecommendProductType=htl%2Cetk%2Cflt',
         {
           signal: expect.any(AbortSignal),
         },
       )
     })
+    expect(
+      await screen.findByRole('link', { name: '前往加購' }),
+    ).toHaveAttribute(
+      'href',
+      'https://uvacation.liontravel.com/thsrdetail?sYear=2026&sOrdr=202605120001',
+    )
   })
 
   it('hides the widget when API loading fails in hidden error mode', async () => {

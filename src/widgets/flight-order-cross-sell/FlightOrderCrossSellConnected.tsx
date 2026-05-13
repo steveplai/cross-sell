@@ -15,8 +15,8 @@ import type { RequestClient } from '@/shared/request'
 import type { LiontravelDomainMode } from '@/shared/utils/liontravelUrl'
 
 import { createWidgetRootProps } from '../../runtime/widgetRoot'
+import { flightOrderCrossSellConnectedBaseData } from './defaultData'
 import { FlightOrderCrossSell } from './FlightOrderCrossSell'
-import { flightOrderCrossSellSampleData } from './sampleData'
 import type {
   FlightOrderCrossSellData,
   FlightOrderCrossSellProps,
@@ -63,9 +63,10 @@ function createConnectedQueryClient() {
 
 function createStaticBaseDataWithApiSections(
   apiSections: FlightOrderCrossSellSection[],
+  orderNumber: string,
 ): FlightOrderCrossSellData {
   const baseData = JSON.parse(
-    JSON.stringify(flightOrderCrossSellSampleData),
+    JSON.stringify(flightOrderCrossSellConnectedBaseData),
   ) as FlightOrderCrossSellData
   const apiSectionsByKind = new Map<
     FlightOrderCrossSellSectionKind,
@@ -80,6 +81,7 @@ function createStaticBaseDataWithApiSections(
 
   return {
     ...baseData,
+    order: createOrderFromExternalOrderNumber(baseData, orderNumber),
     sections: baseData.sections.map((section) => {
       if (!section.kind || !apiBackedSectionKinds.has(section.kind)) {
         return section
@@ -94,6 +96,38 @@ function createStaticBaseDataWithApiSections(
         viewMoreHref: apiSection?.viewMoreHref,
       }
     }),
+  }
+}
+
+function createOrderFromExternalOrderNumber(
+  baseData: FlightOrderCrossSellData,
+  orderNumber: string,
+): FlightOrderCrossSellData['order'] {
+  const normalizedOrderNumber = orderNumber.trim()
+
+  if (!normalizedOrderNumber) {
+    return baseData.order
+  }
+
+  const separatorIndex = normalizedOrderNumber.indexOf('-')
+
+  if (separatorIndex > 0) {
+    const orderYear = normalizedOrderNumber.slice(0, separatorIndex)
+    const orderNumberWithoutYear = normalizedOrderNumber.slice(
+      separatorIndex + 1,
+    )
+
+    if (/^\d{4}$/.test(orderYear) && orderNumberWithoutYear) {
+      return {
+        orderYear,
+        orderNumber: orderNumberWithoutYear,
+      }
+    }
+  }
+
+  return {
+    orderYear: baseData.order?.orderYear ?? '',
+    orderNumber: normalizedOrderNumber,
   }
 }
 
@@ -143,7 +177,9 @@ function FlightOrderCrossSellConnectedContent({
   })
   const resolvedData =
     data ??
-    (query.data ? createStaticBaseDataWithApiSections(query.data) : undefined)
+    (query.data
+      ? createStaticBaseDataWithApiSections(query.data, orderNumber ?? '')
+      : undefined)
 
   if (resolvedData) {
     return (

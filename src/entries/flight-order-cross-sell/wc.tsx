@@ -4,15 +4,15 @@ import {
   FlightOrderCrossSell,
   type FlightOrderCrossSellData,
   type FlightOrderCrossSellProps,
-  flightOrderCrossSellSampleData,
 } from '../../widgets/flight-order-cross-sell'
+import { flightOrderCrossSellFallbackData } from '../../widgets/flight-order-cross-sell/defaultData'
 import widgetStyles from '../../widgets/flight-order-cross-sell/style.css?inline'
 
 const styles = `${baseStyles}\n${widgetStyles}`
 
 function parseData(value: string | null): FlightOrderCrossSellData {
   if (!value) {
-    return flightOrderCrossSellSampleData
+    return flightOrderCrossSellFallbackData
   }
 
   try {
@@ -20,9 +20,9 @@ function parseData(value: string | null): FlightOrderCrossSellData {
 
     return isFlightOrderCrossSellData(parsed)
       ? (parsed as FlightOrderCrossSellData)
-      : flightOrderCrossSellSampleData
+      : flightOrderCrossSellFallbackData
   } catch {
-    return flightOrderCrossSellSampleData
+    return flightOrderCrossSellFallbackData
   }
 }
 
