@@ -38,6 +38,10 @@ export interface FlightOrderCrossSellConnectedProps extends FlightOrderCrossSell
   onViewMore?: FlightOrderCrossSellProps['onViewMore']
   orderNumber?: string
   recommendProductTypes?: FlightOrderCrossSellRecommendProductTypes
+}
+
+interface FlightOrderCrossSellConnectedInternalProps
+  extends FlightOrderCrossSellConnectedProps {
   requestClient?: RequestClient
 }
 
@@ -120,7 +124,7 @@ function FlightOrderCrossSellConnectedContent({
   reminders,
   requestClient,
   serviceAgent,
-}: FlightOrderCrossSellConnectedProps) {
+}: FlightOrderCrossSellConnectedInternalProps) {
   const apiOptions = useMemo<FlightOrderCrossSellApiOptions>(
     () => ({
       baseUrl,
@@ -233,8 +237,8 @@ function ConnectedStateMessage({ message }: { message: string }) {
 
 //#endregion - Sub Components
 
-export function FlightOrderCrossSellConnected(
-  props: FlightOrderCrossSellConnectedProps,
+function FlightOrderCrossSellConnectedRoot(
+  props: FlightOrderCrossSellConnectedInternalProps,
 ) {
   const [queryClient] = useState(createConnectedQueryClient)
 
@@ -243,4 +247,16 @@ export function FlightOrderCrossSellConnected(
       <FlightOrderCrossSellConnectedContent {...props} />
     </QueryClientProvider>
   )
+}
+
+export function FlightOrderCrossSellConnected(
+  props: FlightOrderCrossSellConnectedProps,
+) {
+  return <FlightOrderCrossSellConnectedRoot {...props} />
+}
+
+export function FlightOrderCrossSellConnectedForTesting(
+  props: FlightOrderCrossSellConnectedInternalProps,
+) {
+  return <FlightOrderCrossSellConnectedRoot {...props} />
 }

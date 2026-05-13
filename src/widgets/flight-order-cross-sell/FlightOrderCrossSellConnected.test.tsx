@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import type { RequestClient } from '@/shared/request'
 
-import { FlightOrderCrossSellConnected } from './FlightOrderCrossSellConnected'
+import { FlightOrderCrossSellConnectedForTesting } from './FlightOrderCrossSellConnected'
 
 type MockRequestClientRequest = (
   pathname: string,
@@ -68,7 +68,7 @@ describe('FlightOrderCrossSellConnected', () => {
     const requestClient = createMockRequestClient(get)
 
     render(
-      <FlightOrderCrossSellConnected
+      <FlightOrderCrossSellConnectedForTesting
         errorMode="message"
         requestClient={requestClient}
       />,
@@ -87,7 +87,7 @@ describe('FlightOrderCrossSellConnected', () => {
     const requestClient = createMockRequestClient(get)
 
     render(
-      <FlightOrderCrossSellConnected
+      <FlightOrderCrossSellConnectedForTesting
         domainMode="uat"
         orderNumber="2026-123456"
         requestClient={requestClient}
@@ -133,7 +133,7 @@ describe('FlightOrderCrossSellConnected', () => {
     const requestClient = createMockRequestClient(get)
 
     render(
-      <FlightOrderCrossSellConnected
+      <FlightOrderCrossSellConnectedForTesting
         domainMode="uat"
         orderNumber="202605120001"
         recommendProductTypes={['htl', 'etk', 'flt']}
@@ -162,7 +162,7 @@ describe('FlightOrderCrossSellConnected', () => {
     const requestClient = createMockRequestClient(get)
 
     render(
-      <FlightOrderCrossSellConnected
+      <FlightOrderCrossSellConnectedForTesting
         domainMode="uat"
         orderNumber="2026-123456"
         requestClient={requestClient}
@@ -186,7 +186,7 @@ describe('FlightOrderCrossSellConnected', () => {
     const requestClient = createMockRequestClient(get)
 
     const { container } = render(
-      <FlightOrderCrossSellConnected
+      <FlightOrderCrossSellConnectedForTesting
         orderNumber="202605120001"
         requestClient={requestClient}
       />,
@@ -207,7 +207,7 @@ describe('FlightOrderCrossSellConnected', () => {
     const requestClient = createMockRequestClient(get)
 
     render(
-      <FlightOrderCrossSellConnected
+      <FlightOrderCrossSellConnectedForTesting
         errorMode="message"
         orderNumber="202605120001"
         requestClient={requestClient}

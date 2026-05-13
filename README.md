@@ -247,7 +247,8 @@ For Connected Web Components, simple settings should use attributes when
 available. Complex static content overrides can use the `config` JSON attribute
 or `element.config` property. Attribute values take priority over `config`; for
 example, `currency="TWD"` overrides `config.currency`. Function props such as
-callbacks and dependency objects such as `requestClient` are Mount API only.
+callbacks are Mount API only. `requestClient` is an internal test injection point
+and is not part of the public widget contract.
 
 Connected Mount API usage:
 
