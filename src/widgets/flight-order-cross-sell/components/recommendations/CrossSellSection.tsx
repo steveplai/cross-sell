@@ -307,10 +307,8 @@ export function CrossSellSection({
     >
       <header
         className={cn(
-          'mb-5 flex items-start justify-between gap-4 lion-desktop:mb-6',
-          {
-            'mb-2': hideTitle,
-          },
+          'flex items-start justify-between gap-4',
+          hideTitle ? 'mb-2' : 'mb-5 lion-desktop:mb-6',
         )}
       >
         <div className="min-w-0">
