@@ -493,6 +493,77 @@ test('flight order connected web component handoff emits item event', async ({
   ).toContainText('flight-order-cross-sell:item-select')
 })
 
+test('flight order connected web component applies config attribute overrides', async ({
+  page,
+}) => {
+  await gotoHandoffExample(
+    page,
+    '/examples/web-component/flight-order-cross-sell-connected.basic.html',
+  )
+
+  await expect
+    .poll(() =>
+      getWebComponentWidgetText(page, 'flight-order-cross-sell-connected'),
+    )
+    .toContain('Connected WC 限時優惠')
+  await expect
+    .poll(() =>
+      getWebComponentWidgetText(page, 'flight-order-cross-sell-connected'),
+    )
+    .toContain('立即加購')
+})
+
+test('flight order connected web component applies config property and attribute priority', async ({
+  page,
+}) => {
+  await gotoHandoffExample(
+    page,
+    '/examples/web-component/flight-order-cross-sell-connected.basic.html',
+  )
+
+  await expect
+    .poll(() =>
+      getWebComponentWidgetText(page, 'flight-order-cross-sell-connected'),
+    )
+    .toContain('Connected WC 限時優惠')
+
+  await page
+    .locator('flight-order-cross-sell-connected')
+    .evaluate((element) => {
+      ;(
+        element as HTMLElement & {
+          config?: {
+            currency?: string
+            locale?: string
+            promo?: { activeTitle?: string }
+          }
+        }
+      ).config = {
+        currency: 'USD',
+        locale: 'en-US',
+        promo: {
+          activeTitle: 'Connected property 限時優惠',
+        },
+      }
+    })
+
+  await expect
+    .poll(() =>
+      getWebComponentWidgetText(page, 'flight-order-cross-sell-connected'),
+    )
+    .toContain('Connected property 限時優惠')
+  await expect
+    .poll(() =>
+      getWebComponentWidgetText(page, 'flight-order-cross-sell-connected'),
+    )
+    .toContain('$6,200')
+  await expect
+    .poll(() =>
+      getWebComponentWidgetText(page, 'flight-order-cross-sell-connected'),
+    )
+    .not.toContain('US$6,200')
+})
+
 test('web component host dark class controls shadow DOM theme', async ({
   page,
 }) => {

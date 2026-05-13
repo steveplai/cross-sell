@@ -193,10 +193,13 @@ Public contract:
 
 - Web Component tag: `flight-order-cross-sell-connected`
 - Mount API global: `window.FlightOrderCrossSellConnected`
-- Attributes: `order-number`, `recommend-product-types`, `domain-mode`, `base-url`, `error-mode`
+- Attributes: `order-number`, `recommend-product-types`, `domain-mode`, `base-url`, `error-mode`, `locale`, `currency`, `config`
 - `domain-mode` values: `uat`, `production`
 - `error-mode` values: `hidden`, `message`
 - `recommend-product-types` default: `htl,etk`
+- `config` JSON/property supports static content overrides such as `promo`,
+  `reminders`, `hsrAddon`, `serviceAgent`, `attractionBannerOverrides`,
+  `locale`, and `currency`
 - Events:
   - `flight-order-cross-sell:item-select`, detail `{ sectionId, item }`
   - `flight-order-cross-sell:view-more`, detail `{ sectionId }`
@@ -219,10 +222,32 @@ Connected Web Component usage:
   order-number="2026-123456"
   domain-mode="uat"
   error-mode="hidden"
+  locale="zh-TW"
+  currency="TWD"
+  config='{"hsrAddon":{"ctaLabel":"立即加購"},"promo":{"activeTitle":"Connected WC 限時優惠"}}'
 ></flight-order-cross-sell-connected>
 
 <script src="./dist/widgets/flight-order-cross-sell-connected.wc.js"></script>
+<script>
+  const widget = document.querySelector('flight-order-cross-sell-connected')
+
+  widget.config = {
+    promo: {
+      activeTitle: 'JS property 覆蓋優惠標題',
+    },
+  }
+
+  widget.addEventListener('flight-order-cross-sell:item-select', (event) => {
+    console.log(event.detail)
+  })
+</script>
 ```
+
+For Connected Web Components, simple settings should use attributes when
+available. Complex static content overrides can use the `config` JSON attribute
+or `element.config` property. Attribute values take priority over `config`; for
+example, `currency="TWD"` overrides `config.currency`. Function props such as
+callbacks and dependency objects such as `requestClient` are Mount API only.
 
 Connected Mount API usage:
 
@@ -236,6 +261,15 @@ Connected Mount API usage:
     recommendProductTypes: 'htl,etk',
     domainMode: 'uat',
     errorMode: 'message',
+    hsrAddon: {
+      ctaLabel: '立即加購',
+    },
+    promo: {
+      activeTitle: 'Connected Mount 限時優惠',
+    },
+    onSelectItem(event) {
+      console.log(event)
+    },
   })
 </script>
 ```

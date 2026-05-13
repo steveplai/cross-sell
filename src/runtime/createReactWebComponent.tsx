@@ -8,6 +8,7 @@ interface CreateReactWebComponentOptions<Props extends object> {
   tagName: string
   Component: ComponentType<Props>
   observedAttributes: string[]
+  observedProperties?: string[]
   styles: string
   mapElementToProps: (element: HTMLElement) => Props
 }
@@ -16,13 +17,32 @@ export function createReactWebComponent<Props extends object>({
   tagName,
   Component,
   observedAttributes,
+  observedProperties = [],
   styles,
   mapElementToProps,
 }: CreateReactWebComponentOptions<Props>) {
+  const propertyValues = new WeakMap<HTMLElement, Map<string, unknown>>()
+
+  function getPropertyValues(element: HTMLElement) {
+    let values = propertyValues.get(element)
+
+    if (!values) {
+      values = new Map<string, unknown>()
+      propertyValues.set(element, values)
+    }
+
+    return values
+  }
+
   class ReactWebComponent extends HTMLElement {
     private root?: Root
     private mountNode?: HTMLDivElement
     private shadow?: ShadowRoot
+
+    constructor() {
+      super()
+      this.capturePreUpgradeProperties()
+    }
 
     static get observedAttributes() {
       return observedAttributes
@@ -52,14 +72,42 @@ export function createReactWebComponent<Props extends object>({
       this.root = undefined
     }
 
-    private renderReact() {
+    renderReact() {
       if (!this.root) {
         return
       }
 
       this.root.render(createElement(Component, mapElementToProps(this)))
     }
+
+    private capturePreUpgradeProperties() {
+      observedProperties.forEach((property) => {
+        if (!Object.prototype.hasOwnProperty.call(this, property)) {
+          return
+        }
+
+        const properties = this as unknown as Record<string, unknown>
+        const value = properties[property]
+
+        delete properties[property]
+        properties[property] = value
+      })
+    }
   }
+
+  observedProperties.forEach((property) => {
+    Object.defineProperty(ReactWebComponent.prototype, property, {
+      configurable: true,
+      enumerable: true,
+      get(this: HTMLElement) {
+        return getPropertyValues(this).get(property)
+      },
+      set(this: ReactWebComponent, value: unknown) {
+        getPropertyValues(this).set(property, value)
+        this.renderReact()
+      },
+    })
+  })
 
   if (!customElements.get(tagName)) {
     customElements.define(tagName, ReactWebComponent)

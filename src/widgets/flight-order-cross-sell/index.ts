@@ -1,5 +1,6 @@
 export { FlightOrderCrossSell } from './FlightOrderCrossSell'
 export type {
+  FlightOrderCrossSellConnectedConfig,
   FlightOrderCrossSellConnectedErrorMode,
   FlightOrderCrossSellConnectedProps,
 } from './FlightOrderCrossSellConnected'

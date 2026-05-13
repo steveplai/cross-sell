@@ -24,7 +24,12 @@ import type {
 
 export type FlightOrderCrossSellConnectedErrorMode = 'hidden' | 'message'
 
-export interface FlightOrderCrossSellConnectedProps extends FlightOrderCrossSellContentOverrides {
+export type FlightOrderCrossSellConnectedConfig = Omit<
+  FlightOrderCrossSellContentOverrides,
+  'domainMode'
+>
+
+export interface FlightOrderCrossSellConnectedProps extends FlightOrderCrossSellConnectedConfig {
   baseUrl?: string
   domainMode?: LiontravelDomainMode
   errorMode?: FlightOrderCrossSellConnectedErrorMode
