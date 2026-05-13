@@ -134,8 +134,8 @@ const meta = {
   args: {
     domainMode: 'uat',
     errorMode: 'message',
-    orderNumber: '2026-16575',
-    recommendProductTypes: 'htl',
+    orderNumber: '2026-123456',
+    recommendProductTypes: 'htl,etk',
   },
   argTypes: {
     domainMode: {
@@ -180,7 +180,7 @@ export const StaticData: Story = {
 
 export const ApiSuccess: Story = {
   args: {
-    orderNumber: '2026-123456',
+    orderNumber: '2026-17631',
     useMockResponse: false,
   },
   parameters: {
