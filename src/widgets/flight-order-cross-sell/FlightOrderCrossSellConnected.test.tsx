@@ -4,24 +4,11 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { RequestClient } from '@/shared/request'
 
 import { FlightOrderCrossSellConnected } from './FlightOrderCrossSellConnected'
-import { flightOrderCrossSellSampleData } from './sampleData'
-import type { FlightOrderCrossSellData } from './types'
 
 type MockRequestClientRequest = (
   pathname: string,
   init?: RequestInit,
 ) => Promise<unknown>
-
-function cloneSampleData(overrides: Partial<FlightOrderCrossSellData> = {}) {
-  const sampleData = JSON.parse(
-    JSON.stringify(flightOrderCrossSellSampleData),
-  ) as FlightOrderCrossSellData
-
-  return {
-    ...sampleData,
-    ...overrides,
-  }
-}
 
 function createMockRequestClient(get: MockRequestClientRequest): RequestClient {
   return {
@@ -76,30 +63,20 @@ describe('FlightOrderCrossSellConnected', () => {
     vi.restoreAllMocks()
   })
 
-  it('renders provided data without calling the API', () => {
+  it('shows an error message when order number is missing in message error mode', () => {
     const get = vi.fn<MockRequestClientRequest>()
     const requestClient = createMockRequestClient(get)
 
     render(
       <FlightOrderCrossSellConnected
-        data={cloneSampleData({
-          order: {
-            orderNumber: '999999',
-            orderYear: '2026',
-          },
-        })}
-        orderNumber="202605120001"
+        errorMode="message"
         requestClient={requestClient}
       />,
     )
 
     expect(
-      screen.getByRole('heading', { name: '探索東京飯店' }),
+      screen.getByText('缺少訂單編號，無法載入推薦內容。'),
     ).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: '前往加購' })).toHaveAttribute(
-      'href',
-      'https://uvacation.liontravel.com/thsrdetail?sYear=2026&sOrdr=999999',
-    )
     expect(get).not.toHaveBeenCalled()
   })
 
@@ -111,13 +88,14 @@ describe('FlightOrderCrossSellConnected', () => {
 
     render(
       <FlightOrderCrossSellConnected
+        domainMode="uat"
         orderNumber="2026-123456"
         requestClient={requestClient}
       />,
     )
 
     expect(
-      await screen.findByRole('heading', { name: '探索東京飯店' }),
+      await screen.findByRole('heading', { name: '訂房' }),
     ).toBeInTheDocument()
     expect(screen.getByText('您已解鎖限時優惠！')).toBeInTheDocument()
     expect(
@@ -156,6 +134,7 @@ describe('FlightOrderCrossSellConnected', () => {
 
     render(
       <FlightOrderCrossSellConnected
+        domainMode="uat"
         orderNumber="202605120001"
         recommendProductTypes={['htl', 'etk', 'flt']}
         requestClient={requestClient}
@@ -175,6 +154,28 @@ describe('FlightOrderCrossSellConnected', () => {
     ).toHaveAttribute(
       'href',
       'https://uvacation.liontravel.com/thsrdetail?sYear=2026&sOrdr=202605120001',
+    )
+  })
+
+  it('renders static content when AP-56 returns empty sections', async () => {
+    const get = vi.fn<MockRequestClientRequest>().mockResolvedValue([])
+    const requestClient = createMockRequestClient(get)
+
+    render(
+      <FlightOrderCrossSellConnected
+        domainMode="uat"
+        orderNumber="2026-123456"
+        requestClient={requestClient}
+      />,
+    )
+
+    expect(await screen.findByText('您已解鎖限時優惠！')).toBeInTheDocument()
+    expect(
+      screen.queryByRole('heading', { name: '訂房' }),
+    ).not.toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '前往加購' })).toHaveAttribute(
+      'href',
+      'https://uvacation.liontravel.com/thsrdetail?sYear=2026&sOrdr=123456',
     )
   })
 

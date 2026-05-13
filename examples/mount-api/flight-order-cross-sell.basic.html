@@ -256,7 +256,7 @@
       )
 
       window.FlightOrderCrossSell.mount('#flight-order-cross-sell-root', {
-        data,
+        ...data,
         onSelectItem(event) {
           log.textContent = `item-select: ${event.sectionId}/${event.item.id}`
         },

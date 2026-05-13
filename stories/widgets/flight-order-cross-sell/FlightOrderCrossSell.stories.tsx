@@ -25,7 +25,7 @@ const meta = {
   title: 'Widgets/Flight Order Cross Sell/Base',
   component: FlightOrderCrossSell,
   args: {
-    data: activeData,
+    ...activeData,
   },
   parameters: {
     layout: 'fullscreen',
@@ -40,6 +40,6 @@ export const ActiveOffer: Story = {}
 
 export const ExpiredOffer: Story = {
   args: {
-    data: expiredData,
+    ...expiredData,
   },
 }

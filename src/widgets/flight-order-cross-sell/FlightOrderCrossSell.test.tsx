@@ -65,7 +65,7 @@ describe('FlightOrderCrossSell', () => {
 
     render(
       <FlightOrderCrossSell
-        data={cloneSampleData({
+        {...cloneSampleData({
           promo: {
             ...flightOrderCrossSellSampleData.promo,
             durationSeconds: 7200,
@@ -85,7 +85,7 @@ describe('FlightOrderCrossSell', () => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date('2026-04-21T10:00:00Z'))
 
-    render(<FlightOrderCrossSell data={cloneSampleData()} />)
+    render(<FlightOrderCrossSell {...cloneSampleData()} />)
 
     expect(
       screen.getByRole('heading', { name: '探索東京飯店' }),
@@ -157,8 +157,19 @@ describe('FlightOrderCrossSell', () => {
     )
   })
 
+  it('renders static content when recommendation sections are empty', () => {
+    render(<FlightOrderCrossSell {...cloneSampleData({ sections: [] })} />)
+
+    expect(screen.getByText('您已解鎖限時優惠！')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '前往加購' })).toBeInTheDocument()
+    expect(screen.getByText('簽證護照')).toBeInTheDocument()
+    expect(
+      screen.queryByRole('heading', { name: '探索東京飯店' }),
+    ).not.toBeInTheDocument()
+  })
+
   it('keeps category overflow hints hidden when categories fit', () => {
-    render(<FlightOrderCrossSell data={cloneSampleData()} />)
+    render(<FlightOrderCrossSell {...cloneSampleData()} />)
 
     const categoryScroller = screen.getByTestId(
       'section-tokyo-attractions-categories',
@@ -180,7 +191,7 @@ describe('FlightOrderCrossSell', () => {
   })
 
   it('updates category overflow hints while dragging horizontally', () => {
-    render(<FlightOrderCrossSell data={cloneSampleData()} />)
+    render(<FlightOrderCrossSell {...cloneSampleData()} />)
 
     const categoryScroller = screen.getByTestId(
       'section-tokyo-attractions-categories',
@@ -236,8 +247,10 @@ describe('FlightOrderCrossSell', () => {
   it('falls back to the insurance reminder button when service agent email is missing', () => {
     render(
       <FlightOrderCrossSell
-        data={cloneSampleData({
-          serviceAgent: undefined,
+        {...cloneSampleData({
+          serviceAgent: {
+            email: '',
+          },
         })}
       />,
     )
@@ -254,7 +267,7 @@ describe('FlightOrderCrossSell', () => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date('2026-04-21T10:00:00Z'))
 
-    render(<FlightOrderCrossSell data={cloneSampleData()} />)
+    render(<FlightOrderCrossSell {...cloneSampleData()} />)
 
     const hotelHeading = screen.getByRole('heading', {
       name: '探索東京飯店',
@@ -282,7 +295,7 @@ describe('FlightOrderCrossSell', () => {
   it('uses the attraction banner title override when provided', () => {
     render(
       <FlightOrderCrossSell
-        data={cloneSampleData({
+        {...cloneSampleData({
           attractionBannerOverrides: {
             title: '東京票券精選推薦',
           },
@@ -302,7 +315,7 @@ describe('FlightOrderCrossSell', () => {
     const data = cloneSampleData()
     data.sections[0].items[0].imageUrl = undefined
 
-    const { container } = render(<FlightOrderCrossSell data={data} />)
+    const { container } = render(<FlightOrderCrossSell {...data} />)
 
     expect(
       container.querySelector(`img[src="${defaultProductImageUrl}"]`),
@@ -314,7 +327,7 @@ describe('FlightOrderCrossSell', () => {
     const data = cloneSampleData()
     data.sections[0].items[0].imageUrl = brokenImageUrl
 
-    const { container } = render(<FlightOrderCrossSell data={data} />)
+    const { container } = render(<FlightOrderCrossSell {...data} />)
     const image = container.querySelector(`img[src="${brokenImageUrl}"]`)
 
     expect(image).toBeInTheDocument()
@@ -329,7 +342,7 @@ describe('FlightOrderCrossSell', () => {
     const onSelectAddon = vi.fn()
     const { rerender } = render(
       <FlightOrderCrossSell
-        data={cloneSampleData({ hsrAddon: undefined })}
+        {...cloneSampleData({ hsrAddon: undefined })}
         onSelectAddon={onSelectAddon}
       />,
     )
@@ -348,7 +361,7 @@ describe('FlightOrderCrossSell', () => {
 
     rerender(
       <FlightOrderCrossSell
-        data={cloneSampleData({
+        {...cloneSampleData({
           hsrAddon: {
             id: 'custom-hsr',
             title: '高鐵加購提醒',
@@ -377,7 +390,7 @@ describe('FlightOrderCrossSell', () => {
 
     render(
       <FlightOrderCrossSell
-        data={cloneSampleData({
+        {...cloneSampleData({
           domainMode: 'uat',
           order: {
             orderNumber: '16575',
@@ -407,7 +420,7 @@ describe('FlightOrderCrossSell', () => {
 
     render(
       <FlightOrderCrossSell
-        data={cloneSampleData({
+        {...cloneSampleData({
           domainMode: 'production',
           order: {
             orderNumber: '16575',
@@ -423,12 +436,12 @@ describe('FlightOrderCrossSell', () => {
     )
   })
 
-  it('infers the HSR addon CTA domain mode from a supported flight hostname', () => {
+  it('uses the default UAT domain mode before hostname inference', () => {
     reconfigureTestUrl('https://uflight.liontravel.com/orders')
 
     render(
       <FlightOrderCrossSell
-        data={cloneSampleData({
+        {...cloneSampleData({
           domainMode: undefined,
           order: {
             orderNumber: '16575',
@@ -450,7 +463,7 @@ describe('FlightOrderCrossSell', () => {
 
     render(
       <FlightOrderCrossSell
-        data={cloneSampleData({
+        {...cloneSampleData({
           domainMode: 'uat',
           order: undefined,
         })}
@@ -467,31 +480,25 @@ describe('FlightOrderCrossSell', () => {
     expect(onSelectAddon).toHaveBeenCalledWith({ addonId: 'hsr' })
   })
 
-  it('falls back to the HSR addon button when domain mode and hostname inference are unavailable', async () => {
-    const user = userEvent.setup()
-    const onSelectAddon = vi.fn()
+  it('uses the default UAT domain mode when domain mode is omitted', () => {
     reconfigureTestUrl('https://holiday.xxx.com/orders')
 
     render(
       <FlightOrderCrossSell
-        data={cloneSampleData({
+        {...cloneSampleData({
           domainMode: undefined,
           order: {
             orderNumber: '16575',
             orderYear: '2026',
           },
         })}
-        onSelectAddon={onSelectAddon}
       />,
     )
 
-    expect(
-      screen.queryByRole('link', { name: '前往加購' }),
-    ).not.toBeInTheDocument()
-
-    await user.click(screen.getByRole('button', { name: '前往加購' }))
-
-    expect(onSelectAddon).toHaveBeenCalledWith({ addonId: 'hsr' })
+    expect(screen.getByRole('link', { name: '前往加購' })).toHaveAttribute(
+      'href',
+      'https://uvacation.liontravel.com/thsrdetail?sYear=2026&sOrdr=16575',
+    )
   })
 
   it('shows the full duration before the promo starts', () => {
@@ -500,7 +507,7 @@ describe('FlightOrderCrossSell', () => {
 
     render(
       <FlightOrderCrossSell
-        data={cloneSampleData({
+        {...cloneSampleData({
           promo: {
             ...flightOrderCrossSellSampleData.promo,
             durationSeconds: 3600,
@@ -522,7 +529,7 @@ describe('FlightOrderCrossSell', () => {
 
     const { unmount } = render(
       <FlightOrderCrossSell
-        data={cloneSampleData({
+        {...cloneSampleData({
           promo: {
             ...flightOrderCrossSellSampleData.promo,
             durationSeconds: 10,
@@ -555,7 +562,7 @@ describe('FlightOrderCrossSell', () => {
 
     render(
       <FlightOrderCrossSell
-        data={cloneSampleData({
+        {...cloneSampleData({
           promo: {
             ...flightOrderCrossSellSampleData.promo,
             durationSeconds: 3600,
@@ -581,7 +588,7 @@ describe('FlightOrderCrossSell', () => {
 
     render(
       <FlightOrderCrossSell
-        data={cloneSampleData()}
+        {...cloneSampleData()}
         onSelectAddon={onSelectAddon}
         onSelectItem={onSelectItem}
         onViewMore={onViewMore}
@@ -617,7 +624,7 @@ describe('FlightOrderCrossSell', () => {
       href: 'https://uhotel.liontravel.com/detail/JPTYO001',
     }
 
-    render(<FlightOrderCrossSell data={data} onSelectItem={onSelectItem} />)
+    render(<FlightOrderCrossSell {...data} onSelectItem={onSelectItem} />)
 
     const productLink = screen.getByRole('link', { name: /LA VISTA 東京灣/ })
 
@@ -643,7 +650,7 @@ describe('FlightOrderCrossSell', () => {
     data.sections[0].viewMoreHref =
       'https://uhotel.liontravel.com/search?SearchKeyword=%E6%9D%B1%E4%BA%AC'
 
-    render(<FlightOrderCrossSell data={data} />)
+    render(<FlightOrderCrossSell {...data} />)
 
     expect(
       screen.getAllByRole('link', { name: /探索更多/ })[0],
@@ -661,7 +668,7 @@ describe('FlightOrderCrossSell', () => {
 
     render(
       <FlightOrderCrossSell
-        data={cloneSampleData({
+        {...cloneSampleData({
           sections: legacySections,
         })}
       />,

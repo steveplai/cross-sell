@@ -38,58 +38,6 @@
       No events yet
     </div>
 
-    <script>
-      const startsAt = new Date(Date.now() - 10 * 60 * 1000).toISOString()
-      const data = {
-        locale: 'zh-TW',
-        currency: 'TWD',
-        domainMode: 'uat',
-        order: {
-          orderYear: '2026',
-          orderNumber: '16575',
-        },
-        promo: {
-          id: 'limited-offer',
-          activeTitle: '您已解鎖限時優惠！',
-          expiredTitle: '發現更多旅遊靈感！',
-          startsAt,
-          durationSeconds: 40 * 60 * 60,
-          serviceLabel: '航班周邊服務',
-        },
-        hsrAddon: {
-          id: 'hsr',
-          title: '加購高鐵 行程更順暢',
-          description: '購買國內外行程，最高享 8 折優惠',
-          ctaLabel: '前往加購',
-        },
-        sections: [
-          {
-            id: 'tokyo-hotels',
-            kind: 'hotel',
-            title: '探索東京飯店',
-            viewMoreLabel: '探索更多',
-            items: [
-              {
-                id: 'la-vista-tokyo-bay',
-                title: 'LA VISTA 東京灣',
-                location: '江東區',
-                starRating: 5,
-                rating: '4.5',
-                ratingLabel: '太讚了',
-                reviewCount: 1132,
-                cancellationLabel: '免費取消',
-                price: 1224152,
-                priceSuffix: '起',
-              },
-            ],
-          },
-        ],
-      }
-
-      document
-        .querySelector('flight-order-cross-sell-connected')
-        .setAttribute('data', JSON.stringify(data))
-    </script>
     <script src="../../dist/widgets/flight-order-cross-sell-connected.wc.js"></script>
     <script>
       const widget = document.querySelector('flight-order-cross-sell-connected')

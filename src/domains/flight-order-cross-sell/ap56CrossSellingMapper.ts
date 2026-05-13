@@ -13,8 +13,8 @@ import type {
 
 const defaultCategoryHref = 'https://www.liontravel.com/'
 
-// Convert AP-56 sections into the widget's carousel-only section overrides.
-// Non-carousel static content is merged later by the connected widget.
+// Convert AP-56 sections into the widget section model consumed by the
+// connected widget. Non-carousel static content is supplied by the base widget.
 export function mapAp56CrossSellingResponseToSections(
   response:
     | Ap56CrossSellingResponseEnvelope

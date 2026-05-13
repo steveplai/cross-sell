@@ -5,42 +5,10 @@ import {
   FlightOrderCrossSellConnected,
   type FlightOrderCrossSellConnectedErrorMode,
   type FlightOrderCrossSellConnectedProps,
-  type FlightOrderCrossSellData,
 } from '../../widgets/flight-order-cross-sell'
 import widgetStyles from '../../widgets/flight-order-cross-sell/style.css?inline'
 
 const styles = `${baseStyles}\n${widgetStyles}`
-
-function parseData(value: string | null): FlightOrderCrossSellData | undefined {
-  if (!value) {
-    return undefined
-  }
-
-  try {
-    const parsed = JSON.parse(value)
-
-    return isFlightOrderCrossSellData(parsed)
-      ? (parsed as FlightOrderCrossSellData)
-      : undefined
-  } catch {
-    return undefined
-  }
-}
-
-function isFlightOrderCrossSellData(value: unknown) {
-  if (!value || typeof value !== 'object') {
-    return false
-  }
-
-  const candidate = value as Partial<FlightOrderCrossSellData>
-
-  return (
-    !!candidate.promo &&
-    typeof candidate.promo.startsAt === 'string' &&
-    typeof candidate.promo.durationSeconds === 'number' &&
-    Array.isArray(candidate.sections)
-  )
-}
 
 function parseErrorMode(
   value: string | null | undefined,
@@ -59,7 +27,6 @@ createReactWebComponent<FlightOrderCrossSellConnectedProps>({
   Component: FlightOrderCrossSellConnected,
   observedAttributes: [
     'base-url',
-    'data',
     'domain-mode',
     'error-mode',
     'order-number',
@@ -71,7 +38,6 @@ createReactWebComponent<FlightOrderCrossSellConnectedProps>({
 
     return {
       baseUrl: getOptionalAttribute(element, 'base-url'),
-      data: parseData(element.getAttribute('data')),
       domainMode: isLiontravelDomainMode(domainMode) ? domainMode : undefined,
       errorMode: parseErrorMode(getOptionalAttribute(element, 'error-mode')),
       orderNumber: getOptionalAttribute(element, 'order-number'),

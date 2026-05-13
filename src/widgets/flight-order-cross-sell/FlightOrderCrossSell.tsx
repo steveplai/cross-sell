@@ -12,6 +12,7 @@ import { ReminderCards } from './components/addons/ReminderCards'
 import { PromoHeader } from './components/promo/PromoHeader'
 import { AttractionDecorBanner } from './components/recommendations/AttractionDecorBanner'
 import { CrossSellSection } from './components/recommendations/CrossSellSection'
+import { flightOrderCrossSellDefaultData } from './defaultData'
 import { getRemainingPromoSeconds } from './lib/countdown'
 import { groupFlightOrderCrossSellSections } from './lib/groupSections'
 import type {
@@ -68,7 +69,13 @@ function FlightOrderCrossSellContent({
   onSelectItem,
   onViewMore,
   promoKey,
-}: FlightOrderCrossSellProps & { promoKey: string }) {
+}: Pick<
+  FlightOrderCrossSellProps,
+  'onSelectAddon' | 'onSelectItem' | 'onViewMore'
+> & {
+  data: FlightOrderCrossSellData
+  promoKey: string
+}) {
   const now = useCurrentTime(promoKey)
   const locale = data.locale ?? 'zh-TW'
   const currency = data.currency ?? 'TWD'
@@ -310,11 +317,45 @@ function useCurrentTime(promoKey: string) {
 //#endregion - Functions
 
 export function FlightOrderCrossSell({
-  data,
+  attractionBannerOverrides,
+  currency,
+  domainMode,
+  hsrAddon,
+  locale,
   onSelectAddon,
   onSelectItem,
   onViewMore,
+  order,
+  promo,
+  reminders,
+  sections,
+  serviceAgent,
 }: FlightOrderCrossSellProps) {
+  const data: FlightOrderCrossSellData = {
+    ...flightOrderCrossSellDefaultData,
+    attractionBannerOverrides: {
+      ...flightOrderCrossSellDefaultData.attractionBannerOverrides,
+      ...attractionBannerOverrides,
+    },
+    currency: currency ?? flightOrderCrossSellDefaultData.currency,
+    domainMode: domainMode ?? flightOrderCrossSellDefaultData.domainMode,
+    hsrAddon: {
+      ...flightOrderCrossSellDefaultData.hsrAddon,
+      ...hsrAddon,
+    },
+    locale: locale ?? flightOrderCrossSellDefaultData.locale,
+    order,
+    promo: {
+      ...flightOrderCrossSellDefaultData.promo,
+      ...promo,
+    },
+    reminders: reminders ?? flightOrderCrossSellDefaultData.reminders,
+    sections,
+    serviceAgent: {
+      ...flightOrderCrossSellDefaultData.serviceAgent,
+      ...serviceAgent,
+    },
+  }
   const promoKey = `${data.promo.startsAt}:${data.promo.durationSeconds}`
 
   return (

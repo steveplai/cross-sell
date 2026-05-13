@@ -34,6 +34,127 @@
       No events yet
     </div>
 
+    <script>
+      const data = {
+        locale: 'zh-TW',
+        currency: 'TWD',
+        domainMode: 'uat',
+        order: {
+          orderYear: '2026',
+          orderNumber: '16575',
+        },
+        sections: [
+          {
+            id: 'tokyo-hotels',
+            kind: 'hotel',
+            title: '探索東京飯店',
+            viewMoreLabel: '探索更多',
+            items: [
+              {
+                id: 'la-vista-tokyo-bay',
+                title: 'LA VISTA 東京灣',
+                location: '江東區',
+                starRating: 5,
+                rating: '4.5',
+                ratingLabel: '太讚了',
+                reviewCount: 1132,
+                cancellationLabel: '免費取消',
+                price: 1224152,
+                priceSuffix: '起',
+              },
+              {
+                id: 'hotel-metropolitan',
+                title: '東京灣舒適飯店',
+                location: '江東區',
+                starRating: 5,
+                rating: '4.5',
+                ratingLabel: '太讚了',
+                reviewCount: 1132,
+                cancellationLabel: '免費取消',
+                price: 1224152,
+                priceSuffix: '起',
+              },
+              {
+                id: 'tokyo-bay-stay',
+                title: '東京灣景觀旅宿',
+                location: '江東區',
+                starRating: 5,
+                rating: '4.5',
+                ratingLabel: '太讚了',
+                reviewCount: 1132,
+                cancellationLabel: '免費取消',
+                price: 1224152,
+                priceSuffix: '起',
+              },
+              {
+                id: 'market-front-hotel',
+                title: '市場前站高評價飯店',
+                location: '江東區',
+                starRating: 5,
+                rating: '4.5',
+                ratingLabel: '太讚了',
+                reviewCount: 1132,
+                cancellationLabel: '免費取消',
+                price: 1224152,
+                priceSuffix: '起',
+              },
+              {
+                id: 'odaiba-hotel',
+                title: '台場親子精選飯店',
+                location: '江東區',
+                starRating: 5,
+                rating: '4.5',
+                ratingLabel: '太讚了',
+                reviewCount: 1132,
+                cancellationLabel: '免費取消',
+                price: 1224152,
+                priceSuffix: '起',
+              },
+              {
+                id: 'ginza-design-hotel',
+                title: '銀座設計旅店',
+                location: '銀座',
+                starRating: 5,
+                rating: '4.6',
+                ratingLabel: '很棒',
+                reviewCount: 856,
+                cancellationLabel: '免費取消',
+                price: 98600,
+                priceSuffix: '起',
+              },
+              {
+                id: 'shinjuku-city-hotel',
+                title: '新宿城市飯店',
+                location: '新宿區',
+                starRating: 5,
+                rating: '4.4',
+                ratingLabel: '太讚了',
+                reviewCount: 2041,
+                cancellationLabel: '免費取消',
+                price: 112300,
+                priceSuffix: '起',
+              },
+              {
+                id: 'ueno-family-stay',
+                title: '上野家庭友善旅宿',
+                location: '上野',
+                starRating: 5,
+                rating: '4.3',
+                ratingLabel: '很棒',
+                reviewCount: 624,
+                cancellationLabel: '免費取消',
+                price: 88400,
+                priceSuffix: '起',
+              },
+            ],
+          },
+        ],
+      }
+
+      document
+        .querySelector('flight-order-cross-sell')
+        .setAttribute('data', JSON.stringify(data))
+    </script>
     <script src="../../dist/widgets/flight-order-cross-sell.wc.js"></script>
     <script>
       const widget = document.querySelector('flight-order-cross-sell')

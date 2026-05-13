@@ -109,6 +109,22 @@ export interface FlightOrderCrossSellData {
   currency?: string
 }
 
+export type FlightOrderCrossSellDefaultData = Omit<
+  FlightOrderCrossSellData,
+  'order' | 'sections'
+>
+
+export interface FlightOrderCrossSellContentOverrides {
+  attractionBannerOverrides?: FlightOrderCrossSellAttractionBannerOverrides
+  currency?: string
+  domainMode?: LiontravelDomainMode
+  hsrAddon?: FlightOrderCrossSellAddon
+  locale?: string
+  promo?: Partial<FlightOrderCrossSellPromo>
+  reminders?: FlightOrderCrossSellData['reminders']
+  serviceAgent?: FlightOrderCrossSellServiceAgent
+}
+
 export interface FlightOrderCrossSellItemEvent {
   sectionId: string
   item: FlightOrderCrossSellItem
@@ -122,8 +138,9 @@ export interface FlightOrderCrossSellAddonEvent {
   addonId: string
 }
 
-export interface FlightOrderCrossSellProps {
-  data: FlightOrderCrossSellData
+export interface FlightOrderCrossSellProps extends FlightOrderCrossSellContentOverrides {
+  order?: FlightOrderCrossSellOrder
+  sections: FlightOrderCrossSellSection[]
   onSelectItem?: (event: FlightOrderCrossSellItemEvent) => void
   onViewMore?: (event: FlightOrderCrossSellViewMoreEvent) => void
   onSelectAddon?: (event: FlightOrderCrossSellAddonEvent) => void

@@ -185,15 +185,15 @@ travel-inspiration state.
 ### `flight-order-cross-sell-connected`
 
 API-loading version of `flight-order-cross-sell`. It accepts an `orderNumber`,
-loads AP-56 carousel section data from the flight order cross-sell API, merges
-those sections into the static widget content, then renders the same pure React
-widget used by the static version.
+loads AP-56 section data from the flight order cross-sell API, passes those
+sections to the base widget, and uses the base widget's static default content
+for promo, add-ons, and reminders.
 
 Public contract:
 
 - Web Component tag: `flight-order-cross-sell-connected`
 - Mount API global: `window.FlightOrderCrossSellConnected`
-- Attributes: `order-number`, `recommend-product-types`, `domain-mode`, `base-url`, `error-mode`, `data`
+- Attributes: `order-number`, `recommend-product-types`, `domain-mode`, `base-url`, `error-mode`
 - `domain-mode` values: `uat`, `production`
 - `error-mode` values: `hidden`, `message`
 - `recommend-product-types` default: `htl,etk`
@@ -209,8 +209,8 @@ Default API origins:
 
 The current endpoint path is centralized in the domain API as
 `/category/_fringe/CrossSelling?OrderNo={orderNumber}&RecommendProductType={recommendProductTypes}`.
-The optional `data` attribute or prop bypasses API loading and is intended for
-demos, tests, and CMS previews.
+The connected widget does not accept full static `data`; use
+`flight-order-cross-sell` when sections and order data are already available.
 
 Connected Web Component usage:
 

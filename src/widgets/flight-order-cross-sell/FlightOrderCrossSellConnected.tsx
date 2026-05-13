@@ -15,20 +15,17 @@ import type { RequestClient } from '@/shared/request'
 import type { LiontravelDomainMode } from '@/shared/utils/liontravelUrl'
 
 import { createWidgetRootProps } from '../../runtime/widgetRoot'
-import { flightOrderCrossSellConnectedBaseData } from './defaultData'
 import { FlightOrderCrossSell } from './FlightOrderCrossSell'
 import type {
-  FlightOrderCrossSellData,
+  FlightOrderCrossSellContentOverrides,
+  FlightOrderCrossSellOrder,
   FlightOrderCrossSellProps,
-  FlightOrderCrossSellSection,
-  FlightOrderCrossSellSectionKind,
 } from './types'
 
 export type FlightOrderCrossSellConnectedErrorMode = 'hidden' | 'message'
 
-export interface FlightOrderCrossSellConnectedProps {
+export interface FlightOrderCrossSellConnectedProps extends FlightOrderCrossSellContentOverrides {
   baseUrl?: string
-  data?: FlightOrderCrossSellData
   domainMode?: LiontravelDomainMode
   errorMode?: FlightOrderCrossSellConnectedErrorMode
   onSelectAddon?: FlightOrderCrossSellProps['onSelectAddon']
@@ -44,11 +41,6 @@ export interface FlightOrderCrossSellConnectedProps {
 const connectedWidgetRootProps = createWidgetRootProps(
   'flight-order-cross-sell-connected',
 )
-const apiBackedSectionKinds = new Set<FlightOrderCrossSellSectionKind>([
-  'hotel',
-  'attraction',
-  'transport',
-])
 
 function createConnectedQueryClient() {
   return new QueryClient({
@@ -61,52 +53,13 @@ function createConnectedQueryClient() {
   })
 }
 
-function createStaticBaseDataWithApiSections(
-  apiSections: FlightOrderCrossSellSection[],
-  orderNumber: string,
-): FlightOrderCrossSellData {
-  const baseData = JSON.parse(
-    JSON.stringify(flightOrderCrossSellConnectedBaseData),
-  ) as FlightOrderCrossSellData
-  const apiSectionsByKind = new Map<
-    FlightOrderCrossSellSectionKind,
-    FlightOrderCrossSellSection
-  >()
-
-  apiSections.forEach((section) => {
-    if (section.kind) {
-      apiSectionsByKind.set(section.kind, section)
-    }
-  })
-
-  return {
-    ...baseData,
-    order: createOrderFromExternalOrderNumber(baseData, orderNumber),
-    sections: baseData.sections.map((section) => {
-      if (!section.kind || !apiBackedSectionKinds.has(section.kind)) {
-        return section
-      }
-
-      const apiSection = apiSectionsByKind.get(section.kind)
-
-      return {
-        ...section,
-        categories: apiSection?.categories,
-        items: apiSection?.items ?? [],
-        viewMoreHref: apiSection?.viewMoreHref,
-      }
-    }),
-  }
-}
-
 function createOrderFromExternalOrderNumber(
-  baseData: FlightOrderCrossSellData,
   orderNumber: string,
-): FlightOrderCrossSellData['order'] {
+): FlightOrderCrossSellOrder | undefined {
   const normalizedOrderNumber = orderNumber.trim()
 
   if (!normalizedOrderNumber) {
-    return baseData.order
+    return undefined
   }
 
   const separatorIndex = normalizedOrderNumber.indexOf('-')
@@ -126,9 +79,19 @@ function createOrderFromExternalOrderNumber(
   }
 
   return {
-    orderYear: baseData.order?.orderYear ?? '',
+    orderYear: createDefaultOrderYear(normalizedOrderNumber),
     orderNumber: normalizedOrderNumber,
   }
+}
+
+function createDefaultOrderYear(orderNumber: string) {
+  const leadingYear = orderNumber.slice(0, 4)
+
+  if (/^(19|20)\d{2}$/.test(leadingYear)) {
+    return leadingYear
+  }
+
+  return new Date().getFullYear().toString()
 }
 
 //#endregion - Functions
@@ -136,16 +99,22 @@ function createOrderFromExternalOrderNumber(
 //#region - Sub Components
 
 function FlightOrderCrossSellConnectedContent({
+  attractionBannerOverrides,
   baseUrl,
-  data,
+  currency,
   domainMode = 'production',
   errorMode = 'hidden',
+  hsrAddon,
+  locale,
   onSelectAddon,
   onSelectItem,
   onViewMore,
   orderNumber,
+  promo,
   recommendProductTypes,
+  reminders,
   requestClient,
+  serviceAgent,
 }: FlightOrderCrossSellConnectedProps) {
   const apiOptions = useMemo<FlightOrderCrossSellApiOptions>(
     () => ({
@@ -160,7 +129,7 @@ function FlightOrderCrossSellConnectedContent({
     () => createFlightOrderCrossSellApi(apiOptions),
     [apiOptions],
   )
-  const canLoadFromApi = !data && !!orderNumber
+  const canLoadFromApi = !!orderNumber
   const query = useQuery({
     enabled: canLoadFromApi,
     queryFn: ({ signal }) =>
@@ -175,19 +144,23 @@ function FlightOrderCrossSellConnectedContent({
       requestClient ? 'custom-client' : 'default-client',
     ],
   })
-  const resolvedData =
-    data ??
-    (query.data
-      ? createStaticBaseDataWithApiSections(query.data, orderNumber ?? '')
-      : undefined)
 
-  if (resolvedData) {
+  if (query.data) {
     return (
       <FlightOrderCrossSell
-        data={resolvedData}
+        attractionBannerOverrides={attractionBannerOverrides}
+        currency={currency}
+        domainMode={domainMode}
+        hsrAddon={hsrAddon}
+        locale={locale}
         onSelectAddon={onSelectAddon}
         onSelectItem={onSelectItem}
         onViewMore={onViewMore}
+        order={createOrderFromExternalOrderNumber(orderNumber ?? '')}
+        promo={promo}
+        reminders={reminders}
+        sections={query.data}
+        serviceAgent={serviceAgent}
       />
     )
   }

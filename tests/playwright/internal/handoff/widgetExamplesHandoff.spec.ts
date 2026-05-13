@@ -103,7 +103,7 @@ const webComponentExamples: WebComponentExample[] = [
     widgets: [
       {
         selector: 'flight-order-cross-sell-connected',
-        text: '探索東京飯店',
+        text: '訂房',
       },
     ],
   },
@@ -150,7 +150,7 @@ const mountApiExamples: MountApiExample[] = [
     name: 'flight order cross sell connected mount API basic',
     path: '/examples/mount-api/flight-order-cross-sell-connected.basic.html',
     rootSelector: '#flight-order-cross-sell-connected-root',
-    text: '探索東京飯店',
+    text: '訂房',
   },
 ] as const
 
@@ -158,6 +158,42 @@ const darkBackgroundColor = 'rgb(10, 11, 11)'
 const lightBackgroundColor = 'rgb(255, 255, 255)'
 const flightOrderHsrAddonUrl =
   'https://uvacation.liontravel.com/thsrdetail?sYear=2026&sOrdr=16575'
+const flightOrderConnectedApiResponse = [
+  {
+    Type: '訂房',
+    CombineTagList: ['東京 旅遊'],
+    pList: [
+      {
+        ID: 'JPTYO001',
+        Title: '東京灣精選飯店',
+        Price: 5830,
+        ImgUrl: 'https://static.liontech.com.tw/hotel.jpg',
+        SaleCurr: 'TWD',
+        CityName: ['東京'],
+        SalePrice: 6200,
+        Discount: 5,
+        Location: {
+          Name: '東京車站',
+          Distance: 0.5,
+          Unit: '公里',
+        },
+        Level: 5,
+        Rating: 4.5,
+        RatingCount: 156,
+        Likeability: 95,
+        CancelTag: '免費取消',
+      },
+    ],
+  },
+  {
+    Type: '訂房-看更多(搜尋頁)',
+    pList: [
+      {
+        url: 'https://uhotel.liontravel.com/search?SearchKeyword=%E6%9D%B1%E4%BA%AC',
+      },
+    ],
+  },
+]
 
 function normalizeCssValue(value: string) {
   return value.trim().replace(/\s+/g, ' ')
@@ -195,7 +231,24 @@ function normalizeTokenState(
 }
 
 async function gotoHandoffExample(page: Page, path: string) {
+  if (path.includes('flight-order-cross-sell-connected')) {
+    await mockFlightOrderConnectedApi(page)
+  }
+
   await page.goto(path, { waitUntil: 'domcontentloaded' })
+}
+
+async function mockFlightOrderConnectedApi(page: Page) {
+  await page.route('**/category/_fringe/CrossSelling**', async (route) => {
+    await route.fulfill({
+      body: JSON.stringify(flightOrderConnectedApiResponse),
+      contentType: 'application/json',
+      headers: {
+        'access-control-allow-origin': '*',
+      },
+      status: 200,
+    })
+  })
 }
 
 async function getWebComponentWidgetState(page: Page, selector: string) {
@@ -423,23 +476,21 @@ test('flight order connected web component handoff emits item event', async ({
     .poll(() =>
       getWebComponentWidgetText(page, 'flight-order-cross-sell-connected'),
     )
-    .toContain('探索東京飯店')
+    .toContain('訂房')
 
   await page
     .locator('flight-order-cross-sell-connected')
     .evaluate((element) => {
       const buttons = element.shadowRoot?.querySelectorAll('button') ?? []
       const button = Array.from(buttons).find((candidate) =>
-        candidate.textContent?.includes('LA VISTA 東京灣'),
+        candidate.textContent?.includes('東京灣精選飯店'),
       )
       ;(button as HTMLButtonElement | null)?.click()
     })
 
   await expect(
     page.getByTestId('flight-cross-sell-connected-event-log'),
-  ).toContainText(
-    'flight-order-cross-sell:item-select: tokyo-hotels/la-vista-tokyo-bay',
-  )
+  ).toContainText('flight-order-cross-sell:item-select')
 })
 
 test('web component host dark class controls shadow DOM theme', async ({

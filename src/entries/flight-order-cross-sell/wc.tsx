@@ -5,24 +5,23 @@ import {
   type FlightOrderCrossSellData,
   type FlightOrderCrossSellProps,
 } from '../../widgets/flight-order-cross-sell'
-import { flightOrderCrossSellFallbackData } from '../../widgets/flight-order-cross-sell/defaultData'
 import widgetStyles from '../../widgets/flight-order-cross-sell/style.css?inline'
 
 const styles = `${baseStyles}\n${widgetStyles}`
 
-function parseData(value: string | null): FlightOrderCrossSellData {
+function parseData(value: string | null): FlightOrderCrossSellProps {
   if (!value) {
-    return flightOrderCrossSellFallbackData
+    return { sections: [] }
   }
 
   try {
     const parsed = JSON.parse(value)
 
     return isFlightOrderCrossSellData(parsed)
-      ? (parsed as FlightOrderCrossSellData)
-      : flightOrderCrossSellFallbackData
+      ? mapDataToProps(parsed as FlightOrderCrossSellData)
+      : { sections: [] }
   } catch {
-    return flightOrderCrossSellFallbackData
+    return { sections: [] }
   }
 }
 
@@ -34,11 +33,26 @@ function isFlightOrderCrossSellData(value: unknown) {
   const candidate = value as Partial<FlightOrderCrossSellData>
 
   return (
-    !!candidate.promo &&
-    typeof candidate.promo.startsAt === 'string' &&
-    typeof candidate.promo.durationSeconds === 'number' &&
-    Array.isArray(candidate.sections)
+    typeof candidate === 'object' &&
+    (!candidate.sections || Array.isArray(candidate.sections))
   )
+}
+
+function mapDataToProps(
+  data: FlightOrderCrossSellData,
+): FlightOrderCrossSellProps {
+  return {
+    attractionBannerOverrides: data.attractionBannerOverrides,
+    currency: data.currency,
+    domainMode: data.domainMode,
+    hsrAddon: data.hsrAddon,
+    locale: data.locale,
+    order: data.order,
+    promo: data.promo,
+    reminders: data.reminders,
+    sections: data.sections ?? [],
+    serviceAgent: data.serviceAgent,
+  }
 }
 
 createReactWebComponent<FlightOrderCrossSellProps>({
@@ -47,7 +61,7 @@ createReactWebComponent<FlightOrderCrossSellProps>({
   observedAttributes: ['data'],
   styles,
   mapElementToProps: (element) => ({
-    data: parseData(element.getAttribute('data')),
+    ...parseData(element.getAttribute('data')),
     onSelectItem: (detail) => {
       element.dispatchEvent(
         new CustomEvent('flight-order-cross-sell:item-select', {

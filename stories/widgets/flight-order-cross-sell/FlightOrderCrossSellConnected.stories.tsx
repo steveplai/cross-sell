@@ -3,10 +3,7 @@ import '../../../src/widgets/flight-order-cross-sell/style.css'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import type { ComponentProps } from 'react'
 
-import {
-  FlightOrderCrossSellConnected,
-  flightOrderCrossSellSampleData,
-} from '../../../src/widgets/flight-order-cross-sell'
+import { FlightOrderCrossSellConnected } from '../../../src/widgets/flight-order-cross-sell'
 import {
   createStorybookProxyRequestClient,
   errorRequestClient,
@@ -65,12 +62,6 @@ const meta = {
 export default meta
 
 type Story = StoryObj<typeof meta>
-
-export const StaticData: Story = {
-  args: {
-    data: flightOrderCrossSellSampleData,
-  },
-}
 
 export const ApiSuccess: Story = {
   args: {
