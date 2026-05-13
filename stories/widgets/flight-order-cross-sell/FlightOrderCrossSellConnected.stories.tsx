@@ -1,13 +1,13 @@
-import '../../src/widgets/flight-order-cross-sell/style.css'
+import '../../../src/widgets/flight-order-cross-sell/style.css'
 
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import type { ComponentProps } from 'react'
 
-import type { RequestClient } from '../../src/shared/request'
+import type { RequestClient } from '../../../src/shared/request'
 import {
   FlightOrderCrossSellConnected,
   flightOrderCrossSellSampleData,
-} from '../../src/widgets/flight-order-cross-sell'
+} from '../../../src/widgets/flight-order-cross-sell'
 
 type ConnectedStoryArgs = Omit<
   ComponentProps<typeof FlightOrderCrossSellConnected>,
@@ -129,7 +129,7 @@ async function proxyRequest<T>(
 
 const meta = {
   id: 'flight-order-cross-sell-connected',
-  title: 'Demos/Flight Order Cross Sell/Connected',
+  title: 'Widgets/Flight Order Cross Sell/Connected',
   component: FlightOrderCrossSellConnected,
   args: {
     domainMode: 'uat',

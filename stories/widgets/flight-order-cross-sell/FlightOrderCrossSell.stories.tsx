@@ -1,11 +1,11 @@
-import '../../src/widgets/flight-order-cross-sell/style.css'
+import '../../../src/widgets/flight-order-cross-sell/style.css'
 
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
 import {
   FlightOrderCrossSell,
   flightOrderCrossSellSampleData,
-} from '../../src/widgets/flight-order-cross-sell'
+} from '../../../src/widgets/flight-order-cross-sell'
 
 const activeData = {
   ...flightOrderCrossSellSampleData,
@@ -22,7 +22,7 @@ const expiredData = {
 
 const meta = {
   id: 'flight-order-cross-sell',
-  title: 'Demos/Flight Order Cross Sell',
+  title: 'Widgets/Flight Order Cross Sell/Base',
   component: FlightOrderCrossSell,
   args: {
     data: activeData,
@@ -42,14 +42,4 @@ export const ExpiredOffer: Story = {
   args: {
     data: expiredData,
   },
-}
-
-export const Mobile: Story = {
-  decorators: [
-    (Story) => (
-      <div className="mx-auto max-w-93.75">
-        <Story />
-      </div>
-    ),
-  ],
 }
