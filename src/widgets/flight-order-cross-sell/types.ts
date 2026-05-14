@@ -1,12 +1,10 @@
 import type { LiontravelDomainMode } from '@/shared/utils/liontravelUrl'
 
-export type FlightOrderCrossSellBenefit =
-  | string
-  | {
-      id?: string
-      label: string
-      tagLabel?: string
-    }
+export interface FlightOrderCrossSellBenefit {
+  id?: string
+  label: string
+  tagLabel?: string
+}
 
 export interface FlightOrderCrossSellPromo {
   id: string

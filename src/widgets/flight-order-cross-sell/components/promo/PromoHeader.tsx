@@ -16,17 +16,8 @@ interface PromoHeaderProps {
   remainingSeconds: number
 }
 
-function getBenefitContent(benefit: FlightOrderCrossSellBenefit): {
-  label: string
-  tagLabel?: string
-} {
-  return typeof benefit === 'string' ? { label: benefit } : benefit
-}
-
 function getBenefitKey(benefit: FlightOrderCrossSellBenefit, index: number) {
-  return typeof benefit === 'string'
-    ? benefit
-    : (benefit.id ?? `${benefit.label}-${index}`)
+  return benefit.id ?? `${benefit.label}-${index}`
 }
 
 export function PromoHeader({
@@ -63,31 +54,27 @@ export function PromoHeader({
             />
             <div className="rounded-(--lion-panel-radius) border border-(--lion-gray-300) bg-transparent p-2">
               <p className="m-0 text-sm leading-5.5 text-foreground">
-                {promo.serviceLabel ?? '加訂住宿、高鐵與票券享專屬折扣'}
+                {promo.serviceLabel}
               </p>
               {promo.benefits && promo.benefits.length > 0 ? (
                 <div className="mt-1 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs leading-5.5 text-(--lion-gray-700)">
-                  {promo.benefits.map((benefit, index) => {
-                    const { label, tagLabel } = getBenefitContent(benefit)
-
-                    return (
-                      <span
-                        className="inline-flex items-center gap-1"
-                        key={getBenefitKey(benefit, index)}
-                      >
-                        <Check className="size-5 text-primary" />
-                        {tagLabel ? (
-                          <Badge
-                            className="rounded bg-(--lion-red-100) px-2 py-0.5 text-xs leading-4.75 font-medium text-primary shadow-none"
-                            variant="ghost"
-                          >
-                            {tagLabel}
-                          </Badge>
-                        ) : null}
-                        <span>{label}</span>
-                      </span>
-                    )
-                  })}
+                  {promo.benefits.map((benefit, index) => (
+                    <span
+                      className="inline-flex items-center gap-1"
+                      key={getBenefitKey(benefit, index)}
+                    >
+                      <Check className="size-5 text-primary" />
+                      {benefit.tagLabel ? (
+                        <Badge
+                          className="rounded bg-(--lion-red-100) px-2 py-0.5 text-xs leading-4.75 font-medium text-primary shadow-none"
+                          variant="ghost"
+                        >
+                          {benefit.tagLabel}
+                        </Badge>
+                      ) : null}
+                      <span>{benefit.label}</span>
+                    </span>
+                  ))}
                 </div>
               ) : null}
             </div>
