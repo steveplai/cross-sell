@@ -20,13 +20,8 @@ type ConnectedStoryArgs = ComponentProps<
   useMockResponse?: boolean
 }
 
-function createTodayStartsAt() {
-  const today = new Date()
-  const year = today.getFullYear()
-  const month = String(today.getMonth() + 1).padStart(2, '0')
-  const date = String(today.getDate()).padStart(2, '0')
-
-  return `${year}-${month}-${date}`
+function createActivePromoStartsAt() {
+  return new Date(Date.now() - 10 * 60 * 1000).toISOString()
 }
 
 const meta = {
@@ -40,7 +35,7 @@ const meta = {
     locale: 'zh-TW',
     orderNumber: '2026-123456',
     promoDurationSeconds: 30 * 24 * 60 * 60,
-    promoStartsAt: createTodayStartsAt(),
+    promoStartsAt: createActivePromoStartsAt(),
     recommendProductTypes: 'htl,etk',
     travelInsuranceContactEmail: 'customer-service@liontravel.com',
   },
@@ -67,6 +62,10 @@ const meta = {
     },
     promoStartsAt: {
       control: 'text',
+      description: [
+        'ISO 8601 datetime with an explicit timezone,',
+        'for example 2026-05-14T00:00:00.000Z or 2026-05-14T08:00:00+08:00.',
+      ].join(' '),
     },
     recommendProductTypes: {
       control: 'text',

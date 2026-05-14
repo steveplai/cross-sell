@@ -180,7 +180,10 @@ Public contract:
 
 The `data.promo.startsAt` ISO timestamp and `data.promo.durationSeconds`
 determine whether the widget renders the active discount state or the expired
-travel-inspiration state.
+travel-inspiration state. `startsAt` must be an ISO 8601 datetime with an
+explicit timezone, such as `2026-05-14T00:00:00.000Z` or
+`2026-05-14T08:00:00+08:00`. Date-only and timezone-less datetime strings are
+not part of the public contract.
 
 ### `flight-order-cross-sell-connected`
 
@@ -204,6 +207,9 @@ Public contract:
   `currency`
 - `promo-starts-at` / `promo-duration-seconds` override
   `config.promo.startsAt` / `config.promo.durationSeconds`
+- `promo-starts-at` / `promoStartsAt` must be an ISO 8601 datetime with an
+  explicit timezone, such as `2026-05-14T00:00:00.000Z` or
+  `2026-05-14T08:00:00+08:00`
 - Events:
   - `flight-order-cross-sell:item-select`, detail `{ sectionId, item }`
   - `flight-order-cross-sell:view-more`, detail `{ sectionId }`
