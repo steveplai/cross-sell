@@ -23,25 +23,28 @@ import type {
 } from './types'
 
 export type FlightOrderCrossSellConnectedErrorMode = 'hidden' | 'message'
+export type FlightOrderCrossSellConnectedEnvironment = LiontravelDomainMode
 
 export type FlightOrderCrossSellConnectedConfig = Omit<
   FlightOrderCrossSellContentOverrides,
-  'domainMode'
+  'domainMode' | 'serviceAgent'
 >
 
 export interface FlightOrderCrossSellConnectedProps extends FlightOrderCrossSellConnectedConfig {
-  baseUrl?: string
-  domainMode?: LiontravelDomainMode
+  environment?: FlightOrderCrossSellConnectedEnvironment
   errorMode?: FlightOrderCrossSellConnectedErrorMode
   onSelectAddon?: FlightOrderCrossSellProps['onSelectAddon']
   onSelectItem?: FlightOrderCrossSellProps['onSelectItem']
   onViewMore?: FlightOrderCrossSellProps['onViewMore']
   orderNumber?: string
+  promoDurationSeconds?: number
+  promoStartsAt?: string
   recommendProductTypes?: FlightOrderCrossSellRecommendProductTypes
+  travelInsuranceContactEmail?: string
 }
 
-interface FlightOrderCrossSellConnectedInternalProps
-  extends FlightOrderCrossSellConnectedProps {
+interface FlightOrderCrossSellConnectedInternalProps extends FlightOrderCrossSellConnectedProps {
+  apiBaseUrl?: string
   requestClient?: RequestClient
 }
 
@@ -108,10 +111,10 @@ function createDefaultOrderYear(orderNumber: string) {
 //#region - Sub Components
 
 function FlightOrderCrossSellConnectedContent({
+  apiBaseUrl,
   attractionBannerOverrides,
-  baseUrl,
   currency,
-  domainMode = 'production',
+  environment = 'production',
   errorMode = 'hidden',
   hsrAddon,
   locale,
@@ -120,19 +123,35 @@ function FlightOrderCrossSellConnectedContent({
   onViewMore,
   orderNumber,
   promo,
+  promoDurationSeconds,
+  promoStartsAt,
   recommendProductTypes,
   reminders,
   requestClient,
-  serviceAgent,
+  travelInsuranceContactEmail,
 }: FlightOrderCrossSellConnectedInternalProps) {
+  const domainMode = environment
+  const resolvedPromo = useMemo(() => {
+    if (!promo && !promoStartsAt && promoDurationSeconds === undefined) {
+      return undefined
+    }
+
+    return {
+      ...promo,
+      ...(promoStartsAt ? { startsAt: promoStartsAt } : {}),
+      ...(promoDurationSeconds === undefined
+        ? {}
+        : { durationSeconds: promoDurationSeconds }),
+    }
+  }, [promo, promoDurationSeconds, promoStartsAt])
   const apiOptions = useMemo<FlightOrderCrossSellApiOptions>(
     () => ({
-      baseUrl,
+      apiBaseUrl,
       domainMode,
       recommendProductTypes,
       requestClient,
     }),
-    [baseUrl, domainMode, recommendProductTypes, requestClient],
+    [apiBaseUrl, domainMode, recommendProductTypes, requestClient],
   )
   const api = useMemo(
     () => createFlightOrderCrossSellApi(apiOptions),
@@ -148,7 +167,7 @@ function FlightOrderCrossSellConnectedContent({
       'connected',
       orderNumber,
       domainMode,
-      baseUrl,
+      apiBaseUrl,
       recommendProductTypes,
       requestClient ? 'custom-client' : 'default-client',
     ],
@@ -166,10 +185,14 @@ function FlightOrderCrossSellConnectedContent({
         onSelectItem={onSelectItem}
         onViewMore={onViewMore}
         order={createOrderFromExternalOrderNumber(orderNumber ?? '')}
-        promo={promo}
+        promo={resolvedPromo}
         reminders={reminders}
         sections={query.data}
-        serviceAgent={serviceAgent}
+        serviceAgent={
+          travelInsuranceContactEmail
+            ? { email: travelInsuranceContactEmail }
+            : undefined
+        }
       />
     )
   }

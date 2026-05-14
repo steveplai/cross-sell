@@ -12,7 +12,7 @@ import type {
 } from './ap56CrossSellingTypes'
 
 export interface FlightOrderCrossSellApiOptions {
-  baseUrl?: string
+  apiBaseUrl?: string
   domainMode?: LiontravelDomainMode
   recommendProductTypes?: FlightOrderCrossSellRecommendProductTypes
   requestClient?: RequestClient
@@ -27,7 +27,7 @@ const flightOrderCrossSellEndpointPathname = '/category/_fringe/CrossSelling'
 // Thin request adapter: choose the Lion Travel origin, call AP-56, and hand the
 // raw payload to the mapper. UI-facing data shaping stays out of this file.
 export function createFlightOrderCrossSellApi({
-  baseUrl,
+  apiBaseUrl,
   domainMode = 'production',
   recommendProductTypes = defaultRecommendProductTypes,
   requestClient,
@@ -36,7 +36,7 @@ export function createFlightOrderCrossSellApi({
     requestClient ??
     createRequestClient({
       baseUrl:
-        baseUrl ??
+        apiBaseUrl ??
         createLiontravelOrigin(
           flightOrderCrossSellProductionHostname,
           domainMode,

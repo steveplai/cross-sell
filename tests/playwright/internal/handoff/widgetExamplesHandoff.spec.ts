@@ -107,6 +107,16 @@ const webComponentExamples: WebComponentExample[] = [
       },
     ],
   },
+  {
+    name: 'flight order cross sell connected web component property',
+    path: '/examples/web-component/flight-order-cross-sell-connected.property.html',
+    widgets: [
+      {
+        selector: 'flight-order-cross-sell-connected',
+        text: '訂房',
+      },
+    ],
+  },
 ] as const
 
 const mountApiExamples: MountApiExample[] = [
@@ -511,6 +521,11 @@ test('flight order connected web component applies config attribute overrides', 
       getWebComponentWidgetText(page, 'flight-order-cross-sell-connected'),
     )
     .toContain('立即加購')
+  await expect
+    .poll(() =>
+      getWebComponentWidgetText(page, 'flight-order-cross-sell-connected'),
+    )
+    .toContain('提供旅行保障')
 })
 
 test('flight order connected web component applies config property and attribute priority', async ({
@@ -518,40 +533,19 @@ test('flight order connected web component applies config property and attribute
 }) => {
   await gotoHandoffExample(
     page,
-    '/examples/web-component/flight-order-cross-sell-connected.basic.html',
+    '/examples/web-component/flight-order-cross-sell-connected.property.html',
   )
 
   await expect
     .poll(() =>
       getWebComponentWidgetText(page, 'flight-order-cross-sell-connected'),
     )
-    .toContain('Connected WC 限時優惠')
-
-  await page
-    .locator('flight-order-cross-sell-connected')
-    .evaluate((element) => {
-      ;(
-        element as HTMLElement & {
-          config?: {
-            currency?: string
-            locale?: string
-            promo?: { activeTitle?: string }
-          }
-        }
-      ).config = {
-        currency: 'USD',
-        locale: 'en-US',
-        promo: {
-          activeTitle: 'Connected property 限時優惠',
-        },
-      }
-    })
-
+    .toContain('Connected property 限時優惠')
   await expect
     .poll(() =>
       getWebComponentWidgetText(page, 'flight-order-cross-sell-connected'),
     )
-    .toContain('Connected property 限時優惠')
+    .toContain('提供旅行保障')
   await expect
     .poll(() =>
       getWebComponentWidgetText(page, 'flight-order-cross-sell-connected'),

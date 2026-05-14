@@ -71,10 +71,10 @@ export const loadingRequestClient = createMockRequestClient(
 )
 
 export function createStorybookProxyRequestClient(
-  domainMode: LiontravelDomainMode | undefined,
+  environment: LiontravelDomainMode | undefined,
 ): RequestClient {
   const proxyPathname =
-    domainMode === 'uat'
+    environment === 'uat'
       ? storybookAp56ProxyPathnames.uat
       : storybookAp56ProxyPathnames.production
 

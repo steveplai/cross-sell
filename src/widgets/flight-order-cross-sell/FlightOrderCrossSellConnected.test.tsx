@@ -88,9 +88,10 @@ describe('FlightOrderCrossSellConnected', () => {
 
     render(
       <FlightOrderCrossSellConnectedForTesting
-        domainMode="uat"
+        environment="uat"
         orderNumber="2026-123456"
         requestClient={requestClient}
+        travelInsuranceContactEmail="insurance@example.com"
       />,
     )
 
@@ -120,6 +121,7 @@ describe('FlightOrderCrossSellConnected', () => {
     expect(insuranceSearchParams.get('subject')).toBe(
       '加購保險【訂單編號: 2026-123456】',
     )
+    expect(insuranceHref).toContain('mailto:insurance@example.com')
     expect(get).toHaveBeenCalledWith(
       '/category/_fringe/CrossSelling?OrderNo=2026-123456&RecommendProductType=htl%2Cetk',
       {
@@ -134,7 +136,7 @@ describe('FlightOrderCrossSellConnected', () => {
 
     render(
       <FlightOrderCrossSellConnectedForTesting
-        domainMode="uat"
+        environment="uat"
         orderNumber="202605120001"
         recommendProductTypes={['htl', 'etk', 'flt']}
         requestClient={requestClient}
@@ -163,7 +165,7 @@ describe('FlightOrderCrossSellConnected', () => {
 
     render(
       <FlightOrderCrossSellConnectedForTesting
-        domainMode="uat"
+        environment="uat"
         orderNumber="2026-123456"
         requestClient={requestClient}
       />,
@@ -177,6 +179,29 @@ describe('FlightOrderCrossSellConnected', () => {
       'href',
       'https://uvacation.liontravel.com/thsrdetail?sYear=2026&sOrdr=123456',
     )
+  })
+
+  it('lets first-level promo timing props override promo content timing', async () => {
+    const get = vi.fn<MockRequestClientRequest>().mockResolvedValue([])
+    const requestClient = createMockRequestClient(get)
+
+    render(
+      <FlightOrderCrossSellConnectedForTesting
+        orderNumber="2026-123456"
+        promo={{
+          activeTitle: '一級倒數優惠',
+          expiredTitle: '倒數已結束',
+          startsAt: '2000-01-01T00:00:00.000Z',
+          durationSeconds: 1,
+        }}
+        promoDurationSeconds={40 * 60 * 60}
+        promoStartsAt={new Date(Date.now() - 10 * 60 * 1000).toISOString()}
+        requestClient={requestClient}
+      />,
+    )
+
+    expect(await screen.findByText('一級倒數優惠')).toBeInTheDocument()
+    expect(screen.queryByText('倒數已結束')).not.toBeInTheDocument()
   })
 
   it('hides the widget when API loading fails in hidden error mode', async () => {

@@ -193,13 +193,17 @@ Public contract:
 
 - Web Component tag: `flight-order-cross-sell-connected`
 - Mount API global: `window.FlightOrderCrossSellConnected`
-- Attributes: `order-number`, `recommend-product-types`, `domain-mode`, `base-url`, `error-mode`, `locale`, `currency`, `config`
-- `domain-mode` values: `uat`, `production`
+- Attributes: `order-number`, `recommend-product-types`, `environment`,
+  `error-mode`, `locale`, `currency`, `promo-starts-at`,
+  `promo-duration-seconds`, `travel-insurance-contact-email`, `config`
+- `environment` values: `uat`, `production`
 - `error-mode` values: `hidden`, `message`
 - `recommend-product-types` default: `htl,etk`
 - `config` JSON/property supports static content overrides such as `promo`,
-  `reminders`, `hsrAddon`, `serviceAgent`, `attractionBannerOverrides`,
-  `locale`, and `currency`
+  `reminders`, `hsrAddon`, `attractionBannerOverrides`, `locale`, and
+  `currency`
+- `promo-starts-at` / `promo-duration-seconds` override
+  `config.promo.startsAt` / `config.promo.durationSeconds`
 - Events:
   - `flight-order-cross-sell:item-select`, detail `{ sectionId, item }`
   - `flight-order-cross-sell:view-more`, detail `{ sectionId }`
@@ -220,10 +224,13 @@ Connected Web Component usage:
 ```html
 <flight-order-cross-sell-connected
   order-number="2026-123456"
-  domain-mode="uat"
+  environment="uat"
   error-mode="hidden"
   locale="zh-TW"
   currency="TWD"
+  promo-starts-at="2026-05-14T00:00:00.000Z"
+  promo-duration-seconds="144000"
+  travel-insurance-contact-email="customer-service@liontravel.com"
   config='{"hsrAddon":{"ctaLabel":"立即加購"},"promo":{"activeTitle":"Connected WC 限時優惠"}}'
 ></flight-order-cross-sell-connected>
 
@@ -236,6 +243,9 @@ Connected Web Component usage:
       activeTitle: 'JS property 覆蓋優惠標題',
     },
   }
+  widget.promoStartsAt = new Date(Date.now() - 10 * 60 * 1000).toISOString()
+  widget.promoDurationSeconds = 40 * 60 * 60
+  widget.travelInsuranceContactEmail = 'customer-service@liontravel.com'
 
   widget.addEventListener('flight-order-cross-sell:item-select', (event) => {
     console.log(event.detail)
@@ -260,8 +270,11 @@ Connected Mount API usage:
   window.FlightOrderCrossSellConnected.mount('#flight-cross-sell-root', {
     orderNumber: '2026-123456',
     recommendProductTypes: 'htl,etk',
-    domainMode: 'uat',
+    environment: 'uat',
     errorMode: 'message',
+    promoStartsAt: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
+    promoDurationSeconds: 40 * 60 * 60,
+    travelInsuranceContactEmail: 'customer-service@liontravel.com',
     hsrAddon: {
       ctaLabel: '立即加購',
     },

@@ -3,7 +3,10 @@ import '../../../src/widgets/flight-order-cross-sell/style.css'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import type { ComponentProps } from 'react'
 
-import { FlightOrderCrossSellConnected } from '../../../src/widgets/flight-order-cross-sell'
+import {
+  FlightOrderCrossSellConnected,
+  FlightOrderCrossSellConnectedForTesting,
+} from '../../../src/widgets/flight-order-cross-sell/FlightOrderCrossSellConnected'
 import {
   createStorybookProxyRequestClient,
   errorRequestClient,
@@ -11,11 +14,19 @@ import {
   successRequestClient,
 } from './fixtures'
 
-type ConnectedStoryArgs = Omit<
-  ComponentProps<typeof FlightOrderCrossSellConnected>,
-  'requestClient'
+type ConnectedStoryArgs = ComponentProps<
+  typeof FlightOrderCrossSellConnected
 > & {
   useMockResponse?: boolean
+}
+
+function createTodayStartsAt() {
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = String(today.getMonth() + 1).padStart(2, '0')
+  const date = String(today.getDate()).padStart(2, '0')
+
+  return `${year}-${month}-${date}`
 }
 
 const meta = {
@@ -23,13 +34,18 @@ const meta = {
   title: 'Widgets/Flight Order Cross Sell/Connected',
   component: FlightOrderCrossSellConnected,
   args: {
-    domainMode: 'uat',
+    environment: 'uat',
     errorMode: 'message',
+    currency: 'TWD',
+    locale: 'zh-TW',
     orderNumber: '2026-123456',
+    promoDurationSeconds: 30 * 24 * 60 * 60,
+    promoStartsAt: createTodayStartsAt(),
     recommendProductTypes: 'htl,etk',
+    travelInsuranceContactEmail: 'customer-service@liontravel.com',
   },
   argTypes: {
-    domainMode: {
+    environment: {
       control: 'inline-radio',
       options: ['uat', 'production'],
     },
@@ -37,8 +53,47 @@ const meta = {
       control: 'inline-radio',
       options: ['hidden', 'message'],
     },
+    currency: {
+      control: 'text',
+    },
+    locale: {
+      control: 'text',
+    },
+    orderNumber: {
+      control: 'text',
+    },
+    promoDurationSeconds: {
+      control: 'number',
+    },
+    promoStartsAt: {
+      control: 'text',
+    },
     recommendProductTypes: {
       control: 'text',
+    },
+    travelInsuranceContactEmail: {
+      control: 'text',
+    },
+    promo: {
+      control: 'object',
+    },
+    hsrAddon: {
+      control: 'object',
+    },
+    reminders: {
+      control: 'object',
+    },
+    attractionBannerOverrides: {
+      control: 'object',
+    },
+    onSelectAddon: {
+      table: { disable: true },
+    },
+    onSelectItem: {
+      table: { disable: true },
+    },
+    onViewMore: {
+      table: { disable: true },
     },
     useMockResponse: {
       control: 'boolean',
@@ -48,12 +103,12 @@ const meta = {
     layout: 'fullscreen',
   },
   render: ({ useMockResponse, ...args }) => (
-    <FlightOrderCrossSellConnected
+    <FlightOrderCrossSellConnectedForTesting
       {...args}
       requestClient={
         useMockResponse
           ? successRequestClient
-          : createStorybookProxyRequestClient(args.domainMode)
+          : createStorybookProxyRequestClient(args.environment)
       }
     />
   ),
@@ -78,12 +133,62 @@ export const ApiSuccess: Story = {
   },
 }
 
+export const ContentOverrides: Story = {
+  args: {
+    useMockResponse: true,
+    promo: {
+      activeTitle: 'Connected Storybook 限時優惠',
+      expiredTitle: '發現更多旅遊靈感！',
+      serviceLabel: '加訂住宿、高鐵與票券享專屬折扣',
+      benefits: [
+        {
+          id: 'addon-discount',
+          tagLabel: '加購價',
+          label: '最高可省 25%',
+        },
+        {
+          id: 'flight-change-cancel',
+          label: '航班異動可免費取消',
+        },
+      ],
+    },
+    hsrAddon: {
+      id: 'hsr',
+      title: '加購高鐵 行程更順暢',
+      description: '購買國內外行程，最高享 8 折優惠',
+      ctaLabel: '立即加購',
+    },
+    attractionBannerOverrides: {
+      title: '精選票券與當地體驗',
+    },
+    reminders: {
+      title: '別忘了加購一份安心與便利',
+      subtitle: '即將出門？',
+      items: [
+        {
+          id: 'visa-passport',
+          icon: 'passport',
+          title: '簽證護照',
+          description:
+            '受理代辦中華民國護照、台胞證、各國簽證、國際學生證辦理等。',
+        },
+        {
+          id: 'travel-insurance',
+          icon: 'insurance',
+          title: '旅遊綜合險',
+          description: '於出發前七個工作天聯繫業務專員，提供旅行保障。',
+        },
+      ],
+    },
+  },
+}
+
 export const ApiErrorHidden: Story = {
   args: {
     errorMode: 'hidden',
   },
   render: ({ useMockResponse: _useMockResponse, ...args }) => (
-    <FlightOrderCrossSellConnected
+    <FlightOrderCrossSellConnectedForTesting
       {...args}
       requestClient={errorRequestClient}
     />
@@ -95,7 +200,7 @@ export const ApiErrorMessage: Story = {
     errorMode: 'message',
   },
   render: ({ useMockResponse: _useMockResponse, ...args }) => (
-    <FlightOrderCrossSellConnected
+    <FlightOrderCrossSellConnectedForTesting
       {...args}
       requestClient={errorRequestClient}
     />
@@ -104,7 +209,7 @@ export const ApiErrorMessage: Story = {
 
 export const Loading: Story = {
   render: ({ useMockResponse: _useMockResponse, ...args }) => (
-    <FlightOrderCrossSellConnected
+    <FlightOrderCrossSellConnectedForTesting
       {...args}
       requestClient={loadingRequestClient}
     />

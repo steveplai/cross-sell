@@ -45,6 +45,28 @@ function getConfigProperty(
   )
 }
 
+function getOptionalStringProperty(element: HTMLElement, name: string) {
+  const value = (element as HTMLElement & Record<string, unknown>)[name]
+
+  return typeof value === 'string' && value.trim() ? value.trim() : undefined
+}
+
+function parseOptionalNumber(value: string | null | undefined) {
+  if (!value) {
+    return undefined
+  }
+
+  const numberValue = Number(value)
+
+  return Number.isFinite(numberValue) ? numberValue : undefined
+}
+
+function getOptionalNumberProperty(element: HTMLElement, name: string) {
+  const value = (element as HTMLElement & Record<string, unknown>)[name]
+
+  return typeof value === 'number' && Number.isFinite(value) ? value : undefined
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return !!value && typeof value === 'object' && !Array.isArray(value)
 }
@@ -85,11 +107,6 @@ function pickConnectedConfig(
       value.reminders as FlightOrderCrossSellConnectedConfig['reminders']
   }
 
-  if (isRecord(value.serviceAgent)) {
-    config.serviceAgent =
-      value.serviceAgent as FlightOrderCrossSellConnectedConfig['serviceAgent']
-  }
-
   return config
 }
 
@@ -97,41 +114,59 @@ createReactWebComponent<FlightOrderCrossSellConnectedProps>({
   tagName: 'flight-order-cross-sell-connected',
   Component: FlightOrderCrossSellConnected,
   observedAttributes: [
-    'base-url',
     'config',
     'currency',
-    'domain-mode',
+    'environment',
     'error-mode',
     'locale',
     'order-number',
+    'promo-duration-seconds',
+    'promo-starts-at',
     'recommend-product-types',
+    'travel-insurance-contact-email',
   ],
-  observedProperties: ['config'],
+  observedProperties: [
+    'config',
+    'promoDurationSeconds',
+    'promoStartsAt',
+    'travelInsuranceContactEmail',
+  ],
   styles,
   mapElementToProps: (element) => {
-    const domainMode = getOptionalAttribute(element, 'domain-mode')
+    const environment = getOptionalAttribute(element, 'environment')
     const attributeConfig = parseConfigAttribute(element.getAttribute('config'))
     const propertyConfig = getConfigProperty(element)
 
     return {
       ...attributeConfig,
       ...propertyConfig,
-      baseUrl: getOptionalAttribute(element, 'base-url'),
       currency:
         getOptionalAttribute(element, 'currency') ??
         propertyConfig.currency ??
         attributeConfig.currency,
-      domainMode: isLiontravelDomainMode(domainMode) ? domainMode : undefined,
+      environment: isLiontravelDomainMode(environment)
+        ? environment
+        : undefined,
       errorMode: parseErrorMode(getOptionalAttribute(element, 'error-mode')),
       locale:
         getOptionalAttribute(element, 'locale') ??
         propertyConfig.locale ??
         attributeConfig.locale,
       orderNumber: getOptionalAttribute(element, 'order-number'),
+      promoDurationSeconds:
+        parseOptionalNumber(
+          getOptionalAttribute(element, 'promo-duration-seconds'),
+        ) ?? getOptionalNumberProperty(element, 'promoDurationSeconds'),
+      promoStartsAt:
+        getOptionalAttribute(element, 'promo-starts-at') ??
+        getOptionalStringProperty(element, 'promoStartsAt'),
       recommendProductTypes: getOptionalAttribute(
         element,
         'recommend-product-types',
       ),
+      travelInsuranceContactEmail:
+        getOptionalAttribute(element, 'travel-insurance-contact-email') ??
+        getOptionalStringProperty(element, 'travelInsuranceContactEmail'),
       onSelectItem: (detail) => {
         element.dispatchEvent(
           new CustomEvent('flight-order-cross-sell:item-select', {
