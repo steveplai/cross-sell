@@ -1,8 +1,7 @@
 import type { FlightOrderCrossSellDefaultData } from './types'
 
-const activeStartsAt = new Date(
-  Date.now() - 15 * 24 * 60 * 60 * 1000,
-).toISOString()
+const defaultPromoStartsAt = new Date().toISOString()
+const defaultPromoDurationSeconds = 30 * 24 * 60 * 60
 
 export const flightOrderCrossSellDefaultData: FlightOrderCrossSellDefaultData =
   {
@@ -16,8 +15,8 @@ export const flightOrderCrossSellDefaultData: FlightOrderCrossSellDefaultData =
       id: 'limited-offer',
       activeTitle: '您已解鎖限時優惠！',
       expiredTitle: '發現更多旅遊靈感！',
-      startsAt: activeStartsAt,
-      durationSeconds: 30 * 24 * 60 * 60,
+      startsAt: defaultPromoStartsAt,
+      durationSeconds: defaultPromoDurationSeconds,
       serviceLabel: '加訂住宿、高鐵與票券享專屬折扣',
       benefits: [
         {
@@ -58,4 +57,3 @@ export const flightOrderCrossSellDefaultData: FlightOrderCrossSellDefaultData =
       ],
     },
   }
-  
