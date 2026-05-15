@@ -34,8 +34,9 @@ const meta = {
     currency: 'TWD',
     locale: 'zh-TW',
     orderNumber: '2026-123456',
-    promoDurationSeconds: 30 * 24 * 60 * 60,
+    orderDestination: '東京',
     promoStartsAt: createActivePromoStartsAt(),
+    promoDurationSeconds: 30 * 24 * 60 * 60,
     recommendProductTypes: 'htl,etk',
     travelInsuranceContactEmail: 'customer-service@liontravel.com',
   },
@@ -48,10 +49,10 @@ const meta = {
       control: 'inline-radio',
       options: ['hidden', 'message'],
     },
-    currency: {
+    locale: {
       control: 'text',
     },
-    locale: {
+    currency: {
       control: 'text',
     },
     orderNumber: {
@@ -59,6 +60,15 @@ const meta = {
     },
     orderDestination: {
       control: 'text',
+    },
+    travelInsuranceContactEmail: {
+      control: 'text',
+    },
+    recommendProductTypes: {
+      control: 'text',
+    },
+    useMockResponse: {
+      control: 'boolean',
     },
     promoDurationSeconds: {
       control: 'number',
@@ -70,22 +80,16 @@ const meta = {
         'for example 2026-05-14T00:00:00.000Z or 2026-05-14T08:00:00+08:00.',
       ].join(' '),
     },
-    recommendProductTypes: {
-      control: 'text',
-    },
-    travelInsuranceContactEmail: {
-      control: 'text',
-    },
     promo: {
+      control: 'object',
+    },
+    sectionContentOverrides: {
       control: 'object',
     },
     hsrAddon: {
       control: 'object',
     },
     reminders: {
-      control: 'object',
-    },
-    sectionContentOverrides: {
       control: 'object',
     },
     onSelectAddon: {
@@ -97,12 +101,12 @@ const meta = {
     onViewMore: {
       table: { disable: true },
     },
-    useMockResponse: {
-      control: 'boolean',
-    },
   },
   parameters: {
     layout: 'fullscreen',
+    controls: {
+      sort: 'none',
+    },
   },
   render: ({ useMockResponse, ...args }) => (
     <FlightOrderCrossSellConnectedForTesting
@@ -138,6 +142,7 @@ export const ApiSuccess: Story = {
 export const ContentOverrides: Story = {
   args: {
     useMockResponse: true,
+    orderDestination: '上海',
     promo: {
       activeTitle: 'Connected Storybook 限時優惠',
       expiredTitle: '發現更多旅遊靈感！',
@@ -154,17 +159,16 @@ export const ContentOverrides: Story = {
         },
       ],
     },
+    sectionContentOverrides: {
+      attraction: {
+        title: '精選票券與當地體驗',
+      },
+    },
     hsrAddon: {
       id: 'hsr',
       title: '加購高鐵 行程更順暢',
       description: '購買國內外行程，最高享 8 折優惠',
       ctaLabel: '立即加購',
-    },
-    orderDestination: '上海',
-    sectionContentOverrides: {
-      attraction: {
-        title: '精選票券與當地體驗',
-      },
     },
     reminders: {
       title: '別忘了加購一份安心與便利',

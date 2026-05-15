@@ -5,19 +5,30 @@ import type { ComponentProps } from 'react'
 
 import {
   FlightOrderCrossSell,
-  flightOrderCrossSellSampleData,
+  flightOrderCrossSellSampleData as sampleData,
 } from '../../../src/widgets/flight-order-cross-sell'
 
 type BaseStoryArgs = ComponentProps<typeof FlightOrderCrossSell>
 
-const activeData = {
-  ...flightOrderCrossSellSampleData,
+const activeData: BaseStoryArgs = {
+  domainMode: sampleData.domainMode,
+  locale: sampleData.locale,
+  currency: sampleData.currency,
+  order: sampleData.order,
+  orderDestination: sampleData.orderDestination,
+  serviceAgent: sampleData.serviceAgent,
+  sections: sampleData.sections,
+  promo: sampleData.promo,
+  sectionContentOverrides:
+    sampleData.sectionContentOverrides,
+  hsrAddon: sampleData.hsrAddon,
+  reminders: sampleData.reminders,
 }
 
 const expiredData = {
-  ...flightOrderCrossSellSampleData,
+  ...activeData,
   promo: {
-    ...flightOrderCrossSellSampleData.promo,
+    ...sampleData.promo,
     startsAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
     durationSeconds: 60 * 60,
   },
@@ -31,9 +42,6 @@ const meta = {
     ...activeData,
   },
   argTypes: {
-    currency: {
-      control: 'text',
-    },
     domainMode: {
       control: 'inline-radio',
       options: ['uat', 'production'],
@@ -41,10 +49,16 @@ const meta = {
     locale: {
       control: 'text',
     },
-    orderDestination: {
+    currency: {
       control: 'text',
     },
     order: {
+      control: 'object',
+    },
+    orderDestination: {
+      control: 'text',
+    },
+    serviceAgent: {
       control: 'object',
     },
     sections: {
@@ -53,16 +67,13 @@ const meta = {
     promo: {
       control: 'object',
     },
+    sectionContentOverrides: {
+      control: 'object',
+    },
     hsrAddon: {
       control: 'object',
     },
-    serviceAgent: {
-      control: 'object',
-    },
     reminders: {
-      control: 'object',
-    },
-    sectionContentOverrides: {
       control: 'object',
     },
     onSelectAddon: {
@@ -77,6 +88,9 @@ const meta = {
   },
   parameters: {
     layout: 'fullscreen',
+    controls: {
+      sort: 'none',
+    },
   },
 } satisfies Meta<BaseStoryArgs>
 
@@ -94,6 +108,7 @@ export const ExpiredOffer: Story = {
 
 export const ContentOverrides: Story = {
   args: {
+    orderDestination: '上海',
     promo: {
       activeTitle: 'Base Storybook 限時優惠',
       expiredTitle: '發現更多旅遊靈感！',
@@ -110,17 +125,16 @@ export const ContentOverrides: Story = {
         },
       ],
     },
+    sectionContentOverrides: {
+      attraction: {
+        title: '精選票券與當地體驗',
+      },
+    },
     hsrAddon: {
       id: 'hsr',
       title: '加購高鐵 行程更順暢',
       description: '購買國內外行程，最高享 8 折優惠',
       ctaLabel: '立即加購',
-    },
-    orderDestination: '上海',
-    sectionContentOverrides: {
-      attraction: {
-        title: '精選票券與當地體驗',
-      },
     },
     reminders: {
       title: '別忘了加購一份安心與便利',
