@@ -1,6 +1,7 @@
 import { ChevronRight } from 'lucide-react'
 
 import { ProductCard } from '../cards/ProductCard'
+import { ViewMorePlaceholder } from './ViewMorePlaceholder'
 import type { CrossSellWidgetItem, CrossSellWidgetResolvedSection } from '../../types'
 
 interface CrossSellSectionProps {
@@ -46,16 +47,31 @@ export function CrossSellSection({
         ) : null}
       </div>
 
-      <div className="grid grid-cols-1 gap-4 lion-tablet:grid-cols-2 lion-desktop:grid-cols-3">
+      <div
+        className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2"
+        data-testid="cross-sell-carousel"
+      >
         {section.items.map((item) => (
-          <ProductCard
-            currency={currency}
-            item={item}
+          <div
+            className="min-w-[280px] flex-1 snap-start lion-desktop:min-w-[360px]"
             key={item.id}
-            locale={locale}
-            onClick={() => onSelectItem?.(item)}
-          />
+          >
+            <ProductCard
+              currency={currency}
+              item={item}
+              locale={locale}
+              onClick={() => onSelectItem?.(item)}
+            />
+          </div>
         ))}
+
+        <div className="min-w-[220px] snap-start lion-desktop:min-w-[260px]">
+          <ViewMorePlaceholder
+            href={section.viewMoreHref}
+            label={section.viewMorePlaceholderLabel}
+            onViewMore={onViewMore}
+          />
+        </div>
       </div>
     </section>
   )
