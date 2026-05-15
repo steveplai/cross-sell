@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Flight Order Cross Sell Mount API Full</title>
+    <title>Flight Order Cross Sell Web Component Full</title>
     <style>
       body {
         margin: 0;
@@ -28,19 +28,15 @@
     </style>
   </head>
   <body>
-    <div id="flight-order-cross-sell-root"></div>
-    <div class="event-log" data-testid="flight-cross-sell-mount-log">
+    <flight-order-cross-sell></flight-order-cross-sell>
+
+    <div class="event-log" data-testid="flight-cross-sell-event-log">
       No events yet
     </div>
 
-    <script src="../../dist/widgets/flight-order-cross-sell.mount.js"></script>
     <script>
       const startsAt = new Date(Date.now() - 10 * 60 * 1000).toISOString()
-      const log = document.querySelector(
-        '[data-testid="flight-cross-sell-mount-log"]',
-      )
-
-      window.FlightOrderCrossSell.mount('#flight-order-cross-sell-root', {
+      const data = {
         locale: 'zh-TW',
         currency: 'TWD',
         domainMode: 'uat',
@@ -54,7 +50,7 @@
         },
         promo: {
           id: 'limited-offer',
-          activeTitle: 'Mount API 限時優惠',
+          activeTitle: 'WC 限時優惠',
           expiredTitle: '發現更多旅遊靈感！',
           startsAt,
           durationSeconds: 40 * 60 * 60,
@@ -351,13 +347,31 @@
             ],
           },
         ],
-        onSelectItem(event) {
-          log.textContent = `item-select: ${event.sectionId}/${event.item.id}`
+      }
+
+      document
+        .querySelector('flight-order-cross-sell')
+        .setAttribute('data', JSON.stringify(data))
+    </script>
+    <script src="../../../dist/widgets/flight-order-cross-sell/wc.js"></script>
+    <script>
+      const widget = document.querySelector('flight-order-cross-sell')
+      const log = document.querySelector(
+        '[data-testid="flight-cross-sell-event-log"]',
+      )
+
+      widget.addEventListener(
+        'flight-order-cross-sell:item-select',
+        (event) => {
+          log.textContent = `${event.type}: ${event.detail.sectionId}/${event.detail.item.id}`
         },
-        onSelectAddon(event) {
-          log.textContent = `addon-select: ${event.addonId}`
+      )
+      widget.addEventListener(
+        'flight-order-cross-sell:addon-select',
+        (event) => {
+          log.textContent = `${event.type}: ${event.detail.addonId}`
         },
-      })
+      )
     </script>
   </body>
 </html>

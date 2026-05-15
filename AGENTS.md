@@ -20,8 +20,9 @@ Primary outputs:
 ```txt
 dist/
   widgets/
-    demo-product-banner.wc.js
-    demo-product-banner.mount.js
+    demo-product-banner/
+      wc.js
+      mount.js
   emails/
     demo-product-offer.html
 ```
@@ -74,15 +75,15 @@ stories/
 Each interactive widget currently gets two entries:
 
 ```txt
-src/entries/<widget>.wc.tsx
-src/entries/<widget>.mount.ts
+src/entries/<widget>/wc.tsx
+src/entries/<widget>/mount.ts
 ```
 
 They produce:
 
 ```txt
-dist/widgets/<widget>.wc.js
-dist/widgets/<widget>.mount.js
+dist/widgets/<widget>/wc.js
+dist/widgets/<widget>/mount.js
 ```
 
 The entries are intentionally explicit. Runtime logic is shared in `src/runtime`, but each widget still declares its own external contract:
@@ -340,8 +341,8 @@ scripts/serve-static.mjs
 Playwright serves plain files exactly like a real handoff page:
 
 ```txt
-examples/{web-component,mount-api}/*.html
--> script src="../../dist/widgets/*.js"
+examples/<widget>/{wc,mount}/*.html
+-> script src="../../../dist/widgets/<widget>/{wc,mount}.js"
 ```
 
 This is intentional. Do not switch Playwright back to Vite dev server unless the test target changes away from built `dist` artifacts.

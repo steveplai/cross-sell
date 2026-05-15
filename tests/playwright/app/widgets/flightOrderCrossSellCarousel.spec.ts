@@ -232,12 +232,9 @@ async function clickFlightOrderCarouselNext(page: Page) {
 }
 
 async function gotoFlightOrderCrossSellExample(page: Page) {
-  await page.goto(
-    '/examples/web-component/flight-order-cross-sell.basic.html',
-    {
-      waitUntil: 'domcontentloaded',
-    },
-  )
+  await page.goto('/examples/flight-order-cross-sell/wc/basic.html', {
+    waitUntil: 'domcontentloaded',
+  })
 
   await page.locator('flight-order-cross-sell').evaluate((element, data) => {
     ;(element as HTMLElement & { data?: unknown }).data = data

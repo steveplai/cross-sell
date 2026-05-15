@@ -19,14 +19,18 @@ browser-ready widget scripts and rendered email HTML files.
 ```txt
 dist/
   widgets/
-    demo-product-banner.wc.js
-    demo-product-banner.mount.js
-    themed-demo-product-banner.wc.js
-    themed-demo-product-banner.mount.js
-    flight-order-cross-sell.wc.js
-    flight-order-cross-sell.mount.js
-    flight-order-cross-sell-connected.wc.js
-    flight-order-cross-sell-connected.mount.js
+    demo-product-banner/
+      wc.js
+      mount.js
+    themed-demo-product-banner/
+      wc.js
+      mount.js
+    flight-order-cross-sell/
+      wc.js
+      mount.js
+    flight-order-cross-sell-connected/
+      wc.js
+      mount.js
   emails/
     demo-product-offer.html
     order-cross-sell.html
@@ -240,7 +244,7 @@ Connected Web Component usage:
   config='{"hsrAddon":{"ctaLabel":"立即加購"},"promo":{"activeTitle":"Connected WC 限時優惠"}}'
 ></flight-order-cross-sell-connected>
 
-<script src="./dist/widgets/flight-order-cross-sell-connected.wc.js"></script>
+<script src="./dist/widgets/flight-order-cross-sell-connected/wc.js"></script>
 <script>
   const widget = document.querySelector('flight-order-cross-sell-connected')
 
@@ -271,7 +275,7 @@ Connected Mount API usage:
 ```html
 <div id="flight-cross-sell-root"></div>
 
-<script src="./dist/widgets/flight-order-cross-sell-connected.mount.js"></script>
+<script src="./dist/widgets/flight-order-cross-sell-connected/mount.js"></script>
 <script>
   window.FlightOrderCrossSellConnected.mount('#flight-cross-sell-root', {
     orderNumber: '2026-123456',
@@ -307,7 +311,7 @@ Connected Mount API usage:
   ]'
 ></demo-product-banner>
 
-<script src="./dist/widgets/demo-product-banner.wc.js"></script>
+<script src="./dist/widgets/demo-product-banner/wc.js"></script>
 <script>
   const widget = document.querySelector('demo-product-banner')
 
@@ -334,7 +338,7 @@ boundary.
 ```html
 <div id="demo-product-root"></div>
 
-<script src="./dist/widgets/demo-product-banner.mount.js"></script>
+<script src="./dist/widgets/demo-product-banner/mount.js"></script>
 <script>
   const widget = DemoProductBanner.mount('#demo-product-root', {
     title: '推薦商品',
@@ -460,11 +464,13 @@ Storybook contains full email previews and smaller component previews under
 Built widget handoff examples live in:
 
 ```txt
-examples/web-component/
-examples/mount-api/
+examples/
+  <widget>/
+    wc/
+    mount/
 ```
 
-These examples intentionally load `dist/widgets/*.js` directly. Internal
+These examples intentionally load `dist/widgets/<widget>/{wc,mount}.js` directly. Internal
 Playwright handoff tests serve them with `scripts/serve-static.mjs` so the files
 behave like real handoff artifacts, without Vite dev-server transforms.
 

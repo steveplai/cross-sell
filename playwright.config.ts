@@ -10,7 +10,7 @@ export default defineConfig({
   },
   webServer: {
     command: 'node scripts/serve-static.mjs 4174',
-    url: 'http://127.0.0.1:4174/examples/web-component/demo-product-banner.basic.html',
+    url: 'http://127.0.0.1:4174/examples/demo-product-banner/wc/basic.html',
     reuseExistingServer: !process.env.CI,
   },
   projects: [

@@ -11,32 +11,32 @@ const root = process.cwd()
 const entries = [
   {
     entry: resolve(root, 'src/entries/demo-product-banner/wc.tsx'),
-    fileName: 'demo-product-banner.wc.js',
+    fileName: 'demo-product-banner/wc.js',
     name: 'DemoProductBannerWebComponent',
   },
   {
     entry: resolve(root, 'src/entries/demo-product-banner/mount.ts'),
-    fileName: 'demo-product-banner.mount.js',
+    fileName: 'demo-product-banner/mount.js',
     name: 'DemoProductBanner',
   },
   {
     entry: resolve(root, 'src/entries/themed-demo-product-banner/wc.tsx'),
-    fileName: 'themed-demo-product-banner.wc.js',
+    fileName: 'themed-demo-product-banner/wc.js',
     name: 'ThemedDemoProductBannerWebComponent',
   },
   {
     entry: resolve(root, 'src/entries/themed-demo-product-banner/mount.ts'),
-    fileName: 'themed-demo-product-banner.mount.js',
+    fileName: 'themed-demo-product-banner/mount.js',
     name: 'ThemedDemoProductBanner',
   },
   {
     entry: resolve(root, 'src/entries/flight-order-cross-sell/wc.tsx'),
-    fileName: 'flight-order-cross-sell.wc.js',
+    fileName: 'flight-order-cross-sell/wc.js',
     name: 'FlightOrderCrossSellWebComponent',
   },
   {
     entry: resolve(root, 'src/entries/flight-order-cross-sell/mount.ts'),
-    fileName: 'flight-order-cross-sell.mount.js',
+    fileName: 'flight-order-cross-sell/mount.js',
     name: 'FlightOrderCrossSell',
   },
   {
@@ -44,7 +44,7 @@ const entries = [
       root,
       'src/entries/flight-order-cross-sell/connected.wc.tsx',
     ),
-    fileName: 'flight-order-cross-sell-connected.wc.js',
+    fileName: 'flight-order-cross-sell-connected/wc.js',
     name: 'FlightOrderCrossSellConnectedWebComponent',
   },
   {
@@ -52,7 +52,7 @@ const entries = [
       root,
       'src/entries/flight-order-cross-sell/connected.mount.ts',
     ),
-    fileName: 'flight-order-cross-sell-connected.mount.js',
+    fileName: 'flight-order-cross-sell-connected/mount.js',
     name: 'FlightOrderCrossSellConnected',
   },
 ]

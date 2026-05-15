@@ -29,7 +29,7 @@ type MountApiExample = {
 const webComponentExamples: WebComponentExample[] = [
   {
     name: 'web component basic',
-    path: '/examples/web-component/demo-product-banner.basic.html',
+    path: '/examples/demo-product-banner/wc/basic.html',
     widgets: [
       {
         selector: 'demo-product-banner',
@@ -39,7 +39,7 @@ const webComponentExamples: WebComponentExample[] = [
   },
   {
     name: 'web component custom theme',
-    path: '/examples/web-component/demo-product-banner.custom-theme.html',
+    path: '/examples/themed-demo-product-banner/wc/basic.html',
     widgets: [
       {
         selector: 'themed-demo-product-banner',
@@ -49,7 +49,7 @@ const webComponentExamples: WebComponentExample[] = [
   },
   {
     name: 'web component dark mode',
-    path: '/examples/web-component/demo-product-banner.dark.html',
+    path: '/examples/demo-product-banner/wc/dark.html',
     widgets: [
       {
         selector: '#explicit-dark',
@@ -63,7 +63,7 @@ const webComponentExamples: WebComponentExample[] = [
   },
   {
     name: 'web component events',
-    path: '/examples/web-component/demo-product-banner.events.html',
+    path: '/examples/demo-product-banner/wc/events.html',
     widgets: [
       {
         selector: 'demo-product-banner',
@@ -73,7 +73,7 @@ const webComponentExamples: WebComponentExample[] = [
   },
   {
     name: 'web component multiple instances',
-    path: '/examples/web-component/demo-product-banner.multiple.html',
+    path: '/examples/demo-product-banner/wc/multiple.html',
     widgets: [
       {
         selector: 'demo-product-banner',
@@ -89,7 +89,7 @@ const webComponentExamples: WebComponentExample[] = [
   },
   {
     name: 'flight order cross sell web component basic',
-    path: '/examples/web-component/flight-order-cross-sell.basic.html',
+    path: '/examples/flight-order-cross-sell/wc/basic.html',
     widgets: [
       {
         selector: 'flight-order-cross-sell',
@@ -99,7 +99,7 @@ const webComponentExamples: WebComponentExample[] = [
   },
   {
     name: 'flight order cross sell web component full',
-    path: '/examples/web-component/flight-order-cross-sell.full.html',
+    path: '/examples/flight-order-cross-sell/wc/full.html',
     widgets: [
       {
         selector: 'flight-order-cross-sell',
@@ -109,7 +109,7 @@ const webComponentExamples: WebComponentExample[] = [
   },
   {
     name: 'flight order cross sell web component property',
-    path: '/examples/web-component/flight-order-cross-sell.property.html',
+    path: '/examples/flight-order-cross-sell/wc/property.html',
     widgets: [
       {
         selector: 'flight-order-cross-sell',
@@ -119,7 +119,7 @@ const webComponentExamples: WebComponentExample[] = [
   },
   {
     name: 'flight order cross sell connected web component basic',
-    path: '/examples/web-component/flight-order-cross-sell-connected.basic.html',
+    path: '/examples/flight-order-cross-sell-connected/wc/basic.html',
     widgets: [
       {
         selector: 'flight-order-cross-sell-connected',
@@ -129,7 +129,7 @@ const webComponentExamples: WebComponentExample[] = [
   },
   {
     name: 'flight order cross sell connected web component full',
-    path: '/examples/web-component/flight-order-cross-sell-connected.full.html',
+    path: '/examples/flight-order-cross-sell-connected/wc/full.html',
     widgets: [
       {
         selector: 'flight-order-cross-sell-connected',
@@ -139,7 +139,7 @@ const webComponentExamples: WebComponentExample[] = [
   },
   {
     name: 'flight order cross sell connected web component property',
-    path: '/examples/web-component/flight-order-cross-sell-connected.property.html',
+    path: '/examples/flight-order-cross-sell-connected/wc/property.html',
     widgets: [
       {
         selector: 'flight-order-cross-sell-connected',
@@ -152,55 +152,55 @@ const webComponentExamples: WebComponentExample[] = [
 const mountApiExamples: MountApiExample[] = [
   {
     name: 'mount API basic',
-    path: '/examples/mount-api/demo-product-banner.basic.html',
+    path: '/examples/demo-product-banner/mount/basic.html',
     rootSelector: '#demo-product-root',
     text: '推薦商品',
   },
   {
     name: 'mount API custom theme',
-    path: '/examples/mount-api/demo-product-banner.custom-theme.html',
+    path: '/examples/themed-demo-product-banner/mount/basic.html',
     rootSelector: '#custom-theme-root',
     text: '客製主題推薦商品',
   },
   {
     name: 'mount API dark mode',
-    path: '/examples/mount-api/demo-product-banner.dark.html',
+    path: '/examples/demo-product-banner/mount/dark.html',
     rootSelector: '#dark-root',
     text: '繼承深色商品',
   },
   {
     name: 'mount API unmount',
-    path: '/examples/mount-api/demo-product-banner.unmount.html',
+    path: '/examples/demo-product-banner/mount/unmount.html',
     rootSelector: '#demo-product-root',
     text: '推薦商品',
   },
   {
     name: 'mount API update',
-    path: '/examples/mount-api/demo-product-banner.update.html',
+    path: '/examples/demo-product-banner/mount/update.html',
     rootSelector: '#demo-product-root',
     text: '推薦商品',
   },
   {
     name: 'flight order cross sell mount API basic',
-    path: '/examples/mount-api/flight-order-cross-sell.basic.html',
+    path: '/examples/flight-order-cross-sell/mount/basic.html',
     rootSelector: '#flight-order-cross-sell-root',
     text: '探索地區飯店',
   },
   {
     name: 'flight order cross sell mount API full',
-    path: '/examples/mount-api/flight-order-cross-sell.full.html',
+    path: '/examples/flight-order-cross-sell/mount/full.html',
     rootSelector: '#flight-order-cross-sell-root',
     text: '探索上海飯店',
   },
   {
     name: 'flight order cross sell connected mount API basic',
-    path: '/examples/mount-api/flight-order-cross-sell-connected.basic.html',
+    path: '/examples/flight-order-cross-sell-connected/mount/basic.html',
     rootSelector: '#flight-order-cross-sell-connected-root',
     text: '探索地區飯店',
   },
   {
     name: 'flight order cross sell connected mount API full',
-    path: '/examples/mount-api/flight-order-cross-sell-connected.full.html',
+    path: '/examples/flight-order-cross-sell-connected/mount/full.html',
     rootSelector: '#flight-order-cross-sell-connected-root',
     text: '探索上海飯店',
   },
@@ -455,10 +455,7 @@ test.describe('all widget examples render', () => {
 })
 
 test('web component example renders and emits event', async ({ page }) => {
-  await gotoHandoffExample(
-    page,
-    '/examples/web-component/demo-product-banner.events.html',
-  )
+  await gotoHandoffExample(page, '/examples/demo-product-banner/wc/events.html')
 
   await expect(page.locator('demo-product-banner')).toHaveJSProperty(
     'localName',
@@ -488,7 +485,7 @@ test('flight order web component handoff exposes HSR addon link and event', asyn
 }) => {
   await gotoHandoffExample(
     page,
-    '/examples/web-component/flight-order-cross-sell.full.html',
+    '/examples/flight-order-cross-sell/wc/full.html',
   )
 
   await expect
@@ -521,7 +518,7 @@ test('flight order connected web component handoff emits item event', async ({
 }) => {
   await gotoHandoffExample(
     page,
-    '/examples/web-component/flight-order-cross-sell-connected.basic.html',
+    '/examples/flight-order-cross-sell-connected/wc/basic.html',
   )
 
   await expect
@@ -550,7 +547,7 @@ test('flight order connected web component applies config attribute overrides', 
 }) => {
   await gotoHandoffExample(
     page,
-    '/examples/web-component/flight-order-cross-sell-connected.full.html',
+    '/examples/flight-order-cross-sell-connected/wc/full.html',
   )
 
   await expect
@@ -580,7 +577,7 @@ test('flight order connected web component applies config property and attribute
 }) => {
   await gotoHandoffExample(
     page,
-    '/examples/web-component/flight-order-cross-sell-connected.property.html',
+    '/examples/flight-order-cross-sell-connected/wc/property.html',
   )
 
   await expect
@@ -613,10 +610,7 @@ test('flight order connected web component applies config property and attribute
 test('web component host dark class controls shadow DOM theme', async ({
   page,
 }) => {
-  await gotoHandoffExample(
-    page,
-    '/examples/web-component/demo-product-banner.dark.html',
-  )
+  await gotoHandoffExample(page, '/examples/demo-product-banner/wc/dark.html')
 
   await expect
     .poll(() => getWebComponentWidgetState(page, '#explicit-dark'))
@@ -640,7 +634,7 @@ test('web component host dark class controls shadow DOM theme', async ({
 test('web component applies widget-specific theme tokens', async ({ page }) => {
   await gotoHandoffExample(
     page,
-    '/examples/web-component/demo-product-banner.custom-theme.html',
+    '/examples/themed-demo-product-banner/wc/basic.html',
   )
 
   await expect(page.locator('themed-demo-product-banner')).toHaveJSProperty(
@@ -657,7 +651,7 @@ test('web component applies widget-specific theme tokens', async ({ page }) => {
 test('mount API example can update and unmount', async ({ page }) => {
   await gotoHandoffExample(
     page,
-    '/examples/mount-api/demo-product-banner.update.html',
+    '/examples/demo-product-banner/mount/update.html',
   )
 
   await expect(page.getByText('推薦商品')).toBeVisible()
@@ -674,7 +668,7 @@ test('flight order mount API handoff exposes HSR addon link and callback', async
 }) => {
   await gotoHandoffExample(
     page,
-    '/examples/mount-api/flight-order-cross-sell.full.html',
+    '/examples/flight-order-cross-sell/mount/full.html',
   )
 
   const hsrLink = page.getByRole('link', { name: '前往加購' })
@@ -696,7 +690,7 @@ test('flight order mount API handoff exposes HSR addon link and callback', async
 test('mount API applies widget-specific theme tokens', async ({ page }) => {
   await gotoHandoffExample(
     page,
-    '/examples/mount-api/demo-product-banner.custom-theme.html',
+    '/examples/themed-demo-product-banner/mount/basic.html',
   )
 
   await expect
@@ -712,7 +706,7 @@ test('mount API applies widget-specific theme tokens', async ({ page }) => {
 test('mount API inherits host dark class', async ({ page }) => {
   await gotoHandoffExample(
     page,
-    '/examples/mount-api/demo-product-banner.dark.html',
+    '/examples/demo-product-banner/mount/dark.html',
   )
 
   await expect
@@ -732,7 +726,7 @@ test('mount API defaults to light theme without dark ancestor', async ({
 }) => {
   await gotoHandoffExample(
     page,
-    '/examples/mount-api/demo-product-banner.basic.html',
+    '/examples/demo-product-banner/mount/basic.html',
   )
 
   await expect
