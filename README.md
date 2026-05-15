@@ -71,7 +71,7 @@ dist/
 ```txt
 src/widgets/    Pure React widget components
 src/components/ Shared React UI primitives
-src/domains/    Domain API wrappers for connected widgets
+src/domains/    Domain adapters and response mappers for connected widgets
 src/runtime/    Shared Web Component and Mount API runtime helpers
 src/entries/    Public widget entrypoints and external contracts
 src/emails/     React Email templates, components, and content data
@@ -223,7 +223,7 @@ Default API origins:
 - `production`: `https://www.liontravel.com`
 - `uat`: `https://uwww.liontravel.com`
 
-The current endpoint path is centralized in the existing AP-56 domain API as
+The current endpoint path is centralized in the AP-56 cross-sell domain adapter as
 `/category/_fringe/CrossSelling?OrderNo={orderNumber}&RecommendProductType={recommendProductTypes}`.
 The connected widget does not accept full static `data`; use
 `cross-sell-widget` when sections and order data are already available.
@@ -253,7 +253,7 @@ not part of the public contract.
 ### `flight-order-cross-sell-connected`
 
 API-loading version of `flight-order-cross-sell`. It accepts an `orderNumber`,
-loads AP-56 section data from the flight order cross-sell API, passes those
+loads AP-56 section data from the cross-sell domain adapter, passes those
 sections to the base widget, and uses the base widget's static default content
 for promo, add-ons, and reminders.
 
@@ -285,7 +285,7 @@ Default API origins:
 - `production`: `https://www.liontravel.com`
 - `uat`: `https://uwww.liontravel.com`
 
-The current endpoint path is centralized in the domain API as
+The current endpoint path is centralized in the AP-56 cross-sell domain adapter as
 `/category/_fringe/CrossSelling?OrderNo={orderNumber}&RecommendProductType={recommendProductTypes}`.
 The connected widget does not accept full static `data`; use
 `cross-sell-widget` when sections and order data are already available.

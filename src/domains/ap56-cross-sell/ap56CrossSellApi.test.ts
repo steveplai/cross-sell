@@ -2,11 +2,11 @@ import { describe, expect, it, vi } from 'vitest'
 
 import type { RequestClient } from '@/shared/request'
 
-import { mapAp56CrossSellingResponseToSections } from './ap56CrossSellingMapper'
 import {
-  createFlightOrderCrossSellApi,
-  createFlightOrderCrossSellPath,
-} from './flightOrderCrossSellApi'
+  createAp56CrossSellApi,
+  createAp56CrossSellPath,
+} from './ap56CrossSellApi'
+import { mapAp56CrossSellResponseToSections } from './ap56CrossSellMapper'
 
 type MockRequestClientRequest = (
   pathname: string,
@@ -111,15 +111,15 @@ const ap56EnvelopeResponse = {
   ],
 }
 
-describe('flight order cross-sell AP-56 API', () => {
+describe('AP-56 cross-sell API', () => {
   it('creates the AP-56 endpoint path with default recommend product types', () => {
-    expect(createFlightOrderCrossSellPath('2026-123456')).toBe(
+    expect(createAp56CrossSellPath('2026-123456')).toBe(
       '/category/_fringe/CrossSelling?OrderNo=2026-123456&RecommendProductType=htl%2Cetk',
     )
   })
 
   it('supports custom recommend product types', () => {
-    expect(createFlightOrderCrossSellPath('2026-123456', ['htl', 'etk'])).toBe(
+    expect(createAp56CrossSellPath('2026-123456', ['htl', 'etk'])).toBe(
       '/category/_fringe/CrossSelling?OrderNo=2026-123456&RecommendProductType=htl%2Cetk',
     )
   })
@@ -129,7 +129,7 @@ describe('flight order cross-sell AP-56 API', () => {
       .fn<MockRequestClientRequest>()
       .mockResolvedValue(ap56Response)
     const requestClient = createMockRequestClient(get)
-    const api = createFlightOrderCrossSellApi({ requestClient })
+    const api = createAp56CrossSellApi({ requestClient })
 
     await expect(api.getByOrderNumber('2026-123456')).resolves.toEqual(
       expect.arrayContaining([
@@ -147,7 +147,7 @@ describe('flight order cross-sell AP-56 API', () => {
   })
 
   it('maps AP-56 product fields to widget product fields', () => {
-    const sections = mapAp56CrossSellingResponseToSections(ap56Response)
+    const sections = mapAp56CrossSellResponseToSections(ap56Response)
     const hotelSection = sections.find((section) => section.kind === 'hotel')
 
     expect(hotelSection).toMatchObject({
@@ -190,7 +190,7 @@ describe('flight order cross-sell AP-56 API', () => {
   })
 
   it('maps enveloped AP-56 responses and ProductUrl view-more rows', () => {
-    const sections = mapAp56CrossSellingResponseToSections(ap56EnvelopeResponse)
+    const sections = mapAp56CrossSellResponseToSections(ap56EnvelopeResponse)
     const hotelSection = sections.find((section) => section.kind === 'hotel')
 
     expect(hotelSection).toMatchObject({
@@ -214,6 +214,6 @@ describe('flight order cross-sell AP-56 API', () => {
   })
 
   it('maps an empty AP-56 response to empty carousel sections', () => {
-    expect(mapAp56CrossSellingResponseToSections([])).toEqual([])
+    expect(mapAp56CrossSellResponseToSections([])).toEqual([])
   })
 })

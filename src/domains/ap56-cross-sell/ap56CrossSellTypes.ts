@@ -1,12 +1,12 @@
 // Raw AP-56 response contracts. Keep these separate from widget-facing types so
 // backend field names do not leak into React components.
-export interface Ap56CrossSellingResponseSection {
+export interface Ap56CrossSellResponseSection {
   Type?: unknown
   pList?: unknown
   CombineTagList?: unknown
 }
 
-export interface Ap56CrossSellingResponseEnvelope {
+export interface Ap56CrossSellResponseEnvelope {
   ProductDataList?: unknown
 }
 

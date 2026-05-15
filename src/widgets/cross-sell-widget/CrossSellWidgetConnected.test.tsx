@@ -19,7 +19,7 @@ function createMockRequestClient(get: MockRequestClientRequest): RequestClient {
   }
 }
 
-const ap56CrossSellingResponse = [
+const ap56CrossSellResponse = [
   {
     Type: '訂房',
     CombineTagList: ['東京 旅遊', '東京 鐵塔'],
@@ -83,7 +83,7 @@ describe('CrossSellWidgetConnected', () => {
   it('loads AP-56 carousel data by order number and keeps static content', async () => {
     const get = vi
       .fn<MockRequestClientRequest>()
-      .mockResolvedValue(ap56CrossSellingResponse)
+      .mockResolvedValue(ap56CrossSellResponse)
     const requestClient = createMockRequestClient(get)
 
     render(
@@ -165,7 +165,7 @@ describe('CrossSellWidgetConnected', () => {
   it('applies section content overrides to API sections', async () => {
     const get = vi
       .fn<MockRequestClientRequest>()
-      .mockResolvedValue(ap56CrossSellingResponse)
+      .mockResolvedValue(ap56CrossSellResponse)
     const requestClient = createMockRequestClient(get)
 
     render(
@@ -192,7 +192,7 @@ describe('CrossSellWidgetConnected', () => {
   it('applies order destination to API section titles', async () => {
     const get = vi
       .fn<MockRequestClientRequest>()
-      .mockResolvedValue(ap56CrossSellingResponse)
+      .mockResolvedValue(ap56CrossSellResponse)
     const requestClient = createMockRequestClient(get)
 
     render(

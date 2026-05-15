@@ -6,10 +6,10 @@ import {
 import { type ReactNode, useMemo, useState } from 'react'
 
 import {
-  createFlightOrderCrossSellApi as createAp56CrossSellApi,
-  type FlightOrderCrossSellApiOptions as Ap56CrossSellApiOptions,
-  type FlightOrderCrossSellRecommendProductTypes as Ap56RecommendProductTypes,
-} from '@/domains/flight-order-cross-sell'
+  type Ap56CrossSellApiOptions,
+  type Ap56CrossSellRecommendProductTypes,
+  createAp56CrossSellApi,
+} from '@/domains/ap56-cross-sell'
 import { cn } from '@/lib/utils'
 import type { RequestClient } from '@/shared/request'
 import type { LiontravelDomainMode } from '@/shared/utils/liontravelUrl'
@@ -39,7 +39,7 @@ export interface CrossSellWidgetConnectedProps extends CrossSellWidgetConnectedC
   orderNumber?: string
   promoDurationSeconds?: number
   promoStartsAt?: string
-  recommendProductTypes?: Ap56RecommendProductTypes
+  recommendProductTypes?: Ap56CrossSellRecommendProductTypes
   travelInsuranceContactEmail?: string
 }
 

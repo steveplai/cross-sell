@@ -15,7 +15,7 @@ function createMockRequestClient(handler: MockRequestHandler): RequestClient {
   }
 }
 
-const ap56CrossSellingStoryResponse = [
+const ap56CrossSellStoryResponse = [
   {
     Type: '訂房',
     CombineTagList: ['東京 旅遊', '東京 鐵塔'],
@@ -59,7 +59,7 @@ const storybookAp56ProxyPathnames = {
 }
 
 export const successRequestClient = createMockRequestClient(
-  async () => ap56CrossSellingStoryResponse,
+  async () => ap56CrossSellStoryResponse,
 )
 
 export const errorRequestClient = createMockRequestClient(async () => {

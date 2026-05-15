@@ -133,7 +133,7 @@ export const ApiSuccess: Story = {
     docs: {
       description: {
         story:
-          'Toggle useMockResponse off to call the selected AP-56 domain through the Storybook dev proxy.',
+          'Toggle useMockResponse off to call the selected AP-56 origin through the Storybook dev proxy.',
       },
     },
   },

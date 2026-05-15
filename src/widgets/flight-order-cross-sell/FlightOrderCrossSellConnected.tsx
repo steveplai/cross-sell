@@ -6,10 +6,10 @@ import {
 import { type ReactNode, useMemo, useState } from 'react'
 
 import {
-  createFlightOrderCrossSellApi,
-  type FlightOrderCrossSellApiOptions,
-  type FlightOrderCrossSellRecommendProductTypes,
-} from '@/domains/flight-order-cross-sell'
+  type Ap56CrossSellApiOptions,
+  type Ap56CrossSellRecommendProductTypes,
+  createAp56CrossSellApi,
+} from '@/domains/ap56-cross-sell'
 import { cn } from '@/lib/utils'
 import type { RequestClient } from '@/shared/request'
 import type { LiontravelDomainMode } from '@/shared/utils/liontravelUrl'
@@ -24,6 +24,8 @@ import type {
 
 export type FlightOrderCrossSellConnectedErrorMode = 'hidden' | 'message'
 export type FlightOrderCrossSellConnectedEnvironment = LiontravelDomainMode
+export type FlightOrderCrossSellRecommendProductTypes =
+  Ap56CrossSellRecommendProductTypes
 
 export type FlightOrderCrossSellConnectedConfig = Omit<
   FlightOrderCrossSellContentOverrides,
@@ -145,7 +147,7 @@ function FlightOrderCrossSellConnectedContent({
         : { durationSeconds: promoDurationSeconds }),
     }
   }, [promo, promoDurationSeconds, promoStartsAt])
-  const apiOptions = useMemo<FlightOrderCrossSellApiOptions>(
+  const apiOptions = useMemo<Ap56CrossSellApiOptions>(
     () => ({
       apiBaseUrl,
       domainMode,
@@ -154,10 +156,7 @@ function FlightOrderCrossSellConnectedContent({
     }),
     [apiBaseUrl, domainMode, recommendProductTypes, requestClient],
   )
-  const api = useMemo(
-    () => createFlightOrderCrossSellApi(apiOptions),
-    [apiOptions],
-  )
+  const api = useMemo(() => createAp56CrossSellApi(apiOptions), [apiOptions])
   const canLoadFromApi = !!orderNumber
   const query = useQuery({
     enabled: canLoadFromApi,
