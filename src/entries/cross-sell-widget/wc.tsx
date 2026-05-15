@@ -4,11 +4,9 @@ import {
   CrossSellWidget,
   type CrossSellWidgetProps,
 } from '../../widgets/cross-sell-widget'
-import widgetStyles from '../../widgets/flight-order-cross-sell/style.css?inline'
+import widgetStyles from '../../widgets/cross-sell-widget/style.css?inline'
 
 const styles = `${baseStyles}\n${widgetStyles}`
-
-//#region - Functions
 
 function parseData(value: string | null): CrossSellWidgetProps {
   if (!value) {
@@ -19,7 +17,7 @@ function parseData(value: string | null): CrossSellWidgetProps {
     const parsed = JSON.parse(value)
 
     return isCrossSellWidgetProps(parsed)
-      ? mapDataToProps(parsed as CrossSellWidgetProps)
+      ? (parsed as CrossSellWidgetProps)
       : { sections: [] }
   } catch {
     return { sections: [] }
@@ -30,7 +28,7 @@ function getDataProperty(element: HTMLElement): CrossSellWidgetProps | undefined
   const value = (element as HTMLElement & { data?: unknown }).data
 
   return isCrossSellWidgetProps(value)
-    ? mapDataToProps(value as CrossSellWidgetProps)
+    ? (value as CrossSellWidgetProps)
     : undefined
 }
 
@@ -46,24 +44,6 @@ function isCrossSellWidgetProps(value: unknown) {
     (!candidate.sections || Array.isArray(candidate.sections))
   )
 }
-
-function mapDataToProps(data: CrossSellWidgetProps): CrossSellWidgetProps {
-  return {
-    currency: data.currency,
-    domainMode: data.domainMode,
-    hsrAddon: data.hsrAddon,
-    locale: data.locale,
-    order: data.order,
-    orderDestination: data.orderDestination,
-    promo: data.promo,
-    reminders: data.reminders,
-    sectionContentOverrides: data.sectionContentOverrides,
-    sections: data.sections ?? [],
-    serviceAgent: data.serviceAgent,
-  }
-}
-
-//#endregion - Functions
 
 createReactWebComponent<CrossSellWidgetProps>({
   tagName: 'cross-sell-widget',
