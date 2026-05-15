@@ -3,12 +3,12 @@ import { type ReactNode, useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
 
 import { createWidgetRootProps } from '../../runtime/widgetRoot'
-import { HsrAddonBanner as FeaturedAddonBanner } from '../flight-order-cross-sell/components/addons/HsrAddonBanner'
-import { ReminderCards as ActionCards } from '../flight-order-cross-sell/components/addons/ReminderCards'
-import { PromoHeader } from '../flight-order-cross-sell/components/promo/PromoHeader'
-import { CrossSellSection } from '../flight-order-cross-sell/components/recommendations/CrossSellSection'
-import { getRemainingPromoSeconds } from '../flight-order-cross-sell/lib/countdown'
+import { ActionCards } from './components/actions/ActionCards'
+import { FeaturedAddonBanner } from './components/addons/FeaturedAddonBanner'
+import { PromoHeader } from './components/promo/PromoHeader'
+import { CrossSellSection } from './components/sections/CrossSellSection'
 import { crossSellWidgetDefaultData } from './defaultData'
+import { getRemainingPromoSeconds } from './lib/countdown'
 import type {
   CrossSellWidgetData,
   CrossSellWidgetProps,
@@ -19,8 +19,6 @@ import type {
 
 const crossSellWidgetRootProps = createWidgetRootProps('cross-sell-widget')
 const featuredAddonId = 'featured-addon'
-
-//#region - Sub Components
 
 function ContentPanel({
   allowOverflow = false,
@@ -57,11 +55,9 @@ function CrossSellWidgetContent({
   const remainingSeconds = getRemainingPromoSeconds(data.promo, now)
   const isPromoActive = remainingSeconds > 0
 
-  function getRenderableSections(sections: CrossSellWidgetResolvedSection[]) {
-    return sections.filter((section) => section.items.length > 0)
-  }
-
-  const renderableSections = getRenderableSections(data.sections)
+  const renderableSections = data.sections.filter(
+    (section) => section.items.length > 0,
+  )
 
   return (
     <section
@@ -125,10 +121,6 @@ function CrossSellWidgetContent({
   )
 }
 
-//#endregion - Sub Components
-
-//#region - Functions
-
 function resolveCrossSellWidgetSections(
   sections: CrossSellWidgetSection[],
   sectionContentOverrides?: CrossSellWidgetSectionContentOverridesByKind,
@@ -171,8 +163,6 @@ function useCurrentTime(promoKey: string) {
 
   return now
 }
-
-//#endregion - Functions
 
 export function CrossSellWidget({
   actionSection,
