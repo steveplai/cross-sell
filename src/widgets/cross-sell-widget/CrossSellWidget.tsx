@@ -3,10 +3,16 @@ import { type ReactNode, useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
 
 import { createWidgetRootProps } from '../../runtime/widgetRoot'
-import { ActionCards } from './components/actions/ActionCards'
-import { FeaturedAddonBanner } from './components/addons/FeaturedAddonBanner'
-import { PromoHeader } from './components/promo/PromoHeader'
-import { CrossSellSection } from './components/sections/CrossSellSection'
+import { HsrAddonBanner } from '../flight-order-cross-sell/components/addons/HsrAddonBanner'
+import { ReminderCards } from '../flight-order-cross-sell/components/addons/ReminderCards'
+import { PromoHeader } from '../flight-order-cross-sell/components/promo/PromoHeader'
+import { AttractionDecorBanner } from '../flight-order-cross-sell/components/recommendations/AttractionDecorBanner'
+import { CrossSellSection } from '../flight-order-cross-sell/components/recommendations/CrossSellSection'
+import type {
+  FlightOrderCrossSellAddon,
+  FlightOrderCrossSellReminder,
+  FlightOrderCrossSellResolvedSection,
+} from '../flight-order-cross-sell/types'
 import { crossSellWidgetDefaultData } from './defaultData'
 import { getRemainingPromoSeconds } from './lib/countdown'
 import type {
@@ -19,6 +25,12 @@ import type {
 
 const crossSellWidgetRootProps = createWidgetRootProps('cross-sell-widget')
 const featuredAddonId = 'featured-addon'
+
+type CrossSellSectionGroupKey = 'hotel' | 'attraction' | 'transport' | 'flight' | 'other'
+type CrossSellSectionGroups = Record<
+  CrossSellSectionGroupKey,
+  CrossSellWidgetResolvedSection[]
+>
 
 function ContentPanel({
   allowOverflow = false,
@@ -54,10 +66,73 @@ function CrossSellWidgetContent({
   const currency = data.currency ?? 'TWD'
   const remainingSeconds = getRemainingPromoSeconds(data.promo, now)
   const isPromoActive = remainingSeconds > 0
+  const sectionGroups = groupCrossSellWidgetSections(data.sections)
 
-  const renderableSections = data.sections.filter(
-    (section) => section.items.length > 0,
+  function getRenderableSections(sections: CrossSellWidgetResolvedSection[]) {
+    return sections.filter((section) => section.items.length > 0)
+  }
+
+  const renderableAttractionSections = getRenderableSections(
+    sectionGroups.attraction,
   )
+  const attractionBannerTitle = renderableAttractionSections[0]?.title ?? ''
+
+  function renderCrossSellSections(
+    sections: CrossSellWidgetResolvedSection[],
+    options: { hideTitle?: boolean; sectionClassName?: string } = {},
+  ) {
+    return (
+      <div className="flex flex-col divide-y divide-(--lion-gray-50)">
+        {sections.map((section) => (
+          <CrossSellSection
+            className={options.sectionClassName}
+            currency={currency}
+            hideTitle={options.hideTitle}
+            isPromoActive={isPromoActive}
+            key={section.id}
+            locale={locale}
+            onSelectItem={(item) =>
+              onSelectItem?.({
+                item: item as unknown as CrossSellWidgetResolvedSection['items'][number],
+                sectionId: section.id,
+              })
+            }
+            onViewMore={() => onViewMore?.({ sectionId: section.id })}
+            section={section as unknown as FlightOrderCrossSellResolvedSection}
+          />
+        ))}
+      </div>
+    )
+  }
+
+  function renderDefaultSectionPanel(sections: CrossSellWidgetResolvedSection[]) {
+    const renderableSections = getRenderableSections(sections)
+
+    if (renderableSections.length === 0) {
+      return null
+    }
+
+    return (
+      <ContentPanel>{renderCrossSellSections(renderableSections)}</ContentPanel>
+    )
+  }
+
+  function renderPromoHotelPanel() {
+    const renderableHotelSections = getRenderableSections(sectionGroups.hotel)
+
+    return (
+      <ContentPanel allowOverflow>
+        <PromoHeader
+          isPromoActive={isPromoActive}
+          promo={data.promo}
+          remainingSeconds={remainingSeconds}
+        />
+        {renderableHotelSections.length > 0
+          ? renderCrossSellSections(renderableHotelSections)
+          : null}
+      </ContentPanel>
+    )
+  }
 
   return (
     <section
@@ -69,18 +144,12 @@ function CrossSellWidgetContent({
       {...crossSellWidgetRootProps}
     >
       <div className="mx-auto flex w-full max-w-297.5 flex-col gap-2.5 py-0 lion-desktop:py-0">
-        <ContentPanel allowOverflow>
-          <PromoHeader
-            isPromoActive={isPromoActive}
-            promo={data.promo}
-            remainingSeconds={remainingSeconds}
-          />
-        </ContentPanel>
+        {renderPromoHotelPanel()}
 
         {data.featuredAddon ? (
           <ContentPanel>
-            <FeaturedAddonBanner
-              addon={data.featuredAddon}
+            <HsrAddonBanner
+              addon={data.featuredAddon as FlightOrderCrossSellAddon}
               href={data.featuredAddon.href}
               onSelectAddon={() =>
                 onSelectAddon?.({
@@ -91,25 +160,28 @@ function CrossSellWidgetContent({
           </ContentPanel>
         ) : null}
 
-        {renderableSections.map((section) => (
-          <ContentPanel key={section.id}>
-            <CrossSellSection
-              currency={currency}
-              isPromoActive={isPromoActive}
-              locale={locale}
-              onSelectItem={(item) =>
-                onSelectItem?.({ item, sectionId: section.id })
-              }
-              onViewMore={() => onViewMore?.({ sectionId: section.id })}
-              section={section}
-            />
+        {renderableAttractionSections.length > 0 ? (
+          <ContentPanel>
+            <div className="overflow-hidden bg-background">
+              <AttractionDecorBanner title={attractionBannerTitle} />
+              <div className="relative z-10 -mt-5 overflow-hidden rounded-t-[20px] bg-background lion-desktop:rounded-t-[24px]">
+                {renderCrossSellSections(renderableAttractionSections, {
+                  hideTitle: true,
+                  sectionClassName: cn('pt-3 lion-desktop:pt-3.75'),
+                })}
+              </div>
+            </div>
           </ContentPanel>
-        ))}
+        ) : null}
+
+        {renderDefaultSectionPanel(sectionGroups.transport)}
+        {renderDefaultSectionPanel(sectionGroups.flight)}
+        {renderDefaultSectionPanel(sectionGroups.other)}
 
         {data.actionSection ? (
           <ContentPanel>
-            <ActionCards
-              items={data.actionSection.items}
+            <ReminderCards
+              items={data.actionSection.items as FlightOrderCrossSellReminder[]}
               onSelectAddon={(addonId) => onSelectAddon?.({ addonId })}
               subtitle={data.actionSection.subtitle}
               title={data.actionSection.title}
@@ -119,6 +191,40 @@ function CrossSellWidgetContent({
       </div>
     </section>
   )
+}
+
+function groupCrossSellWidgetSections(
+  sections: CrossSellWidgetResolvedSection[],
+): CrossSellSectionGroups {
+  const groups: CrossSellSectionGroups = {
+    attraction: [],
+    flight: [],
+    hotel: [],
+    other: [],
+    transport: [],
+  }
+
+  sections.forEach((section) => {
+    switch (section.kind) {
+      case 'hotel':
+        groups.hotel.push(section)
+        break
+      case 'attraction':
+        groups.attraction.push(section)
+        break
+      case 'transport':
+        groups.transport.push(section)
+        break
+      case 'flight':
+        groups.flight.push(section)
+        break
+      default:
+        groups.other.push(section)
+        break
+    }
+  })
+
+  return groups
 }
 
 function resolveCrossSellWidgetSections(
@@ -131,9 +237,7 @@ function resolveCrossSellWidgetSections(
       : undefined
     const title = overrideContent?.title ?? section.title ?? section.id
     const viewMoreLabel =
-      overrideContent?.viewMoreLabel ??
-      section.viewMoreLabel ??
-      title
+      overrideContent?.viewMoreLabel ?? section.viewMoreLabel ?? title
 
     return {
       ...section,
