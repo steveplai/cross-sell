@@ -25,6 +25,9 @@ dist/
     themed-demo-product-banner/
       wc.js
       mount.js
+    cross-sell-widget/
+      wc.js
+      mount.js
     flight-order-cross-sell/
       wc.js
       mount.js
@@ -167,6 +170,25 @@ Public contract:
 - Event: `demo-product:product-select`
 - Event detail shape: `{ product }`
 
+### `cross-sell-widget`
+
+Renamed base cross-sell widget intended for section-driven cross-sell rendering
+across product contexts.
+
+Public contract:
+
+- Web Component tag: `cross-sell-widget`
+- Mount API global: `window.CrossSellWidget`
+- Attribute/property: `data`
+- Events:
+  - `cross-sell-widget:item-select`, detail `{ sectionId, item }`
+  - `cross-sell-widget:view-more`, detail `{ sectionId }`
+  - `cross-sell-widget:addon-select`, detail `{ addonId }`
+
+The `data.promo.startsAt` ISO timestamp and `data.promo.durationSeconds`
+determine whether the widget renders the active discount state or the expired
+travel-inspiration state.
+
 ### `flight-order-cross-sell`
 
 Flight order completion-page cross-sell widget. It supports the active limited
@@ -227,7 +249,7 @@ Default API origins:
 The current endpoint path is centralized in the domain API as
 `/category/_fringe/CrossSelling?OrderNo={orderNumber}&RecommendProductType={recommendProductTypes}`.
 The connected widget does not accept full static `data`; use
-`flight-order-cross-sell` when sections and order data are already available.
+`cross-sell-widget` when sections and order data are already available.
 
 Connected Web Component usage:
 

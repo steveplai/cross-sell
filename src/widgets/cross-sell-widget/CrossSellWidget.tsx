@@ -1,36 +1,51 @@
 import { type ReactNode, useEffect, useState } from 'react'
 
 import { cn } from '@/lib/utils'
+import {
+  createLiontravelUrl,
+  resolveLiontravelDomainMode,
+} from '@/shared/utils/liontravelUrl'
 
 import { createWidgetRootProps } from '../../runtime/widgetRoot'
-import { HsrAddonBanner } from '../flight-order-cross-sell/components/addons/HsrAddonBanner'
-import { ReminderCards } from '../flight-order-cross-sell/components/addons/ReminderCards'
-import { PromoHeader } from '../flight-order-cross-sell/components/promo/PromoHeader'
-import { AttractionDecorBanner } from '../flight-order-cross-sell/components/recommendations/AttractionDecorBanner'
-import { CrossSellSection } from '../flight-order-cross-sell/components/recommendations/CrossSellSection'
-import type {
-  FlightOrderCrossSellAddon,
-  FlightOrderCrossSellReminder,
-  FlightOrderCrossSellResolvedSection,
-} from '../flight-order-cross-sell/types'
-import { crossSellWidgetDefaultData } from './defaultData'
+import { HsrAddonBanner } from './components/addons/HsrAddonBanner'
+import { ReminderCards } from './components/addons/ReminderCards'
+import { PromoHeader } from './components/promo/PromoHeader'
+import { AttractionDecorBanner } from './components/recommendations/AttractionDecorBanner'
+import { CrossSellSection } from './components/recommendations/CrossSellSection'
+import {
+  createCrossSellWidgetSectionContentDefaults,
+  crossSellWidgetDefaultData,
+} from './defaultData'
 import { getRemainingPromoSeconds } from './lib/countdown'
+import { groupCrossSellWidgetSections } from './lib/groupSections'
 import type {
   CrossSellWidgetData,
   CrossSellWidgetProps,
+  CrossSellWidgetReminder,
   CrossSellWidgetResolvedSection,
   CrossSellWidgetSection,
   CrossSellWidgetSectionContentOverridesByKind,
 } from './types'
 
 const crossSellWidgetRootProps = createWidgetRootProps('cross-sell-widget')
-const featuredAddonId = 'featured-addon'
+const hsrAddonId = 'hsr'
+const hsrAddonProductionHostname = 'vacation.liontravel.com'
+const hsrAddonPathname = '/thsrdetail'
+const visaPassportProductionHostname = 'visa.liontravel.com'
+const visaPassportPathname = '/search'
+const insuranceMailBody = [
+  '要保人資訊',
+  '姓名：',
+  '居住地址：',
+  '',
+  '所有旅客資訊',
+  '旅客1：',
+  '身分證字號：',
+  '生日：',
+  '關係：',
+].join('\n')
 
-type CrossSellSectionGroupKey = 'hotel' | 'attraction' | 'transport' | 'flight' | 'other'
-type CrossSellSectionGroups = Record<
-  CrossSellSectionGroupKey,
-  CrossSellWidgetResolvedSection[]
->
+//#region - Sub Components
 
 function ContentPanel({
   allowOverflow = false,
@@ -57,13 +72,20 @@ function CrossSellWidgetContent({
   onSelectItem,
   onViewMore,
   promoKey,
-}: Pick<CrossSellWidgetProps, 'onSelectAddon' | 'onSelectItem' | 'onViewMore'> & {
+}: Pick<
+  CrossSellWidgetProps,
+  'onSelectAddon' | 'onSelectItem' | 'onViewMore'
+> & {
   data: CrossSellWidgetData
   promoKey: string
 }) {
   const now = useCurrentTime(promoKey)
   const locale = data.locale ?? 'zh-TW'
   const currency = data.currency ?? 'TWD'
+  const hsrAddon = data.hsrAddon
+  const hsrAddonHref = createHsrAddonHref(data)
+  const insuranceMailtoHref = createInsuranceMailtoHref(data)
+  const visaPassportHref = createVisaPassportHref(data)
   const remainingSeconds = getRemainingPromoSeconds(data.promo, now)
   const isPromoActive = remainingSeconds > 0
   const sectionGroups = groupCrossSellWidgetSections(data.sections)
@@ -92,20 +114,19 @@ function CrossSellWidgetContent({
             key={section.id}
             locale={locale}
             onSelectItem={(item) =>
-              onSelectItem?.({
-                item: item as unknown as CrossSellWidgetResolvedSection['items'][number],
-                sectionId: section.id,
-              })
+              onSelectItem?.({ item, sectionId: section.id })
             }
             onViewMore={() => onViewMore?.({ sectionId: section.id })}
-            section={section as unknown as FlightOrderCrossSellResolvedSection}
+            section={section}
           />
         ))}
       </div>
     )
   }
 
-  function renderDefaultSectionPanel(sections: CrossSellWidgetResolvedSection[]) {
+  function renderDefaultSectionPanel(
+    sections: CrossSellWidgetResolvedSection[],
+  ) {
     const renderableSections = getRenderableSections(sections)
 
     if (renderableSections.length === 0) {
@@ -146,19 +167,15 @@ function CrossSellWidgetContent({
       <div className="mx-auto flex w-full max-w-297.5 flex-col gap-2.5 py-0 lion-desktop:py-0">
         {renderPromoHotelPanel()}
 
-        {data.featuredAddon ? (
-          <ContentPanel>
-            <HsrAddonBanner
-              addon={data.featuredAddon as FlightOrderCrossSellAddon}
-              href={data.featuredAddon.href}
-              onSelectAddon={() =>
-                onSelectAddon?.({
-                  addonId: data.featuredAddon?.id ?? featuredAddonId,
-                })
-              }
-            />
-          </ContentPanel>
-        ) : null}
+        <ContentPanel>
+          <HsrAddonBanner
+            addon={hsrAddon}
+            href={hsrAddonHref}
+            onSelectAddon={() =>
+              onSelectAddon?.({ addonId: hsrAddon.id ?? hsrAddonId })
+            }
+          />
+        </ContentPanel>
 
         {renderableAttractionSections.length > 0 ? (
           <ContentPanel>
@@ -178,13 +195,16 @@ function CrossSellWidgetContent({
         {renderDefaultSectionPanel(sectionGroups.flight)}
         {renderDefaultSectionPanel(sectionGroups.other)}
 
-        {data.actionSection ? (
+        {data.reminders ? (
           <ContentPanel>
             <ReminderCards
-              items={data.actionSection.items as FlightOrderCrossSellReminder[]}
+              items={createReminderItems(data.reminders.items, {
+                insuranceMailtoHref,
+                visaPassportHref,
+              })}
               onSelectAddon={(addonId) => onSelectAddon?.({ addonId })}
-              subtitle={data.actionSection.subtitle}
-              title={data.actionSection.title}
+              subtitle={data.reminders.subtitle}
+              title={data.reminders.title}
             />
           </ContentPanel>
         ) : null}
@@ -193,63 +213,142 @@ function CrossSellWidgetContent({
   )
 }
 
-function groupCrossSellWidgetSections(
-  sections: CrossSellWidgetResolvedSection[],
-): CrossSellSectionGroups {
-  const groups: CrossSellSectionGroups = {
-    attraction: [],
-    flight: [],
-    hotel: [],
-    other: [],
-    transport: [],
+//#endregion - Sub Components
+
+//#region - Functions
+
+function createHsrAddonHref(data: CrossSellWidgetData) {
+  const domainMode = resolveLiontravelDomainMode(
+    data.domainMode,
+    getCurrentHostname(),
+  )
+
+  if (!domainMode || !data.order?.orderYear || !data.order.orderNumber) {
+    return undefined
   }
 
-  sections.forEach((section) => {
-    switch (section.kind) {
-      case 'hotel':
-        groups.hotel.push(section)
-        break
-      case 'attraction':
-        groups.attraction.push(section)
-        break
-      case 'transport':
-        groups.transport.push(section)
-        break
-      case 'flight':
-        groups.flight.push(section)
-        break
-      default:
-        groups.other.push(section)
-        break
-    }
+  return createLiontravelUrl({
+    domainMode,
+    pathname: hsrAddonPathname,
+    productionHostname: hsrAddonProductionHostname,
+    query: {
+      sYear: data.order.orderYear,
+      sOrdr: data.order.orderNumber,
+    },
   })
+}
 
-  return groups
+function createVisaPassportHref(data: CrossSellWidgetData) {
+  const domainMode = resolveLiontravelDomainMode(
+    data.domainMode,
+    getCurrentHostname(),
+  )
+
+  if (!domainMode) {
+    return undefined
+  }
+
+  return createLiontravelUrl({
+    domainMode,
+    pathname: visaPassportPathname,
+    productionHostname: visaPassportProductionHostname,
+    query: {
+      Countrylicensing: 'TW',
+    },
+  })
+}
+
+function createInsuranceMailtoHref(data: CrossSellWidgetData) {
+  const agentEmail = data.serviceAgent?.email?.trim()
+  const orderYear = data.order?.orderYear
+  const orderNumber = data.order?.orderNumber
+
+  if (!agentEmail || !orderYear || !orderNumber) {
+    return undefined
+  }
+
+  const subject = `加購保險【訂單編號: ${orderYear}-${orderNumber}】`
+  const searchParams = [
+    `subject=${encodeURIComponent(subject)}`,
+    `body=${encodeURIComponent(insuranceMailBody)}`,
+  ].join('&')
+
+  return `mailto:${agentEmail}?${searchParams}`
+}
+
+function createReminderItems(
+  items: CrossSellWidgetReminder[],
+  options: { insuranceMailtoHref?: string; visaPassportHref?: string },
+) {
+  return items.map((item) => {
+    if (item.icon === 'passport' && options.visaPassportHref) {
+      return { ...item, href: options.visaPassportHref }
+    }
+
+    if (item.icon === 'insurance' && options.insuranceMailtoHref) {
+      return { ...item, href: options.insuranceMailtoHref }
+    }
+
+    return item
+  })
 }
 
 function resolveCrossSellWidgetSections(
   sections: CrossSellWidgetSection[],
+  orderDestination?: string,
   sectionContentOverrides?: CrossSellWidgetSectionContentOverridesByKind,
 ): CrossSellWidgetResolvedSection[] {
+  const sectionContentDefaults =
+    createCrossSellWidgetSectionContentDefaults(orderDestination)
+
   return sections.map((section) => {
-    const overrideContent = section.kind
-      ? sectionContentOverrides?.[section.kind]
-      : undefined
-    const title = overrideContent?.title ?? section.title ?? section.id
+    if (!section.kind) {
+      const title = section.title ?? section.id
+      const viewMoreLabel = section.viewMoreLabel ?? title
+
+      return {
+        ...section,
+        title,
+        viewMoreLabel,
+        viewMorePlaceholderLabel:
+          section.viewMorePlaceholderLabel ?? viewMoreLabel,
+      }
+    }
+
+    const defaultContent = sectionContentDefaults[section.kind] ?? {}
+    const overrideContent = sectionContentOverrides?.[section.kind]
+    const title =
+      overrideContent?.title ?? section.title ?? defaultContent.title
     const viewMoreLabel =
-      overrideContent?.viewMoreLabel ?? section.viewMoreLabel ?? title
+      overrideContent?.viewMoreLabel ??
+      section.viewMoreLabel ??
+      defaultContent.viewMoreLabel ??
+      title ??
+      section.id
 
     return {
       ...section,
-      subtitle: overrideContent?.subtitle ?? section.subtitle,
-      title,
+      subtitle:
+        overrideContent?.subtitle ??
+        section.subtitle ??
+        defaultContent?.subtitle,
+      title: title ?? section.id,
       viewMoreLabel,
       viewMorePlaceholderLabel:
         overrideContent?.viewMorePlaceholderLabel ??
         section.viewMorePlaceholderLabel ??
+        defaultContent.viewMorePlaceholderLabel ??
         viewMoreLabel,
     }
   })
+}
+
+function getCurrentHostname() {
+  if (typeof window === 'undefined') {
+    return undefined
+  }
+
+  return window.location.hostname
 }
 
 function useCurrentTime(promoKey: string) {
@@ -268,36 +367,48 @@ function useCurrentTime(promoKey: string) {
   return now
 }
 
+//#endregion - Functions
+
 export function CrossSellWidget({
-  actionSection,
   currency,
-  featuredAddon,
+  domainMode,
+  hsrAddon,
   locale,
   onSelectAddon,
   onSelectItem,
   onViewMore,
+  order,
+  orderDestination,
   promo,
+  reminders,
   sectionContentOverrides,
   sections,
+  serviceAgent,
 }: CrossSellWidgetProps) {
   const data: CrossSellWidgetData = {
     ...crossSellWidgetDefaultData,
-    actionSection,
     currency: currency ?? crossSellWidgetDefaultData.currency,
-    featuredAddon: featuredAddon
-      ? {
-          ...featuredAddon,
-        }
-      : undefined,
+    domainMode: domainMode ?? crossSellWidgetDefaultData.domainMode,
+    hsrAddon: {
+      ...crossSellWidgetDefaultData.hsrAddon,
+      ...hsrAddon,
+    },
     locale: locale ?? crossSellWidgetDefaultData.locale,
+    order,
     promo: {
       ...crossSellWidgetDefaultData.promo,
       ...promo,
     },
+    reminders: reminders ?? crossSellWidgetDefaultData.reminders,
     sections: resolveCrossSellWidgetSections(
       sections,
+      orderDestination,
       sectionContentOverrides,
     ),
+    serviceAgent: {
+      ...crossSellWidgetDefaultData.serviceAgent,
+      ...serviceAgent,
+    },
   }
   const promoKey = `${data.promo.startsAt}:${data.promo.durationSeconds}`
 

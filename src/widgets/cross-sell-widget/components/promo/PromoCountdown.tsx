@@ -11,6 +11,8 @@ interface PromoCountdownProps {
   remainingSeconds: number
 }
 
+export type PromoCountdownDigitDivider = FlipNumberDivider
+
 const countdownLabels = ['天', '時', '分', '秒'] as const
 
 export function PromoCountdown({

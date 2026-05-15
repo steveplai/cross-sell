@@ -1,3 +1,5 @@
+import type { LiontravelDomainMode } from '@/shared/utils/liontravelUrl'
+
 export interface CrossSellWidgetBenefit {
   id?: string
   label: string
@@ -36,6 +38,12 @@ export interface CrossSellWidgetItem {
   priceSuffix?: string
 }
 
+export type CrossSellWidgetSectionKind =
+  | 'hotel'
+  | 'attraction'
+  | 'transport'
+  | 'flight'
+
 export interface CrossSellWidgetCategory {
   id?: string
   label: string
@@ -44,7 +52,7 @@ export interface CrossSellWidgetCategory {
 
 export interface CrossSellWidgetSection {
   id: string
-  kind?: string
+  kind?: CrossSellWidgetSectionKind
   title?: string
   subtitle?: string
   viewMoreLabel?: string
@@ -68,50 +76,65 @@ export interface CrossSellWidgetSectionContentOverrides {
 }
 
 export type CrossSellWidgetSectionContentOverridesByKind = Partial<
-  Record<string, CrossSellWidgetSectionContentOverrides>
+  Record<CrossSellWidgetSectionKind, CrossSellWidgetSectionContentOverrides>
 >
 
-export interface CrossSellWidgetFeaturedAddon {
-  id?: string
-  title: string
-  description: string
-  ctaLabel: string
-  href?: string
-}
-
-export interface CrossSellWidgetActionItem {
+export interface CrossSellWidgetReminder {
   id: string
   title: string
   description: string
   accentText?: string
   href?: string
-  icon?: 'gift' | 'insurance' | 'passport' | 'wifi'
+  icon: 'gift' | 'insurance' | 'passport' | 'wifi'
 }
 
-export interface CrossSellWidgetActionSection {
+export interface CrossSellWidgetAddon {
+  id?: string
   title: string
-  subtitle?: string
-  items: CrossSellWidgetActionItem[]
+  description: string
+  ctaLabel: string
+}
+
+export interface CrossSellWidgetOrder {
+  orderYear: string
+  orderNumber: string
+}
+
+export interface CrossSellWidgetServiceAgent {
+  email?: string
 }
 
 export interface CrossSellWidgetData {
   promo: CrossSellWidgetPromo
   sections: CrossSellWidgetResolvedSection[]
-  actionSection?: CrossSellWidgetActionSection
-  currency?: string
-  featuredAddon?: CrossSellWidgetFeaturedAddon
+  domainMode?: LiontravelDomainMode
+  hsrAddon: CrossSellWidgetAddon
+  order?: CrossSellWidgetOrder
+  serviceAgent?: CrossSellWidgetServiceAgent
+  reminders?: {
+    title: string
+    subtitle?: string
+    items: CrossSellWidgetReminder[]
+  }
   locale?: string
+  currency?: string
 }
 
-export type CrossSellWidgetDefaultData = Omit<CrossSellWidgetData, 'sections'>
+export type CrossSellWidgetDefaultData = Omit<
+  CrossSellWidgetData,
+  'order' | 'sections'
+>
 
 export interface CrossSellWidgetContentOverrides {
-  actionSection?: CrossSellWidgetActionSection
   currency?: string
-  featuredAddon?: Partial<CrossSellWidgetFeaturedAddon>
+  domainMode?: LiontravelDomainMode
+  hsrAddon?: Partial<CrossSellWidgetAddon>
   locale?: string
+  orderDestination?: string
   promo?: Partial<CrossSellWidgetPromo>
+  reminders?: CrossSellWidgetData['reminders']
   sectionContentOverrides?: CrossSellWidgetSectionContentOverridesByKind
+  serviceAgent?: CrossSellWidgetServiceAgent
 }
 
 export interface CrossSellWidgetItemEvent {
@@ -128,6 +151,7 @@ export interface CrossSellWidgetAddonEvent {
 }
 
 export interface CrossSellWidgetProps extends CrossSellWidgetContentOverrides {
+  order?: CrossSellWidgetOrder
   sections: CrossSellWidgetSection[]
   onSelectItem?: (event: CrossSellWidgetItemEvent) => void
   onViewMore?: (event: CrossSellWidgetViewMoreEvent) => void

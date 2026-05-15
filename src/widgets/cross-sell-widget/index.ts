@@ -1,9 +1,9 @@
 export { CrossSellWidget } from './CrossSellWidget'
-
+export { getRemainingPromoSeconds } from './lib/countdown'
+export { crossSellWidgetSampleData } from './sampleData'
 export type {
   CrossSellWidgetAddon,
   CrossSellWidgetAddonEvent,
-  CrossSellWidgetBenefit,
   CrossSellWidgetCategory,
   CrossSellWidgetContentOverrides,
   CrossSellWidgetData,
@@ -21,3 +21,4 @@ export type {
   CrossSellWidgetSectionKind,
   CrossSellWidgetViewMoreEvent,
 } from './types'
+export type { LiontravelDomainMode } from '@/shared/utils/liontravelUrl'

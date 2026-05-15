@@ -1,5 +1,9 @@
 import { expect, test } from '@playwright/test'
 
+type CrossSellWidgetTestWindow = Window & {
+  __crossSellEvents?: string[]
+}
+
 test.describe('CrossSellWidget', () => {
   test('renders widget content correctly', async ({ page }) => {
     await page.goto('/examples/cross-sell-widget/wc/basic.html')
@@ -13,7 +17,7 @@ test.describe('CrossSellWidget', () => {
     await page.goto('/examples/cross-sell-widget/wc/basic.html')
 
     await expect(
-      page.getByTestId('cross-sell-carousel').first(),
+      page.locator('[data-testid$="-carousel"]').first(),
     ).toBeVisible()
 
     await expect(
@@ -26,17 +30,20 @@ test.describe('CrossSellWidget', () => {
 
     await page.evaluate(() => {
       const widget = document.querySelector('cross-sell-widget')
+      const testWindow = window as CrossSellWidgetTestWindow
 
-      window.__crossSellEvents = []
+      testWindow.__crossSellEvents = []
 
       widget?.addEventListener('cross-sell-widget:item-select', (event) => {
-        window.__crossSellEvents.push(event.type)
+        testWindow.__crossSellEvents?.push(event.type)
       })
     })
 
     await page.getByText('東京灣精選飯店').click()
 
-    const events = await page.evaluate(() => window.__crossSellEvents)
+    const events = await page.evaluate(
+      () => (window as CrossSellWidgetTestWindow).__crossSellEvents ?? [],
+    )
 
     expect(events).toContain('cross-sell-widget:item-select')
   })

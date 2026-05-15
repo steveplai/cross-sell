@@ -3,54 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cross Sell Widget Web Component</title>
+    <title>Cross Sell Widget Web Component Basic</title>
+    <style>
+      body {
+        margin: 0;
+        background: #fff8f4;
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          sans-serif;
+      }
+    </style>
   </head>
   <body>
-    <main style="max-width: 1280px; margin: 40px auto; font-family: sans-serif">
-      <h1>Cross Sell Widget Web Component Example</h1>
-
-      <cross-sell-widget id="cross-sell-widget"></cross-sell-widget>
-    </main>
+    <cross-sell-widget
+      data='{"sections":[{"id":"hotel-recommendations","kind":"hotel","items":[{"id":"tokyo-bay-hotel","title":"東京灣精選飯店","location":"江東區","starRating":5,"rating":"4.5","ratingLabel":"太讚了","reviewCount":1132,"cancellationLabel":"免費取消","price":1224152,"priceSuffix":"起"}]}]}'
+    ></cross-sell-widget>
 
     <script src="../../../dist/widgets/cross-sell-widget/wc.js"></script>
-
-    <script>
-      const widget = document.getElementById('cross-sell-widget')
-
-      widget.data = {
-        promo: {
-          id: 'cross-sell-example',
-          activeTitle: '您已解鎖限時優惠！',
-          expiredTitle: '探索更多推薦商品！',
-          startsAt: new Date().toISOString(),
-          durationSeconds: 2592000,
-          serviceLabel: '精選旅遊加購推薦',
-        },
-        featuredAddon: {
-          id: 'transport-addon',
-          title: '加購交通 行程更順暢',
-          description: '搭配交通票券與接送服務，旅程更輕鬆。',
-          ctaLabel: '立即查看',
-        },
-        sections: [
-          {
-            id: 'hotel-section',
-            title: '精選住宿',
-            viewMoreLabel: '查看更多',
-            items: [
-              {
-                id: 'hotel-1',
-                title: '東京灣精選飯店',
-                location: '東京灣',
-                imageUrl:
-                  'https://picsum.photos/seed/cross-sell-example/640/426',
-                price: 9800,
-                rating: '4.6',
-              },
-            ],
-          },
-        ],
-      }
-    </script>
   </body>
 </html>
