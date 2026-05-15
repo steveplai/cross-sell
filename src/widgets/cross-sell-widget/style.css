@@ -13,7 +13,10 @@
   --lion-page-gradient-to: #ffffff;
   --lion-promo-header-gradient-from: #fff5eb;
   --lion-promo-header-gradient-to: #ffffff;
+  --lion-attraction-banner-gradient-from: #ffffff;
+  --lion-attraction-banner-gradient-to: rgb(240 55 66 / 0.05);
 
+  /* Lion Design Token */
   --lion-gray-50: #f4f4f4;
   --lion-gray-100: var(--accent);
   --lion-gray-200: var(--muted);
@@ -22,10 +25,23 @@
   --lion-gray-700: #666666;
   --lion-gray-800: #444444;
   --lion-gray-900: var(--foreground);
+  --lion-stone-300: var(--border);
+  --lion-stone-400: var(--ring);
   --lion-red-100: #ffefef;
+  --lion-red-200: #ffe8e9;
+  --lion-red-300: #fcd7d9;
+  --lion-red-600: var(--primary);
   --lion-orange-100: #fff3e5;
+  --lion-orange-200: #ffe7ca;
+  --lion-orange-300: #ffd9ac;
+  --lion-orange-400: #ff9166;
+  --lion-orange-500: var(--warning);
   --lion-orange-600: #ff8400;
+  --lion-blue-600: var(--info);
   --lion-panel-radius: 10px;
+  --lion-category-overflow-shadow-start: 8px 0 10px -12px rgb(0 0 0 / 0.1);
+  --lion-category-overflow-shadow-end: -8px 0 10px -12px rgb(0 0 0 / 0.1);
+  --lion-carousel-control-shadow: 0 0 4px rgb(0 0 0 / 0.25);
   --lion-product-card-price-foreground: #383838;
   --lion-product-card-shadow:
     0 1px 2px rgb(0 0 0 / 0.08), 0 2px 6px rgb(0 0 0 / 0.08);
@@ -41,13 +57,20 @@
   --lion-page-gradient-to: var(--background);
   --lion-promo-header-gradient-from: #241813;
   --lion-promo-header-gradient-to: var(--background);
+  --lion-attraction-banner-gradient-from: var(--background);
+  --lion-attraction-banner-gradient-to: rgb(240 55 66 / 0.16);
 
   --lion-gray-50: #232626;
   --lion-gray-300: #2a2f2d;
   --lion-gray-700: #a1a5a5;
   --lion-gray-800: #c8cccc;
   --lion-red-100: #3a171a;
+  --lion-red-200: #4a1d22;
+  --lion-red-300: #64262d;
   --lion-orange-100: #332017;
+  --lion-orange-200: #44281b;
+  --lion-orange-300: #5c3320;
+  --lion-orange-400: #ff9162;
   --lion-orange-600: #ff9a1f;
   --lion-product-card-price-foreground: var(--lion-gray-800);
   --lion-product-card-shadow:
