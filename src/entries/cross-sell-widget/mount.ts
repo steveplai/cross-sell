@@ -4,7 +4,7 @@ import {
   CrossSellWidget,
   type CrossSellWidgetProps,
 } from '../../widgets/cross-sell-widget'
-import widgetStyles from '../../widgets/flight-order-cross-sell/style.css?inline'
+import widgetStyles from '../../widgets/cross-sell-widget/style.css?inline'
 
 const styles = `${baseStyles}\n${widgetStyles}`
 
