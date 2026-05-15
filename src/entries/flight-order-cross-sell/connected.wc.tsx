@@ -19,6 +19,8 @@ const sectionKinds = [
   'flight',
 ] as const satisfies readonly FlightOrderCrossSellSectionKind[]
 
+//#region - Functions
+
 function parseErrorMode(
   value: string | null | undefined,
 ): FlightOrderCrossSellConnectedErrorMode {
@@ -193,6 +195,8 @@ function pickConnectedConfig(
 
   return config
 }
+
+//#endregion - Functions
 
 createReactWebComponent<FlightOrderCrossSellConnectedProps>({
   tagName: 'flight-order-cross-sell-connected',

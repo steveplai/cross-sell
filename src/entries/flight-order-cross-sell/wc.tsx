@@ -8,6 +8,8 @@ import widgetStyles from '../../widgets/flight-order-cross-sell/style.css?inline
 
 const styles = `${baseStyles}\n${widgetStyles}`
 
+//#region - Functions
+
 function parseData(value: string | null): FlightOrderCrossSellProps {
   if (!value) {
     return { sections: [] }
@@ -64,6 +66,8 @@ function mapDataToProps(
     serviceAgent: data.serviceAgent,
   }
 }
+
+//#endregion - Functions
 
 createReactWebComponent<FlightOrderCrossSellProps>({
   tagName: 'flight-order-cross-sell',
