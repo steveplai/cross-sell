@@ -1,35 +1,75 @@
-import type { LiontravelDomainMode } from '@/shared/utils/liontravelUrl'
+export interface CrossSellWidgetBenefit {
+  id?: string
+  label: string
+  tagLabel?: string
+}
 
-import type {
-  FlightOrderCrossSellAddon,
-  FlightOrderCrossSellBenefit,
-  FlightOrderCrossSellCategory,
-  FlightOrderCrossSellItem,
-  FlightOrderCrossSellOrder,
-  FlightOrderCrossSellPromo,
-  FlightOrderCrossSellReminder,
-  FlightOrderCrossSellSection,
-  FlightOrderCrossSellSectionContentOverrides,
-  FlightOrderCrossSellSectionContentOverridesByKind,
-  FlightOrderCrossSellSectionKind,
-} from '../flight-order-cross-sell'
+export interface CrossSellWidgetPromo {
+  id: string
+  activeTitle: string
+  expiredTitle: string
+  startsAt: string
+  durationSeconds: number
+  benefits?: CrossSellWidgetBenefit[]
+  serviceLabel: string
+}
 
-export type CrossSellWidgetBenefit = FlightOrderCrossSellBenefit
-export type CrossSellWidgetPromo = FlightOrderCrossSellPromo
-export type CrossSellWidgetItem = FlightOrderCrossSellItem
-export type CrossSellWidgetSectionKind = FlightOrderCrossSellSectionKind
-export type CrossSellWidgetCategory = FlightOrderCrossSellCategory
-export type CrossSellWidgetSection = FlightOrderCrossSellSection
-export type CrossSellWidgetSectionContentOverrides =
-  FlightOrderCrossSellSectionContentOverrides
-export type CrossSellWidgetSectionContentOverridesByKind =
-  FlightOrderCrossSellSectionContentOverridesByKind
+export interface CrossSellWidgetItem {
+  id: string
+  title: string
+  href?: string
+  imageUrl?: string
+  location?: string
+  detailLocation?: string
+  badge?: string
+  promoBadge?: string
+  starRating?: number
+  rating?: string
+  ratingLabel?: string
+  reviewCount?: number
+  interestLabel?: string
+  cancellationLabel?: string
+  originalPrice?: number
+  discountLabel?: string
+  price: number
+  pricePrefix?: string
+  priceSuffix?: string
+}
+
+export interface CrossSellWidgetCategory {
+  id?: string
+  label: string
+  href: string
+}
+
+export interface CrossSellWidgetSection {
+  id: string
+  kind?: string
+  title?: string
+  subtitle?: string
+  viewMoreLabel?: string
+  viewMoreHref?: string
+  viewMorePlaceholderLabel?: string
+  categories?: CrossSellWidgetCategory[]
+  items: CrossSellWidgetItem[]
+}
 
 export interface CrossSellWidgetResolvedSection extends CrossSellWidgetSection {
   title: string
   viewMoreLabel: string
   viewMorePlaceholderLabel: string
 }
+
+export interface CrossSellWidgetSectionContentOverrides {
+  title?: string
+  subtitle?: string
+  viewMoreLabel?: string
+  viewMorePlaceholderLabel?: string
+}
+
+export type CrossSellWidgetSectionContentOverridesByKind = Partial<
+  Record<string, CrossSellWidgetSectionContentOverrides>
+>
 
 export interface CrossSellWidgetFeaturedAddon {
   id?: string
@@ -45,7 +85,7 @@ export interface CrossSellWidgetActionItem {
   description: string
   accentText?: string
   href?: string
-  icon: 'gift' | 'insurance' | 'passport' | 'wifi'
+  icon?: 'gift' | 'insurance' | 'passport' | 'wifi'
 }
 
 export interface CrossSellWidgetActionSection {
@@ -59,47 +99,19 @@ export interface CrossSellWidgetData {
   sections: CrossSellWidgetResolvedSection[]
   actionSection?: CrossSellWidgetActionSection
   currency?: string
-  domainMode?: LiontravelDomainMode
   featuredAddon?: CrossSellWidgetFeaturedAddon
   locale?: string
 }
 
-export type CrossSellWidgetDefaultData = Omit<
-  CrossSellWidgetData,
-  'sections'
->
+export type CrossSellWidgetDefaultData = Omit<CrossSellWidgetData, 'sections'>
 
 export interface CrossSellWidgetContentOverrides {
   actionSection?: CrossSellWidgetActionSection
   currency?: string
-  domainMode?: LiontravelDomainMode
   featuredAddon?: Partial<CrossSellWidgetFeaturedAddon>
   locale?: string
-  orderDestination?: string
   promo?: Partial<CrossSellWidgetPromo>
   sectionContentOverrides?: CrossSellWidgetSectionContentOverridesByKind
-
-  /**
-   * @deprecated Use featuredAddon instead. This is kept for compatibility with
-   * the original flight-order-cross-sell data contract.
-   */
-  hsrAddon?: Partial<FlightOrderCrossSellAddon>
-
-  /**
-   * @deprecated Use actionSection instead. This is kept for compatibility with
-   * the original flight-order-cross-sell data contract.
-   */
-  reminders?: CrossSellWidgetActionSection
-
-  /**
-   * @deprecated Flight order data should be adapted before reaching the generic widget.
-   */
-  order?: FlightOrderCrossSellOrder
-
-  /**
-   * @deprecated Flight service agent data should be adapted before reaching the generic widget.
-   */
-  serviceAgent?: { email?: string }
 }
 
 export interface CrossSellWidgetItemEvent {
@@ -121,7 +133,3 @@ export interface CrossSellWidgetProps extends CrossSellWidgetContentOverrides {
   onViewMore?: (event: CrossSellWidgetViewMoreEvent) => void
   onSelectAddon?: (event: CrossSellWidgetAddonEvent) => void
 }
-
-export type CrossSellWidgetReminder = FlightOrderCrossSellReminder
-export type CrossSellWidgetAddon = FlightOrderCrossSellAddon
-export type CrossSellWidgetOrder = FlightOrderCrossSellOrder
