@@ -1,6 +1,4 @@
-export {
-  FlightOrderCrossSell as CrossSellWidget,
-} from '../flight-order-cross-sell'
+export { CrossSellWidget } from './CrossSellWidget'
 
 export type {
   CrossSellWidgetAddon,
