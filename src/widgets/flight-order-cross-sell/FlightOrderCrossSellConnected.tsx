@@ -112,7 +112,6 @@ function createDefaultOrderYear(orderNumber: string) {
 
 function FlightOrderCrossSellConnectedContent({
   apiBaseUrl,
-  attractionBannerOverrides,
   currency,
   environment = 'production',
   errorMode = 'hidden',
@@ -121,6 +120,7 @@ function FlightOrderCrossSellConnectedContent({
   onSelectAddon,
   onSelectItem,
   onViewMore,
+  orderDestination,
   orderNumber,
   promo,
   promoDurationSeconds,
@@ -128,6 +128,7 @@ function FlightOrderCrossSellConnectedContent({
   recommendProductTypes,
   reminders,
   requestClient,
+  sectionContentOverrides,
   travelInsuranceContactEmail,
 }: FlightOrderCrossSellConnectedInternalProps) {
   const domainMode = environment
@@ -176,7 +177,6 @@ function FlightOrderCrossSellConnectedContent({
   if (query.data) {
     return (
       <FlightOrderCrossSell
-        attractionBannerOverrides={attractionBannerOverrides}
         currency={currency}
         domainMode={domainMode}
         hsrAddon={hsrAddon}
@@ -184,9 +184,11 @@ function FlightOrderCrossSellConnectedContent({
         onSelectAddon={onSelectAddon}
         onSelectItem={onSelectItem}
         onViewMore={onViewMore}
+        orderDestination={orderDestination}
         order={createOrderFromExternalOrderNumber(orderNumber ?? '')}
         promo={resolvedPromo}
         reminders={reminders}
+        sectionContentOverrides={sectionContentOverrides}
         sections={query.data}
         serviceAgent={
           travelInsuranceContactEmail

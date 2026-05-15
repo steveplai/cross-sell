@@ -12,14 +12,19 @@ import { ReminderCards } from './components/addons/ReminderCards'
 import { PromoHeader } from './components/promo/PromoHeader'
 import { AttractionDecorBanner } from './components/recommendations/AttractionDecorBanner'
 import { CrossSellSection } from './components/recommendations/CrossSellSection'
-import { flightOrderCrossSellDefaultData } from './defaultData'
+import {
+  createFlightOrderCrossSellSectionContentDefaults,
+  flightOrderCrossSellDefaultData,
+} from './defaultData'
 import { getRemainingPromoSeconds } from './lib/countdown'
 import { groupFlightOrderCrossSellSections } from './lib/groupSections'
 import type {
   FlightOrderCrossSellData,
   FlightOrderCrossSellProps,
   FlightOrderCrossSellReminder,
+  FlightOrderCrossSellResolvedSection,
   FlightOrderCrossSellSection,
+  FlightOrderCrossSellSectionContentOverridesByKind,
 } from './types'
 
 const flightOrderCrossSellRootProps = createWidgetRootProps(
@@ -85,19 +90,21 @@ function FlightOrderCrossSellContent({
   const visaPassportHref = createVisaPassportHref(data)
   const remainingSeconds = getRemainingPromoSeconds(data.promo, now)
   const isPromoActive = remainingSeconds > 0
-  const attractionBannerOverrides = data.attractionBannerOverrides
   const sectionGroups = groupFlightOrderCrossSellSections(data.sections)
 
-  function getRenderableSections(sections: FlightOrderCrossSellSection[]) {
+  function getRenderableSections(
+    sections: FlightOrderCrossSellResolvedSection[],
+  ) {
     return sections.filter((section) => section.items.length > 0)
   }
 
   const renderableAttractionSections = getRenderableSections(
     sectionGroups.attraction,
   )
+  const attractionBannerTitle = renderableAttractionSections[0]?.title ?? ''
 
   function renderCrossSellSections(
-    sections: FlightOrderCrossSellSection[],
+    sections: FlightOrderCrossSellResolvedSection[],
     options: { hideTitle?: boolean; sectionClassName?: string } = {},
   ) {
     return (
@@ -121,7 +128,9 @@ function FlightOrderCrossSellContent({
     )
   }
 
-  function renderDefaultSectionPanel(sections: FlightOrderCrossSellSection[]) {
+  function renderDefaultSectionPanel(
+    sections: FlightOrderCrossSellResolvedSection[],
+  ) {
     const renderableSections = getRenderableSections(sections)
 
     if (renderableSections.length === 0) {
@@ -167,7 +176,7 @@ function FlightOrderCrossSellContent({
             addon={hsrAddon}
             href={hsrAddonHref}
             onSelectAddon={() =>
-              onSelectAddon?.({ addonId: hsrAddon?.id ?? hsrAddonId })
+              onSelectAddon?.({ addonId: hsrAddon.id ?? hsrAddonId })
             }
           />
         </ContentPanel>
@@ -175,9 +184,7 @@ function FlightOrderCrossSellContent({
         {renderableAttractionSections.length > 0 ? (
           <ContentPanel>
             <div className="overflow-hidden bg-background">
-              <AttractionDecorBanner
-                contentOverrides={attractionBannerOverrides}
-              />
+              <AttractionDecorBanner title={attractionBannerTitle} />
               <div className="relative z-10 -mt-5 overflow-hidden rounded-t-[20px] bg-background lion-desktop:rounded-t-[24px]">
                 {renderCrossSellSections(renderableAttractionSections, {
                   hideTitle: true,
@@ -290,6 +297,56 @@ function createReminderItems(
   })
 }
 
+function resolveFlightOrderCrossSellSections(
+  sections: FlightOrderCrossSellSection[],
+  orderDestination?: string,
+  sectionContentOverrides?: FlightOrderCrossSellSectionContentOverridesByKind,
+): FlightOrderCrossSellResolvedSection[] {
+  const sectionContentDefaults =
+    createFlightOrderCrossSellSectionContentDefaults(orderDestination)
+
+  return sections.map((section) => {
+    if (!section.kind) {
+      const title = section.title ?? section.id
+      const viewMoreLabel = section.viewMoreLabel ?? title
+
+      return {
+        ...section,
+        title,
+        viewMoreLabel,
+        viewMorePlaceholderLabel:
+          section.viewMorePlaceholderLabel ?? viewMoreLabel,
+      }
+    }
+
+    const defaultContent = sectionContentDefaults[section.kind] ?? {}
+    const overrideContent = sectionContentOverrides?.[section.kind]
+    const title =
+      overrideContent?.title ?? section.title ?? defaultContent.title
+    const viewMoreLabel =
+      overrideContent?.viewMoreLabel ??
+      section.viewMoreLabel ??
+      defaultContent.viewMoreLabel ??
+      title ??
+      section.id
+
+    return {
+      ...section,
+      subtitle:
+        overrideContent?.subtitle ??
+        section.subtitle ??
+        defaultContent?.subtitle,
+      title: title ?? section.id,
+      viewMoreLabel,
+      viewMorePlaceholderLabel:
+        overrideContent?.viewMorePlaceholderLabel ??
+        section.viewMorePlaceholderLabel ??
+        defaultContent.viewMorePlaceholderLabel ??
+        viewMoreLabel,
+    }
+  })
+}
+
 function getCurrentHostname() {
   if (typeof window === 'undefined') {
     return undefined
@@ -317,7 +374,6 @@ function useCurrentTime(promoKey: string) {
 //#endregion - Functions
 
 export function FlightOrderCrossSell({
-  attractionBannerOverrides,
   currency,
   domainMode,
   hsrAddon,
@@ -326,17 +382,15 @@ export function FlightOrderCrossSell({
   onSelectItem,
   onViewMore,
   order,
+  orderDestination,
   promo,
   reminders,
+  sectionContentOverrides,
   sections,
   serviceAgent,
 }: FlightOrderCrossSellProps) {
   const data: FlightOrderCrossSellData = {
     ...flightOrderCrossSellDefaultData,
-    attractionBannerOverrides: {
-      ...flightOrderCrossSellDefaultData.attractionBannerOverrides,
-      ...attractionBannerOverrides,
-    },
     currency: currency ?? flightOrderCrossSellDefaultData.currency,
     domainMode: domainMode ?? flightOrderCrossSellDefaultData.domainMode,
     hsrAddon: {
@@ -350,7 +404,11 @@ export function FlightOrderCrossSell({
       ...promo,
     },
     reminders: reminders ?? flightOrderCrossSellDefaultData.reminders,
-    sections,
+    sections: resolveFlightOrderCrossSellSections(
+      sections,
+      orderDestination,
+      sectionContentOverrides,
+    ),
     serviceAgent: {
       ...flightOrderCrossSellDefaultData.serviceAgent,
       ...serviceAgent,

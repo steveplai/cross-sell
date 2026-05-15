@@ -13,7 +13,7 @@ export interface FlightOrderCrossSellPromo {
   startsAt: string
   durationSeconds: number
   benefits?: FlightOrderCrossSellBenefit[]
-  serviceLabel?: string
+  serviceLabel: string
 }
 
 export interface FlightOrderCrossSellItem {
@@ -53,13 +53,34 @@ export interface FlightOrderCrossSellCategory {
 export interface FlightOrderCrossSellSection {
   id: string
   kind?: FlightOrderCrossSellSectionKind
-  title: string
+  title?: string
   subtitle?: string
   viewMoreLabel?: string
   viewMoreHref?: string
+  viewMorePlaceholderLabel?: string
   categories?: FlightOrderCrossSellCategory[]
   items: FlightOrderCrossSellItem[]
 }
+
+export interface FlightOrderCrossSellResolvedSection extends FlightOrderCrossSellSection {
+  title: string
+  viewMoreLabel: string
+  viewMorePlaceholderLabel: string
+}
+
+export interface FlightOrderCrossSellSectionContentOverrides {
+  title?: string
+  subtitle?: string
+  viewMoreLabel?: string
+  viewMorePlaceholderLabel?: string
+}
+
+export type FlightOrderCrossSellSectionContentOverridesByKind = Partial<
+  Record<
+    FlightOrderCrossSellSectionKind,
+    FlightOrderCrossSellSectionContentOverrides
+  >
+>
 
 export interface FlightOrderCrossSellReminder {
   id: string
@@ -70,15 +91,11 @@ export interface FlightOrderCrossSellReminder {
   icon: 'gift' | 'insurance' | 'passport' | 'wifi'
 }
 
-export interface FlightOrderCrossSellAttractionBannerOverrides {
-  title?: string
-}
-
 export interface FlightOrderCrossSellAddon {
   id?: string
-  title?: string
-  description?: string
-  ctaLabel?: string
+  title: string
+  description: string
+  ctaLabel: string
 }
 
 export interface FlightOrderCrossSellOrder {
@@ -92,10 +109,9 @@ export interface FlightOrderCrossSellServiceAgent {
 
 export interface FlightOrderCrossSellData {
   promo: FlightOrderCrossSellPromo
-  sections: FlightOrderCrossSellSection[]
-  attractionBannerOverrides?: FlightOrderCrossSellAttractionBannerOverrides
+  sections: FlightOrderCrossSellResolvedSection[]
   domainMode?: LiontravelDomainMode
-  hsrAddon?: FlightOrderCrossSellAddon
+  hsrAddon: FlightOrderCrossSellAddon
   order?: FlightOrderCrossSellOrder
   serviceAgent?: FlightOrderCrossSellServiceAgent
   reminders?: {
@@ -113,13 +129,14 @@ export type FlightOrderCrossSellDefaultData = Omit<
 >
 
 export interface FlightOrderCrossSellContentOverrides {
-  attractionBannerOverrides?: FlightOrderCrossSellAttractionBannerOverrides
   currency?: string
   domainMode?: LiontravelDomainMode
-  hsrAddon?: FlightOrderCrossSellAddon
+  hsrAddon?: Partial<FlightOrderCrossSellAddon>
   locale?: string
+  orderDestination?: string
   promo?: Partial<FlightOrderCrossSellPromo>
   reminders?: FlightOrderCrossSellData['reminders']
+  sectionContentOverrides?: FlightOrderCrossSellSectionContentOverridesByKind
   serviceAgent?: FlightOrderCrossSellServiceAgent
 }
 

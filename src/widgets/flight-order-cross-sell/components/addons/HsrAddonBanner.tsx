@@ -6,16 +6,8 @@ import { cn } from '@/lib/utils'
 import type { FlightOrderCrossSellAddon } from '../../types'
 import { HsrBackground } from './HsrBackground'
 
-const defaultHsrAddon: Required<
-  Pick<FlightOrderCrossSellAddon, 'title' | 'description' | 'ctaLabel'>
-> = {
-  title: '加購高鐵 行程更順暢',
-  description: '購買國內外行程，最高享 8 折優惠',
-  ctaLabel: '前往加購',
-}
-
 interface HsrAddonBannerProps {
-  addon?: FlightOrderCrossSellAddon
+  addon: FlightOrderCrossSellAddon
   href?: string
   onSelectAddon?: () => void
 }
@@ -70,23 +62,19 @@ export function HsrAddonBanner({
   href,
   onSelectAddon,
 }: HsrAddonBannerProps) {
-  const title = addon?.title ?? defaultHsrAddon.title
-  const description = addon?.description ?? defaultHsrAddon.description
-  const ctaLabel = addon?.ctaLabel ?? defaultHsrAddon.ctaLabel
-
   return (
     <section className={sectionClassName}>
       <div className={layoutClassName}>
         <HsrBackground className={mobileBackgroundClassName} cropRight={39} />
         <HsrBackground className={desktopBackgroundClassName} />
         <div className={textGroupClassName}>
-          <h2 className={titleClassName}>{title}</h2>
+          <h2 className={titleClassName}>{addon.title}</h2>
           <div className={descriptionClassName}>
             <Check
               aria-hidden="true"
               className="size-4 text-(--lion-orange-600)"
             />
-            <p>{description}</p>
+            <p>{addon.description}</p>
           </div>
         </div>
         {href ? (
@@ -97,7 +85,7 @@ export function HsrAddonBanner({
               rel="noopener noreferrer"
               target="_blank"
             >
-              {ctaLabel}
+              {addon.ctaLabel}
             </a>
           </Button>
         ) : (
@@ -107,7 +95,7 @@ export function HsrAddonBanner({
             type="button"
             variant="outline"
           >
-            {ctaLabel}
+            {addon.ctaLabel}
           </Button>
         )}
       </div>

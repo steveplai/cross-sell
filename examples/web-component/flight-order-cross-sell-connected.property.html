@@ -52,11 +52,13 @@
       )
 
       widget.travelInsuranceContactEmail = 'customer-service@liontravel.com'
+      widget.orderDestination = '上海'
       widget.promoStartsAt = new Date(Date.now() - 10 * 60 * 1000).toISOString()
       widget.promoDurationSeconds = 40 * 60 * 60
       widget.config = {
         currency: 'USD',
         locale: 'en-US',
+        orderDestination: '大阪',
         promo: {
           activeTitle: 'Connected property 限時優惠',
           expiredTitle: '發現更多旅遊靈感！',
@@ -81,8 +83,10 @@
           description: '購買國內外行程，最高享 8 折優惠',
           ctaLabel: '立即加購',
         },
-        attractionBannerOverrides: {
-          title: '精選票券與當地體驗',
+        sectionContentOverrides: {
+          attraction: {
+            title: '精選票券與當地體驗',
+          },
         },
         reminders: {
           title: '別忘了加購一份安心與便利',

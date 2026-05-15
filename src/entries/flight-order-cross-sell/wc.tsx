@@ -2,7 +2,6 @@ import { createReactWebComponent } from '../../runtime/createReactWebComponent'
 import baseStyles from '../../styles/widget.css?inline'
 import {
   FlightOrderCrossSell,
-  type FlightOrderCrossSellData,
   type FlightOrderCrossSellProps,
 } from '../../widgets/flight-order-cross-sell'
 import widgetStyles from '../../widgets/flight-order-cross-sell/style.css?inline'
@@ -17,20 +16,20 @@ function parseData(value: string | null): FlightOrderCrossSellProps {
   try {
     const parsed = JSON.parse(value)
 
-    return isFlightOrderCrossSellData(parsed)
-      ? mapDataToProps(parsed as FlightOrderCrossSellData)
+    return isFlightOrderCrossSellProps(parsed)
+      ? mapDataToProps(parsed as FlightOrderCrossSellProps)
       : { sections: [] }
   } catch {
     return { sections: [] }
   }
 }
 
-function isFlightOrderCrossSellData(value: unknown) {
+function isFlightOrderCrossSellProps(value: unknown) {
   if (!value || typeof value !== 'object') {
     return false
   }
 
-  const candidate = value as Partial<FlightOrderCrossSellData>
+  const candidate = value as Partial<FlightOrderCrossSellProps>
 
   return (
     typeof candidate === 'object' &&
@@ -39,15 +38,15 @@ function isFlightOrderCrossSellData(value: unknown) {
 }
 
 function mapDataToProps(
-  data: FlightOrderCrossSellData,
+  data: FlightOrderCrossSellProps,
 ): FlightOrderCrossSellProps {
   return {
-    attractionBannerOverrides: data.attractionBannerOverrides,
     currency: data.currency,
     domainMode: data.domainMode,
     hsrAddon: data.hsrAddon,
     locale: data.locale,
     order: data.order,
+    orderDestination: data.orderDestination,
     promo: data.promo,
     reminders: data.reminders,
     sections: data.sections ?? [],

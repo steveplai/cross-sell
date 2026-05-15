@@ -93,7 +93,7 @@ const webComponentExamples: WebComponentExample[] = [
     widgets: [
       {
         selector: 'flight-order-cross-sell',
-        text: '探索東京飯店',
+        text: '探索地區飯店',
       },
     ],
   },
@@ -103,7 +103,7 @@ const webComponentExamples: WebComponentExample[] = [
     widgets: [
       {
         selector: 'flight-order-cross-sell-connected',
-        text: '訂房',
+        text: '探索上海飯店',
       },
     ],
   },
@@ -113,7 +113,7 @@ const webComponentExamples: WebComponentExample[] = [
     widgets: [
       {
         selector: 'flight-order-cross-sell-connected',
-        text: '訂房',
+        text: '探索上海飯店',
       },
     ],
   },
@@ -154,13 +154,13 @@ const mountApiExamples: MountApiExample[] = [
     name: 'flight order cross sell mount API basic',
     path: '/examples/mount-api/flight-order-cross-sell.basic.html',
     rootSelector: '#flight-order-cross-sell-root',
-    text: '探索東京飯店',
+    text: '探索地區飯店',
   },
   {
     name: 'flight order cross sell connected mount API basic',
     path: '/examples/mount-api/flight-order-cross-sell-connected.basic.html',
     rootSelector: '#flight-order-cross-sell-connected-root',
-    text: '訂房',
+    text: '探索地區飯店',
   },
 ] as const
 
@@ -486,7 +486,7 @@ test('flight order connected web component handoff emits item event', async ({
     .poll(() =>
       getWebComponentWidgetText(page, 'flight-order-cross-sell-connected'),
     )
-    .toContain('訂房')
+    .toContain('探索上海飯店')
 
   await page
     .locator('flight-order-cross-sell-connected')
@@ -526,6 +526,11 @@ test('flight order connected web component applies config attribute overrides', 
       getWebComponentWidgetText(page, 'flight-order-cross-sell-connected'),
     )
     .toContain('提供旅行保障')
+  await expect
+    .poll(() =>
+      getWebComponentWidgetText(page, 'flight-order-cross-sell-connected'),
+    )
+    .toContain('探索上海飯店')
 })
 
 test('flight order connected web component applies config property and attribute priority', async ({
@@ -546,6 +551,11 @@ test('flight order connected web component applies config property and attribute
       getWebComponentWidgetText(page, 'flight-order-cross-sell-connected'),
     )
     .toContain('提供旅行保障')
+  await expect
+    .poll(() =>
+      getWebComponentWidgetText(page, 'flight-order-cross-sell-connected'),
+    )
+    .toContain('探索上海飯店')
   await expect
     .poll(() =>
       getWebComponentWidgetText(page, 'flight-order-cross-sell-connected'),

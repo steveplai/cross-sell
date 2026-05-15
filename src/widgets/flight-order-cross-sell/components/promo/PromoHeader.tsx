@@ -10,17 +10,6 @@ import type {
 import { CountdownBackground } from './CountdownBackground'
 import { PromoCountdown } from './PromoCountdown'
 
-const defaultPromoHeader: Required<
-  Pick<
-    FlightOrderCrossSellPromo,
-    'activeTitle' | 'expiredTitle' | 'serviceLabel'
-  >
-> = {
-  activeTitle: '您已解鎖限時優惠！',
-  expiredTitle: '發現更多旅遊靈感！',
-  serviceLabel: '加訂住宿、高鐵與票券享專屬折扣',
-}
-
 interface PromoHeaderProps {
   isPromoActive: boolean
   promo: FlightOrderCrossSellPromo
@@ -36,10 +25,6 @@ export function PromoHeader({
   promo,
   remainingSeconds,
 }: PromoHeaderProps) {
-  const activeTitle = promo.activeTitle ?? defaultPromoHeader.activeTitle
-  const expiredTitle = promo.expiredTitle ?? defaultPromoHeader.expiredTitle
-  const serviceLabel = promo.serviceLabel ?? defaultPromoHeader.serviceLabel
-
   return (
     <div
       className={cn(
@@ -58,7 +43,7 @@ export function PromoHeader({
 
       <div className="relative mx-auto flex max-w-90 flex-col items-center gap-3 lion-desktop:gap-6">
         <p className="m-0 text-xl leading-7.5 font-bold text-(--lion-orange-600) lion-desktop:text-[32px]">
-          {isPromoActive ? activeTitle : expiredTitle}
+          {isPromoActive ? promo.activeTitle : promo.expiredTitle}
         </p>
 
         {isPromoActive ? (
@@ -69,7 +54,7 @@ export function PromoHeader({
             />
             <div className="rounded-(--lion-panel-radius) border border-(--lion-gray-300) bg-transparent p-2">
               <p className="m-0 text-sm leading-5.5 text-foreground">
-                {serviceLabel}
+                {promo.serviceLabel}
               </p>
               {promo.benefits && promo.benefits.length > 0 ? (
                 <div className="mt-1 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs leading-5.5 text-(--lion-gray-700)">

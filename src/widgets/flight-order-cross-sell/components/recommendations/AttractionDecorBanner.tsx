@@ -1,19 +1,12 @@
 import { cn } from '@/lib/utils'
 
-import type { FlightOrderCrossSellAttractionBannerOverrides } from '../../types'
 import { AttractionTicketsDecor } from './AttractionTicketsDecor'
 
-const defaultAttractionBannerTitle = '探索東京 景點不錯過'
-
 interface AttractionDecorBannerProps {
-  contentOverrides?: FlightOrderCrossSellAttractionBannerOverrides
+  title: string
 }
 
-export function AttractionDecorBanner({
-  contentOverrides,
-}: AttractionDecorBannerProps) {
-  const title = contentOverrides?.title ?? defaultAttractionBannerTitle
-
+export function AttractionDecorBanner({ title }: AttractionDecorBannerProps) {
   return (
     <section
       className={cn(

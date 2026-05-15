@@ -1,4 +1,13 @@
-import type { FlightOrderCrossSellData } from './types'
+import type {
+  FlightOrderCrossSellData,
+  FlightOrderCrossSellProps,
+} from './types'
+
+type FlightOrderCrossSellSampleData = Omit<
+  FlightOrderCrossSellProps,
+  'hsrAddon' | 'promo' | 'reminders'
+> &
+  Pick<FlightOrderCrossSellData, 'hsrAddon' | 'promo' | 'reminders'>
 
 const activeStartsAt = new Date(
   Date.now() - 15 * 24 * 60 * 60 * 1000,
@@ -26,8 +35,8 @@ function createCategorySearchUrl(keyword: string) {
   return `${categorySearchBaseUrl}?${searchParams.toString()}`
 }
 
-// Storybook and tests use this complete fixture data for rendered widget states.
-export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
+// Storybook and tests use this fixture to exercise the widget's default content resolver.
+export const flightOrderCrossSellSampleData: FlightOrderCrossSellSampleData = {
   locale: 'zh-TW',
   currency: 'TWD',
   domainMode: 'uat',
@@ -87,8 +96,6 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
     {
       id: 'tokyo-hotels',
       kind: 'hotel',
-      title: '探索東京飯店',
-      viewMoreLabel: '探索更多',
       items: [
         {
           id: 'la-vista-tokyo-bay',
@@ -232,9 +239,7 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
     {
       id: 'tokyo-attractions',
       kind: 'attraction',
-      title: '探索東京 景點不錯過',
       subtitle: '大家都在搜尋',
-      viewMoreLabel: '探索更多',
       categories: [
         {
           id: 'tokyo-disney',
@@ -322,8 +327,6 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellData = {
     {
       id: 'local-transport',
       kind: 'transport',
-      title: '當地交通 一次搞定',
-      viewMoreLabel: '探索更多',
       items: [
         {
           id: 'narita-express',

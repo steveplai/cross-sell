@@ -11,7 +11,6 @@ export { flightOrderCrossSellSampleData } from './sampleData'
 export type {
   FlightOrderCrossSellAddon,
   FlightOrderCrossSellAddonEvent,
-  FlightOrderCrossSellAttractionBannerOverrides,
   FlightOrderCrossSellCategory,
   FlightOrderCrossSellContentOverrides,
   FlightOrderCrossSellData,
@@ -22,7 +21,10 @@ export type {
   FlightOrderCrossSellPromo,
   FlightOrderCrossSellProps,
   FlightOrderCrossSellReminder,
+  FlightOrderCrossSellResolvedSection,
   FlightOrderCrossSellSection,
+  FlightOrderCrossSellSectionContentOverrides,
+  FlightOrderCrossSellSectionContentOverridesByKind,
   FlightOrderCrossSellSectionKind,
   FlightOrderCrossSellViewMoreEvent,
 } from './types'

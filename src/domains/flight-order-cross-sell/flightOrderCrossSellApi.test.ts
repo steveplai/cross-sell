@@ -186,6 +186,7 @@ describe('flight order cross-sell AP-56 API', () => {
         }),
       ],
     })
+    expect(hotelSection).not.toHaveProperty('title')
   })
 
   it('maps enveloped AP-56 responses and ProductUrl view-more rows', () => {

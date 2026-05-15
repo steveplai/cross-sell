@@ -17,7 +17,7 @@ export function getFlightOrderCrossSellSectionKind(
     return section.kind
   }
 
-  const sectionText = `${section.id} ${section.title}`.toLowerCase()
+  const sectionText = `${section.id} ${section.title ?? ''}`.toLowerCase()
 
   if (sectionText.includes('hotel') || sectionText.includes('飯店')) {
     return 'hotel'
@@ -46,10 +46,12 @@ export function getFlightOrderCrossSellSectionKind(
   return undefined
 }
 
-export function groupFlightOrderCrossSellSections(
-  sections: FlightOrderCrossSellSection[],
-): FlightOrderCrossSellSectionGroups {
-  const groups: FlightOrderCrossSellSectionGroups = {
+export function groupFlightOrderCrossSellSections<
+  TSection extends FlightOrderCrossSellSection,
+>(sections: TSection[]) {
+  const groups: Record<FlightOrderCrossSellSectionKind, TSection[]> & {
+    other: TSection[]
+  } = {
     hotel: [],
     attraction: [],
     transport: [],

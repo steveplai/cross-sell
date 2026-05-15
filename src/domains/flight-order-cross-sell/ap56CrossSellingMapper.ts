@@ -52,7 +52,7 @@ export function mapAp56CrossSellingResponseToSections(
 
     // Multiple AP-56 rows can contribute to one widget section, for example
     // product rows and separate "view more" URL rows for the same kind.
-    const section = getOrCreateSectionOverride(sectionOverrides, kind, type)
+    const section = getOrCreateSectionOverride(sectionOverrides, kind)
 
     // AP-56 uses pList both for product cards and for "view more" URL rows.
     if (isSearchViewMoreType(type)) {
@@ -109,7 +109,6 @@ function getOrCreateSectionOverride(
     FlightOrderCrossSellSection
   >,
   kind: FlightOrderCrossSellSectionKind,
-  type: string,
 ) {
   const existingSection = sectionOverrides.get(kind)
 
@@ -120,7 +119,6 @@ function getOrCreateSectionOverride(
   const section: FlightOrderCrossSellSection = {
     id: `api-${kind}`,
     kind,
-    title: type,
     items: [],
   }
 

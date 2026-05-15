@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { FlightOrderCrossSell } from './FlightOrderCrossSell'
 import { flightOrderCrossSellSampleData } from './sampleData'
-import type { FlightOrderCrossSellData } from './types'
+import type { FlightOrderCrossSellProps } from './types'
 
 interface JsdomGlobal {
   jsdom?: {
@@ -12,10 +12,10 @@ interface JsdomGlobal {
   }
 }
 
-function cloneSampleData(overrides: Partial<FlightOrderCrossSellData> = {}) {
+function cloneSampleData(overrides: Partial<FlightOrderCrossSellProps> = {}) {
   const sampleData = JSON.parse(
     JSON.stringify(flightOrderCrossSellSampleData),
-  ) as FlightOrderCrossSellData
+  ) as FlightOrderCrossSellProps
 
   return {
     ...sampleData,
@@ -88,10 +88,10 @@ describe('FlightOrderCrossSell', () => {
     render(<FlightOrderCrossSell {...cloneSampleData()} />)
 
     expect(
-      screen.getByRole('heading', { name: '探索東京飯店' }),
+      screen.getByRole('heading', { name: '探索地區飯店' }),
     ).toBeInTheDocument()
     expect(
-      screen.getByRole('heading', { name: '探索東京 景點不錯過' }),
+      screen.getByRole('heading', { name: '探索地區 景點不錯過' }),
     ).toBeInTheDocument()
     expect(
       screen.getByRole('heading', { name: '當地交通 一次搞定' }),
@@ -164,7 +164,7 @@ describe('FlightOrderCrossSell', () => {
     expect(screen.getByRole('link', { name: '前往加購' })).toBeInTheDocument()
     expect(screen.getByText('簽證護照')).toBeInTheDocument()
     expect(
-      screen.queryByRole('heading', { name: '探索東京飯店' }),
+      screen.queryByRole('heading', { name: '探索地區飯店' }),
     ).not.toBeInTheDocument()
   })
 
@@ -270,7 +270,7 @@ describe('FlightOrderCrossSell', () => {
     render(<FlightOrderCrossSell {...cloneSampleData()} />)
 
     const hotelHeading = screen.getByRole('heading', {
-      name: '探索東京飯店',
+      name: '探索地區飯店',
     })
     const hsrCta = screen.getByRole('link', { name: '前往加購' })
     const attractionBanner = screen.getByTestId('attraction-decor')
@@ -292,12 +292,49 @@ describe('FlightOrderCrossSell', () => {
     ])
   })
 
-  it('uses the attraction banner title override when provided', () => {
+  it('uses order destination for destination-aware section titles', () => {
     render(
       <FlightOrderCrossSell
         {...cloneSampleData({
-          attractionBannerOverrides: {
-            title: '東京票券精選推薦',
+          orderDestination: '上海',
+        })}
+      />,
+    )
+
+    expect(
+      screen.getByRole('heading', { name: '探索上海飯店' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: '探索上海 景點不錯過' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: '當地交通 一次搞定' }),
+    ).toBeInTheDocument()
+  })
+
+  it('falls back to the default destination when order destination is blank', () => {
+    render(
+      <FlightOrderCrossSell
+        {...cloneSampleData({
+          orderDestination: '   ',
+        })}
+      />,
+    )
+
+    expect(
+      screen.getByRole('heading', { name: '探索地區飯店' }),
+    ).toBeInTheDocument()
+  })
+
+  it('uses section content title overrides before order destination defaults', () => {
+    render(
+      <FlightOrderCrossSell
+        {...cloneSampleData({
+          orderDestination: '上海',
+          sectionContentOverrides: {
+            attraction: {
+              title: '東京票券精選推薦',
+            },
           },
         })}
       />,
@@ -307,8 +344,31 @@ describe('FlightOrderCrossSell', () => {
       screen.getByRole('heading', { name: '東京票券精選推薦' }),
     ).toBeInTheDocument()
     expect(
-      screen.queryByRole('heading', { name: '探索東京 景點不錯過' }),
+      screen.queryByRole('heading', { name: '探索上海 景點不錯過' }),
     ).not.toBeInTheDocument()
+  })
+
+  it('uses resolved section content overrides for view-more labels', () => {
+    render(
+      <FlightOrderCrossSell
+        {...cloneSampleData()}
+        sectionContentOverrides={{
+          hotel: {
+            title: '住宿推薦',
+            viewMoreLabel: '看更多住宿',
+            viewMorePlaceholderLabel: '全部住宿推薦',
+          },
+        }}
+      />,
+    )
+
+    expect(screen.getByRole('link', { name: /看更多住宿/ })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: '住宿推薦' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: '全部住宿推薦' }),
+    ).toBeInTheDocument()
   })
 
   it('renders the default product image when item image data is missing', () => {
@@ -337,7 +397,7 @@ describe('FlightOrderCrossSell', () => {
     expect(image).toHaveAttribute('src', defaultProductImageUrl)
   })
 
-  it('renders HSR addon defaults and partial overrides', async () => {
+  it('renders HSR addon defaults and overrides', async () => {
     const user = userEvent.setup()
     const onSelectAddon = vi.fn()
     const { rerender } = render(
@@ -365,6 +425,8 @@ describe('FlightOrderCrossSell', () => {
           hsrAddon: {
             id: 'custom-hsr',
             title: '高鐵加購提醒',
+            description: '客製高鐵加購說明',
+            ctaLabel: '立即加購高鐵',
           },
         })}
         onSelectAddon={onSelectAddon}
@@ -374,12 +436,12 @@ describe('FlightOrderCrossSell', () => {
     expect(
       screen.getByRole('heading', { name: '高鐵加購提醒' }),
     ).toBeInTheDocument()
+    expect(screen.getByText('客製高鐵加購說明')).toBeInTheDocument()
     expect(
-      screen.getByText('購買國內外行程，最高享 8 折優惠'),
+      screen.getByRole('link', { name: '立即加購高鐵' }),
     ).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: '前往加購' })).toBeInTheDocument()
 
-    await user.click(screen.getByRole('link', { name: '前往加購' }))
+    await user.click(screen.getByRole('link', { name: '立即加購高鐵' }))
 
     expect(onSelectAddon).toHaveBeenLastCalledWith({ addonId: 'custom-hsr' })
   })
@@ -661,10 +723,21 @@ describe('FlightOrderCrossSell', () => {
   })
 
   it('falls back to legacy section id and title classification without section kind', () => {
-    const legacySections = cloneSampleData().sections.map((section) => ({
-      ...section,
-      kind: undefined,
-    }))
+    const legacySections = cloneSampleData().sections.map((section) => {
+      if (section.kind === 'hotel') {
+        return { ...section, kind: undefined, title: '探索東京飯店' }
+      }
+
+      if (section.kind === 'attraction') {
+        return { ...section, kind: undefined, title: '探索東京 景點不錯過' }
+      }
+
+      if (section.kind === 'transport') {
+        return { ...section, kind: undefined, title: '當地交通 一次搞定' }
+      }
+
+      return { ...section, kind: undefined }
+    })
 
     render(
       <FlightOrderCrossSell

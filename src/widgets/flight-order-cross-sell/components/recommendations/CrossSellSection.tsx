@@ -20,7 +20,7 @@ import { cn } from '@/lib/utils'
 
 import type {
   FlightOrderCrossSellItem,
-  FlightOrderCrossSellSection as FlightOrderCrossSellSectionData,
+  FlightOrderCrossSellResolvedSection as FlightOrderCrossSellSectionData,
 } from '../../types'
 import { ProductCard } from './ProductCard'
 import { useCarouselPlaceholderLayout } from './useCarouselPlaceholderLayout'
@@ -53,42 +53,6 @@ interface CrossSellSectionProps {
   hideTitle?: boolean
   onSelectItem?: (item: FlightOrderCrossSellItem) => void
   onViewMore?: () => void
-}
-
-function getPlaceholderLabel(section: FlightOrderCrossSellSectionData) {
-  if (section.kind === 'hotel') {
-    return '更多精選飯店'
-  }
-
-  if (section.kind === 'attraction') {
-    return '更多精選景點'
-  }
-
-  if (section.kind === 'transport') {
-    return '更多交通選擇'
-  }
-
-  if (section.kind === 'flight') {
-    return '更多精選機票'
-  }
-
-  if (section.title.includes('飯店')) {
-    return '更多精選飯店'
-  }
-
-  if (section.title.includes('景點')) {
-    return '更多精選景點'
-  }
-
-  if (section.title.includes('交通')) {
-    return '更多交通選擇'
-  }
-
-  if (section.title.includes('機票')) {
-    return '更多精選機票'
-  }
-
-  return section.viewMoreLabel ?? '探索更多'
 }
 
 function useCategoryDragScroll(itemsCount: number) {
@@ -294,7 +258,8 @@ export function CrossSellSection({
     return null
   }
 
-  const placeholderLabel = getPlaceholderLabel(section)
+  const viewMoreLabel = section.viewMoreLabel
+  const placeholderLabel = section.viewMorePlaceholderLabel
   const canDragCategories = categoryOverflow.start || categoryOverflow.end
   const viewMoreHref = section.viewMoreHref ?? viewMoreDestinationUrl
 
@@ -339,7 +304,7 @@ export function CrossSellSection({
             rel="noopener noreferrer"
             target="_blank"
           >
-            {section.viewMoreLabel ?? '探索更多'}
+            {viewMoreLabel}
             <ChevronRight aria-hidden="true" className="size-4" />
           </a>
         </Button>

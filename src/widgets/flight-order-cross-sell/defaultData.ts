@@ -1,7 +1,12 @@
-import type { FlightOrderCrossSellDefaultData } from './types'
+import type {
+  FlightOrderCrossSellDefaultData,
+  FlightOrderCrossSellSectionContentOverrides,
+  FlightOrderCrossSellSectionContentOverridesByKind,
+} from './types'
 
 const defaultPromoStartsAt = new Date().toISOString()
 const defaultPromoDurationSeconds = 30 * 24 * 60 * 60
+export const defaultFlightOrderCrossSellOrderDestination = '地區'
 
 export const flightOrderCrossSellDefaultData: FlightOrderCrossSellDefaultData =
   {
@@ -57,3 +62,48 @@ export const flightOrderCrossSellDefaultData: FlightOrderCrossSellDefaultData =
       ],
     },
   }
+
+export function normalizeFlightOrderCrossSellOrderDestination(
+  orderDestination?: string,
+) {
+  return (
+    (orderDestination?.trim() ?? defaultFlightOrderCrossSellOrderDestination) ||
+    defaultFlightOrderCrossSellOrderDestination
+  )
+}
+
+export function createFlightOrderCrossSellSectionContentDefaults(
+  orderDestination?: string,
+): FlightOrderCrossSellSectionContentOverridesByKind {
+  const destination =
+    normalizeFlightOrderCrossSellOrderDestination(orderDestination)
+  const defaultContent: Pick<
+    FlightOrderCrossSellSectionContentOverrides,
+    'viewMoreLabel'
+  > = {
+    viewMoreLabel: '探索更多',
+  }
+
+  return {
+    hotel: {
+      ...defaultContent,
+      title: `探索${destination}飯店`,
+      viewMorePlaceholderLabel: '更多精選飯店',
+    },
+    attraction: {
+      ...defaultContent,
+      title: `探索${destination} 景點不錯過`,
+      viewMorePlaceholderLabel: '更多精選景點',
+    },
+    transport: {
+      ...defaultContent,
+      title: '當地交通 一次搞定',
+      viewMorePlaceholderLabel: '更多交通選擇',
+    },
+    flight: {
+      ...defaultContent,
+      title: `探索${destination}機票`,
+      viewMorePlaceholderLabel: '更多精選機票',
+    },
+  }
+}

@@ -6,10 +6,18 @@ import {
   type FlightOrderCrossSellConnectedConfig,
   type FlightOrderCrossSellConnectedErrorMode,
   type FlightOrderCrossSellConnectedProps,
+  type FlightOrderCrossSellSectionContentOverrides,
+  type FlightOrderCrossSellSectionKind,
 } from '../../widgets/flight-order-cross-sell'
 import widgetStyles from '../../widgets/flight-order-cross-sell/style.css?inline'
 
 const styles = `${baseStyles}\n${widgetStyles}`
+const sectionKinds = [
+  'hotel',
+  'attraction',
+  'transport',
+  'flight',
+] as const satisfies readonly FlightOrderCrossSellSectionKind[]
 
 function parseErrorMode(
   value: string | null | undefined,
@@ -71,6 +79,78 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return !!value && typeof value === 'object' && !Array.isArray(value)
 }
 
+function pickHsrAddonConfig(
+  value: Record<string, unknown>,
+): FlightOrderCrossSellConnectedConfig['hsrAddon'] {
+  const addon: NonNullable<FlightOrderCrossSellConnectedConfig['hsrAddon']> = {}
+
+  if (typeof value.id === 'string') {
+    addon.id = value.id
+  }
+
+  if (typeof value.title === 'string') {
+    addon.title = value.title
+  }
+
+  if (typeof value.description === 'string') {
+    addon.description = value.description
+  }
+
+  if (typeof value.ctaLabel === 'string') {
+    addon.ctaLabel = value.ctaLabel
+  }
+
+  return Object.keys(addon).length > 0 ? addon : undefined
+}
+
+function pickSectionContentOverride(
+  value: Record<string, unknown>,
+): FlightOrderCrossSellSectionContentOverrides | undefined {
+  const content: FlightOrderCrossSellSectionContentOverrides = {}
+
+  if (typeof value.title === 'string') {
+    content.title = value.title
+  }
+
+  if (typeof value.subtitle === 'string') {
+    content.subtitle = value.subtitle
+  }
+
+  if (typeof value.viewMoreLabel === 'string') {
+    content.viewMoreLabel = value.viewMoreLabel
+  }
+
+  if (typeof value.viewMorePlaceholderLabel === 'string') {
+    content.viewMorePlaceholderLabel = value.viewMorePlaceholderLabel
+  }
+
+  return Object.keys(content).length > 0 ? content : undefined
+}
+
+function pickSectionContentOverrides(
+  value: Record<string, unknown>,
+): FlightOrderCrossSellConnectedConfig['sectionContentOverrides'] {
+  const overrides: NonNullable<
+    FlightOrderCrossSellConnectedConfig['sectionContentOverrides']
+  > = {}
+
+  sectionKinds.forEach((kind) => {
+    const content = value[kind]
+
+    if (!isRecord(content)) {
+      return
+    }
+
+    const overrideContent = pickSectionContentOverride(content)
+
+    if (overrideContent) {
+      overrides[kind] = overrideContent
+    }
+  })
+
+  return Object.keys(overrides).length > 0 ? overrides : undefined
+}
+
 function pickConnectedConfig(
   value: unknown,
 ): FlightOrderCrossSellConnectedConfig {
@@ -80,22 +160,20 @@ function pickConnectedConfig(
 
   const config: FlightOrderCrossSellConnectedConfig = {}
 
-  if (isRecord(value.attractionBannerOverrides)) {
-    config.attractionBannerOverrides =
-      value.attractionBannerOverrides as FlightOrderCrossSellConnectedConfig['attractionBannerOverrides']
-  }
-
   if (typeof value.currency === 'string') {
     config.currency = value.currency
   }
 
   if (isRecord(value.hsrAddon)) {
-    config.hsrAddon =
-      value.hsrAddon as FlightOrderCrossSellConnectedConfig['hsrAddon']
+    config.hsrAddon = pickHsrAddonConfig(value.hsrAddon)
   }
 
   if (typeof value.locale === 'string') {
     config.locale = value.locale
+  }
+
+  if (typeof value.orderDestination === 'string') {
+    config.orderDestination = value.orderDestination
   }
 
   if (isRecord(value.promo)) {
@@ -105,6 +183,12 @@ function pickConnectedConfig(
   if (isRecord(value.reminders)) {
     config.reminders =
       value.reminders as FlightOrderCrossSellConnectedConfig['reminders']
+  }
+
+  if (isRecord(value.sectionContentOverrides)) {
+    config.sectionContentOverrides = pickSectionContentOverrides(
+      value.sectionContentOverrides,
+    )
   }
 
   return config
@@ -119,6 +203,7 @@ createReactWebComponent<FlightOrderCrossSellConnectedProps>({
     'environment',
     'error-mode',
     'locale',
+    'order-destination',
     'order-number',
     'promo-duration-seconds',
     'promo-starts-at',
@@ -127,6 +212,7 @@ createReactWebComponent<FlightOrderCrossSellConnectedProps>({
   ],
   observedProperties: [
     'config',
+    'orderDestination',
     'promoDurationSeconds',
     'promoStartsAt',
     'travelInsuranceContactEmail',
@@ -152,6 +238,11 @@ createReactWebComponent<FlightOrderCrossSellConnectedProps>({
         getOptionalAttribute(element, 'locale') ??
         propertyConfig.locale ??
         attributeConfig.locale,
+      orderDestination:
+        getOptionalAttribute(element, 'order-destination') ??
+        getOptionalStringProperty(element, 'orderDestination') ??
+        propertyConfig.orderDestination ??
+        attributeConfig.orderDestination,
       orderNumber: getOptionalAttribute(element, 'order-number'),
       promoDurationSeconds:
         parseOptionalNumber(

@@ -96,8 +96,11 @@ describe('FlightOrderCrossSellConnected', () => {
     )
 
     expect(
-      await screen.findByRole('heading', { name: '訂房' }),
+      await screen.findByRole('heading', { name: '探索地區飯店' }),
     ).toBeInTheDocument()
+    expect(
+      screen.queryByRole('heading', { name: '訂房' }),
+    ).not.toBeInTheDocument()
     expect(screen.getByText('您已解鎖限時優惠！')).toBeInTheDocument()
     expect(
       screen.getByRole('link', { name: /東京灣精選飯店/ }),
@@ -157,6 +160,52 @@ describe('FlightOrderCrossSellConnected', () => {
       'href',
       'https://uvacation.liontravel.com/thsrdetail?sYear=2026&sOrdr=202605120001',
     )
+  })
+
+  it('applies section content overrides to API sections', async () => {
+    const get = vi
+      .fn<MockRequestClientRequest>()
+      .mockResolvedValue(ap56CrossSellingResponse)
+    const requestClient = createMockRequestClient(get)
+
+    render(
+      <FlightOrderCrossSellConnectedForTesting
+        orderNumber="2026-123456"
+        requestClient={requestClient}
+        sectionContentOverrides={{
+          hotel: {
+            viewMoreLabel: '查看更多飯店',
+            viewMorePlaceholderLabel: '全部飯店推薦',
+          },
+        }}
+      />,
+    )
+
+    expect(
+      await screen.findByRole('link', { name: /查看更多飯店/ }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: '全部飯店推薦' }),
+    ).toBeInTheDocument()
+  })
+
+  it('applies order destination to API section titles', async () => {
+    const get = vi
+      .fn<MockRequestClientRequest>()
+      .mockResolvedValue(ap56CrossSellingResponse)
+    const requestClient = createMockRequestClient(get)
+
+    render(
+      <FlightOrderCrossSellConnectedForTesting
+        orderDestination="上海"
+        orderNumber="2026-123456"
+        requestClient={requestClient}
+      />,
+    )
+
+    expect(
+      await screen.findByRole('heading', { name: '探索上海飯店' }),
+    ).toBeInTheDocument()
   })
 
   it('renders static content when AP-56 returns empty sections', async () => {

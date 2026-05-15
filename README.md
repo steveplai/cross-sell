@@ -196,15 +196,15 @@ Public contract:
 
 - Web Component tag: `flight-order-cross-sell-connected`
 - Mount API global: `window.FlightOrderCrossSellConnected`
-- Attributes: `order-number`, `recommend-product-types`, `environment`,
-  `error-mode`, `locale`, `currency`, `promo-starts-at`,
+- Attributes: `order-number`, `order-destination`, `recommend-product-types`,
+  `environment`, `error-mode`, `locale`, `currency`, `promo-starts-at`,
   `promo-duration-seconds`, `travel-insurance-contact-email`, `config`
 - `environment` values: `uat`, `production`
 - `error-mode` values: `hidden`, `message`
 - `recommend-product-types` default: `htl,etk`
 - `config` JSON/property supports static content overrides such as `promo`,
-  `reminders`, `hsrAddon`, `attractionBannerOverrides`, `locale`, and
-  `currency`
+  `reminders`, `hsrAddon`, `sectionContentOverrides`, `orderDestination`,
+  `locale`, and `currency`
 - `promo-starts-at` / `promo-duration-seconds` override
   `config.promo.startsAt` / `config.promo.durationSeconds`
 - `promo-starts-at` / `promoStartsAt` must be an ISO 8601 datetime with an

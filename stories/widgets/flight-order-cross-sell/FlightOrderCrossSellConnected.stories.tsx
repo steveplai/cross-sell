@@ -57,6 +57,9 @@ const meta = {
     orderNumber: {
       control: 'text',
     },
+    orderDestination: {
+      control: 'text',
+    },
     promoDurationSeconds: {
       control: 'number',
     },
@@ -82,7 +85,7 @@ const meta = {
     reminders: {
       control: 'object',
     },
-    attractionBannerOverrides: {
+    sectionContentOverrides: {
       control: 'object',
     },
     onSelectAddon: {
@@ -157,8 +160,11 @@ export const ContentOverrides: Story = {
       description: '購買國內外行程，最高享 8 折優惠',
       ctaLabel: '立即加購',
     },
-    attractionBannerOverrides: {
-      title: '精選票券與當地體驗',
+    orderDestination: '上海',
+    sectionContentOverrides: {
+      attraction: {
+        title: '精選票券與當地體驗',
+      },
     },
     reminders: {
       title: '別忘了加購一份安心與便利',
