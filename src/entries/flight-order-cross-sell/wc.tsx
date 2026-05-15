@@ -24,6 +24,16 @@ function parseData(value: string | null): FlightOrderCrossSellProps {
   }
 }
 
+function getDataProperty(
+  element: HTMLElement,
+): FlightOrderCrossSellProps | undefined {
+  const value = (element as HTMLElement & { data?: unknown }).data
+
+  return isFlightOrderCrossSellProps(value)
+    ? mapDataToProps(value as FlightOrderCrossSellProps)
+    : undefined
+}
+
 function isFlightOrderCrossSellProps(value: unknown) {
   if (!value || typeof value !== 'object') {
     return false
@@ -49,6 +59,7 @@ function mapDataToProps(
     orderDestination: data.orderDestination,
     promo: data.promo,
     reminders: data.reminders,
+    sectionContentOverrides: data.sectionContentOverrides,
     sections: data.sections ?? [],
     serviceAgent: data.serviceAgent,
   }
@@ -58,9 +69,10 @@ createReactWebComponent<FlightOrderCrossSellProps>({
   tagName: 'flight-order-cross-sell',
   Component: FlightOrderCrossSell,
   observedAttributes: ['data'],
+  observedProperties: ['data'],
   styles,
   mapElementToProps: (element) => ({
-    ...parseData(element.getAttribute('data')),
+    ...(getDataProperty(element) ?? parseData(element.getAttribute('data'))),
     onSelectItem: (detail) => {
       element.dispatchEvent(
         new CustomEvent('flight-order-cross-sell:item-select', {

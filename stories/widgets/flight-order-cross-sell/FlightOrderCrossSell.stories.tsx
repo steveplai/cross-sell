@@ -19,8 +19,7 @@ const activeData: BaseStoryArgs = {
   serviceAgent: sampleData.serviceAgent,
   sections: sampleData.sections,
   promo: sampleData.promo,
-  sectionContentOverrides:
-    sampleData.sectionContentOverrides,
+  sectionContentOverrides: sampleData.sectionContentOverrides,
   hsrAddon: sampleData.hsrAddon,
   reminders: sampleData.reminders,
 }

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Flight Order Cross Sell Mount API</title>
+    <title>Flight Order Cross Sell Mount API Basic</title>
     <style>
       body {
         margin: 0;
@@ -15,253 +15,34 @@
           'Segoe UI',
           sans-serif;
       }
-
-      .event-log {
-        margin: 16px auto;
-        max-width: 1190px;
-        border: 1px solid #ececec;
-        background: white;
-        padding: 12px;
-        color: #444;
-        font-size: 14px;
-      }
     </style>
   </head>
   <body>
     <div id="flight-order-cross-sell-root"></div>
-    <div class="event-log" data-testid="flight-cross-sell-mount-log">
-      No events yet
-    </div>
 
     <script src="../../dist/widgets/flight-order-cross-sell.mount.js"></script>
     <script>
-      const startsAt = new Date(Date.now() - 10 * 60 * 1000).toISOString()
-      const sampleImageUrls = {
-        cityHotel: 'https://picsum.photos/seed/liontravel-city-hotel/640/426',
-        familyStay: 'https://picsum.photos/seed/liontravel-family-stay/640/426',
-        hotelBay:
-          'https://picsum.photos/seed/liontravel-tokyo-bay-hotel/640/426',
-        hotelLounge:
-          'https://picsum.photos/seed/liontravel-hotel-lounge/640/426',
-        hotelRoom: 'https://picsum.photos/seed/liontravel-hotel-room/640/426',
-        seasideHotel:
-          'https://picsum.photos/seed/liontravel-seaside-hotel/640/426',
-      }
-      const hotelItems = [
-        {
-          id: 'la-vista-tokyo-bay',
-          title: 'LA VISTA 東京灣',
-          imageUrl: sampleImageUrls.hotelLounge,
-          location: '距離市場前站0.2公里',
-          detailLocation: '江東區',
-          badge: '熱銷 TOP1',
-          promoBadge: '86%東京旅客喜愛',
-          starRating: 5,
-          rating: '4.5',
-          ratingLabel: '太讚了',
-          reviewCount: 1132,
-          cancellationLabel: '免費取消',
-          originalPrice: 1825,
-          discountLabel: '折扣 20%',
-          price: 1224152,
-          priceSuffix: '起',
-        },
-        {
-          id: 'hotel-metropolitan',
-          title: '東京灣舒適飯店',
-          imageUrl: sampleImageUrls.hotelRoom,
-          location: '江東區',
-          detailLocation: '江東區',
-          promoBadge: '86%東京旅客喜愛',
-          starRating: 5,
-          rating: '4.5',
-          ratingLabel: '太讚了',
-          reviewCount: 1132,
-          cancellationLabel: '免費取消',
-          originalPrice: 1825,
-          discountLabel: '折扣 20%',
-          price: 1224152,
-          priceSuffix: '起',
-        },
-        {
-          id: 'tokyo-bay-stay',
-          title: '東京灣景觀旅宿',
-          imageUrl: sampleImageUrls.hotelBay,
-          location: '江東區',
-          detailLocation: '江東區',
-          promoBadge: '86%東京旅客喜愛',
-          starRating: 5,
-          rating: '4.5',
-          ratingLabel: '太讚了',
-          reviewCount: 1132,
-          cancellationLabel: '免費取消',
-          originalPrice: 1825,
-          discountLabel: '折扣 20%',
-          price: 1224152,
-          priceSuffix: '起',
-        },
-        {
-          id: 'market-front-hotel',
-          title: '市場前站高評價飯店',
-          imageUrl: sampleImageUrls.cityHotel,
-          location: '距離市場前站0.2公里',
-          detailLocation: '江東區',
-          promoBadge: '86%東京旅客喜愛',
-          starRating: 5,
-          rating: '4.5',
-          ratingLabel: '太讚了',
-          reviewCount: 1132,
-          cancellationLabel: '免費取消',
-          originalPrice: 1825,
-          discountLabel: '折扣 20%',
-          price: 1224152,
-          priceSuffix: '起',
-        },
-        {
-          id: 'odaiba-hotel',
-          title: '台場親子精選飯店',
-          imageUrl: sampleImageUrls.seasideHotel,
-          location: '江東區',
-          detailLocation: '江東區',
-          promoBadge: '86%東京旅客喜愛',
-          starRating: 5,
-          rating: '4.5',
-          ratingLabel: '太讚了',
-          reviewCount: 1132,
-          cancellationLabel: '免費取消',
-          originalPrice: 1825,
-          discountLabel: '折扣 20%',
-          price: 1224152,
-          priceSuffix: '起',
-        },
-        {
-          id: 'ginza-design-hotel',
-          title: '銀座設計旅店',
-          imageUrl: sampleImageUrls.cityHotel,
-          location: '銀座',
-          detailLocation: '銀座',
-          promoBadge: '86%東京旅客喜愛',
-          starRating: 5,
-          rating: '4.6',
-          ratingLabel: '很棒',
-          reviewCount: 856,
-          cancellationLabel: '免費取消',
-          originalPrice: 2410,
-          discountLabel: '折扣 18%',
-          price: 98600,
-          priceSuffix: '起',
-        },
-        {
-          id: 'shinjuku-city-hotel',
-          title: '新宿城市飯店',
-          imageUrl: sampleImageUrls.hotelRoom,
-          location: '新宿區',
-          detailLocation: '新宿區',
-          promoBadge: '熱門加購',
-          starRating: 5,
-          rating: '4.4',
-          ratingLabel: '太讚了',
-          reviewCount: 2041,
-          cancellationLabel: '免費取消',
-          originalPrice: 3180,
-          discountLabel: '折扣 15%',
-          price: 112300,
-          priceSuffix: '起',
-        },
-        {
-          id: 'ueno-family-stay',
-          title: '上野家庭友善旅宿',
-          imageUrl: sampleImageUrls.familyStay,
-          location: '上野',
-          detailLocation: '上野',
-          promoBadge: '親子首選',
-          starRating: 5,
-          rating: '4.3',
-          ratingLabel: '很棒',
-          reviewCount: 624,
-          cancellationLabel: '免費取消',
-          originalPrice: 2650,
-          discountLabel: '折扣 12%',
-          price: 88400,
-          priceSuffix: '起',
-        },
-      ]
-      const data = {
-        locale: 'zh-TW',
-        currency: 'TWD',
-        domainMode: 'uat',
-        order: {
-          orderYear: '2026',
-          orderNumber: '16575',
-        },
-        serviceAgent: {
-          email: 'customer-service@liontravel.com',
-        },
-        promo: {
-          id: 'limited-offer',
-          activeTitle: '您已解鎖限時優惠！',
-          expiredTitle: '發現更多旅遊靈感！',
-          startsAt,
-          durationSeconds: 40 * 60 * 60,
-          benefits: [
-            {
-              id: 'addon-discount',
-              tagLabel: '加購價',
-              label: '最高可省 25%',
-            },
-            {
-              id: 'flight-change-cancel',
-              label: '航班異動可免費取消',
-            },
-          ],
-          serviceLabel: '航班周邊服務',
-        },
-        hsrAddon: {
-          id: 'hsr',
-          title: '加購高鐵 行程更順暢',
-          description: '購買國內外行程，最高享 8 折優惠',
-          ctaLabel: '前往加購',
-        },
-        reminders: {
-          title: '別忘了加購一份安心與便利',
-          subtitle: '即將出門？',
-          items: [
-            {
-              id: 'visa-passport',
-              icon: 'passport',
-              title: '簽證護照',
-              description:
-                '受理代辦中華民國護照、台胞證、各國簽證、國際學生證辦理等，雄獅帶你輕鬆玩遍全球。',
-            },
-            {
-              id: 'travel-insurance',
-              icon: 'insurance',
-              title: '旅遊綜合險',
-              description:
-                '於出發前七個工作天聯繫業務專員，為您的旅行提供全方位的保障！',
-            },
-          ],
-        },
+      window.FlightOrderCrossSell.mount('#flight-order-cross-sell-root', {
         sections: [
           {
-            id: 'tokyo-hotels',
+            id: 'hotel-recommendations',
             kind: 'hotel',
-            items: hotelItems,
+            items: [
+              {
+                id: 'tokyo-bay-hotel',
+                title: '東京灣精選飯店',
+                location: '江東區',
+                starRating: 5,
+                rating: '4.5',
+                ratingLabel: '太讚了',
+                reviewCount: 1132,
+                cancellationLabel: '免費取消',
+                price: 1224152,
+                priceSuffix: '起',
+              },
+            ],
           },
         ],
-      }
-      const log = document.querySelector(
-        '[data-testid="flight-cross-sell-mount-log"]',
-      )
-
-      window.FlightOrderCrossSell.mount('#flight-order-cross-sell-root', {
-        ...data,
-        onSelectItem(event) {
-          log.textContent = `item-select: ${event.sectionId}/${event.item.id}`
-        },
-        onSelectAddon(event) {
-          log.textContent = `addon-select: ${event.addonId}`
-        },
       })
     </script>
   </body>

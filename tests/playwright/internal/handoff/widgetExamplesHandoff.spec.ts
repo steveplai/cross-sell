@@ -98,8 +98,38 @@ const webComponentExamples: WebComponentExample[] = [
     ],
   },
   {
+    name: 'flight order cross sell web component full',
+    path: '/examples/web-component/flight-order-cross-sell.full.html',
+    widgets: [
+      {
+        selector: 'flight-order-cross-sell',
+        text: '探索上海飯店',
+      },
+    ],
+  },
+  {
+    name: 'flight order cross sell web component property',
+    path: '/examples/web-component/flight-order-cross-sell.property.html',
+    widgets: [
+      {
+        selector: 'flight-order-cross-sell',
+        text: '探索上海飯店',
+      },
+    ],
+  },
+  {
     name: 'flight order cross sell connected web component basic',
     path: '/examples/web-component/flight-order-cross-sell-connected.basic.html',
+    widgets: [
+      {
+        selector: 'flight-order-cross-sell-connected',
+        text: '探索地區飯店',
+      },
+    ],
+  },
+  {
+    name: 'flight order cross sell connected web component full',
+    path: '/examples/web-component/flight-order-cross-sell-connected.full.html',
     widgets: [
       {
         selector: 'flight-order-cross-sell-connected',
@@ -157,10 +187,22 @@ const mountApiExamples: MountApiExample[] = [
     text: '探索地區飯店',
   },
   {
+    name: 'flight order cross sell mount API full',
+    path: '/examples/mount-api/flight-order-cross-sell.full.html',
+    rootSelector: '#flight-order-cross-sell-root',
+    text: '探索上海飯店',
+  },
+  {
     name: 'flight order cross sell connected mount API basic',
     path: '/examples/mount-api/flight-order-cross-sell-connected.basic.html',
     rootSelector: '#flight-order-cross-sell-connected-root',
     text: '探索地區飯店',
+  },
+  {
+    name: 'flight order cross sell connected mount API full',
+    path: '/examples/mount-api/flight-order-cross-sell-connected.full.html',
+    rootSelector: '#flight-order-cross-sell-connected-root',
+    text: '探索上海飯店',
   },
 ] as const
 
@@ -446,7 +488,7 @@ test('flight order web component handoff exposes HSR addon link and event', asyn
 }) => {
   await gotoHandoffExample(
     page,
-    '/examples/web-component/flight-order-cross-sell.basic.html',
+    '/examples/web-component/flight-order-cross-sell.full.html',
   )
 
   await expect
@@ -486,7 +528,7 @@ test('flight order connected web component handoff emits item event', async ({
     .poll(() =>
       getWebComponentWidgetText(page, 'flight-order-cross-sell-connected'),
     )
-    .toContain('探索上海飯店')
+    .toContain('探索地區飯店')
 
   await page
     .locator('flight-order-cross-sell-connected')
@@ -508,7 +550,7 @@ test('flight order connected web component applies config attribute overrides', 
 }) => {
   await gotoHandoffExample(
     page,
-    '/examples/web-component/flight-order-cross-sell-connected.basic.html',
+    '/examples/web-component/flight-order-cross-sell-connected.full.html',
   )
 
   await expect
@@ -632,7 +674,7 @@ test('flight order mount API handoff exposes HSR addon link and callback', async
 }) => {
   await gotoHandoffExample(
     page,
-    '/examples/mount-api/flight-order-cross-sell.basic.html',
+    '/examples/mount-api/flight-order-cross-sell.full.html',
   )
 
   const hsrLink = page.getByRole('link', { name: '前往加購' })

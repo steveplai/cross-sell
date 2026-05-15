@@ -2,21 +2,135 @@ import type { Page } from '@playwright/test'
 import { expect, test } from '@playwright/test'
 
 const desktopCarouselViewportWidth = 980
+const hotelSectionId = 'hotel-recommendations'
 const maxDensityCarouselViewportWidth = 1190
+const firstHotelTitle = '上海外灘精選飯店'
+const finalPageFirstHotelTitle = '靜安設計酒店'
+const hotelSectionTestId = `section-${hotelSectionId}`
+
+const flightOrderCarouselData = {
+  orderDestination: '上海',
+  sections: [
+    {
+      id: hotelSectionId,
+      kind: 'hotel',
+      items: [
+        {
+          id: 'shanghai-bund-hotel',
+          title: firstHotelTitle,
+          location: '距離南京東路站 0.4 公里',
+          detailLocation: '黃浦區',
+          starRating: 5,
+          rating: '4.5',
+          ratingLabel: '太讚了',
+          reviewCount: 1132,
+          cancellationLabel: '免費取消',
+          price: 4160,
+          priceSuffix: '起',
+        },
+        {
+          id: 'pudong-river-view-hotel',
+          title: '浦東江景商旅',
+          location: '陸家嘴',
+          detailLocation: '浦東新區',
+          starRating: 4,
+          rating: '4.4',
+          ratingLabel: '很棒',
+          reviewCount: 864,
+          cancellationLabel: '免費取消',
+          price: 3978,
+          priceSuffix: '起',
+        },
+        {
+          id: 'xintiandi-boutique-stay',
+          title: '新天地設計旅宿',
+          location: '新天地',
+          detailLocation: '黃浦區',
+          starRating: 4,
+          rating: '4.6',
+          ratingLabel: '太讚了',
+          reviewCount: 529,
+          cancellationLabel: '免費取消',
+          price: 3432,
+          priceSuffix: '起',
+        },
+        {
+          id: 'people-square-family-hotel',
+          title: '人民廣場親子飯店',
+          location: '人民廣場',
+          detailLocation: '黃浦區',
+          starRating: 4,
+          rating: '4.3',
+          ratingLabel: '很棒',
+          reviewCount: 721,
+          cancellationLabel: '免費取消',
+          price: 3680,
+          priceSuffix: '起',
+        },
+        {
+          id: 'hongqiao-business-hotel',
+          title: '虹橋商務飯店',
+          location: '虹橋',
+          detailLocation: '長寧區',
+          starRating: 4,
+          rating: '4.2',
+          ratingLabel: '很棒',
+          reviewCount: 438,
+          cancellationLabel: '免費取消',
+          price: 2980,
+          priceSuffix: '起',
+        },
+        {
+          id: 'jing-an-design-hotel',
+          title: finalPageFirstHotelTitle,
+          location: '靜安寺',
+          detailLocation: '靜安區',
+          starRating: 5,
+          rating: '4.7',
+          ratingLabel: '太讚了',
+          reviewCount: 652,
+          cancellationLabel: '免費取消',
+          price: 4860,
+          priceSuffix: '起',
+        },
+        {
+          id: 'french-concession-stay',
+          title: '衡山路精品旅宿',
+          location: '徐匯區',
+          detailLocation: '徐匯區',
+          starRating: 4,
+          rating: '4.5',
+          ratingLabel: '太讚了',
+          reviewCount: 394,
+          cancellationLabel: '免費取消',
+          price: 3560,
+          priceSuffix: '起',
+        },
+        {
+          id: 'yu-garden-city-hotel',
+          title: '豫園城市旅店',
+          location: '豫園',
+          detailLocation: '黃浦區',
+          starRating: 3,
+          rating: '4.1',
+          ratingLabel: '很好',
+          reviewCount: 287,
+          cancellationLabel: '免費取消',
+          price: 2460,
+          priceSuffix: '起',
+        },
+      ],
+    },
+  ],
+}
 
 async function getFlightOrderCarouselState(page: Page) {
-  return page.locator('flight-order-cross-sell').evaluate((element) => {
+  return page.locator('flight-order-cross-sell').evaluate((element, testId) => {
     const root = element.shadowRoot
-    const content = root?.querySelector(
-      '[data-testid="section-tokyo-hotels-items"]',
-    )
+    const content = root?.querySelector(`[data-testid="${testId}-items"]`)
     const viewport = content?.parentElement
-    const previous = root?.querySelector(
-      '[data-testid="section-tokyo-hotels-previous"]',
-    )
-    const next = root?.querySelector(
-      '[data-testid="section-tokyo-hotels-next"]',
-    )
+    const previous = root?.querySelector(`[data-testid="${testId}-previous"]`)
+    const next = root?.querySelector(`[data-testid="${testId}-next"]`)
 
     if (!(content instanceof HTMLElement)) {
       return null
@@ -102,19 +216,19 @@ async function getFlightOrderCarouselState(page: Page) {
           ? viewport.getBoundingClientRect().width
           : null,
     }
-  })
+  }, hotelSectionTestId)
 }
 
 async function clickFlightOrderCarouselNext(page: Page) {
-  await page.locator('flight-order-cross-sell').evaluate((element) => {
+  await page.locator('flight-order-cross-sell').evaluate((element, testId) => {
     const next = element.shadowRoot?.querySelector(
-      '[data-testid="section-tokyo-hotels-next"]',
+      `[data-testid="${testId}-next"]`,
     )
 
     if (next instanceof HTMLButtonElement) {
       next.click()
     }
-  })
+  }, hotelSectionTestId)
 }
 
 async function gotoFlightOrderCrossSellExample(page: Page) {
@@ -124,18 +238,22 @@ async function gotoFlightOrderCrossSellExample(page: Page) {
       waitUntil: 'domcontentloaded',
     },
   )
+
+  await page.locator('flight-order-cross-sell').evaluate((element, data) => {
+    ;(element as HTMLElement & { data?: unknown }).data = data
+  }, flightOrderCarouselData)
 }
 
 async function focusFirstFlightOrderProduct(page: Page) {
-  await page.locator('flight-order-cross-sell').evaluate((element) => {
+  await page.locator('flight-order-cross-sell').evaluate((element, testId) => {
     const button = element.shadowRoot?.querySelector(
-      '[data-testid="section-tokyo-hotels-items"] button',
+      `[data-testid="${testId}-items"] button`,
     )
 
     if (button instanceof HTMLButtonElement) {
       button.focus()
     }
-  })
+  }, hotelSectionTestId)
 }
 
 test('flight order carousel uses browser scrolling without a visible scrollbar', async ({
@@ -207,7 +325,7 @@ test('flight order carousel moves one desktop page and fills the final page with
 
       return state?.firstFullyVisibleCardText ?? ''
     })
-    .toContain('LA VISTA 東京灣')
+    .toContain(firstHotelTitle)
 
   await expect
     .poll(() => getFlightOrderCarouselState(page))
@@ -224,7 +342,7 @@ test('flight order carousel moves one desktop page and fills the final page with
 
       return state?.firstFullyVisibleCardText ?? ''
     })
-    .toContain('銀座設計旅店')
+    .toContain(finalPageFirstHotelTitle)
 
   await expect
     .poll(() => getFlightOrderCarouselState(page))

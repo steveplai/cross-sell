@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Flight Order Cross Sell Connected Mount API</title>
+    <title>Flight Order Cross Sell Connected Mount API Basic</title>
     <style>
       body {
         margin: 0;
@@ -15,46 +15,17 @@
           'Segoe UI',
           sans-serif;
       }
-
-      .event-log {
-        margin: 16px auto;
-        max-width: 1190px;
-        border: 1px solid #ececec;
-        background: white;
-        padding: 12px;
-        color: #444;
-        font-size: 14px;
-      }
     </style>
   </head>
   <body>
     <div id="flight-order-cross-sell-connected-root"></div>
-    <div class="event-log" data-testid="flight-cross-sell-connected-mount-log">
-      No events yet
-    </div>
 
     <script src="../../dist/widgets/flight-order-cross-sell-connected.mount.js"></script>
     <script>
-      const log = document.querySelector(
-        '[data-testid="flight-cross-sell-connected-mount-log"]',
-      )
-      const promoStartsAt = new Date(Date.now() - 10 * 60 * 1000).toISOString()
-
       window.FlightOrderCrossSellConnected.mount(
         '#flight-order-cross-sell-connected-root',
         {
-          environment: 'uat',
-          errorMode: 'message',
           orderNumber: '2026-16575',
-          promoDurationSeconds: 40 * 60 * 60,
-          promoStartsAt,
-          travelInsuranceContactEmail: 'customer-service@liontravel.com',
-          onSelectItem(event) {
-            log.textContent = `item-select: ${event.sectionId}/${event.item.id}`
-          },
-          onSelectAddon(event) {
-            log.textContent = `addon-select: ${event.addonId}`
-          },
         },
       )
     </script>

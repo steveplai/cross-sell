@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flight Order Cross Sell Connected Mount API Full</title>
+    <style>
+      body {
+        margin: 0;
+        background: #fff8f4;
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          sans-serif;
+      }
+
+      .event-log {
+        margin: 16px auto;
+        max-width: 1190px;
+        border: 1px solid #ececec;
+        background: white;
+        padding: 12px;
+        color: #444;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="flight-order-cross-sell-connected-root"></div>
+    <div class="event-log" data-testid="flight-cross-sell-connected-mount-log">
+      No events yet
+    </div>
+
+    <script src="../../dist/widgets/flight-order-cross-sell-connected.mount.js"></script>
+    <script>
+      const log = document.querySelector(
+        '[data-testid="flight-cross-sell-connected-mount-log"]',
+      )
+      const promoStartsAt = new Date(Date.now() - 10 * 60 * 1000).toISOString()
+
+      window.FlightOrderCrossSellConnected.mount(
+        '#flight-order-cross-sell-connected-root',
+        {
+          environment: 'uat',
+          errorMode: 'message',
+          locale: 'zh-TW',
+          currency: 'TWD',
+          orderNumber: '2026-16575',
+          orderDestination: '上海',
+          promoStartsAt,
+          promoDurationSeconds: 40 * 60 * 60,
+          recommendProductTypes: 'htl,etk',
+          travelInsuranceContactEmail: 'customer-service@liontravel.com',
+          promo: {
+            activeTitle: 'Connected mount 限時優惠',
+            expiredTitle: '發現更多旅遊靈感！',
+            serviceLabel: '加訂住宿、高鐵與票券享專屬折扣',
+            benefits: [
+              {
+                id: 'addon-discount',
+                tagLabel: '加購價',
+                label: '最高可省 25%',
+              },
+              {
+                id: 'flight-change-cancel',
+                label: '航班異動可免費取消',
+              },
+            ],
+          },
+          sectionContentOverrides: {
+            attraction: {
+              title: '精選票券與當地體驗',
+            },
+          },
+          hsrAddon: {
+            id: 'hsr',
+            title: '加購高鐵 行程更順暢',
+            description: '購買國內外行程，最高享 8 折優惠',
+            ctaLabel: '立即加購',
+          },
+          reminders: {
+            title: '別忘了加購一份安心與便利',
+            subtitle: '即將出門？',
+            items: [
+              {
+                id: 'visa-passport',
+                icon: 'passport',
+                title: '簽證護照',
+                description:
+                  '受理代辦中華民國護照、台胞證、各國簽證、國際學生證辦理等。',
+              },
+              {
+                id: 'travel-insurance',
+                icon: 'insurance',
+                title: '旅遊綜合險',
+                description: '於出發前七個工作天聯繫業務專員，提供旅行保障。',
+              },
+            ],
+          },
+          onSelectItem(event) {
+            log.textContent = `item-select: ${event.sectionId}/${event.item.id}`
+          },
+          onSelectAddon(event) {
+            log.textContent = `addon-select: ${event.addonId}`
+          },
+        },
+      )
+    </script>
+  </body>
+</html>
