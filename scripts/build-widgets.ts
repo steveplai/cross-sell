@@ -40,6 +40,16 @@ const entries = [
     name: 'CrossSellWidget',
   },
   {
+    entry: resolve(root, 'src/entries/cross-sell-widget/connected.wc.tsx'),
+    fileName: 'cross-sell-widget-connected/wc.js',
+    name: 'CrossSellWidgetConnectedWebComponent',
+  },
+  {
+    entry: resolve(root, 'src/entries/cross-sell-widget/connected.mount.ts'),
+    fileName: 'cross-sell-widget-connected/mount.js',
+    name: 'CrossSellWidgetConnected',
+  },
+  {
     entry: resolve(root, 'src/entries/flight-order-cross-sell/wc.tsx'),
     fileName: 'flight-order-cross-sell/wc.js',
     name: 'FlightOrderCrossSellWebComponent',

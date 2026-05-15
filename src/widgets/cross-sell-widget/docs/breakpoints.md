@@ -1,4 +1,4 @@
-# Flight Order Cross Sell 斷點設計
+# Cross Sell Widget 斷點設計
 
 這份文件記錄 `cross-sell-widget` widget 目前的斷點設計。
 

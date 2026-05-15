@@ -47,4 +47,22 @@ test.describe('CrossSellWidget', () => {
 
     expect(events).toContain('cross-sell-widget:item-select')
   })
+
+  test('normalizes missing sections from data attribute and property', async ({
+    page,
+  }) => {
+    await page.goto('/examples/cross-sell-widget/wc/basic.html')
+
+    await page.locator('cross-sell-widget').evaluate((element) => {
+      element.setAttribute('data', '{}')
+    })
+
+    await expect(page.getByText('您已解鎖限時優惠！')).toBeVisible()
+
+    await page.locator('cross-sell-widget').evaluate((element) => {
+      ;(element as HTMLElement & { data?: unknown }).data = {}
+    })
+
+    await expect(page.getByText('您已解鎖限時優惠！')).toBeVisible()
+  })
 })

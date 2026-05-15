@@ -17,18 +17,20 @@ function parseData(value: string | null): CrossSellWidgetProps {
     const parsed = JSON.parse(value)
 
     return isCrossSellWidgetProps(parsed)
-      ? (parsed as CrossSellWidgetProps)
+      ? mapDataToProps(parsed as CrossSellWidgetProps)
       : { sections: [] }
   } catch {
     return { sections: [] }
   }
 }
 
-function getDataProperty(element: HTMLElement): CrossSellWidgetProps | undefined {
+function getDataProperty(
+  element: HTMLElement,
+): CrossSellWidgetProps | undefined {
   const value = (element as HTMLElement & { data?: unknown }).data
 
   return isCrossSellWidgetProps(value)
-    ? (value as CrossSellWidgetProps)
+    ? mapDataToProps(value as CrossSellWidgetProps)
     : undefined
 }
 
@@ -43,6 +45,22 @@ function isCrossSellWidgetProps(value: unknown) {
     typeof candidate === 'object' &&
     (!candidate.sections || Array.isArray(candidate.sections))
   )
+}
+
+function mapDataToProps(data: CrossSellWidgetProps): CrossSellWidgetProps {
+  return {
+    currency: data.currency,
+    domainMode: data.domainMode,
+    hsrAddon: data.hsrAddon,
+    locale: data.locale,
+    order: data.order,
+    orderDestination: data.orderDestination,
+    promo: data.promo,
+    reminders: data.reminders,
+    sectionContentOverrides: data.sectionContentOverrides,
+    sections: data.sections ?? [],
+    serviceAgent: data.serviceAgent,
+  }
 }
 
 createReactWebComponent<CrossSellWidgetProps>({

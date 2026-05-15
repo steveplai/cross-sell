@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cross Sell Widget Connected Web Component Basic</title>
+    <style>
+      body {
+        margin: 0;
+        background: #fff8f4;
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          sans-serif;
+      }
+
+      .event-log {
+        margin: 16px auto;
+        max-width: 1190px;
+        border: 1px solid #ececec;
+        background: white;
+        padding: 12px;
+        color: #444;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <cross-sell-widget-connected
+      order-number="2026-16575"
+    ></cross-sell-widget-connected>
+
+    <div class="event-log" data-testid="cross-sell-widget-connected-event-log">
+      No events yet
+    </div>
+
+    <script src="../../../dist/widgets/cross-sell-widget-connected/wc.js"></script>
+    <script>
+      const widget = document.querySelector('cross-sell-widget-connected')
+      const log = document.querySelector(
+        '[data-testid="cross-sell-widget-connected-event-log"]',
+      )
+
+      widget.addEventListener('cross-sell-widget:item-select', (event) => {
+        log.textContent = `${event.type}: ${event.detail.sectionId}/${event.detail.item.id}`
+      })
+      widget.addEventListener('cross-sell-widget:addon-select', (event) => {
+        log.textContent = `${event.type}: ${event.detail.addonId}`
+      })
+    </script>
+  </body>
+</html>

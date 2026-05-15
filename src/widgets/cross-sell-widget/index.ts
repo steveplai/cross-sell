@@ -1,4 +1,11 @@
 export { CrossSellWidget } from './CrossSellWidget'
+export type {
+  CrossSellWidgetConnectedConfig,
+  CrossSellWidgetConnectedEnvironment,
+  CrossSellWidgetConnectedErrorMode,
+  CrossSellWidgetConnectedProps,
+} from './CrossSellWidgetConnected'
+export { CrossSellWidgetConnected } from './CrossSellWidgetConnected'
 export { getRemainingPromoSeconds } from './lib/countdown'
 export { crossSellWidgetSampleData } from './sampleData'
 export type {

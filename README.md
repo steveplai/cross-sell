@@ -28,6 +28,9 @@ dist/
     cross-sell-widget/
       wc.js
       mount.js
+    cross-sell-widget-connected/
+      wc.js
+      mount.js
     flight-order-cross-sell/
       wc.js
       mount.js
@@ -188,6 +191,42 @@ Public contract:
 The `data.promo.startsAt` ISO timestamp and `data.promo.durationSeconds`
 determine whether the widget renders the active discount state or the expired
 travel-inspiration state.
+
+### `cross-sell-widget-connected`
+
+API-loading version of `cross-sell-widget`. It accepts an `orderNumber`, loads
+AP-56 section data, passes those sections to the base widget, and uses the base
+widget's static default content for promo, add-ons, and reminders.
+
+Public contract:
+
+- Web Component tag: `cross-sell-widget-connected`
+- Mount API global: `window.CrossSellWidgetConnected`
+- Attributes: `order-number`, `order-destination`, `recommend-product-types`,
+  `environment`, `error-mode`, `locale`, `currency`, `promo-starts-at`,
+  `promo-duration-seconds`, `travel-insurance-contact-email`, `config`
+- `environment` values: `uat`, `production`
+- `error-mode` values: `hidden`, `message`
+- `recommend-product-types` default: `htl,etk`
+- `config` JSON/property supports static content overrides such as `promo`,
+  `reminders`, `hsrAddon`, `sectionContentOverrides`, `orderDestination`,
+  `locale`, and `currency`
+- `promo-starts-at` / `promo-duration-seconds` override
+  `config.promo.startsAt` / `config.promo.durationSeconds`
+- Events:
+  - `cross-sell-widget:item-select`, detail `{ sectionId, item }`
+  - `cross-sell-widget:view-more`, detail `{ sectionId }`
+  - `cross-sell-widget:addon-select`, detail `{ addonId }`
+
+Default API origins:
+
+- `production`: `https://www.liontravel.com`
+- `uat`: `https://uwww.liontravel.com`
+
+The current endpoint path is centralized in the existing AP-56 domain API as
+`/category/_fringe/CrossSelling?OrderNo={orderNumber}&RecommendProductType={recommendProductTypes}`.
+The connected widget does not accept full static `data`; use
+`cross-sell-widget` when sections and order data are already available.
 
 ### `flight-order-cross-sell`
 

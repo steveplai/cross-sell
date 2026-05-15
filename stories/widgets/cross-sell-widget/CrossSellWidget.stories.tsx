@@ -1,4 +1,4 @@
-import '../src/widgets/cross-sell-widget/style.css'
+import '../../../src/widgets/cross-sell-widget/style.css'
 
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import type { ComponentProps } from 'react'
@@ -6,7 +6,7 @@ import type { ComponentProps } from 'react'
 import {
   CrossSellWidget,
   crossSellWidgetSampleData as sampleData,
-} from '../src/widgets/cross-sell-widget'
+} from '../../../src/widgets/cross-sell-widget'
 
 type BaseStoryArgs = ComponentProps<typeof CrossSellWidget>
 

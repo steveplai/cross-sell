@@ -1,4 +1,5 @@
-[data-csc-widget][data-csc-widget-name='cross-sell-widget'] {
+[data-csc-widget][data-csc-widget-name='cross-sell-widget'],
+[data-csc-widget][data-csc-widget-name='cross-sell-widget-connected'] {
   font-family:
     'Noto Sans TC',
     system-ui,
@@ -50,7 +51,10 @@
 }
 
 .dark [data-csc-widget][data-csc-widget-name='cross-sell-widget'],
-:host(.dark) [data-csc-widget][data-csc-widget-name='cross-sell-widget'] {
+.dark [data-csc-widget][data-csc-widget-name='cross-sell-widget-connected'],
+:host(.dark) [data-csc-widget][data-csc-widget-name='cross-sell-widget'],
+:host(.dark)
+  [data-csc-widget][data-csc-widget-name='cross-sell-widget-connected'] {
   color-scheme: dark;
 
   --lion-page-gradient-from: #241813;
