@@ -30,6 +30,16 @@ const entries = [
     name: 'ThemedDemoProductBanner',
   },
   {
+    entry: resolve(root, 'src/entries/cross-sell-widget/wc.tsx'),
+    fileName: 'cross-sell-widget/wc.js',
+    name: 'CrossSellWidgetWebComponent',
+  },
+  {
+    entry: resolve(root, 'src/entries/cross-sell-widget/mount.ts'),
+    fileName: 'cross-sell-widget/mount.js',
+    name: 'CrossSellWidget',
+  },
+  {
     entry: resolve(root, 'src/entries/flight-order-cross-sell/wc.tsx'),
     fileName: 'flight-order-cross-sell/wc.js',
     name: 'FlightOrderCrossSellWebComponent',
