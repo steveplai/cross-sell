@@ -24,6 +24,8 @@ const defaultRecommendProductTypes = 'htl,etk'
 const ap56CrossSellProductionHostname = 'www.liontravel.com'
 const ap56CrossSellEndpointPathname = '/category/_fringe/CrossSelling'
 
+type Ap56CrossSellLocation = Pick<Location, 'hostname' | 'origin'>
+
 // Thin request adapter: choose the Lion Travel origin, call AP-56, and hand the
 // raw payload to the mapper. UI-facing data shaping stays out of this file.
 export function createAp56CrossSellApi({
@@ -35,9 +37,7 @@ export function createAp56CrossSellApi({
   const client =
     requestClient ??
     createRequestClient({
-      baseUrl:
-        apiBaseUrl ??
-        createLiontravelOrigin(ap56CrossSellProductionHostname, domainMode),
+      baseUrl: resolveAp56CrossSellBaseUrl(apiBaseUrl, domainMode),
     })
 
   return {
@@ -49,6 +49,18 @@ export function createAp56CrossSellApi({
       return mapAp56CrossSellResponseToSections(response)
     },
   }
+}
+
+export function resolveAp56CrossSellBaseUrl(
+  apiBaseUrl: string | undefined,
+  domainMode: LiontravelDomainMode,
+  location: Ap56CrossSellLocation | undefined = getCurrentLocation(),
+) {
+  return (
+    apiBaseUrl ??
+    resolveCurrentLiontravelOrigin(location) ??
+    createLiontravelOrigin(ap56CrossSellProductionHostname, domainMode)
+  )
 }
 
 export function createAp56CrossSellPath(
@@ -71,4 +83,22 @@ function normalizeRecommendProductTypes(
   }
 
   return recommendProductTypes
+}
+
+function getCurrentLocation(): Ap56CrossSellLocation | undefined {
+  return typeof globalThis.location === 'undefined'
+    ? undefined
+    : globalThis.location
+}
+
+function resolveCurrentLiontravelOrigin(
+  location: Ap56CrossSellLocation | undefined,
+) {
+  const hostname = location?.hostname.toLowerCase()
+
+  if (hostname === 'liontravel.com' || hostname?.endsWith('.liontravel.com')) {
+    return location?.origin
+  }
+
+  return undefined
 }

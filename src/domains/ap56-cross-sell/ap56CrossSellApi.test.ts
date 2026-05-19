@@ -5,6 +5,7 @@ import type { RequestClient } from '@/shared/request'
 import {
   createAp56CrossSellApi,
   createAp56CrossSellPath,
+  resolveAp56CrossSellBaseUrl,
 } from './ap56CrossSellApi'
 import { mapAp56CrossSellResponseToSections } from './ap56CrossSellMapper'
 
@@ -121,6 +122,44 @@ describe('AP-56 cross-sell API', () => {
   it('supports custom recommend product types', () => {
     expect(createAp56CrossSellPath('2026-123456', ['htl', 'etk'])).toBe(
       '/category/_fringe/CrossSelling?OrderNo=2026-123456&RecommendProductType=htl%2Cetk',
+    )
+  })
+
+  it('prefers an explicit API base URL', () => {
+    expect(
+      resolveAp56CrossSellBaseUrl('https://proxy.example.com', 'uat', {
+        hostname: 'uflight.liontravel.com',
+        origin: 'https://uflight.liontravel.com',
+      }),
+    ).toBe('https://proxy.example.com')
+  })
+
+  it('uses the current Lion Travel origin to keep browser requests same-origin', () => {
+    expect(
+      resolveAp56CrossSellBaseUrl(undefined, 'uat', {
+        hostname: 'uflight.liontravel.com',
+        origin: 'https://uflight.liontravel.com',
+      }),
+    ).toBe('https://uflight.liontravel.com')
+
+    expect(
+      resolveAp56CrossSellBaseUrl(undefined, 'production', {
+        hostname: 'flight.liontravel.com',
+        origin: 'https://flight.liontravel.com',
+      }),
+    ).toBe('https://flight.liontravel.com')
+  })
+
+  it('falls back to the AP-56 www origin outside Lion Travel pages', () => {
+    expect(
+      resolveAp56CrossSellBaseUrl(undefined, 'uat', {
+        hostname: 'localhost',
+        origin: 'http://localhost:6006',
+      }),
+    ).toBe('https://uwww.liontravel.com')
+
+    expect(resolveAp56CrossSellBaseUrl(undefined, 'production')).toBe(
+      'https://www.liontravel.com',
     )
   })
 
