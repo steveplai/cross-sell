@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import type { RequestClient } from '@/shared/request'
 
-import { FlightOrderCrossSellConnectedForTesting } from './FlightOrderCrossSellConnected'
+import { CrossSellWidgetConnectedForTesting } from './CrossSellWidgetConnected'
 
 type MockRequestClientRequest = (
   pathname: string,
@@ -57,7 +57,7 @@ const ap56CrossSellResponse = [
   },
 ]
 
-describe('FlightOrderCrossSellConnected', () => {
+describe('CrossSellWidgetConnected', () => {
   afterEach(() => {
     cleanup()
     vi.restoreAllMocks()
@@ -68,7 +68,7 @@ describe('FlightOrderCrossSellConnected', () => {
     const requestClient = createMockRequestClient(get)
 
     render(
-      <FlightOrderCrossSellConnectedForTesting
+      <CrossSellWidgetConnectedForTesting
         errorMode="message"
         requestClient={requestClient}
       />,
@@ -87,7 +87,7 @@ describe('FlightOrderCrossSellConnected', () => {
     const requestClient = createMockRequestClient(get)
 
     render(
-      <FlightOrderCrossSellConnectedForTesting
+      <CrossSellWidgetConnectedForTesting
         environment="uat"
         orderNumber="2026-123456"
         requestClient={requestClient}
@@ -138,7 +138,7 @@ describe('FlightOrderCrossSellConnected', () => {
     const requestClient = createMockRequestClient(get)
 
     render(
-      <FlightOrderCrossSellConnectedForTesting
+      <CrossSellWidgetConnectedForTesting
         environment="uat"
         orderNumber="202605120001"
         recommendProductTypes={['htl', 'etk', 'flt']}
@@ -169,7 +169,7 @@ describe('FlightOrderCrossSellConnected', () => {
     const requestClient = createMockRequestClient(get)
 
     render(
-      <FlightOrderCrossSellConnectedForTesting
+      <CrossSellWidgetConnectedForTesting
         orderNumber="2026-123456"
         requestClient={requestClient}
         sectionContentOverrides={{
@@ -196,7 +196,7 @@ describe('FlightOrderCrossSellConnected', () => {
     const requestClient = createMockRequestClient(get)
 
     render(
-      <FlightOrderCrossSellConnectedForTesting
+      <CrossSellWidgetConnectedForTesting
         orderDestination="上海"
         orderNumber="2026-123456"
         requestClient={requestClient}
@@ -213,7 +213,7 @@ describe('FlightOrderCrossSellConnected', () => {
     const requestClient = createMockRequestClient(get)
 
     render(
-      <FlightOrderCrossSellConnectedForTesting
+      <CrossSellWidgetConnectedForTesting
         environment="uat"
         orderNumber="2026-123456"
         requestClient={requestClient}
@@ -235,7 +235,7 @@ describe('FlightOrderCrossSellConnected', () => {
     const requestClient = createMockRequestClient(get)
 
     render(
-      <FlightOrderCrossSellConnectedForTesting
+      <CrossSellWidgetConnectedForTesting
         orderNumber="2026-123456"
         promo={{
           activeTitle: '一級倒數優惠',
@@ -260,7 +260,7 @@ describe('FlightOrderCrossSellConnected', () => {
     const requestClient = createMockRequestClient(get)
 
     const { container } = render(
-      <FlightOrderCrossSellConnectedForTesting
+      <CrossSellWidgetConnectedForTesting
         orderNumber="202605120001"
         requestClient={requestClient}
       />,
@@ -281,7 +281,7 @@ describe('FlightOrderCrossSellConnected', () => {
     const requestClient = createMockRequestClient(get)
 
     render(
-      <FlightOrderCrossSellConnectedForTesting
+      <CrossSellWidgetConnectedForTesting
         errorMode="message"
         orderNumber="202605120001"
         requestClient={requestClient}

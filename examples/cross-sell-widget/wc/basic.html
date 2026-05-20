@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cross Sell Widget Web Component Basic</title>
+    <style>
+      body {
+        margin: 0;
+        background: #fff8f4;
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <cross-sell-widget
+      data='{"sections":[{"id":"hotel-recommendations","kind":"hotel","items":[{"id":"tokyo-bay-hotel","title":"東京灣精選飯店","location":"江東區","starRating":5,"rating":"4.5","ratingLabel":"太讚了","reviewCount":1132,"cancellationLabel":"免費取消","price":1224152,"priceSuffix":"起"}]}]}'
+    ></cross-sell-widget>
+
+    <script src="../../../dist/widgets/cross-sell-widget/wc.js"></script>
+  </body>
+</html>

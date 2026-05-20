@@ -63,7 +63,7 @@ export const successRequestClient = createMockRequestClient(
 )
 
 export const errorRequestClient = createMockRequestClient(async () => {
-  throw new Error('Failed to load flight order cross-sell data.')
+  throw new Error('Failed to load cross-sell widget data.')
 })
 
 export const loadingRequestClient = createMockRequestClient(

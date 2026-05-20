@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cross Sell Widget Connected Mount API Basic</title>
+    <style>
+      body {
+        margin: 0;
+        background: #fff8f4;
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="cross-sell-widget-connected-root"></div>
+
+    <script src="../../../dist/widgets/cross-sell-widget-connected/mount.js"></script>
+    <script>
+      window.CrossSellWidgetConnected.mount(
+        '#cross-sell-widget-connected-root',
+        {
+          orderNumber: '2026-16575',
+        },
+      )
+    </script>
+  </body>
+</html>

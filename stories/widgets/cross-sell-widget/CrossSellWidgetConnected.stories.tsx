@@ -1,12 +1,12 @@
-import '../../../src/widgets/flight-order-cross-sell/style.css'
+import '../../../src/widgets/cross-sell-widget/style.css'
 
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import type { ComponentProps } from 'react'
 
 import {
-  FlightOrderCrossSellConnected,
-  FlightOrderCrossSellConnectedForTesting,
-} from '../../../src/widgets/flight-order-cross-sell/FlightOrderCrossSellConnected'
+  CrossSellWidgetConnected,
+  CrossSellWidgetConnectedForTesting,
+} from '../../../src/widgets/cross-sell-widget/CrossSellWidgetConnected'
 import {
   createStorybookProxyRequestClient,
   errorRequestClient,
@@ -14,9 +14,7 @@ import {
   successRequestClient,
 } from './fixtures'
 
-type ConnectedStoryArgs = ComponentProps<
-  typeof FlightOrderCrossSellConnected
-> & {
+type ConnectedStoryArgs = ComponentProps<typeof CrossSellWidgetConnected> & {
   useMockResponse?: boolean
 }
 
@@ -25,9 +23,9 @@ function createActivePromoStartsAt() {
 }
 
 const meta = {
-  id: 'flight-order-cross-sell-connected',
-  title: 'Widgets/Flight Order Cross Sell/Connected',
-  component: FlightOrderCrossSellConnected,
+  id: 'cross-sell-widget-connected',
+  title: 'Widgets/Cross Sell Widget/Connected',
+  component: CrossSellWidgetConnected,
   args: {
     environment: 'uat',
     errorMode: 'message',
@@ -109,7 +107,7 @@ const meta = {
     },
   },
   render: ({ useMockResponse, ...args }) => (
-    <FlightOrderCrossSellConnectedForTesting
+    <CrossSellWidgetConnectedForTesting
       {...args}
       requestClient={
         useMockResponse
@@ -197,7 +195,7 @@ export const ApiErrorHidden: Story = {
     errorMode: 'hidden',
   },
   render: ({ useMockResponse: _useMockResponse, ...args }) => (
-    <FlightOrderCrossSellConnectedForTesting
+    <CrossSellWidgetConnectedForTesting
       {...args}
       requestClient={errorRequestClient}
     />
@@ -209,7 +207,7 @@ export const ApiErrorMessage: Story = {
     errorMode: 'message',
   },
   render: ({ useMockResponse: _useMockResponse, ...args }) => (
-    <FlightOrderCrossSellConnectedForTesting
+    <CrossSellWidgetConnectedForTesting
       {...args}
       requestClient={errorRequestClient}
     />
@@ -218,7 +216,7 @@ export const ApiErrorMessage: Story = {
 
 export const Loading: Story = {
   render: ({ useMockResponse: _useMockResponse, ...args }) => (
-    <FlightOrderCrossSellConnectedForTesting
+    <CrossSellWidgetConnectedForTesting
       {...args}
       requestClient={loadingRequestClient}
     />

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cross Sell Widget Connected Property Web Component</title>
+    <style>
+      body {
+        margin: 0;
+        background: #fff8f4;
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          sans-serif;
+      }
+
+      .event-log {
+        margin: 16px auto;
+        max-width: 1190px;
+        border: 1px solid #ececec;
+        background: white;
+        padding: 12px;
+        color: #444;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <cross-sell-widget-connected
+      currency="TWD"
+      environment="uat"
+      error-mode="message"
+      locale="zh-TW"
+      order-number="2026-16575"
+      recommend-product-types="htl,etk"
+    ></cross-sell-widget-connected>
+
+    <div
+      class="event-log"
+      data-testid="cross-sell-widget-connected-property-event-log"
+    >
+      No events yet
+    </div>
+
+    <script src="../../../dist/widgets/cross-sell-widget-connected/wc.js"></script>
+    <script>
+      const widget = document.querySelector('cross-sell-widget-connected')
+      const log = document.querySelector(
+        '[data-testid="cross-sell-widget-connected-property-event-log"]',
+      )
+
+      widget.travelInsuranceContactEmail = 'customer-service@liontravel.com'
+      widget.orderDestination = '上海'
+      widget.promoStartsAt = new Date(Date.now() - 10 * 60 * 1000).toISOString()
+      widget.promoDurationSeconds = 40 * 60 * 60
+      widget.config = {
+        currency: 'USD',
+        locale: 'en-US',
+        orderDestination: '大阪',
+        promo: {
+          activeTitle: 'Connected property 限時優惠',
+          expiredTitle: '發現更多旅遊靈感！',
+          startsAt: '2000-01-01T00:00:00.000Z',
+          durationSeconds: 1,
+          serviceLabel: '加訂住宿、高鐵與票券享專屬折扣',
+          benefits: [
+            {
+              id: 'addon-discount',
+              tagLabel: '加購價',
+              label: '最高可省 25%',
+            },
+            {
+              id: 'flight-change-cancel',
+              label: '航班異動可免費取消',
+            },
+          ],
+        },
+        hsrAddon: {
+          id: 'hsr',
+          title: '加購高鐵 行程更順暢',
+          description: '購買國內外行程，最高享 8 折優惠',
+          ctaLabel: '立即加購',
+        },
+        sectionContentOverrides: {
+          attraction: {
+            title: '精選票券與當地體驗',
+          },
+        },
+        reminders: {
+          title: '別忘了加購一份安心與便利',
+          subtitle: '即將出門？',
+          items: [
+            {
+              id: 'visa-passport',
+              icon: 'passport',
+              title: '簽證護照',
+              description:
+                '受理代辦中華民國護照、台胞證、各國簽證、國際學生證辦理等。',
+            },
+            {
+              id: 'travel-insurance',
+              icon: 'insurance',
+              title: '旅遊綜合險',
+              description: '於出發前七個工作天聯繫業務專員，提供旅行保障。',
+            },
+          ],
+        },
+      }
+
+      widget.addEventListener('cross-sell-widget:item-select', (event) => {
+        log.textContent = `${event.type}: ${event.detail.sectionId}/${event.detail.item.id}`
+      })
+      widget.addEventListener('cross-sell-widget:addon-select', (event) => {
+        log.textContent = `${event.type}: ${event.detail.addonId}`
+      })
+    </script>
+  </body>
+</html>

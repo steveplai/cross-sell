@@ -1,26 +1,26 @@
 import type {
-  FlightOrderCrossSellCategory,
-  FlightOrderCrossSellItem,
-  FlightOrderCrossSellSection,
-  FlightOrderCrossSellSectionKind,
-} from '@/widgets/flight-order-cross-sell'
+  CrossSellWidgetCategory,
+  CrossSellWidgetItem,
+  CrossSellWidgetSection,
+  CrossSellWidgetSectionKind,
+} from '@/widgets/cross-sell-widget'
 
 import type {
-  Ap56CrossSellingResponseEnvelope,
-  Ap56CrossSellingResponseSection,
+  Ap56CrossSellResponseEnvelope,
+  Ap56CrossSellResponseSection,
   Ap56ProductInfo,
-} from './ap56CrossSellingTypes'
+} from './ap56CrossSellTypes'
 
 const defaultCategoryHref = 'https://www.liontravel.com/'
 
 // Convert AP-56 sections into the widget section model consumed by the
 // connected widget. Non-carousel static content is supplied by the base widget.
-export function mapAp56CrossSellingResponseToSections(
+export function mapAp56CrossSellResponseToSections(
   response:
-    | Ap56CrossSellingResponseEnvelope
-    | Ap56CrossSellingResponseSection[]
+    | Ap56CrossSellResponseEnvelope
+    | Ap56CrossSellResponseSection[]
     | unknown,
-): FlightOrderCrossSellSection[] {
+): CrossSellWidgetSection[] {
   const sections = getResponseSections(response)
 
   if (!sections) {
@@ -28,8 +28,8 @@ export function mapAp56CrossSellingResponseToSections(
   }
 
   const sectionOverrides = new Map<
-    FlightOrderCrossSellSectionKind,
-    FlightOrderCrossSellSection
+    CrossSellWidgetSectionKind,
+    CrossSellWidgetSection
   >()
 
   sections.forEach((rawSection) => {
@@ -104,11 +104,8 @@ export function mapAp56CrossSellingResponseToSections(
 // #region - Functions
 
 function getOrCreateSectionOverride(
-  sectionOverrides: Map<
-    FlightOrderCrossSellSectionKind,
-    FlightOrderCrossSellSection
-  >,
-  kind: FlightOrderCrossSellSectionKind,
+  sectionOverrides: Map<CrossSellWidgetSectionKind, CrossSellWidgetSection>,
+  kind: CrossSellWidgetSectionKind,
 ) {
   const existingSection = sectionOverrides.get(kind)
 
@@ -116,7 +113,7 @@ function getOrCreateSectionOverride(
     return existingSection
   }
 
-  const section: FlightOrderCrossSellSection = {
+  const section: CrossSellWidgetSection = {
     id: `api-${kind}`,
     kind,
     items: [],
@@ -129,25 +126,25 @@ function getOrCreateSectionOverride(
 
 function getResponseSections(response: unknown) {
   if (Array.isArray(response)) {
-    return response as Ap56CrossSellingResponseSection[]
+    return response as Ap56CrossSellResponseSection[]
   }
 
   if (!response || typeof response !== 'object') {
     return undefined
   }
 
-  const productDataList = (response as Ap56CrossSellingResponseEnvelope)
+  const productDataList = (response as Ap56CrossSellResponseEnvelope)
     .ProductDataList
 
   return Array.isArray(productDataList)
-    ? (productDataList as Ap56CrossSellingResponseSection[])
+    ? (productDataList as Ap56CrossSellResponseSection[])
     : undefined
 }
 
 function mapProductInfoToItem(
   product: Ap56ProductInfo,
   index: number,
-): FlightOrderCrossSellItem | undefined {
+): CrossSellWidgetItem | undefined {
   if (!product || typeof product !== 'object') {
     return undefined
   }
@@ -198,7 +195,7 @@ function mapProductInfoToItem(
 
 function getSectionKindFromApiType(
   type: string | undefined,
-): FlightOrderCrossSellSectionKind | undefined {
+): CrossSellWidgetSectionKind | undefined {
   if (type?.startsWith('訂房')) {
     return 'hotel'
   }
@@ -233,7 +230,7 @@ function getFirstUrl(products: Ap56ProductInfo[]) {
 function createCategories(
   value: unknown,
   href = defaultCategoryHref,
-): FlightOrderCrossSellCategory[] {
+): CrossSellWidgetCategory[] {
   if (!Array.isArray(value)) {
     return []
   }
@@ -333,8 +330,8 @@ function asNumber(value: unknown) {
 }
 
 function isItem(
-  item: FlightOrderCrossSellItem | undefined,
-): item is FlightOrderCrossSellItem {
+  item: CrossSellWidgetItem | undefined,
+): item is CrossSellWidgetItem {
   return !!item
 }
 

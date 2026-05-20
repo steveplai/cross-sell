@@ -15,37 +15,35 @@ import type { RequestClient } from '@/shared/request'
 import type { LiontravelDomainMode } from '@/shared/utils/liontravelUrl'
 
 import { createWidgetRootProps } from '../../runtime/widgetRoot'
-import { FlightOrderCrossSell } from './FlightOrderCrossSell'
+import { CrossSellWidget } from './CrossSellWidget'
 import type {
-  FlightOrderCrossSellContentOverrides,
-  FlightOrderCrossSellOrder,
-  FlightOrderCrossSellProps,
+  CrossSellWidgetContentOverrides,
+  CrossSellWidgetOrder,
+  CrossSellWidgetProps,
 } from './types'
 
-export type FlightOrderCrossSellConnectedErrorMode = 'hidden' | 'message'
-export type FlightOrderCrossSellConnectedEnvironment = LiontravelDomainMode
-export type FlightOrderCrossSellRecommendProductTypes =
-  Ap56CrossSellRecommendProductTypes
+export type CrossSellWidgetConnectedErrorMode = 'hidden' | 'message'
+export type CrossSellWidgetConnectedEnvironment = LiontravelDomainMode
 
-export type FlightOrderCrossSellConnectedConfig = Omit<
-  FlightOrderCrossSellContentOverrides,
+export type CrossSellWidgetConnectedConfig = Omit<
+  CrossSellWidgetContentOverrides,
   'domainMode' | 'serviceAgent'
 >
 
-export interface FlightOrderCrossSellConnectedProps extends FlightOrderCrossSellConnectedConfig {
-  environment?: FlightOrderCrossSellConnectedEnvironment
-  errorMode?: FlightOrderCrossSellConnectedErrorMode
-  onSelectAddon?: FlightOrderCrossSellProps['onSelectAddon']
-  onSelectItem?: FlightOrderCrossSellProps['onSelectItem']
-  onViewMore?: FlightOrderCrossSellProps['onViewMore']
+export interface CrossSellWidgetConnectedProps extends CrossSellWidgetConnectedConfig {
+  environment?: CrossSellWidgetConnectedEnvironment
+  errorMode?: CrossSellWidgetConnectedErrorMode
+  onSelectAddon?: CrossSellWidgetProps['onSelectAddon']
+  onSelectItem?: CrossSellWidgetProps['onSelectItem']
+  onViewMore?: CrossSellWidgetProps['onViewMore']
   orderNumber?: string
   promoDurationSeconds?: number
   promoStartsAt?: string
-  recommendProductTypes?: FlightOrderCrossSellRecommendProductTypes
+  recommendProductTypes?: Ap56CrossSellRecommendProductTypes
   travelInsuranceContactEmail?: string
 }
 
-interface FlightOrderCrossSellConnectedInternalProps extends FlightOrderCrossSellConnectedProps {
+interface CrossSellWidgetConnectedInternalProps extends CrossSellWidgetConnectedProps {
   apiBaseUrl?: string
   requestClient?: RequestClient
 }
@@ -53,7 +51,7 @@ interface FlightOrderCrossSellConnectedInternalProps extends FlightOrderCrossSel
 //#region - Functions
 
 const connectedWidgetRootProps = createWidgetRootProps(
-  'flight-order-cross-sell-connected',
+  'cross-sell-widget-connected',
 )
 
 function createConnectedQueryClient() {
@@ -69,7 +67,7 @@ function createConnectedQueryClient() {
 
 function createOrderFromExternalOrderNumber(
   orderNumber: string,
-): FlightOrderCrossSellOrder | undefined {
+): CrossSellWidgetOrder | undefined {
   const normalizedOrderNumber = orderNumber.trim()
 
   if (!normalizedOrderNumber) {
@@ -112,7 +110,7 @@ function createDefaultOrderYear(orderNumber: string) {
 
 //#region - Sub Components
 
-function FlightOrderCrossSellConnectedContent({
+function CrossSellWidgetConnectedContent({
   apiBaseUrl,
   currency,
   environment = 'production',
@@ -132,7 +130,7 @@ function FlightOrderCrossSellConnectedContent({
   requestClient,
   sectionContentOverrides,
   travelInsuranceContactEmail,
-}: FlightOrderCrossSellConnectedInternalProps) {
+}: CrossSellWidgetConnectedInternalProps) {
   const domainMode = environment
   const resolvedPromo = useMemo(() => {
     if (!promo && !promoStartsAt && promoDurationSeconds === undefined) {
@@ -163,7 +161,7 @@ function FlightOrderCrossSellConnectedContent({
     queryFn: ({ signal }) =>
       api.getByOrderNumber(orderNumber ?? '', { signal }),
     queryKey: [
-      'flight-order-cross-sell',
+      'cross-sell-widget',
       'connected',
       orderNumber,
       domainMode,
@@ -175,7 +173,7 @@ function FlightOrderCrossSellConnectedContent({
 
   if (query.data) {
     return (
-      <FlightOrderCrossSell
+      <CrossSellWidget
         currency={currency}
         domainMode={domainMode}
         hsrAddon={hsrAddon}
@@ -261,26 +259,24 @@ function ConnectedStateMessage({ message }: { message: string }) {
 
 //#endregion - Sub Components
 
-function FlightOrderCrossSellConnectedRoot(
-  props: FlightOrderCrossSellConnectedInternalProps,
+function CrossSellWidgetConnectedRoot(
+  props: CrossSellWidgetConnectedInternalProps,
 ) {
   const [queryClient] = useState(createConnectedQueryClient)
 
   return (
     <QueryClientProvider client={queryClient}>
-      <FlightOrderCrossSellConnectedContent {...props} />
+      <CrossSellWidgetConnectedContent {...props} />
     </QueryClientProvider>
   )
 }
 
-export function FlightOrderCrossSellConnected(
-  props: FlightOrderCrossSellConnectedProps,
-) {
-  return <FlightOrderCrossSellConnectedRoot {...props} />
+export function CrossSellWidgetConnected(props: CrossSellWidgetConnectedProps) {
+  return <CrossSellWidgetConnectedRoot {...props} />
 }
 
-export function FlightOrderCrossSellConnectedForTesting(
-  props: FlightOrderCrossSellConnectedInternalProps,
+export function CrossSellWidgetConnectedForTesting(
+  props: CrossSellWidgetConnectedInternalProps,
 ) {
-  return <FlightOrderCrossSellConnectedRoot {...props} />
+  return <CrossSellWidgetConnectedRoot {...props} />
 }

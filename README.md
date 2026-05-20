@@ -25,6 +25,12 @@ dist/
     themed-demo-product-banner/
       wc.js
       mount.js
+    cross-sell-widget/
+      wc.js
+      mount.js
+    cross-sell-widget-connected/
+      wc.js
+      mount.js
     flight-order-cross-sell/
       wc.js
       mount.js
@@ -65,7 +71,7 @@ dist/
 ```txt
 src/widgets/    Pure React widget components
 src/components/ Shared React UI primitives
-src/domains/    Domain API wrappers for connected widgets
+src/domains/    Domain adapters and response mappers for connected widgets
 src/runtime/    Shared Web Component and Mount API runtime helpers
 src/entries/    Public widget entrypoints and external contracts
 src/emails/     React Email templates, components, and content data
@@ -167,6 +173,61 @@ Public contract:
 - Event: `demo-product:product-select`
 - Event detail shape: `{ product }`
 
+### `cross-sell-widget`
+
+Renamed base cross-sell widget intended for section-driven cross-sell rendering
+across product contexts.
+
+Public contract:
+
+- Web Component tag: `cross-sell-widget`
+- Mount API global: `window.CrossSellWidget`
+- Attribute/property: `data`
+- Events:
+  - `cross-sell-widget:item-select`, detail `{ sectionId, item }`
+  - `cross-sell-widget:view-more`, detail `{ sectionId }`
+  - `cross-sell-widget:addon-select`, detail `{ addonId }`
+
+The `data.promo.startsAt` ISO timestamp and `data.promo.durationSeconds`
+determine whether the widget renders the active discount state or the expired
+travel-inspiration state.
+
+### `cross-sell-widget-connected`
+
+API-loading version of `cross-sell-widget`. It accepts an `orderNumber`, loads
+AP-56 section data, passes those sections to the base widget, and uses the base
+widget's static default content for promo, add-ons, and reminders.
+
+Public contract:
+
+- Web Component tag: `cross-sell-widget-connected`
+- Mount API global: `window.CrossSellWidgetConnected`
+- Attributes: `order-number`, `order-destination`, `recommend-product-types`,
+  `environment`, `error-mode`, `locale`, `currency`, `promo-starts-at`,
+  `promo-duration-seconds`, `travel-insurance-contact-email`, `config`
+- `environment` values: `uat`, `production`
+- `error-mode` values: `hidden`, `message`
+- `recommend-product-types` default: `htl,etk`
+- `config` JSON/property supports static content overrides such as `promo`,
+  `reminders`, `hsrAddon`, `sectionContentOverrides`, `orderDestination`,
+  `locale`, and `currency`
+- `promo-starts-at` / `promo-duration-seconds` override
+  `config.promo.startsAt` / `config.promo.durationSeconds`
+- Events:
+  - `cross-sell-widget:item-select`, detail `{ sectionId, item }`
+  - `cross-sell-widget:view-more`, detail `{ sectionId }`
+  - `cross-sell-widget:addon-select`, detail `{ addonId }`
+
+Default API origins:
+
+- `production`: `https://www.liontravel.com`
+- `uat`: `https://uwww.liontravel.com`
+
+The current endpoint path is centralized in the AP-56 cross-sell domain adapter as
+`/category/_fringe/CrossSelling?OrderNo={orderNumber}&RecommendProductType={recommendProductTypes}`.
+The connected widget does not accept full static `data`; use
+`cross-sell-widget` when sections and order data are already available.
+
 ### `flight-order-cross-sell`
 
 Flight order completion-page cross-sell widget. It supports the active limited
@@ -192,7 +253,7 @@ not part of the public contract.
 ### `flight-order-cross-sell-connected`
 
 API-loading version of `flight-order-cross-sell`. It accepts an `orderNumber`,
-loads AP-56 section data from the flight order cross-sell API, passes those
+loads AP-56 section data from the cross-sell domain adapter, passes those
 sections to the base widget, and uses the base widget's static default content
 for promo, add-ons, and reminders.
 
@@ -224,10 +285,10 @@ Default API origins:
 - `production`: `https://www.liontravel.com`
 - `uat`: `https://uwww.liontravel.com`
 
-The current endpoint path is centralized in the domain API as
+The current endpoint path is centralized in the AP-56 cross-sell domain adapter as
 `/category/_fringe/CrossSelling?OrderNo={orderNumber}&RecommendProductType={recommendProductTypes}`.
 The connected widget does not accept full static `data`; use
-`flight-order-cross-sell` when sections and order data are already available.
+`cross-sell-widget` when sections and order data are already available.
 
 Connected Web Component usage:
 

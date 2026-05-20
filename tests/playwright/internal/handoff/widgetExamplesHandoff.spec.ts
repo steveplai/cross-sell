@@ -98,6 +98,36 @@ const webComponentExamples: WebComponentExample[] = [
     ],
   },
   {
+    name: 'cross sell widget web component basic',
+    path: '/examples/cross-sell-widget/wc/basic.html',
+    widgets: [
+      {
+        selector: 'cross-sell-widget',
+        text: '探索地區飯店',
+      },
+    ],
+  },
+  {
+    name: 'cross sell widget web component full',
+    path: '/examples/cross-sell-widget/wc/full.html',
+    widgets: [
+      {
+        selector: 'cross-sell-widget',
+        text: '探索上海飯店',
+      },
+    ],
+  },
+  {
+    name: 'cross sell widget web component property',
+    path: '/examples/cross-sell-widget/wc/property.html',
+    widgets: [
+      {
+        selector: 'cross-sell-widget',
+        text: '探索上海飯店',
+      },
+    ],
+  },
+  {
     name: 'flight order cross sell web component full',
     path: '/examples/flight-order-cross-sell/wc/full.html',
     widgets: [
@@ -143,6 +173,36 @@ const webComponentExamples: WebComponentExample[] = [
     widgets: [
       {
         selector: 'flight-order-cross-sell-connected',
+        text: '探索上海飯店',
+      },
+    ],
+  },
+  {
+    name: 'cross sell widget connected web component basic',
+    path: '/examples/cross-sell-widget-connected/wc/basic.html',
+    widgets: [
+      {
+        selector: 'cross-sell-widget-connected',
+        text: '探索地區飯店',
+      },
+    ],
+  },
+  {
+    name: 'cross sell widget connected web component full',
+    path: '/examples/cross-sell-widget-connected/wc/full.html',
+    widgets: [
+      {
+        selector: 'cross-sell-widget-connected',
+        text: '探索上海飯店',
+      },
+    ],
+  },
+  {
+    name: 'cross sell widget connected web component property',
+    path: '/examples/cross-sell-widget-connected/wc/property.html',
+    widgets: [
+      {
+        selector: 'cross-sell-widget-connected',
         text: '探索上海飯店',
       },
     ],
@@ -193,6 +253,18 @@ const mountApiExamples: MountApiExample[] = [
     text: '探索上海飯店',
   },
   {
+    name: 'cross sell widget mount API basic',
+    path: '/examples/cross-sell-widget/mount/basic.html',
+    rootSelector: '#cross-sell-widget-root',
+    text: '探索地區飯店',
+  },
+  {
+    name: 'cross sell widget mount API full',
+    path: '/examples/cross-sell-widget/mount/full.html',
+    rootSelector: '#cross-sell-widget-root',
+    text: '探索上海飯店',
+  },
+  {
     name: 'flight order cross sell connected mount API basic',
     path: '/examples/flight-order-cross-sell-connected/mount/basic.html',
     rootSelector: '#flight-order-cross-sell-connected-root',
@@ -202,6 +274,18 @@ const mountApiExamples: MountApiExample[] = [
     name: 'flight order cross sell connected mount API full',
     path: '/examples/flight-order-cross-sell-connected/mount/full.html',
     rootSelector: '#flight-order-cross-sell-connected-root',
+    text: '探索上海飯店',
+  },
+  {
+    name: 'cross sell widget connected mount API basic',
+    path: '/examples/cross-sell-widget-connected/mount/basic.html',
+    rootSelector: '#cross-sell-widget-connected-root',
+    text: '探索地區飯店',
+  },
+  {
+    name: 'cross sell widget connected mount API full',
+    path: '/examples/cross-sell-widget-connected/mount/full.html',
+    rootSelector: '#cross-sell-widget-connected-root',
     text: '探索上海飯店',
   },
 ] as const
@@ -283,7 +367,10 @@ function normalizeTokenState(
 }
 
 async function gotoHandoffExample(page: Page, path: string) {
-  if (path.includes('flight-order-cross-sell-connected')) {
+  if (
+    path.includes('flight-order-cross-sell-connected') ||
+    path.includes('cross-sell-widget-connected')
+  ) {
     await mockFlightOrderConnectedApi(page)
   }
 
@@ -365,8 +452,8 @@ async function getWebComponentWidgetTokenState(page: Page, selector: string) {
   return normalizeTokenState(state)
 }
 
-async function getFlightOrderWebComponentHsrLinkState(page: Page) {
-  return page.locator('flight-order-cross-sell').evaluate((element) => {
+async function getWebComponentHsrLinkState(page: Page, selector: string) {
+  return page.locator(selector).evaluate((element) => {
     const anchors = element.shadowRoot?.querySelectorAll('a') ?? []
     const link = Array.from(anchors).find(
       (candidate) => candidate.textContent?.trim() === '前往加購',
@@ -489,7 +576,7 @@ test('flight order web component handoff exposes HSR addon link and event', asyn
   )
 
   await expect
-    .poll(() => getFlightOrderWebComponentHsrLinkState(page))
+    .poll(() => getWebComponentHsrLinkState(page, 'flight-order-cross-sell'))
     .toEqual({
       href: flightOrderHsrAddonUrl,
       rel: 'noopener noreferrer',
@@ -510,6 +597,36 @@ test('flight order web component handoff exposes HSR addon link and event', asyn
 
   await expect(page.getByTestId('flight-cross-sell-event-log')).toContainText(
     'flight-order-cross-sell:addon-select: hsr',
+  )
+})
+
+test('cross sell widget web component handoff exposes HSR addon link and event', async ({
+  page,
+}) => {
+  await gotoHandoffExample(page, '/examples/cross-sell-widget/wc/full.html')
+
+  await expect
+    .poll(() => getWebComponentHsrLinkState(page, 'cross-sell-widget'))
+    .toEqual({
+      href: flightOrderHsrAddonUrl,
+      rel: 'noopener noreferrer',
+      target: '_blank',
+    })
+
+  await page.locator('cross-sell-widget').evaluate((element) => {
+    const anchors = element.shadowRoot?.querySelectorAll('a') ?? []
+    const link = Array.from(anchors).find(
+      (candidate) => candidate.textContent?.trim() === '前往加購',
+    )
+
+    if (link instanceof HTMLAnchorElement) {
+      link.addEventListener('click', (event) => event.preventDefault())
+      link.click()
+    }
+  })
+
+  await expect(page.getByTestId('cross-sell-widget-event-log')).toContainText(
+    'cross-sell-widget:addon-select: hsr',
   )
 })
 
@@ -542,6 +659,31 @@ test('flight order connected web component handoff emits item event', async ({
   ).toContainText('flight-order-cross-sell:item-select')
 })
 
+test('cross sell widget connected web component handoff emits item event', async ({
+  page,
+}) => {
+  await gotoHandoffExample(
+    page,
+    '/examples/cross-sell-widget-connected/wc/basic.html',
+  )
+
+  await expect
+    .poll(() => getWebComponentWidgetText(page, 'cross-sell-widget-connected'))
+    .toContain('探索地區飯店')
+
+  await page.locator('cross-sell-widget-connected').evaluate((element) => {
+    const buttons = element.shadowRoot?.querySelectorAll('button') ?? []
+    const button = Array.from(buttons).find((candidate) =>
+      candidate.textContent?.includes('東京灣精選飯店'),
+    )
+    ;(button as HTMLButtonElement | null)?.click()
+  })
+
+  await expect(
+    page.getByTestId('cross-sell-widget-connected-event-log'),
+  ).toContainText('cross-sell-widget:item-select')
+})
+
 test('flight order connected web component applies config attribute overrides', async ({
   page,
 }) => {
@@ -569,6 +711,28 @@ test('flight order connected web component applies config attribute overrides', 
     .poll(() =>
       getWebComponentWidgetText(page, 'flight-order-cross-sell-connected'),
     )
+    .toContain('探索上海飯店')
+})
+
+test('cross sell widget connected web component applies config attribute overrides', async ({
+  page,
+}) => {
+  await gotoHandoffExample(
+    page,
+    '/examples/cross-sell-widget-connected/wc/full.html',
+  )
+
+  await expect
+    .poll(() => getWebComponentWidgetText(page, 'cross-sell-widget-connected'))
+    .toContain('Connected WC 限時優惠')
+  await expect
+    .poll(() => getWebComponentWidgetText(page, 'cross-sell-widget-connected'))
+    .toContain('立即加購')
+  await expect
+    .poll(() => getWebComponentWidgetText(page, 'cross-sell-widget-connected'))
+    .toContain('提供旅行保障')
+  await expect
+    .poll(() => getWebComponentWidgetText(page, 'cross-sell-widget-connected'))
     .toContain('探索上海飯店')
 })
 
@@ -604,6 +768,31 @@ test('flight order connected web component applies config property and attribute
     .poll(() =>
       getWebComponentWidgetText(page, 'flight-order-cross-sell-connected'),
     )
+    .not.toContain('US$6,200')
+})
+
+test('cross sell widget connected web component applies config property and attribute priority', async ({
+  page,
+}) => {
+  await gotoHandoffExample(
+    page,
+    '/examples/cross-sell-widget-connected/wc/property.html',
+  )
+
+  await expect
+    .poll(() => getWebComponentWidgetText(page, 'cross-sell-widget-connected'))
+    .toContain('Connected property 限時優惠')
+  await expect
+    .poll(() => getWebComponentWidgetText(page, 'cross-sell-widget-connected'))
+    .toContain('提供旅行保障')
+  await expect
+    .poll(() => getWebComponentWidgetText(page, 'cross-sell-widget-connected'))
+    .toContain('探索上海飯店')
+  await expect
+    .poll(() => getWebComponentWidgetText(page, 'cross-sell-widget-connected'))
+    .toContain('$6,200')
+  await expect
+    .poll(() => getWebComponentWidgetText(page, 'cross-sell-widget-connected'))
     .not.toContain('US$6,200')
 })
 
