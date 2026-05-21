@@ -112,16 +112,16 @@ describe('FlightOrderCrossSell', () => {
     expect(screen.getAllByText('江東區').length).toBeGreaterThan(0)
 
     expect(screen.getAllByRole('link', { name: /探索更多/ }).length).toBe(3)
-    const categoryLink = screen.getAllByRole('link', {
+    const popularSearchLink = screen.getAllByRole('link', {
       name: '東京迪士尼',
     })[0]
 
-    expect(categoryLink).toHaveAttribute(
+    expect(popularSearchLink).toHaveAttribute(
       'href',
       'https://www.liontravel.com/search?keyword=%E6%9D%B1%E4%BA%AC%E8%BF%AA%E5%A3%AB%E5%B0%BC',
     )
-    expect(categoryLink).toHaveAttribute('target', '_blank')
-    expect(categoryLink).toHaveAttribute('rel', 'noopener noreferrer')
+    expect(popularSearchLink).toHaveAttribute('target', '_blank')
+    expect(popularSearchLink).toHaveAttribute('rel', 'noopener noreferrer')
 
     expect(screen.getByRole('link', { name: '前往加購' })).toBeInTheDocument()
     const passportLink = screen.getByRole('link', { name: /簽證護照/ })
@@ -168,37 +168,41 @@ describe('FlightOrderCrossSell', () => {
     ).not.toBeInTheDocument()
   })
 
-  it('keeps category overflow hints hidden when categories fit', () => {
+  it('keeps popular search overflow hints hidden when popular searches fit', () => {
     render(<FlightOrderCrossSell {...cloneSampleData()} />)
 
-    const categoryScroller = screen.getByTestId(
-      'section-tokyo-attractions-categories',
+    const popularSearchScroller = screen.getByTestId(
+      'section-tokyo-attractions-popular-searches',
     )
 
-    Object.defineProperties(categoryScroller, {
+    Object.defineProperties(popularSearchScroller, {
       clientWidth: { configurable: true, value: 320 },
       scrollWidth: { configurable: true, value: 320 },
     })
 
-    fireEvent.scroll(categoryScroller)
+    fireEvent.scroll(popularSearchScroller)
 
     expect(
-      screen.getByTestId('section-tokyo-attractions-categories-overflow-start'),
+      screen.getByTestId(
+        'section-tokyo-attractions-popular-searches-overflow-start',
+      ),
     ).toHaveClass('opacity-0')
     expect(
-      screen.getByTestId('section-tokyo-attractions-categories-overflow-end'),
+      screen.getByTestId(
+        'section-tokyo-attractions-popular-searches-overflow-end',
+      ),
     ).toHaveClass('opacity-0')
   })
 
-  it('updates category overflow hints while dragging horizontally', () => {
+  it('updates popular search overflow hints while dragging horizontally', () => {
     render(<FlightOrderCrossSell {...cloneSampleData()} />)
 
-    const categoryScroller = screen.getByTestId(
-      'section-tokyo-attractions-categories',
+    const popularSearchScroller = screen.getByTestId(
+      'section-tokyo-attractions-popular-searches',
     )
     let scrollLeft = 0
 
-    Object.defineProperties(categoryScroller, {
+    Object.defineProperties(popularSearchScroller, {
       clientWidth: { configurable: true, value: 100 },
       scrollLeft: {
         configurable: true,
@@ -210,35 +214,35 @@ describe('FlightOrderCrossSell', () => {
       scrollWidth: { configurable: true, value: 320 },
     })
 
-    fireEvent.scroll(categoryScroller)
+    fireEvent.scroll(popularSearchScroller)
 
     const startOverflow = screen.getByTestId(
-      'section-tokyo-attractions-categories-overflow-start',
+      'section-tokyo-attractions-popular-searches-overflow-start',
     )
     const endOverflow = screen.getByTestId(
-      'section-tokyo-attractions-categories-overflow-end',
+      'section-tokyo-attractions-popular-searches-overflow-end',
     )
 
     expect(startOverflow).toHaveClass('opacity-0')
     expect(endOverflow).toHaveClass('opacity-100')
 
-    fireEvent.pointerDown(categoryScroller, {
+    fireEvent.pointerDown(popularSearchScroller, {
       button: 0,
       clientX: 120,
       pointerId: 1,
     })
-    fireEvent.pointerMove(categoryScroller, {
+    fireEvent.pointerMove(popularSearchScroller, {
       clientX: 60,
       pointerId: 1,
     })
-    fireEvent.pointerUp(categoryScroller, { pointerId: 1 })
+    fireEvent.pointerUp(popularSearchScroller, { pointerId: 1 })
 
     expect(scrollLeft).toBe(60)
     expect(startOverflow).toHaveClass('opacity-0')
     expect(endOverflow).toHaveClass('opacity-100')
 
     scrollLeft = 220
-    fireEvent.scroll(categoryScroller)
+    fireEvent.scroll(popularSearchScroller)
 
     expect(startOverflow).toHaveClass('opacity-100')
     expect(endOverflow).toHaveClass('opacity-0')

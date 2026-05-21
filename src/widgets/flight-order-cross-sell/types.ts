@@ -44,7 +44,7 @@ export type FlightOrderCrossSellSectionKind =
   | 'transport'
   | 'flight'
 
-export interface FlightOrderCrossSellCategory {
+export interface FlightOrderCrossSellPopularSearch {
   id?: string
   label: string
   href: string
@@ -58,7 +58,7 @@ export interface FlightOrderCrossSellSection {
   viewMoreLabel?: string
   viewMoreHref?: string
   viewMorePlaceholderLabel?: string
-  categories?: FlightOrderCrossSellCategory[]
+  popularSearches?: FlightOrderCrossSellPopularSearch[]
   items: FlightOrderCrossSellItem[]
 }
 

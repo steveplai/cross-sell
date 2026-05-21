@@ -3,8 +3,8 @@ import {
   type LiontravelDomainMode,
 } from '@/shared/utils/liontravelUrl'
 import type {
-  CrossSellWidgetCategory,
   CrossSellWidgetItem,
+  CrossSellWidgetPopularSearch,
   CrossSellWidgetSection,
   CrossSellWidgetSectionKind,
 } from '@/widgets/cross-sell-widget'
@@ -15,7 +15,7 @@ import type {
   Ap56ProductInfo,
 } from './ap56CrossSellTypes'
 
-const categorySearchProductionHostname = 'activity.liontravel.com'
+const popularSearchProductionHostname = 'activity.liontravel.com'
 
 interface MapAp56CrossSellResponseOptions {
   domainMode?: LiontravelDomainMode
@@ -66,10 +66,13 @@ export function mapAp56CrossSellResponseToSections(
     // AP-56 uses pList both for product cards and for "view more" URL rows.
     if (isSearchViewMoreType(type)) {
       section.viewMoreHref = getFirstUrl(pList) ?? section.viewMoreHref
-      const categories = createCategories(rawSection.CombineTagList, domainMode)
+      const popularSearches = createPopularSearches(
+        rawSection.CombineTagList,
+        domainMode,
+      )
 
-      if (categories.length > 0) {
-        section.categories = categories
+      if (popularSearches.length > 0) {
+        section.popularSearches = popularSearches
       }
 
       return
@@ -85,10 +88,13 @@ export function mapAp56CrossSellResponseToSections(
       section.viewMoreHref = section.viewMoreHref ?? getFirstUrl(pList)
     }
 
-    const categories = createCategories(rawSection.CombineTagList, domainMode)
+    const popularSearches = createPopularSearches(
+      rawSection.CombineTagList,
+      domainMode,
+    )
 
-    if (categories.length > 0) {
-      section.categories = categories
+    if (popularSearches.length > 0) {
+      section.popularSearches = popularSearches
     }
   })
 
@@ -221,10 +227,10 @@ function getFirstUrl(products: Ap56ProductInfo[]) {
   return undefined
 }
 
-function createCategories(
+function createPopularSearches(
   value: unknown,
   domainMode: LiontravelDomainMode,
-): CrossSellWidgetCategory[] {
+): CrossSellWidgetPopularSearch[] {
   if (!Array.isArray(value)) {
     return []
   }
@@ -235,18 +241,18 @@ function createCategories(
     .map((label) => ({
       id: label,
       label,
-      href: createCategorySearchHref(label, domainMode),
+      href: createPopularSearchHref(label, domainMode),
     }))
 }
 
-function createCategorySearchHref(
+function createPopularSearchHref(
   label: string,
   domainMode: LiontravelDomainMode,
 ) {
   return createLiontravelUrl({
     domainMode,
     pathname: '/search',
-    productionHostname: categorySearchProductionHostname,
+    productionHostname: popularSearchProductionHostname,
     query: {
       SearchKeyword: label,
     },

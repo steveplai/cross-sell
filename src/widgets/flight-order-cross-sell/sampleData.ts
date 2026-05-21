@@ -12,7 +12,7 @@ type FlightOrderCrossSellSampleData = Omit<
 const activeStartsAt = new Date(
   Date.now() - 15 * 24 * 60 * 60 * 1000,
 ).toISOString()
-const categorySearchBaseUrl = 'https://www.liontravel.com/search'
+const popularSearchBaseUrl = 'https://www.liontravel.com/search'
 const sampleImageUrls = {
   airportTransfer:
     'https://picsum.photos/seed/liontravel-airport-transfer/640/426',
@@ -29,10 +29,10 @@ const sampleImageUrls = {
   travelPass: 'https://picsum.photos/seed/liontravel-travel-pass/640/426',
 }
 
-function createCategorySearchUrl(keyword: string) {
+function createPopularSearchUrl(keyword: string) {
   const searchParams = new URLSearchParams({ keyword })
 
-  return `${categorySearchBaseUrl}?${searchParams.toString()}`
+  return `${popularSearchBaseUrl}?${searchParams.toString()}`
 }
 
 // Storybook and tests use this fixture to exercise the widget's default content resolver.
@@ -240,36 +240,36 @@ export const flightOrderCrossSellSampleData: FlightOrderCrossSellSampleData = {
       id: 'tokyo-attractions',
       kind: 'attraction',
       subtitle: '大家都在搜尋',
-      categories: [
+      popularSearches: [
         {
           id: 'tokyo-disney',
           label: '東京迪士尼',
-          href: createCategorySearchUrl('東京迪士尼'),
+          href: createPopularSearchUrl('東京迪士尼'),
         },
         {
           id: 'universal-studios-japan',
           label: '日本環球影城',
-          href: createCategorySearchUrl('日本環球影城'),
+          href: createPopularSearchUrl('日本環球影城'),
         },
         {
           id: 'travel-pass',
           label: '周遊券',
-          href: createCategorySearchUrl('周遊券'),
+          href: createPopularSearchUrl('周遊券'),
         },
         {
           id: 'japan-esim',
           label: '日本 eSim',
-          href: createCategorySearchUrl('日本 eSim'),
+          href: createPopularSearchUrl('日本 eSim'),
         },
         {
           id: 'tokyo-disney-ticket',
           label: '東京迪士尼',
-          href: createCategorySearchUrl('東京迪士尼門票'),
+          href: createPopularSearchUrl('東京迪士尼門票'),
         },
         {
           id: 'universal-studios-japan-ticket',
           label: '日本環球影城',
-          href: createCategorySearchUrl('日本環球影城門票'),
+          href: createPopularSearchUrl('日本環球影城門票'),
         },
       ],
       items: [

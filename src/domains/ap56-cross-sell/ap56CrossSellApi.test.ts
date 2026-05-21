@@ -191,7 +191,7 @@ describe('AP-56 cross-sell API', () => {
 
     expect(hotelSection).toMatchObject({
       kind: 'hotel',
-      categories: [
+      popularSearches: [
         {
           id: '東京 旅遊',
           label: '東京 旅遊',
@@ -228,7 +228,7 @@ describe('AP-56 cross-sell API', () => {
     expect(hotelSection).not.toHaveProperty('title')
   })
 
-  it('maps AP-56 category search links with the configured domain mode', async () => {
+  it('maps AP-56 popular search links with the configured domain mode', async () => {
     const get = vi
       .fn<MockRequestClientRequest>()
       .mockResolvedValue(ap56Response)
@@ -241,7 +241,7 @@ describe('AP-56 cross-sell API', () => {
     const sections = await api.getByOrderNumber('2026-123456')
     const hotelSection = sections.find((section) => section.kind === 'hotel')
 
-    expect(hotelSection?.categories?.[0]).toMatchObject({
+    expect(hotelSection?.popularSearches?.[0]).toMatchObject({
       id: '東京 旅遊',
       label: '東京 旅遊',
       href: 'https://uactivity.liontravel.com/search?SearchKeyword=%E6%9D%B1%E4%BA%AC+%E6%97%85%E9%81%8A',

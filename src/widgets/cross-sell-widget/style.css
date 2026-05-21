@@ -40,8 +40,8 @@
   --lion-orange-600: #ff8400;
   --lion-blue-600: var(--info);
   --lion-panel-radius: 10px;
-  --lion-category-overflow-shadow-start: 8px 0 10px -12px rgb(0 0 0 / 0.1);
-  --lion-category-overflow-shadow-end: -8px 0 10px -12px rgb(0 0 0 / 0.1);
+  --lion-popular-search-overflow-shadow-start: 8px 0 10px -12px rgb(0 0 0 / 0.1);
+  --lion-popular-search-overflow-shadow-end: -8px 0 10px -12px rgb(0 0 0 / 0.1);
   --lion-carousel-control-shadow: 0 0 4px rgb(0 0 0 / 0.25);
   --lion-product-card-price-foreground: #383838;
   --lion-product-card-shadow:

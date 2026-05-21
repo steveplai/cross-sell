@@ -44,7 +44,7 @@ export type CrossSellWidgetSectionKind =
   | 'transport'
   | 'flight'
 
-export interface CrossSellWidgetCategory {
+export interface CrossSellWidgetPopularSearch {
   id?: string
   label: string
   href: string
@@ -58,7 +58,7 @@ export interface CrossSellWidgetSection {
   viewMoreLabel?: string
   viewMoreHref?: string
   viewMorePlaceholderLabel?: string
-  categories?: CrossSellWidgetCategory[]
+  popularSearches?: CrossSellWidgetPopularSearch[]
   items: CrossSellWidgetItem[]
 }
 

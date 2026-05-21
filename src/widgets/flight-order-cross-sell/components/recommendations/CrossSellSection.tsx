@@ -36,10 +36,10 @@ const carouselItemClassName = cn(
   'min-[1190px]:basis-1/5',
 )
 const viewMoreDestinationUrl = 'https://www.liontravel.com/'
-const categoryDragThresholdPx = 5
-const categoryOverflowIndicatorClassName =
+const popularSearchDragThresholdPx = 5
+const popularSearchOverflowIndicatorClassName =
   'pointer-events-none absolute top-0 h-5.75 transition-opacity duration-200 ease-out'
-const emptyCategoryOverflow = {
+const emptyPopularSearchOverflow = {
   end: false,
   start: false,
 }
@@ -55,7 +55,7 @@ interface CrossSellSectionProps {
   onViewMore?: () => void
 }
 
-function useCategoryDragScroll(itemsCount: number) {
+function usePopularSearchDragScroll(itemsCount: number) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const dragStateRef = useRef({
     hasDragged: false,
@@ -65,7 +65,7 @@ function useCategoryDragScroll(itemsCount: number) {
     startX: 0,
   })
   const [isDragging, setIsDragging] = useState(false)
-  const [overflow, setOverflow] = useState(emptyCategoryOverflow)
+  const [overflow, setOverflow] = useState(emptyPopularSearchOverflow)
 
   const updateOverflowState = useCallback(() => {
     const scrollElement = scrollRef.current
@@ -167,7 +167,7 @@ function useCategoryDragScroll(itemsCount: number) {
 
       const deltaX = event.clientX - dragState.startX
 
-      if (Math.abs(deltaX) > categoryDragThresholdPx) {
+      if (Math.abs(deltaX) > popularSearchDragThresholdPx) {
         dragState.hasDragged = true
       }
 
@@ -247,10 +247,10 @@ export function CrossSellSection({
     handlePointerDown,
     handlePointerMove,
     isDragging,
-    overflow: categoryOverflow,
-    scrollRef: categoryScrollRef,
+    overflow: popularSearchOverflow,
+    scrollRef: popularSearchScrollRef,
     stopDragging,
-  } = useCategoryDragScroll(section.categories?.length ?? 0)
+  } = usePopularSearchDragScroll(section.popularSearches?.length ?? 0)
   const { placeholderBasis, placeholderSpan, setCarouselApi } =
     useCarouselPlaceholderLayout(section.items.length)
 
@@ -260,7 +260,8 @@ export function CrossSellSection({
 
   const viewMoreLabel = section.viewMoreLabel
   const placeholderLabel = section.viewMorePlaceholderLabel
-  const canDragCategories = categoryOverflow.start || categoryOverflow.end
+  const canDragPopularSearches =
+    popularSearchOverflow.start || popularSearchOverflow.end
   const viewMoreHref = section.viewMoreHref ?? viewMoreDestinationUrl
 
   return (
@@ -310,25 +311,25 @@ export function CrossSellSection({
         </Button>
       </header>
 
-      {section.categories && section.categories.length > 0 ? (
+      {section.popularSearches && section.popularSearches.length > 0 ? (
         <div className="relative mb-4">
           <div
             className={cn(
               'flex touch-pan-y gap-2 overflow-x-auto overscroll-x-contain pb-1 select-none',
               '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
-              canDragCategories &&
+              canDragPopularSearches &&
                 (isDragging ? 'cursor-grabbing' : 'cursor-grab'),
             )}
-            data-testid={`section-${section.id}-categories`}
+            data-testid={`section-${section.id}-popular-searches`}
             onClickCapture={handleClickCapture}
             onLostPointerCapture={stopDragging}
             onPointerCancel={stopDragging}
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={stopDragging}
-            ref={categoryScrollRef}
+            ref={popularSearchScrollRef}
           >
-            {section.categories.map((category, index) => (
+            {section.popularSearches.map((popularSearch, index) => (
               <Button
                 asChild
                 className={cn(
@@ -336,17 +337,17 @@ export function CrossSellSection({
                   'text-xs leading-4.75 font-normal text-(--lion-gray-800) shadow-none',
                   'hover:bg-(--lion-gray-100) hover:text-primary',
                 )}
-                key={category.id ?? `${category.label}-${index}`}
+                key={popularSearch.id ?? `${popularSearch.label}-${index}`}
                 size="xs"
                 variant="ghost"
               >
                 <a
                   draggable={false}
-                  href={category.href}
+                  href={popularSearch.href}
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  {category.label}
+                  {popularSearch.label}
                 </a>
               </Button>
             ))}
@@ -354,22 +355,22 @@ export function CrossSellSection({
           <div
             aria-hidden="true"
             className={cn(
-              categoryOverflowIndicatorClassName,
+              popularSearchOverflowIndicatorClassName,
               'left-0 w-18 bg-linear-to-r from-background/90 via-background/50 to-background/0',
-              'shadow-(--lion-category-overflow-shadow-start)',
-              categoryOverflow.start ? 'opacity-100' : 'opacity-0',
+              'shadow-(--lion-popular-search-overflow-shadow-start)',
+              popularSearchOverflow.start ? 'opacity-100' : 'opacity-0',
             )}
-            data-testid={`section-${section.id}-categories-overflow-start`}
+            data-testid={`section-${section.id}-popular-searches-overflow-start`}
           />
           <div
             aria-hidden="true"
             className={cn(
-              categoryOverflowIndicatorClassName,
+              popularSearchOverflowIndicatorClassName,
               'right-0 w-18 bg-linear-to-l from-background/90 via-background/50 to-background/0',
-              'shadow-(--lion-category-overflow-shadow-end)',
-              categoryOverflow.end ? 'opacity-100' : 'opacity-0',
+              'shadow-(--lion-popular-search-overflow-shadow-end)',
+              popularSearchOverflow.end ? 'opacity-100' : 'opacity-0',
             )}
-            data-testid={`section-${section.id}-categories-overflow-end`}
+            data-testid={`section-${section.id}-popular-searches-overflow-end`}
           />
         </div>
       ) : null}
