@@ -10,8 +10,8 @@ import { createWidgetRootProps } from '../../runtime/widgetRoot'
 import { HsrAddonBanner } from './components/addons/HsrAddonBanner'
 import { ReminderCards } from './components/addons/ReminderCards'
 import { PromoHeader } from './components/promo/PromoHeader'
-import { AttractionDecorBanner } from './components/recommendations/AttractionDecorBanner'
-import { CrossSellSection } from './components/recommendations/CrossSellSection'
+import { AttractionRecommendationsPanel } from './components/recommendations/AttractionRecommendationsPanel'
+import { CrossSellSectionList } from './components/recommendations/CrossSellSectionList'
 import {
   createCrossSellWidgetSectionContentDefaults,
   crossSellWidgetDefaultData,
@@ -97,32 +97,6 @@ function CrossSellWidgetContent({
   const renderableAttractionSections = getRenderableSections(
     sectionGroups.attraction,
   )
-  const attractionBannerTitle = renderableAttractionSections[0]?.title ?? ''
-
-  function renderCrossSellSections(
-    sections: CrossSellWidgetResolvedSection[],
-    options: { hideTitle?: boolean; sectionClassName?: string } = {},
-  ) {
-    return (
-      <div className="flex flex-col divide-y divide-(--lion-gray-50)">
-        {sections.map((section) => (
-          <CrossSellSection
-            className={options.sectionClassName}
-            currency={currency}
-            hideTitle={options.hideTitle}
-            isPromoActive={isPromoActive}
-            key={section.id}
-            locale={locale}
-            onSelectItem={(item) =>
-              onSelectItem?.({ item, sectionId: section.id })
-            }
-            onViewMore={() => onViewMore?.({ sectionId: section.id })}
-            section={section}
-          />
-        ))}
-      </div>
-    )
-  }
 
   function renderDefaultSectionPanel(
     sections: CrossSellWidgetResolvedSection[],
@@ -134,7 +108,16 @@ function CrossSellWidgetContent({
     }
 
     return (
-      <ContentPanel>{renderCrossSellSections(renderableSections)}</ContentPanel>
+      <ContentPanel>
+        <CrossSellSectionList
+          currency={currency}
+          isPromoActive={isPromoActive}
+          locale={locale}
+          onSelectItem={onSelectItem}
+          onViewMore={onViewMore}
+          sections={renderableSections}
+        />
+      </ContentPanel>
     )
   }
 
@@ -148,9 +131,16 @@ function CrossSellWidgetContent({
           promo={data.promo}
           remainingSeconds={remainingSeconds}
         />
-        {renderableHotelSections.length > 0
-          ? renderCrossSellSections(renderableHotelSections)
-          : null}
+        {renderableHotelSections.length > 0 ? (
+          <CrossSellSectionList
+            currency={currency}
+            isPromoActive={isPromoActive}
+            locale={locale}
+            onSelectItem={onSelectItem}
+            onViewMore={onViewMore}
+            sections={renderableHotelSections}
+          />
+        ) : null}
       </ContentPanel>
     )
   }
@@ -179,15 +169,14 @@ function CrossSellWidgetContent({
 
         {renderableAttractionSections.length > 0 ? (
           <ContentPanel>
-            <div className="overflow-hidden bg-background">
-              <AttractionDecorBanner title={attractionBannerTitle} />
-              <div className="relative z-10 -mt-5 overflow-hidden rounded-t-[20px] bg-background lion-desktop:rounded-t-[24px]">
-                {renderCrossSellSections(renderableAttractionSections, {
-                  hideTitle: true,
-                  sectionClassName: cn('pt-3 lion-desktop:pt-3.75'),
-                })}
-              </div>
-            </div>
+            <AttractionRecommendationsPanel
+              currency={currency}
+              isPromoActive={isPromoActive}
+              locale={locale}
+              onSelectItem={onSelectItem}
+              onViewMore={onViewMore}
+              sections={renderableAttractionSections}
+            />
           </ContentPanel>
         ) : null}
 
