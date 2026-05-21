@@ -91,6 +91,7 @@ export function createCrossSellWidgetSectionContentDefaults(
     attraction: {
       ...defaultContent,
       title: `探索${destination} 景點不錯過`,
+      subtitle: '大家都在搜尋',
       viewMorePlaceholderLabel: '更多精選景點',
     },
     transport: {
