@@ -46,7 +46,7 @@ export function createAp56CrossSellApi({
         Ap56CrossSellResponseEnvelope | Ap56CrossSellResponseSection[]
       >(createAp56CrossSellPath(orderNumber, recommendProductTypes), init)
 
-      return mapAp56CrossSellResponseToSections(response)
+      return mapAp56CrossSellResponseToSections(response, { domainMode })
     },
   }
 }

@@ -1,3 +1,7 @@
+import {
+  createLiontravelUrl,
+  type LiontravelDomainMode,
+} from '@/shared/utils/liontravelUrl'
 import type {
   CrossSellWidgetCategory,
   CrossSellWidgetItem,
@@ -11,7 +15,11 @@ import type {
   Ap56ProductInfo,
 } from './ap56CrossSellTypes'
 
-const defaultCategoryHref = 'https://www.liontravel.com/'
+const categorySearchProductionHostname = 'activity.liontravel.com'
+
+interface MapAp56CrossSellResponseOptions {
+  domainMode?: LiontravelDomainMode
+}
 
 // Convert AP-56 sections into the widget section model consumed by the
 // connected widget. Non-carousel static content is supplied by the base widget.
@@ -20,6 +28,7 @@ export function mapAp56CrossSellResponseToSections(
     | Ap56CrossSellResponseEnvelope
     | Ap56CrossSellResponseSection[]
     | unknown,
+  { domainMode = 'production' }: MapAp56CrossSellResponseOptions = {},
 ): CrossSellWidgetSection[] {
   const sections = getResponseSections(response)
 
@@ -57,10 +66,7 @@ export function mapAp56CrossSellResponseToSections(
     // AP-56 uses pList both for product cards and for "view more" URL rows.
     if (isSearchViewMoreType(type)) {
       section.viewMoreHref = getFirstUrl(pList) ?? section.viewMoreHref
-      const categories = createCategories(
-        rawSection.CombineTagList,
-        section.viewMoreHref,
-      )
+      const categories = createCategories(rawSection.CombineTagList, domainMode)
 
       if (categories.length > 0) {
         section.categories = categories
@@ -79,26 +85,14 @@ export function mapAp56CrossSellResponseToSections(
       section.viewMoreHref = section.viewMoreHref ?? getFirstUrl(pList)
     }
 
-    const categories = createCategories(
-      rawSection.CombineTagList,
-      section.viewMoreHref,
-    )
+    const categories = createCategories(rawSection.CombineTagList, domainMode)
 
     if (categories.length > 0) {
       section.categories = categories
     }
   })
 
-  return Array.from(sectionOverrides.values()).map((section) => ({
-    ...section,
-    // Category chips should navigate to the same destination as the section's
-    // API-provided search page when that URL exists.
-    categories:
-      section.categories?.map((category) => ({
-        ...category,
-        href: section.viewMoreHref ?? category.href,
-      })) ?? undefined,
-  }))
+  return Array.from(sectionOverrides.values())
 }
 
 // #region - Functions
@@ -229,7 +223,7 @@ function getFirstUrl(products: Ap56ProductInfo[]) {
 
 function createCategories(
   value: unknown,
-  href = defaultCategoryHref,
+  domainMode: LiontravelDomainMode,
 ): CrossSellWidgetCategory[] {
   if (!Array.isArray(value)) {
     return []
@@ -241,8 +235,22 @@ function createCategories(
     .map((label) => ({
       id: label,
       label,
-      href,
+      href: createCategorySearchHref(label, domainMode),
     }))
+}
+
+function createCategorySearchHref(
+  label: string,
+  domainMode: LiontravelDomainMode,
+) {
+  return createLiontravelUrl({
+    domainMode,
+    pathname: '/search',
+    productionHostname: categorySearchProductionHostname,
+    query: {
+      SearchKeyword: label,
+    },
+  })
 }
 
 function formatLocation(value: unknown) {
