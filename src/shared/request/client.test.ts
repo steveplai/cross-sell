@@ -22,7 +22,7 @@ describe('createRequestClient', () => {
       baseUrl: 'https://www.liontravel.com',
       fetchImpl: fetchMock as unknown as typeof fetch,
       headers: {
-        'x-widget-name': 'flight-order-cross-sell',
+        'x-widget-name': 'cross-sell-widget',
       },
     })
 
@@ -45,7 +45,7 @@ describe('createRequestClient', () => {
     const headers = new Headers(init?.headers)
 
     expect(headers.get('accept')).toBe('application/json')
-    expect(headers.get('x-widget-name')).toBe('flight-order-cross-sell')
+    expect(headers.get('x-widget-name')).toBe('cross-sell-widget')
     expect(headers.get('x-request-id')).toBe('request-1')
   })
 

@@ -49,32 +49,6 @@ const entries = [
     fileName: 'cross-sell-widget-connected/mount.js',
     name: 'CrossSellWidgetConnected',
   },
-  {
-    entry: resolve(root, 'src/entries/flight-order-cross-sell/wc.tsx'),
-    fileName: 'flight-order-cross-sell/wc.js',
-    name: 'FlightOrderCrossSellWebComponent',
-  },
-  {
-    entry: resolve(root, 'src/entries/flight-order-cross-sell/mount.ts'),
-    fileName: 'flight-order-cross-sell/mount.js',
-    name: 'FlightOrderCrossSell',
-  },
-  {
-    entry: resolve(
-      root,
-      'src/entries/flight-order-cross-sell/connected.wc.tsx',
-    ),
-    fileName: 'flight-order-cross-sell-connected/wc.js',
-    name: 'FlightOrderCrossSellConnectedWebComponent',
-  },
-  {
-    entry: resolve(
-      root,
-      'src/entries/flight-order-cross-sell/connected.mount.ts',
-    ),
-    fileName: 'flight-order-cross-sell-connected/mount.js',
-    name: 'FlightOrderCrossSellConnected',
-  },
 ]
 
 await rm(resolve(root, 'dist/widgets'), { force: true, recursive: true })
