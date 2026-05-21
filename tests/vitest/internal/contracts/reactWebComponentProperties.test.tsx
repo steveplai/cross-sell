@@ -1,4 +1,4 @@
-import { waitFor } from '@testing-library/react'
+import { act, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
 
 import { createReactWebComponent } from '../../../../src/runtime/createReactWebComponent'
@@ -18,8 +18,10 @@ function getShadowText(element: HTMLElement) {
 }
 
 describe('createReactWebComponent observed properties', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
+  afterEach(async () => {
+    await act(async () => {
+      document.body.innerHTML = ''
+    })
   })
 
   it('re-renders when an observed property is set', async () => {
@@ -35,14 +37,18 @@ describe('createReactWebComponent observed properties', () => {
     })
 
     const element = document.createElement('csc-property-rerender-test')
-    document.body.appendChild(element)
+    await act(async () => {
+      document.body.appendChild(element)
+    })
 
     await waitFor(() => {
       expect(getShadowText(element)).toContain('fallback title')
     })
-    ;(element as HTMLElement & ConfigurableTestWidgetProps).config = {
-      title: 'property title',
-    }
+    await act(async () => {
+      ;(element as HTMLElement & ConfigurableTestWidgetProps).config = {
+        title: 'property title',
+      }
+    })
 
     await waitFor(() => {
       expect(getShadowText(element)).toContain('property title')
@@ -56,17 +62,21 @@ describe('createReactWebComponent observed properties', () => {
       title: 'pre-upgrade title',
     }
 
-    document.body.appendChild(element)
+    await act(async () => {
+      document.body.appendChild(element)
+    })
 
-    createReactWebComponent<ConfigurableTestWidgetProps>({
-      tagName: 'csc-property-upgrade-test',
-      Component: ConfigurableTestWidget,
-      observedAttributes: [],
-      observedProperties: ['config'],
-      styles: '',
-      mapElementToProps: (candidate) => ({
-        config: (candidate as HTMLElement & ConfigurableTestWidgetProps).config,
-      }),
+    await act(async () => {
+      createReactWebComponent<ConfigurableTestWidgetProps>({
+        tagName: 'csc-property-upgrade-test',
+        Component: ConfigurableTestWidget,
+        observedAttributes: [],
+        observedProperties: ['config'],
+        styles: '',
+        mapElementToProps: (candidate) => ({
+          config: (candidate as HTMLElement & ConfigurableTestWidgetProps).config,
+        }),
+      })
     })
 
     await waitFor(() => {
