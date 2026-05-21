@@ -12,6 +12,10 @@ interface HsrAddonBannerProps {
   onSelectAddon?: () => void
 }
 
+const discountHighlightPattern = /(\d+\s*折)/u
+
+//#region - Styles
+
 // Container queries measure the section content box. This maps the intended
 // 630px section width to 590px after the mobile 20px side padding is removed.
 const hsrInlineLayoutClassName =
@@ -57,6 +61,8 @@ const ctaClassName = cn(
   'lion-desktop:w-auto',
 )
 
+//#endregion - Styles
+
 export function HsrAddonBanner({
   addon,
   href,
@@ -74,7 +80,7 @@ export function HsrAddonBanner({
               aria-hidden="true"
               className="size-4 text-(--lion-orange-600)"
             />
-            <p>{addon.description}</p>
+            <p>{renderHighlightedDescription(addon.description)}</p>
           </div>
         </div>
         {href ? (
@@ -100,5 +106,17 @@ export function HsrAddonBanner({
         )}
       </div>
     </section>
+  )
+}
+
+function renderHighlightedDescription(description: string) {
+  return description.split(discountHighlightPattern).map((part, index) =>
+    discountHighlightPattern.test(part) ? (
+      <span className="font-medium text-primary" key={`discount-${index}`}>
+        {part}
+      </span>
+    ) : (
+      part
+    ),
   )
 }

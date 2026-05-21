@@ -411,8 +411,14 @@ describe('CrossSellWidget', () => {
       screen.getByRole('heading', { name: '加購高鐵 行程更順暢' }),
     ).toBeInTheDocument()
     expect(
-      screen.getByText('購買國內外行程，最高享 8 折優惠'),
+      screen.getByText((_content, element) => {
+        return (
+          element?.tagName.toLowerCase() === 'p' &&
+          element.textContent === '購買國內外行程，最高享 8 折 優惠'
+        )
+      }),
     ).toBeInTheDocument()
+    expect(screen.getByText('8 折')).toHaveClass('text-primary')
     expect(screen.getByRole('link', { name: '前往加購' })).toBeInTheDocument()
 
     await user.click(screen.getByRole('link', { name: '前往加購' }))

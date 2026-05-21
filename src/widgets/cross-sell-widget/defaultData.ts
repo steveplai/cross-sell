@@ -37,7 +37,7 @@ export const crossSellWidgetDefaultData: CrossSellWidgetDefaultData = {
   hsrAddon: {
     id: 'hsr',
     title: '加購高鐵 行程更順暢',
-    description: '購買國內外行程，最高享 8 折優惠',
+    description: '購買國內外行程，最高享 8 折 優惠',
     ctaLabel: '前往加購',
   },
   reminders: {
