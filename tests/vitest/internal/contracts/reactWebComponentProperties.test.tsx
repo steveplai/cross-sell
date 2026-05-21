@@ -74,7 +74,8 @@ describe('createReactWebComponent observed properties', () => {
         observedProperties: ['config'],
         styles: '',
         mapElementToProps: (candidate) => ({
-          config: (candidate as HTMLElement & ConfigurableTestWidgetProps).config,
+          config: (candidate as HTMLElement & ConfigurableTestWidgetProps)
+            .config,
         }),
       })
     })
