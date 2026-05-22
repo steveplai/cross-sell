@@ -98,7 +98,10 @@ export function mapAp56CrossSellResponseToSections(
     }
   })
 
-  return Array.from(sectionOverrides.values())
+  return Array.from(sectionOverrides.values()).map((section) => ({
+    ...section,
+    items: assignRecommendationBadges(section.items),
+  }))
 }
 
 // #region - Functions
@@ -161,7 +164,6 @@ function mapProductInfoToItem(
     asString(product.ID) ?? asString(product.ProductUrl) ?? `${title}-${index}`
   const salePrice = asNumber(product.SalePrice)
   const discount = asNumber(product.Discount)
-  const likeability = asNumber(product.Likeability)
   const rating = asNumber(product.Rating)
   const shouldShowRating = isVisibleRating(rating)
 
@@ -174,10 +176,6 @@ function mapProductInfoToItem(
     imageUrl: asString(product.ImgUrl),
     location: formatLocation(product.Location),
     detailLocation: firstString(product.CityName),
-    promoBadge:
-      typeof likeability === 'number'
-        ? `${Math.round(likeability)}%旅客喜愛`
-        : undefined,
     starRating: asNumber(product.Level),
     rating: shouldShowRating ? formatRating(rating) : undefined,
     ratingLabel: shouldShowRating ? formatRatingLabel(rating) : undefined,
@@ -193,6 +191,32 @@ function mapProductInfoToItem(
     pricePrefix: asString(product.SaleCurr),
     priceSuffix: '起',
   }
+}
+
+function assignRecommendationBadges(items: CrossSellWidgetItem[]) {
+  const badgeByIndex = createRecommendationBadgeByIndex(items.length)
+
+  if (badgeByIndex.length === 0) {
+    return items
+  }
+
+  return items.map((item, index) => {
+    const promoBadge = badgeByIndex[index]
+
+    return promoBadge ? { ...item, promoBadge } : item
+  })
+}
+
+function createRecommendationBadgeByIndex(itemsCount: number) {
+  if (itemsCount >= 5) {
+    return ['熱銷 TOP1', '熱銷 TOP2', '熱銷 TOP3', '最多旅客喜愛']
+  }
+
+  if (itemsCount >= 2) {
+    return ['熱銷 TOP1']
+  }
+
+  return []
 }
 
 function getSectionKindFromApiType(

@@ -211,7 +211,6 @@ describe('AP-56 cross-sell API', () => {
           imageUrl: 'https://static.liontech.com.tw/hotel.jpg',
           location: '距離東京車站0.5公里',
           detailLocation: '東京',
-          promoBadge: '95%旅客喜愛',
           starRating: 5,
           rating: '4.5',
           ratingLabel: '太讚了',
@@ -225,7 +224,57 @@ describe('AP-56 cross-sell API', () => {
         }),
       ],
     })
+    expect(hotelSection?.items[0]).not.toHaveProperty('promoBadge')
     expect(hotelSection).not.toHaveProperty('title')
+  })
+
+  it('assigns recommendation badges from the AP-56 product order', () => {
+    const createProduct = (index: number) => ({
+      ID: `badge-${index}`,
+      Title: `推薦商品 ${index}`,
+      Price: 1000 + index,
+      Likeability: 90 - index,
+    })
+
+    const oneItemSection = mapAp56CrossSellResponseToSections([
+      {
+        Type: '訂房',
+        pList: [createProduct(1)],
+      },
+    ])[0]
+    const fourItemSection = mapAp56CrossSellResponseToSections([
+      {
+        Type: '訂房',
+        pList: [1, 2, 3, 4].map(createProduct),
+      },
+    ])[0]
+    const fiveItemSection = mapAp56CrossSellResponseToSections([
+      {
+        Type: '訂房',
+        pList: [1, 2].map(createProduct),
+      },
+      {
+        Type: '訂房',
+        pList: [3, 4, 5].map(createProduct),
+      },
+    ])[0]
+
+    expect(oneItemSection.items.map((item) => item.promoBadge)).toEqual([
+      undefined,
+    ])
+    expect(fourItemSection.items.map((item) => item.promoBadge)).toEqual([
+      '熱銷 TOP1',
+      undefined,
+      undefined,
+      undefined,
+    ])
+    expect(fiveItemSection.items.map((item) => item.promoBadge)).toEqual([
+      '熱銷 TOP1',
+      '熱銷 TOP2',
+      '熱銷 TOP3',
+      '最多旅客喜愛',
+      undefined,
+    ])
   })
 
   it('maps AP-56 rating labels by the spec thresholds', () => {
