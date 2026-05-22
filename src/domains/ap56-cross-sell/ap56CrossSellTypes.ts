@@ -26,6 +26,7 @@ export interface Ap56ProductInfo {
   Rating?: unknown
   RatingCount?: unknown
   Likeability?: unknown
+  ClickCount?: unknown
   CancelTag?: unknown
   url?: unknown
 }

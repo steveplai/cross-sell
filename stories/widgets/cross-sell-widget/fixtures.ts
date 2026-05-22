@@ -137,6 +137,7 @@ const ap56CrossSellStoryResponse = [
         Rating: 4.5,
         RatingCount: 168,
         Likeability: 91,
+        ClickCount: 999,
         CancelTag: '可免費取消',
       },
       {
@@ -154,6 +155,7 @@ const ap56CrossSellStoryResponse = [
         Rating: 4,
         RatingCount: 76,
         Likeability: 88,
+        ClickCount: 1200,
         CancelTag: '可免費取消',
       },
       {
@@ -171,6 +173,7 @@ const ap56CrossSellStoryResponse = [
         Rating: 3.5,
         RatingCount: 45,
         Likeability: 86,
+        ClickCount: 10000,
         CancelTag: '可免費取消',
       },
       {
@@ -188,6 +191,7 @@ const ap56CrossSellStoryResponse = [
         Rating: 3.4,
         RatingCount: 18,
         Likeability: 72,
+        ClickCount: 0,
         CancelTag: '可免費取消',
       },
     ],
@@ -218,6 +222,7 @@ const ap56CrossSellStoryResponse = [
         PriceDiff: 100,
         Rating: 4.5,
         RatingCount: 120,
+        ClickCount: 1000,
       },
       {
         ID: 'JP-TYO-TRAFFIC-002',
@@ -233,6 +238,7 @@ const ap56CrossSellStoryResponse = [
         PriceDiff: 0,
         Rating: 4,
         RatingCount: 62,
+        ClickCount: 9900,
       },
       {
         ID: 'JP-TYO-TRAFFIC-003',
@@ -248,6 +254,7 @@ const ap56CrossSellStoryResponse = [
         PriceDiff: null,
         Rating: 3.5,
         RatingCount: 41,
+        ClickCount: 1200000,
       },
       {
         ID: 'JP-TYO-TRAFFIC-004',
@@ -263,6 +270,7 @@ const ap56CrossSellStoryResponse = [
         PriceDiff: 60,
         Rating: 3.4,
         RatingCount: 34,
+        ClickCount: null,
       },
     ],
   },

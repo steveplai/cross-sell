@@ -373,6 +373,87 @@ describe('AP-56 cross-sell API', () => {
     })
   })
 
+  it('maps AP-56 ClickCount to attraction and transport interest labels', () => {
+    const sections = mapAp56CrossSellResponseToSections([
+      {
+        Type: '訂房',
+        pList: [
+          {
+            ID: 'hotel-click-count',
+            Title: '飯店不顯示興趣人數',
+            Price: 1000,
+            ClickCount: 1200,
+          },
+        ],
+      },
+      {
+        Type: '票券(玩樂)',
+        pList: [
+          {
+            ID: 'attraction-count-999',
+            Title: '玩樂 999',
+            Price: 1000,
+            ClickCount: 999,
+          },
+          {
+            ID: 'attraction-count-1000',
+            Title: '玩樂 1000',
+            Price: 1000,
+            ClickCount: 1000,
+          },
+          {
+            ID: 'attraction-count-1200',
+            Title: '玩樂 1200',
+            Price: 1000,
+            ClickCount: 1200,
+          },
+          {
+            ID: 'attraction-count-10000',
+            Title: '玩樂 10000',
+            Price: 1000,
+            ClickCount: 10000,
+          },
+          {
+            ID: 'attraction-count-empty',
+            Title: '玩樂不顯示',
+            Price: 1000,
+            ClickCount: 0,
+          },
+        ],
+      },
+      {
+        Type: '票券(交通)',
+        pList: [
+          {
+            ID: 'transport-count-1200000',
+            Title: '交通 1200000',
+            Price: 1000,
+            ClickCount: 1200000,
+          },
+        ],
+      },
+    ])
+    const hotelItem = sections.find((section) => section.kind === 'hotel')
+      ?.items[0]
+    const attractionItems =
+      sections.find((section) => section.kind === 'attraction')?.items ?? []
+    const transportItem = sections.find(
+      (section) => section.kind === 'transport',
+    )?.items[0]
+
+    expect(hotelItem).not.toHaveProperty('interestLabel')
+    expect(attractionItems.map((item) => item.interestLabel)).toEqual([
+      '999人有興趣',
+      '1K+人有興趣',
+      '1.2K+人有興趣',
+      '10K+人有興趣',
+      undefined,
+    ])
+    expect(transportItem).toMatchObject({
+      interestLabel: '1.2M+人有興趣',
+    })
+  })
+
   it('maps AP-56 product display fields by section kind', () => {
     const createProduct = (index: number) => ({
       ID: `kind-${index}`,

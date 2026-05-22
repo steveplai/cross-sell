@@ -44,6 +44,20 @@ export function createDiscountFields(
   }
 }
 
+export function createInterestLabelField(
+  product: Ap56ProductInfo,
+): Pick<CrossSellWidgetItem, 'interestLabel'> {
+  const clickCount = asNumber(product.ClickCount)
+
+  if (typeof clickCount !== 'number' || clickCount <= 0) {
+    return {}
+  }
+
+  return {
+    interestLabel: `${formatInterestCount(clickCount)}人有興趣`,
+  }
+}
+
 export function formatLocation(value: unknown) {
   if (!value || typeof value !== 'object') {
     return undefined
@@ -132,5 +146,27 @@ function formatPercent(value: number) {
 function formatAmount(value: number) {
   return new Intl.NumberFormat('zh-TW', {
     maximumFractionDigits: 0,
+  }).format(value)
+}
+
+function formatCompactCount(value: number) {
+  if (value >= 1_000_000) {
+    return `${formatCompactUnitValue(value / 1_000_000)}M`
+  }
+
+  if (value >= 1_000) {
+    return `${formatCompactUnitValue(value / 1_000)}K`
+  }
+
+  return formatAmount(value)
+}
+
+function formatInterestCount(value: number) {
+  return value >= 1_000 ? `${formatCompactCount(value)}+` : formatAmount(value)
+}
+
+function formatCompactUnitValue(value: number) {
+  return new Intl.NumberFormat('zh-TW', {
+    maximumFractionDigits: value < 10 ? 1 : 0,
   }).format(value)
 }

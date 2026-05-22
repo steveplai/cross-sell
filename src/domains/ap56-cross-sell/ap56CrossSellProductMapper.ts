@@ -5,6 +5,7 @@ import type {
 
 import {
   createDiscountFields,
+  createInterestLabelField,
   createRecommendationBadgeField,
   formatLocation,
   formatRating,
@@ -119,6 +120,7 @@ function enrichAttractionProductItem(
     ...item,
     ...createRecommendationBadgeField(context),
     location: firstString(product.CityName),
+    ...createInterestLabelField(product),
     ...createDiscountFields(product),
   }
 }
@@ -130,6 +132,7 @@ function enrichTransportProductItem(
   return {
     ...item,
     location: firstString(product.CityName),
+    ...createInterestLabelField(product),
     ...createDiscountFields(product),
   }
 }
