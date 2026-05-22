@@ -81,16 +81,16 @@ export function ProductCard({
           onError={handleProductImageError}
           src={imageUrl}
         />
-        <div className="absolute inset-x-0 bottom-0 h-6.75 bg-linear-to-b from-black/0 to-black/80" />
+        <div className="absolute inset-x-0 bottom-0 h-13 bg-linear-to-b from-black/0 to-black/80" />
         {imageBadge ? (
           <Badge className="absolute top-1.25 left-1.25 h-5.5 rounded-lg bg-primary px-1.25 py-0 text-xs leading-5.5 font-normal text-primary-foreground shadow-none hover:bg-primary">
             {imageBadge}
           </Badge>
         ) : null}
         {item.location ? (
-          <span className="absolute bottom-0 left-0 flex max-w-full items-center gap-1 truncate px-2 py-1 text-xs leading-5.5 text-white">
+          <span className="absolute right-0 bottom-0 left-0 flex items-center gap-1 px-2 py-1 text-xs leading-4 text-white">
             <MapPin aria-hidden="true" className="size-4 shrink-0" />
-            <span className="truncate">{item.location}</span>
+            <span className="line-clamp-2 min-w-0">{item.location}</span>
           </span>
         ) : null}
       </div>
