@@ -162,6 +162,8 @@ function mapProductInfoToItem(
   const salePrice = asNumber(product.SalePrice)
   const discount = asNumber(product.Discount)
   const likeability = asNumber(product.Likeability)
+  const rating = asNumber(product.Rating)
+  const shouldShowRating = isVisibleRating(rating)
 
   // Keep API-specific field names contained here. Everything returned below is
   // the stable widget model consumed by ProductCard and CrossSellSection.
@@ -177,9 +179,9 @@ function mapProductInfoToItem(
         ? `${Math.round(likeability)}%旅客喜愛`
         : undefined,
     starRating: asNumber(product.Level),
-    rating: formatRating(product.Rating),
-    ratingLabel: formatRatingLabel(product.Rating),
-    reviewCount: asNumber(product.RatingCount),
+    rating: shouldShowRating ? formatRating(rating) : undefined,
+    ratingLabel: shouldShowRating ? formatRatingLabel(rating) : undefined,
+    reviewCount: shouldShowRating ? asNumber(product.RatingCount) : undefined,
     cancellationLabel: asString(product.CancelTag),
     originalPrice:
       typeof discount === 'number' && discount > 0 ? salePrice : undefined,
@@ -276,36 +278,30 @@ function formatLocation(value: unknown) {
   return name
 }
 
-function formatRating(value: unknown) {
-  const rating = asNumber(value)
+function isVisibleRating(rating: number | undefined): rating is number {
+  return typeof rating === 'number' && rating >= 3.5
+}
 
-  if (typeof rating !== 'number' || rating <= 0) {
-    return undefined
-  }
-
+function formatRating(rating: number) {
   return new Intl.NumberFormat('zh-TW', {
     maximumFractionDigits: 1,
     minimumFractionDigits: Number.isInteger(rating) ? 0 : 1,
   }).format(rating)
 }
 
-function formatRatingLabel(value: unknown) {
-  const rating = asNumber(value)
-
-  if (typeof rating !== 'number' || rating <= 0) {
-    return undefined
-  }
-
+function formatRatingLabel(rating: number) {
   if (rating >= 4.5) {
     return '太讚了'
   }
 
   if (rating >= 4) {
-    return '很棒'
+    return '非常好'
   }
 
-  // Lower ratings still render the numeric score, just without a qualitative
-  // label because the current card design only has positive copy.
+  if (rating >= 3.5) {
+    return '很不錯'
+  }
+
   return undefined
 }
 

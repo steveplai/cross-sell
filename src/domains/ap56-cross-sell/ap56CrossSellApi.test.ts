@@ -228,6 +228,72 @@ describe('AP-56 cross-sell API', () => {
     expect(hotelSection).not.toHaveProperty('title')
   })
 
+  it('maps AP-56 rating labels by the spec thresholds', () => {
+    const sections = mapAp56CrossSellResponseToSections([
+      {
+        Type: '訂房',
+        pList: [
+          {
+            ID: 'rating-hidden',
+            Title: '低分不顯示評論',
+            Price: 1000,
+            Rating: 3.4,
+            RatingCount: 10,
+          },
+          {
+            ID: 'rating-good',
+            Title: '很不錯評論',
+            Price: 1000,
+            Rating: 3.5,
+            RatingCount: 20,
+          },
+          {
+            ID: 'rating-great',
+            Title: '非常好評論',
+            Price: 1000,
+            Rating: 4,
+            RatingCount: 30,
+          },
+          {
+            ID: 'rating-excellent',
+            Title: '太讚了評論',
+            Price: 1000,
+            Rating: 4.5,
+            RatingCount: 40,
+          },
+        ],
+      },
+    ])
+    const hotelSection = sections.find((section) => section.kind === 'hotel')
+
+    expect(hotelSection?.items).toEqual([
+      expect.objectContaining({
+        id: 'rating-hidden',
+        rating: undefined,
+        ratingLabel: undefined,
+        reviewCount: undefined,
+      }),
+      expect.objectContaining({
+        id: 'rating-good',
+        rating: '3.5',
+        ratingLabel: '很不錯',
+        reviewCount: 20,
+      }),
+      expect.objectContaining({
+        id: 'rating-great',
+        rating: '4',
+        ratingLabel: '非常好',
+        reviewCount: 30,
+      }),
+      expect.objectContaining({
+        id: 'rating-excellent',
+        rating: '4.5',
+        ratingLabel: '太讚了',
+        reviewCount: 40,
+      }),
+    ])
+  })
+
   it('maps AP-56 popular search links with the configured domain mode', async () => {
     const get = vi
       .fn<MockRequestClientRequest>()

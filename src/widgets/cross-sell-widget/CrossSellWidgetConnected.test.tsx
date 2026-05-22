@@ -45,6 +45,17 @@ const ap56CrossSellResponse = [
         Likeability: 95,
         CancelTag: '免費取消',
       },
+      {
+        ID: 'JPTYO002',
+        Title: '東京非常好飯店',
+        ProductUrl: 'https://uhotel.liontravel.com/detail/JPTYO002',
+        Price: 4200,
+        SaleCurr: 'TWD',
+        CityName: ['東京'],
+        Level: 4,
+        Rating: 4,
+        RatingCount: 88,
+      },
     ],
   },
   {
@@ -52,6 +63,35 @@ const ap56CrossSellResponse = [
     pList: [
       {
         url: 'https://uhotel.liontravel.com/search?SearchKeyword=%E6%9D%B1%E4%BA%AC',
+      },
+    ],
+  },
+  {
+    Type: '票券(玩樂)',
+    pList: [
+      {
+        ID: 'ETK001',
+        Title: '東京很不錯票券',
+        ProductUrl: 'https://activity.liontravel.com/detail/ETK001',
+        Price: 1200,
+        SaleCurr: 'TWD',
+        CityName: ['東京'],
+        Rating: 3.5,
+        RatingCount: 45,
+      },
+    ],
+  },
+  {
+    Type: '票券(交通)',
+    pList: [
+      {
+        ID: 'TRF001',
+        Title: '低分交通票券',
+        ProductUrl: 'https://activity.liontravel.com/detail/TRF001',
+        Price: 800,
+        SaleCurr: 'TWD',
+        Rating: 3.4,
+        RatingCount: 34,
       },
     ],
   },
@@ -131,6 +171,39 @@ describe('CrossSellWidgetConnected', () => {
         signal: expect.any(AbortSignal),
       },
     )
+  })
+
+  it('renders AP-56 rating content by the spec thresholds', async () => {
+    const get = vi
+      .fn<MockRequestClientRequest>()
+      .mockResolvedValue(ap56CrossSellResponse)
+    const requestClient = createMockRequestClient(get)
+
+    render(
+      <CrossSellWidgetConnectedForTesting
+        orderNumber="2026-123456"
+        requestClient={requestClient}
+      />,
+    )
+
+    expect(
+      await screen.findByRole('link', { name: /東京灣精選飯店/ }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: /東京非常好飯店/ }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: /東京很不錯票券/ }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: /低分交通票券/ }),
+    ).toBeInTheDocument()
+
+    expect(screen.getByText('太讚了')).toBeInTheDocument()
+    expect(screen.getByText('非常好')).toBeInTheDocument()
+    expect(screen.getByText('很不錯')).toBeInTheDocument()
+    expect(screen.queryByText('3.4')).not.toBeInTheDocument()
+    expect(screen.queryByText('(34)')).not.toBeInTheDocument()
   })
 
   it('passes custom recommend product types to the API', async () => {
