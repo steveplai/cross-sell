@@ -324,12 +324,14 @@ describe('AP-56 cross-sell API', () => {
     })
     expect(attractionItem).toMatchObject({
       recommendationBadge: '熱銷 TOP1',
+      location: '東京',
     })
-    expect(attractionItem).not.toHaveProperty('location')
     expect(attractionItem).not.toHaveProperty('detailLocation')
     expect(attractionItem).not.toHaveProperty('starRating')
     expect(transportItem).not.toHaveProperty('recommendationBadge')
-    expect(transportItem).not.toHaveProperty('location')
+    expect(transportItem).toMatchObject({
+      location: '東京',
+    })
     expect(transportItem).not.toHaveProperty('detailLocation')
     expect(transportItem).not.toHaveProperty('starRating')
   })

@@ -227,9 +227,9 @@ function mapProductInfoToItem(
     case 'hotel':
       return enrichHotelProductItem(item, product, context)
     case 'attraction':
-      return enrichAttractionProductItem(item, context)
+      return enrichAttractionProductItem(item, product, context)
     case 'transport':
-      return enrichTransportProductItem(item)
+      return enrichTransportProductItem(item, product)
     case 'flight':
       return item
   }
@@ -252,18 +252,24 @@ function enrichHotelProductItem(
 
 function enrichAttractionProductItem(
   item: CrossSellWidgetItem,
+  product: Ap56ProductInfo,
   context: Ap56ProductMapContext,
 ): CrossSellWidgetItem {
   return {
     ...item,
     ...createRecommendationBadgeField(context),
+    location: firstString(product.CityName),
   }
 }
 
 function enrichTransportProductItem(
   item: CrossSellWidgetItem,
+  product: Ap56ProductInfo,
 ): CrossSellWidgetItem {
-  return item
+  return {
+    ...item,
+    location: firstString(product.CityName),
+  }
 }
 
 function createRecommendationBadgeField(

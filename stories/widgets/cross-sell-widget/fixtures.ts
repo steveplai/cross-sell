@@ -126,7 +126,7 @@ const ap56CrossSellStoryResponse = [
         ImgUrl:
           'https://picsum.photos/seed/liontravel-tokyo-ticket-excellent/640/426',
         SaleCurr: 'TWD',
-        CityName: ['東京'],
+        CityName: ['舞濱區'],
         Rating: 4.5,
         RatingCount: 168,
         Likeability: 91,
@@ -140,7 +140,7 @@ const ap56CrossSellStoryResponse = [
         ImgUrl:
           'https://picsum.photos/seed/liontravel-tokyo-ticket-great/640/426',
         SaleCurr: 'TWD',
-        CityName: ['東京'],
+        CityName: ['淺草區'],
         Rating: 4,
         RatingCount: 76,
         Likeability: 88,
@@ -154,7 +154,7 @@ const ap56CrossSellStoryResponse = [
         ImgUrl:
           'https://picsum.photos/seed/liontravel-tokyo-ticket-good/640/426',
         SaleCurr: 'TWD',
-        CityName: ['東京'],
+        CityName: ['墨田區'],
         Rating: 3.5,
         RatingCount: 45,
         Likeability: 86,
@@ -168,7 +168,7 @@ const ap56CrossSellStoryResponse = [
         ImgUrl:
           'https://picsum.photos/seed/liontravel-tokyo-ticket-hidden/640/426',
         SaleCurr: 'TWD',
-        CityName: ['東京'],
+        CityName: ['台場區'],
         Rating: 3.4,
         RatingCount: 18,
         Likeability: 72,
@@ -196,6 +196,7 @@ const ap56CrossSellStoryResponse = [
         ImgUrl:
           'https://picsum.photos/seed/liontravel-traffic-ticket-excellent/640/426',
         SaleCurr: 'TWD',
+        CityName: ['成田區'],
         Rating: 4.5,
         RatingCount: 120,
       },
@@ -207,6 +208,7 @@ const ap56CrossSellStoryResponse = [
         ImgUrl:
           'https://picsum.photos/seed/liontravel-traffic-ticket-great/640/426',
         SaleCurr: 'TWD',
+        CityName: ['羽田區'],
         Rating: 4,
         RatingCount: 62,
       },
@@ -218,6 +220,7 @@ const ap56CrossSellStoryResponse = [
         ImgUrl:
           'https://picsum.photos/seed/liontravel-traffic-ticket-good/640/426',
         SaleCurr: 'TWD',
+        CityName: ['新宿區'],
         Rating: 3.5,
         RatingCount: 41,
       },
@@ -229,6 +232,7 @@ const ap56CrossSellStoryResponse = [
         ImgUrl:
           'https://picsum.photos/seed/liontravel-traffic-ticket-hidden/640/426',
         SaleCurr: 'TWD',
+        CityName: ['池袋區'],
         Rating: 3.4,
         RatingCount: 34,
       },
