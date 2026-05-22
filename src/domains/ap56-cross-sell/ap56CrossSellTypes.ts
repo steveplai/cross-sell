@@ -20,6 +20,7 @@ export interface Ap56ProductInfo {
   CityName?: unknown
   SalePrice?: unknown
   Discount?: unknown
+  PriceDiff?: unknown
   Location?: unknown
   Level?: unknown
   Rating?: unknown

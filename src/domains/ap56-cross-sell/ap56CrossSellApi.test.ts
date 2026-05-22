@@ -276,6 +276,103 @@ describe('AP-56 cross-sell API', () => {
     ])
   })
 
+  it('maps AP-56 discount fields from PriceDiff and Discount', () => {
+    const sections = mapAp56CrossSellResponseToSections([
+      {
+        Type: '訂房',
+        pList: [
+          {
+            ID: 'price-diff-priority',
+            Title: '金額折扣優先',
+            Price: 1000,
+            SalePrice: 1200,
+            PriceDiff: 200,
+            Discount: 10,
+          },
+          {
+            ID: 'discount-fallback',
+            Title: '百分比折扣備援',
+            Price: 1000,
+            SalePrice: 1200,
+            PriceDiff: 0,
+            Discount: 7.5,
+          },
+          {
+            ID: 'no-discount-fields',
+            Title: '無有效折扣',
+            Price: 1000,
+            SalePrice: 1200,
+            PriceDiff: null,
+            Discount: null,
+          },
+          {
+            ID: 'no-original-price',
+            Title: '售價未低於定價',
+            Price: 1000,
+            SalePrice: 1000,
+            PriceDiff: 200,
+            Discount: null,
+          },
+        ],
+      },
+      {
+        Type: '票券(玩樂)',
+        pList: [
+          {
+            ID: 'attraction-discount',
+            Title: '玩樂折扣',
+            Price: 900,
+            SalePrice: 1000,
+            PriceDiff: 100,
+          },
+        ],
+      },
+      {
+        Type: '票券(交通)',
+        pList: [
+          {
+            ID: 'transport-discount',
+            Title: '交通折扣',
+            Price: 800,
+            SalePrice: 900,
+            Discount: 5,
+          },
+        ],
+      },
+    ])
+    const hotelItems =
+      sections.find((section) => section.kind === 'hotel')?.items ?? []
+    const attractionItem = sections.find(
+      (section) => section.kind === 'attraction',
+    )?.items[0]
+    const transportItem = sections.find(
+      (section) => section.kind === 'transport',
+    )?.items[0]
+
+    expect(hotelItems[0]).toMatchObject({
+      originalPrice: 1200,
+      discountLabel: '折扣 200元',
+    })
+    expect(hotelItems[1]).toMatchObject({
+      originalPrice: 1200,
+      discountLabel: '折扣 7.5%',
+    })
+    expect(hotelItems[2]).not.toHaveProperty('originalPrice')
+    expect(hotelItems[2]).not.toHaveProperty('discountLabel')
+    expect(hotelItems[3]).toMatchObject({
+      discountLabel: '折扣 200元',
+    })
+    expect(hotelItems[3]).not.toHaveProperty('originalPrice')
+    expect(attractionItem).toMatchObject({
+      originalPrice: 1000,
+      discountLabel: '折扣 100元',
+    })
+    expect(transportItem).toMatchObject({
+      originalPrice: 900,
+      discountLabel: '折扣 5%',
+    })
+  })
+
   it('maps AP-56 product display fields by section kind', () => {
     const createProduct = (index: number) => ({
       ID: `kind-${index}`,

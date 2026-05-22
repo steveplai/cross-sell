@@ -246,7 +246,7 @@ function enrichHotelProductItem(
     location: formatLocation(product.Location),
     detailLocation: firstString(product.CityName),
     starRating: asNumber(product.Level),
-    ...createHotelDiscountFields(product),
+    ...createDiscountFields(product),
   }
 }
 
@@ -259,6 +259,7 @@ function enrichAttractionProductItem(
     ...item,
     ...createRecommendationBadgeField(context),
     location: firstString(product.CityName),
+    ...createDiscountFields(product),
   }
 }
 
@@ -269,6 +270,7 @@ function enrichTransportProductItem(
   return {
     ...item,
     location: firstString(product.CityName),
+    ...createDiscountFields(product),
   }
 }
 
@@ -287,20 +289,48 @@ function createRecommendationBadge({
   return createRecommendationBadgeByIndex(totalItems)[index]
 }
 
-function createHotelDiscountFields(
+function createDiscountFields(
   product: Ap56ProductInfo,
 ): Pick<CrossSellWidgetItem, 'discountLabel' | 'originalPrice'> {
-  const salePrice = asNumber(product.SalePrice)
-  const discount = asNumber(product.Discount)
+  const discountLabel = createDiscountLabel(product)
 
-  if (typeof discount !== 'number' || discount <= 0) {
+  if (!discountLabel) {
     return {}
   }
 
-  return {
-    originalPrice: salePrice,
-    discountLabel: `折扣 ${formatPercent(discount)}%`,
+  const price = asNumber(product.Price)
+  const salePrice = asNumber(product.SalePrice)
+
+  if (
+    typeof price === 'number' &&
+    typeof salePrice === 'number' &&
+    salePrice > price
+  ) {
+    return {
+      originalPrice: salePrice,
+      discountLabel,
+    }
   }
+
+  return {
+    discountLabel,
+  }
+}
+
+function createDiscountLabel(product: Ap56ProductInfo) {
+  const priceDiff = asNumber(product.PriceDiff)
+
+  if (typeof priceDiff === 'number' && priceDiff > 0) {
+    return `折扣 ${formatAmount(priceDiff)}元`
+  }
+
+  const discount = asNumber(product.Discount)
+
+  if (typeof discount === 'number' && discount > 0) {
+    return `折扣 ${formatPercent(discount)}%`
+  }
+
+  return undefined
 }
 
 function createRecommendationBadgeByIndex(itemsCount: number) {
@@ -428,6 +458,12 @@ function formatRatingLabel(rating: number) {
 function formatPercent(value: number) {
   return new Intl.NumberFormat('zh-TW', {
     maximumFractionDigits: 1,
+  }).format(value)
+}
+
+function formatAmount(value: number) {
+  return new Intl.NumberFormat('zh-TW', {
+    maximumFractionDigits: 0,
   }).format(value)
 }
 

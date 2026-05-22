@@ -628,7 +628,7 @@ describe('CrossSellWidget', () => {
     expect(clearIntervalSpy).toHaveBeenCalled()
   })
 
-  it('renders expired state without special offer pricing', () => {
+  it('renders expired state while keeping API-provided product discounts', () => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date('2026-04-21T10:00:00Z'))
 
@@ -648,8 +648,8 @@ describe('CrossSellWidget', () => {
     expect(screen.queryByText('您已解鎖限時優惠！')).not.toBeInTheDocument()
     expect(screen.queryByLabelText(/優惠倒數/)).not.toBeInTheDocument()
     expect(screen.getAllByText('86%東京旅客喜愛').length).toBeGreaterThan(0)
-    expect(screen.queryByText('折扣 20%')).not.toBeInTheDocument()
-    expect(screen.queryByText(/1,825/)).not.toBeInTheDocument()
+    expect(screen.getAllByText('折扣 20%').length).toBeGreaterThan(0)
+    expect(screen.getAllByText(/1,825/).length).toBeGreaterThan(0)
     expect(screen.getAllByText('1,224,152').length).toBeGreaterThan(0)
   })
 

@@ -59,7 +59,6 @@ function getStarRating(starRating?: number) {
 
 export function ProductCard({
   currency,
-  isPromoActive,
   item,
   locale,
   onSelect,
@@ -171,7 +170,7 @@ export function ProductCard({
         </div>
 
         <CardFooter className="flex flex-col items-end p-0">
-          {isPromoActive && (item.originalPrice || item.discountLabel) ? (
+          {item.originalPrice || item.discountLabel ? (
             <div className="flex w-full items-center justify-end gap-1 text-right">
               {item.originalPrice ? (
                 <span className="text-2xs leading-5.5 text-muted-foreground line-through">
