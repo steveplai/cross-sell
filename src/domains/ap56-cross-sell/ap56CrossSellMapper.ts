@@ -21,6 +21,22 @@ interface MapAp56CrossSellResponseOptions {
   domainMode?: LiontravelDomainMode
 }
 
+interface Ap56ProductItemCandidate {
+  item: CrossSellWidgetItem
+  product: Ap56ProductInfo
+}
+
+interface Ap56SectionAccumulator extends CrossSellWidgetSection {
+  kind: CrossSellWidgetSectionKind
+  productCandidates: Ap56ProductItemCandidate[]
+}
+
+interface Ap56ProductMapContext {
+  index: number
+  kind: CrossSellWidgetSectionKind
+  totalItems: number
+}
+
 // Convert AP-56 sections into the widget section model consumed by the
 // connected widget. Non-carousel static content is supplied by the base widget.
 export function mapAp56CrossSellResponseToSections(
@@ -36,9 +52,9 @@ export function mapAp56CrossSellResponseToSections(
     return []
   }
 
-  const sectionOverrides = new Map<
+  const sectionAccumulators = new Map<
     CrossSellWidgetSectionKind,
-    CrossSellWidgetSection
+    Ap56SectionAccumulator
   >()
 
   sections.forEach((rawSection) => {
@@ -61,7 +77,7 @@ export function mapAp56CrossSellResponseToSections(
 
     // Multiple AP-56 rows can contribute to one widget section, for example
     // product rows and separate "view more" URL rows for the same kind.
-    const section = getOrCreateSectionOverride(sectionOverrides, kind)
+    const section = getOrCreateSectionAccumulator(sectionAccumulators, kind)
 
     // AP-56 uses pList both for product cards and for "view more" URL rows.
     if (isSearchViewMoreType(type)) {
@@ -78,13 +94,15 @@ export function mapAp56CrossSellResponseToSections(
       return
     }
 
-    const items = pList.map(mapProductInfoToItem).filter(isItem)
+    const productCandidates = pList
+      .map(mapProductInfoToCandidate)
+      .filter(isProductItemCandidate)
 
-    section.items.push(...items)
+    section.productCandidates.push(...productCandidates)
 
     // Some AP-56 URL rows are identifiable only by their payload shape. Preserve
     // an existing viewMoreHref if a more explicit search-page row already set it.
-    if (items.length === 0) {
+    if (productCandidates.length === 0) {
       section.viewMoreHref = section.viewMoreHref ?? getFirstUrl(pList)
     }
 
@@ -98,31 +116,40 @@ export function mapAp56CrossSellResponseToSections(
     }
   })
 
-  return Array.from(sectionOverrides.values()).map((section) => ({
-    ...section,
-    items: assignRecommendationBadges(section.items),
-  }))
+  return Array.from(sectionAccumulators.values()).map(
+    ({ productCandidates, ...section }) => ({
+      ...section,
+      items: productCandidates.map(({ item, product }, index) =>
+        mapProductInfoToItem(item, product, {
+          index,
+          kind: section.kind,
+          totalItems: productCandidates.length,
+        }),
+      ),
+    }),
+  )
 }
 
 // #region - Functions
 
-function getOrCreateSectionOverride(
-  sectionOverrides: Map<CrossSellWidgetSectionKind, CrossSellWidgetSection>,
+function getOrCreateSectionAccumulator(
+  sectionAccumulators: Map<CrossSellWidgetSectionKind, Ap56SectionAccumulator>,
   kind: CrossSellWidgetSectionKind,
 ) {
-  const existingSection = sectionOverrides.get(kind)
+  const existingSection = sectionAccumulators.get(kind)
 
   if (existingSection) {
     return existingSection
   }
 
-  const section: CrossSellWidgetSection = {
+  const section: Ap56SectionAccumulator = {
     id: `api-${kind}`,
     kind,
     items: [],
+    productCandidates: [],
   }
 
-  sectionOverrides.set(kind, section)
+  sectionAccumulators.set(kind, section)
 
   return section
 }
@@ -144,7 +171,16 @@ function getResponseSections(response: unknown) {
     : undefined
 }
 
-function mapProductInfoToItem(
+function mapProductInfoToCandidate(
+  product: Ap56ProductInfo,
+  index: number,
+): Ap56ProductItemCandidate | undefined {
+  const item = mapBaseProductInfoToItem(product, index)
+
+  return item ? { item, product } : undefined
+}
+
+function mapBaseProductInfoToItem(
   product: Ap56ProductInfo,
   index: number,
 ): CrossSellWidgetItem | undefined {
@@ -162,8 +198,6 @@ function mapProductInfoToItem(
 
   const id =
     asString(product.ID) ?? asString(product.ProductUrl) ?? `${title}-${index}`
-  const salePrice = asNumber(product.SalePrice)
-  const discount = asNumber(product.Discount)
   const rating = asNumber(product.Rating)
   const shouldShowRating = isVisibleRating(rating)
 
@@ -174,37 +208,95 @@ function mapProductInfoToItem(
     title,
     href: asString(product.ProductUrl),
     imageUrl: asString(product.ImgUrl),
-    location: formatLocation(product.Location),
-    detailLocation: firstString(product.CityName),
-    starRating: asNumber(product.Level),
     rating: shouldShowRating ? formatRating(rating) : undefined,
     ratingLabel: shouldShowRating ? formatRatingLabel(rating) : undefined,
     reviewCount: shouldShowRating ? asNumber(product.RatingCount) : undefined,
     cancellationLabel: asString(product.CancelTag),
-    originalPrice:
-      typeof discount === 'number' && discount > 0 ? salePrice : undefined,
-    discountLabel:
-      typeof discount === 'number' && discount > 0
-        ? `折扣 ${formatPercent(discount)}%`
-        : undefined,
     price,
     pricePrefix: asString(product.SaleCurr),
     priceSuffix: '起',
   }
 }
 
-function assignRecommendationBadges(items: CrossSellWidgetItem[]) {
-  const badgeByIndex = createRecommendationBadgeByIndex(items.length)
+function mapProductInfoToItem(
+  item: CrossSellWidgetItem,
+  product: Ap56ProductInfo,
+  context: Ap56ProductMapContext,
+) {
+  switch (context.kind) {
+    case 'hotel':
+      return enrichHotelProductItem(item, product, context)
+    case 'attraction':
+      return enrichAttractionProductItem(item, product, context)
+    case 'transport':
+      return enrichTransportProductItem(item)
+    case 'flight':
+      return item
+  }
+}
 
-  if (badgeByIndex.length === 0) {
-    return items
+function enrichHotelProductItem(
+  item: CrossSellWidgetItem,
+  product: Ap56ProductInfo,
+  context: Ap56ProductMapContext,
+): CrossSellWidgetItem {
+  return {
+    ...item,
+    ...createRecommendationBadgeField(context),
+    location: formatLocation(product.Location),
+    detailLocation: firstString(product.CityName),
+    starRating: asNumber(product.Level),
+    ...createHotelDiscountFields(product),
+  }
+}
+
+function enrichAttractionProductItem(
+  item: CrossSellWidgetItem,
+  product: Ap56ProductInfo,
+  context: Ap56ProductMapContext,
+): CrossSellWidgetItem {
+  return {
+    ...item,
+    ...createRecommendationBadgeField(context),
+    detailLocation: firstString(product.CityName),
+  }
+}
+
+function enrichTransportProductItem(
+  item: CrossSellWidgetItem,
+): CrossSellWidgetItem {
+  return item
+}
+
+function createRecommendationBadgeField(
+  context: Ap56ProductMapContext,
+): Pick<CrossSellWidgetItem, 'recommendationBadge'> {
+  const recommendationBadge = createRecommendationBadge(context)
+
+  return recommendationBadge ? { recommendationBadge } : {}
+}
+
+function createRecommendationBadge({
+  index,
+  totalItems,
+}: Ap56ProductMapContext) {
+  return createRecommendationBadgeByIndex(totalItems)[index]
+}
+
+function createHotelDiscountFields(
+  product: Ap56ProductInfo,
+): Pick<CrossSellWidgetItem, 'discountLabel' | 'originalPrice'> {
+  const salePrice = asNumber(product.SalePrice)
+  const discount = asNumber(product.Discount)
+
+  if (typeof discount !== 'number' || discount <= 0) {
+    return {}
   }
 
-  return items.map((item, index) => {
-    const recommendationBadge = badgeByIndex[index]
-
-    return recommendationBadge ? { ...item, recommendationBadge } : item
-  })
+  return {
+    originalPrice: salePrice,
+    discountLabel: `折扣 ${formatPercent(discount)}%`,
+  }
 }
 
 function createRecommendationBadgeByIndex(itemsCount: number) {
@@ -363,10 +455,10 @@ function asNumber(value: unknown) {
   return Number.isFinite(parsed) ? parsed : undefined
 }
 
-function isItem(
-  item: CrossSellWidgetItem | undefined,
-): item is CrossSellWidgetItem {
-  return !!item
+function isProductItemCandidate(
+  candidate: Ap56ProductItemCandidate | undefined,
+): candidate is Ap56ProductItemCandidate {
+  return !!candidate
 }
 
 // #endregion - Functions

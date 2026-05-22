@@ -276,6 +276,64 @@ describe('AP-56 cross-sell API', () => {
     ])
   })
 
+  it('maps AP-56 product display fields by section kind', () => {
+    const createProduct = (index: number) => ({
+      ID: `kind-${index}`,
+      Title: `推薦商品 ${index}`,
+      ProductUrl: `https://example.com/products/${index}`,
+      Price: 1000 + index,
+      CityName: ['東京'],
+      Level: 5,
+      Location: {
+        Name: '東京車站',
+        Distance: 0.5,
+        Unit: '公里',
+      },
+    })
+    const sections = mapAp56CrossSellResponseToSections([
+      {
+        Type: '訂房',
+        pList: [1, 2].map(createProduct),
+      },
+      {
+        Type: '票券(玩樂)',
+        pList: [3, 4].map(createProduct),
+      },
+      {
+        Type: '票券(交通)',
+        pList: [5, 6].map(createProduct),
+      },
+    ])
+    const hotelItem = sections.find((section) => section.kind === 'hotel')
+      ?.items[0]
+    const attractionItem = sections.find(
+      (section) => section.kind === 'attraction',
+    )?.items[0]
+    const transportItem = sections.find(
+      (section) => section.kind === 'transport',
+    )?.items[0]
+
+    expect(hotelItem).toBeDefined()
+    expect(attractionItem).toBeDefined()
+    expect(transportItem).toBeDefined()
+    expect(hotelItem).toMatchObject({
+      recommendationBadge: '熱銷 TOP1',
+      location: '距離東京車站0.5公里',
+      detailLocation: '東京',
+      starRating: 5,
+    })
+    expect(attractionItem).toMatchObject({
+      recommendationBadge: '熱銷 TOP1',
+      detailLocation: '東京',
+    })
+    expect(attractionItem).not.toHaveProperty('location')
+    expect(attractionItem).not.toHaveProperty('starRating')
+    expect(transportItem).not.toHaveProperty('recommendationBadge')
+    expect(transportItem).not.toHaveProperty('location')
+    expect(transportItem).not.toHaveProperty('detailLocation')
+    expect(transportItem).not.toHaveProperty('starRating')
+  })
+
   it('maps AP-56 rating labels by the spec thresholds', () => {
     const sections = mapAp56CrossSellResponseToSections([
       {
