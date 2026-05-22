@@ -184,7 +184,7 @@ export function ProductCard({
               ) : null}
             </div>
           ) : null}
-          <div className="flex items-center gap-2 whitespace-nowrap">
+          <div className="flex items-baseline gap-2 whitespace-nowrap">
             <span className="text-xs leading-5.5 text-(--lion-product-card-price-foreground)">
               {item.pricePrefix ?? currency}
             </span>
