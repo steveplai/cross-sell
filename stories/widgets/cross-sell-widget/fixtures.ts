@@ -187,7 +187,7 @@ const ap56CrossSellStoryResponse = [
         CityName: ['台場區'],
         SalePrice: 900,
         Discount: null,
-        PriceDiff: 80,
+        PriceDiff: 9,
         Rating: 3.4,
         RatingCount: 18,
         Likeability: 72,

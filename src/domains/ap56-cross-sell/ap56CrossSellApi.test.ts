@@ -306,6 +306,14 @@ describe('AP-56 cross-sell API', () => {
             Discount: null,
           },
           {
+            ID: 'price-diff-addon-label',
+            Title: '低金額顯示加購價',
+            Price: 1000,
+            SalePrice: 1009,
+            PriceDiff: 9,
+            Discount: 10,
+          },
+          {
             ID: 'no-original-price',
             Title: '售價未低於定價',
             Price: 1000,
@@ -351,7 +359,7 @@ describe('AP-56 cross-sell API', () => {
 
     expect(hotelItems[0]).toMatchObject({
       originalPrice: 1200,
-      discountLabel: '折扣 200元',
+      discountLabel: '折$200',
     })
     expect(hotelItems[1]).toMatchObject({
       originalPrice: 1200,
@@ -360,12 +368,16 @@ describe('AP-56 cross-sell API', () => {
     expect(hotelItems[2]).not.toHaveProperty('originalPrice')
     expect(hotelItems[2]).not.toHaveProperty('discountLabel')
     expect(hotelItems[3]).toMatchObject({
-      discountLabel: '折扣 200元',
+      originalPrice: 1009,
+      discountLabel: '加購價',
     })
-    expect(hotelItems[3]).not.toHaveProperty('originalPrice')
+    expect(hotelItems[4]).toMatchObject({
+      discountLabel: '折$200',
+    })
+    expect(hotelItems[4]).not.toHaveProperty('originalPrice')
     expect(attractionItem).toMatchObject({
       originalPrice: 1000,
-      discountLabel: '折扣 100元',
+      discountLabel: '折$100',
     })
     expect(transportItem).toMatchObject({
       originalPrice: 900,

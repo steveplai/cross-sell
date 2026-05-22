@@ -113,7 +113,11 @@ function createDiscountLabel(product: Ap56ProductInfo) {
   const priceDiff = asNumber(product.PriceDiff)
 
   if (typeof priceDiff === 'number' && priceDiff > 0) {
-    return `折扣 ${formatAmount(priceDiff)}元`
+    if (priceDiff < 10) {
+      return '加購價'
+    }
+
+    return `折$${formatAmount(priceDiff)}`
   }
 
   const discount = asNumber(product.Discount)
