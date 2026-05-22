@@ -24,7 +24,7 @@ export interface CrossSellWidgetItem {
   location?: string
   detailLocation?: string
   badge?: string
-  promoBadge?: string
+  recommendationBadge?: string
   starRating?: number
   rating?: string
   ratingLabel?: string

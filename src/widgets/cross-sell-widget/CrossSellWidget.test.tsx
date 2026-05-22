@@ -647,6 +647,7 @@ describe('CrossSellWidget', () => {
     expect(screen.getByText('發現更多旅遊靈感！')).toBeInTheDocument()
     expect(screen.queryByText('您已解鎖限時優惠！')).not.toBeInTheDocument()
     expect(screen.queryByLabelText(/優惠倒數/)).not.toBeInTheDocument()
+    expect(screen.getAllByText('86%東京旅客喜愛').length).toBeGreaterThan(0)
     expect(screen.queryByText('折扣 20%')).not.toBeInTheDocument()
     expect(screen.queryByText(/1,825/)).not.toBeInTheDocument()
     expect(screen.getAllByText('1,224,152').length).toBeGreaterThan(0)

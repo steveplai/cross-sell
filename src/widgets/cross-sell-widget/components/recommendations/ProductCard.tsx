@@ -66,9 +66,7 @@ export function ProductCard({
 }: ProductCardProps) {
   const rootClassName =
     'group block h-full w-full rounded-lg bg-transparent p-0 text-left font-normal whitespace-normal text-card-foreground shadow-none hover:bg-transparent hover:text-card-foreground'
-  const imageBadge = isPromoActive
-    ? (item.promoBadge ?? item.badge)
-    : item.badge
+  const imageBadge = item.recommendationBadge ?? item.badge
   const reviewCount = formatReviewCount(item.reviewCount)
   const starRating = getStarRating(item.starRating)
   const formattedPrice = new Intl.NumberFormat(locale, {

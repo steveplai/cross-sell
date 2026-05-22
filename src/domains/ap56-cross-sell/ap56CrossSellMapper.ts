@@ -201,9 +201,9 @@ function assignRecommendationBadges(items: CrossSellWidgetItem[]) {
   }
 
   return items.map((item, index) => {
-    const promoBadge = badgeByIndex[index]
+    const recommendationBadge = badgeByIndex[index]
 
-    return promoBadge ? { ...item, promoBadge } : item
+    return recommendationBadge ? { ...item, recommendationBadge } : item
   })
 }
 

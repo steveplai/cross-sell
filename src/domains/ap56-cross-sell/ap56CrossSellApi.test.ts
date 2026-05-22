@@ -224,7 +224,7 @@ describe('AP-56 cross-sell API', () => {
         }),
       ],
     })
-    expect(hotelSection?.items[0]).not.toHaveProperty('promoBadge')
+    expect(hotelSection?.items[0]).not.toHaveProperty('recommendationBadge')
     expect(hotelSection).not.toHaveProperty('title')
   })
 
@@ -259,16 +259,15 @@ describe('AP-56 cross-sell API', () => {
       },
     ])[0]
 
-    expect(oneItemSection.items.map((item) => item.promoBadge)).toEqual([
-      undefined,
-    ])
-    expect(fourItemSection.items.map((item) => item.promoBadge)).toEqual([
-      '熱銷 TOP1',
-      undefined,
-      undefined,
-      undefined,
-    ])
-    expect(fiveItemSection.items.map((item) => item.promoBadge)).toEqual([
+    expect(
+      oneItemSection.items.map((item) => item.recommendationBadge),
+    ).toEqual([undefined])
+    expect(
+      fourItemSection.items.map((item) => item.recommendationBadge),
+    ).toEqual(['熱銷 TOP1', undefined, undefined, undefined])
+    expect(
+      fiveItemSection.items.map((item) => item.recommendationBadge),
+    ).toEqual([
       '熱銷 TOP1',
       '熱銷 TOP2',
       '熱銷 TOP3',
