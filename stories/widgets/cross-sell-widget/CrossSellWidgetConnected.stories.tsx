@@ -131,7 +131,7 @@ export const ApiSuccess: Story = {
     docs: {
       description: {
         story:
-          'Toggle useMockResponse off to call the selected AP-56 origin through the Storybook dev proxy.',
+          'Turn useMockResponse on to inspect local AP-56 mock data, or off to call the selected AP-56 origin through the Storybook dev proxy.',
       },
     },
   },
