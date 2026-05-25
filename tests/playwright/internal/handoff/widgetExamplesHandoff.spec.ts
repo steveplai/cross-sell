@@ -138,6 +138,16 @@ const webComponentExamples: WebComponentExample[] = [
     ],
   },
   {
+    name: 'cross sell widget connected web component visible blocks',
+    path: '/examples/cross-sell-widget-connected/wc/visible-blocks.html',
+    widgets: [
+      {
+        selector: 'cross-sell-widget-connected',
+        text: '探索地區飯店',
+      },
+    ],
+  },
+  {
     name: 'cross sell widget connected web component property',
     path: '/examples/cross-sell-widget-connected/wc/property.html',
     widgets: [
