@@ -1,4 +1,4 @@
-import { Fragment, type ReactNode, useEffect, useState } from 'react'
+import { type ReactNode, useEffect, useState } from 'react'
 
 import { cn } from '@/lib/utils'
 import {
@@ -47,7 +47,7 @@ const insuranceMailBody = [
   '關係：',
 ].join('\n')
 
-type ContentPanelShape = 'default' | 'flatBottom' | 'flatTop'
+type ContentPanelJoinState = 'none' | 'joinsNext' | 'joinsPrevious'
 type CrossSellWidgetContentBlockKey =
   | 'hotel'
   | 'hsr'
@@ -57,14 +57,9 @@ type CrossSellWidgetContentBlockKey =
   | 'other'
   | 'reminders'
 
-interface CrossSellWidgetContentBlockRenderOptions {
-  className?: string
-  panelShape?: ContentPanelShape
-}
-
 interface CrossSellWidgetContentBlock {
+  content: ReactNode
   key: CrossSellWidgetContentBlockKey
-  render: (options?: CrossSellWidgetContentBlockRenderOptions) => ReactNode
 }
 
 const promoAttachableBlockKeys = new Set<CrossSellWidgetContentBlockKey>([
@@ -80,23 +75,23 @@ function ContentPanel({
   blockKey,
   children,
   className,
-  panelShape = 'default',
+  panelJoinState = 'none',
 }: {
   allowOverflow?: boolean
   blockKey?: 'promoHeader' | CrossSellWidgetContentBlockKey
   children: ReactNode
   className?: string
-  panelShape?: ContentPanelShape
+  panelJoinState?: ContentPanelJoinState
 }) {
   return (
     <div
       className={cn(
         'rounded-none',
-        panelShape === 'default' &&
+        panelJoinState === 'none' &&
           'lion-desktop:rounded-(--lion-panel-radius)',
-        panelShape === 'flatBottom' &&
+        panelJoinState === 'joinsNext' &&
           'lion-desktop:rounded-t-(--lion-panel-radius)',
-        panelShape === 'flatTop' &&
+        panelJoinState === 'joinsPrevious' &&
           'lion-desktop:rounded-b-(--lion-panel-radius)',
         allowOverflow ? 'overflow-visible' : 'overflow-hidden',
         className,
@@ -155,23 +150,17 @@ function CrossSellWidgetContent({
     }
 
     return {
-      key: blockKey,
-      render: ({ className, panelShape } = {}) => (
-        <ContentPanel
-          blockKey={blockKey}
-          className={className}
-          panelShape={panelShape}
-        >
-          <CrossSellSectionList
-            currency={currency}
-            isPromoActive={isPromoActive}
-            locale={locale}
-            onSelectItem={onSelectItem}
-            onViewMore={onViewMore}
-            sections={renderableSections}
-          />
-        </ContentPanel>
+      content: (
+        <CrossSellSectionList
+          currency={currency}
+          isPromoActive={isPromoActive}
+          locale={locale}
+          onSelectItem={onSelectItem}
+          onViewMore={onViewMore}
+          sections={renderableSections}
+        />
       ),
+      key: blockKey,
     }
   }
 
@@ -181,22 +170,16 @@ function CrossSellWidgetContent({
     }
 
     return {
-      key: 'hsr',
-      render: ({ className, panelShape } = {}) => (
-        <ContentPanel
-          blockKey="hsr"
-          className={className}
-          panelShape={panelShape}
-        >
-          <HsrAddonBanner
-            addon={hsrAddon}
-            href={hsrAddonHref}
-            onSelectAddon={() =>
-              onSelectAddon?.({ addonId: hsrAddon.id ?? hsrAddonId })
-            }
-          />
-        </ContentPanel>
+      content: (
+        <HsrAddonBanner
+          addon={hsrAddon}
+          href={hsrAddonHref}
+          onSelectAddon={() =>
+            onSelectAddon?.({ addonId: hsrAddon.id ?? hsrAddonId })
+          }
+        />
       ),
+      key: 'hsr',
     }
   }
 
@@ -212,23 +195,17 @@ function CrossSellWidgetContent({
     }
 
     return {
-      key: 'attraction',
-      render: ({ className, panelShape } = {}) => (
-        <ContentPanel
-          blockKey="attraction"
-          className={className}
-          panelShape={panelShape}
-        >
-          <AttractionRecommendationsPanel
-            currency={currency}
-            isPromoActive={isPromoActive}
-            locale={locale}
-            onSelectItem={onSelectItem}
-            onViewMore={onViewMore}
-            sections={renderableSections}
-          />
-        </ContentPanel>
+      content: (
+        <AttractionRecommendationsPanel
+          currency={currency}
+          isPromoActive={isPromoActive}
+          locale={locale}
+          onSelectItem={onSelectItem}
+          onViewMore={onViewMore}
+          sections={renderableSections}
+        />
       ),
+      key: 'attraction',
     }
   }
 
@@ -240,24 +217,18 @@ function CrossSellWidgetContent({
     const remindersData = data.reminders
 
     return {
-      key: 'reminders',
-      render: ({ className, panelShape } = {}) => (
-        <ContentPanel
-          blockKey="reminders"
-          className={className}
-          panelShape={panelShape}
-        >
-          <ReminderCards
-            items={createReminderItems(remindersData.items, {
-              insuranceMailtoHref,
-              visaPassportHref,
-            })}
-            onSelectAddon={(addonId) => onSelectAddon?.({ addonId })}
-            subtitle={remindersData.subtitle}
-            title={remindersData.title}
-          />
-        </ContentPanel>
+      content: (
+        <ReminderCards
+          items={createReminderItems(remindersData.items, {
+            insuranceMailtoHref,
+            visaPassportHref,
+          })}
+          onSelectAddon={(addonId) => onSelectAddon?.({ addonId })}
+          subtitle={remindersData.subtitle}
+          title={remindersData.title}
+        />
       ),
+      key: 'reminders',
     }
   }
 
@@ -290,7 +261,7 @@ function CrossSellWidgetContent({
           <ContentPanel
             allowOverflow
             blockKey="promoHeader"
-            panelShape={promoAttachedBlockKey ? 'flatBottom' : 'default'}
+            panelJoinState={promoAttachedBlockKey ? 'joinsNext' : 'none'}
           >
             <PromoHeader
               isPromoActive={isPromoActive}
@@ -306,12 +277,14 @@ function CrossSellWidgetContent({
             index > 0 || (shouldRenderPromoHeader && !isAttachedToPromo)
 
           return (
-            <Fragment key={block.key}>
-              {block.render({
-                className: cn(shouldAddTopMargin && 'mt-2.5'),
-                panelShape: isAttachedToPromo ? 'flatTop' : 'default',
-              })}
-            </Fragment>
+            <ContentPanel
+              blockKey={block.key}
+              className={cn(shouldAddTopMargin && 'mt-2.5')}
+              key={block.key}
+              panelJoinState={isAttachedToPromo ? 'joinsPrevious' : 'none'}
+            >
+              {block.content}
+            </ContentPanel>
           )
         })}
       </div>
