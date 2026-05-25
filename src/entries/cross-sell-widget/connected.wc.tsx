@@ -8,7 +8,10 @@ import {
   type CrossSellWidgetConnectedProps,
   type CrossSellWidgetSectionContentOverrides,
   type CrossSellWidgetSectionKind,
+  type CrossSellWidgetSourceProduct,
+  type CrossSellWidgetVisibleBlocks,
 } from '../../widgets/cross-sell-widget'
+import { crossSellWidgetBlockKeys } from '../../widgets/cross-sell-widget/lib/visibleBlocks'
 import widgetStyles from '../../widgets/cross-sell-widget/style.css?inline'
 
 const styles = `${baseStyles}\n${widgetStyles}`
@@ -18,6 +21,11 @@ const sectionKinds = [
   'transport',
   'flight',
 ] as const satisfies readonly CrossSellWidgetSectionKind[]
+const sourceProducts = [
+  'flight',
+  'hotel',
+  'ticket',
+] as const satisfies readonly CrossSellWidgetSourceProduct[]
 
 //#region - Functions
 
@@ -25,6 +33,12 @@ function parseErrorMode(
   value: string | null | undefined,
 ): CrossSellWidgetConnectedErrorMode {
   return value === 'message' ? 'message' : 'hidden'
+}
+
+function parseSourceProduct(
+  value: string | null | undefined,
+): CrossSellWidgetSourceProduct | undefined {
+  return sourceProducts.find((sourceProduct) => sourceProduct === value)
 }
 
 function getOptionalAttribute(element: HTMLElement, name: string) {
@@ -69,6 +83,26 @@ function parseOptionalNumber(value: string | null | undefined) {
   const numberValue = Number(value)
 
   return Number.isFinite(numberValue) ? numberValue : undefined
+}
+
+function parseVisibleBlocksAttribute(value: string | null) {
+  if (!value) {
+    return undefined
+  }
+
+  try {
+    return pickVisibleBlocks(JSON.parse(value))
+  } catch {
+    return undefined
+  }
+}
+
+function getVisibleBlocksProperty(
+  element: HTMLElement,
+): CrossSellWidgetVisibleBlocks | undefined {
+  return pickVisibleBlocks(
+    (element as HTMLElement & { visibleBlocks?: unknown }).visibleBlocks,
+  )
 }
 
 function getOptionalNumberProperty(element: HTMLElement, name: string) {
@@ -153,6 +187,24 @@ function pickSectionContentOverrides(
   return Object.keys(overrides).length > 0 ? overrides : undefined
 }
 
+function pickVisibleBlocks(
+  value: unknown,
+): CrossSellWidgetVisibleBlocks | undefined {
+  if (!isRecord(value)) {
+    return undefined
+  }
+
+  const visibleBlocks: CrossSellWidgetVisibleBlocks = {}
+
+  crossSellWidgetBlockKeys.forEach((key) => {
+    if (typeof value[key] === 'boolean') {
+      visibleBlocks[key] = value[key]
+    }
+  })
+
+  return Object.keys(visibleBlocks).length > 0 ? visibleBlocks : undefined
+}
+
 function pickConnectedConfig(value: unknown): CrossSellWidgetConnectedConfig {
   if (!isRecord(value)) {
     return {}
@@ -210,14 +262,18 @@ createReactWebComponent<CrossSellWidgetConnectedProps>({
     'promo-duration-seconds',
     'promo-starts-at',
     'recommend-product-types',
+    'source-product',
     'travel-insurance-contact-email',
+    'visible-blocks',
   ],
   observedProperties: [
     'config',
     'orderDestination',
     'promoDurationSeconds',
     'promoStartsAt',
+    'sourceProduct',
     'travelInsuranceContactEmail',
+    'visibleBlocks',
   ],
   styles,
   mapElementToProps: (element) => {
@@ -257,9 +313,16 @@ createReactWebComponent<CrossSellWidgetConnectedProps>({
         element,
         'recommend-product-types',
       ),
+      sourceProduct: parseSourceProduct(
+        getOptionalAttribute(element, 'source-product') ??
+          getOptionalStringProperty(element, 'sourceProduct'),
+      ),
       travelInsuranceContactEmail:
         getOptionalAttribute(element, 'travel-insurance-contact-email') ??
         getOptionalStringProperty(element, 'travelInsuranceContactEmail'),
+      visibleBlocks:
+        getVisibleBlocksProperty(element) ??
+        parseVisibleBlocksAttribute(element.getAttribute('visible-blocks')),
       onSelectItem: (detail) => {
         element.dispatchEvent(
           new CustomEvent('cross-sell-widget:item-select', {

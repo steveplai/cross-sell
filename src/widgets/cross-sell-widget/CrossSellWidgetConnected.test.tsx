@@ -173,6 +173,104 @@ describe('CrossSellWidgetConnected', () => {
     )
   })
 
+  it('keeps all existing blocks visible for the flight source product', async () => {
+    const get = vi
+      .fn<MockRequestClientRequest>()
+      .mockResolvedValue(ap56CrossSellResponse)
+    const requestClient = createMockRequestClient(get)
+
+    render(
+      <CrossSellWidgetConnectedForTesting
+        orderNumber="2026-123456"
+        requestClient={requestClient}
+        sourceProduct="flight"
+      />,
+    )
+
+    expect(
+      await screen.findByRole('heading', { name: '探索地區飯店' }),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '前往加購' })).toBeInTheDocument()
+    expect(screen.getByText('簽證護照')).toBeInTheDocument()
+    expect(screen.getByText('旅遊綜合險')).toBeInTheDocument()
+  })
+
+  it('hides hotel recommendations and reminders for the hotel source product', async () => {
+    const get = vi
+      .fn<MockRequestClientRequest>()
+      .mockResolvedValue(ap56CrossSellResponse)
+    const requestClient = createMockRequestClient(get)
+
+    render(
+      <CrossSellWidgetConnectedForTesting
+        orderNumber="2026-123456"
+        requestClient={requestClient}
+        sourceProduct="hotel"
+      />,
+    )
+
+    expect(
+      await screen.findByRole('link', { name: /東京很不錯票券/ }),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByRole('heading', { name: '探索地區飯店' }),
+    ).not.toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '前往加購' })).toBeInTheDocument()
+    expect(screen.queryByText('簽證護照')).not.toBeInTheDocument()
+    expect(screen.queryByText('旅遊綜合險')).not.toBeInTheDocument()
+  })
+
+  it('hides hotel, HSR, and reminders for the ticket source product', async () => {
+    const get = vi
+      .fn<MockRequestClientRequest>()
+      .mockResolvedValue(ap56CrossSellResponse)
+    const requestClient = createMockRequestClient(get)
+
+    render(
+      <CrossSellWidgetConnectedForTesting
+        orderNumber="2026-123456"
+        requestClient={requestClient}
+        sourceProduct="ticket"
+      />,
+    )
+
+    expect(
+      await screen.findByRole('link', { name: /東京很不錯票券/ }),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByRole('heading', { name: '探索地區飯店' }),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('link', { name: '前往加購' }),
+    ).not.toBeInTheDocument()
+    expect(screen.queryByText('簽證護照')).not.toBeInTheDocument()
+    expect(screen.queryByText('旅遊綜合險')).not.toBeInTheDocument()
+  })
+
+  it('lets visible blocks override the source product preset', async () => {
+    const get = vi
+      .fn<MockRequestClientRequest>()
+      .mockResolvedValue(ap56CrossSellResponse)
+    const requestClient = createMockRequestClient(get)
+
+    render(
+      <CrossSellWidgetConnectedForTesting
+        orderNumber="2026-123456"
+        requestClient={requestClient}
+        sourceProduct="ticket"
+        visibleBlocks={{ hsr: true }}
+      />,
+    )
+
+    expect(
+      await screen.findByRole('link', { name: /東京很不錯票券/ }),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '前往加購' })).toBeInTheDocument()
+    expect(
+      screen.queryByRole('heading', { name: '探索地區飯店' }),
+    ).not.toBeInTheDocument()
+  })
+
   it('renders AP-56 rating content by the spec thresholds', async () => {
     const get = vi
       .fn<MockRequestClientRequest>()

@@ -16,14 +16,17 @@ import type { LiontravelDomainMode } from '@/shared/utils/liontravelUrl'
 
 import { createWidgetRootProps } from '../../runtime/widgetRoot'
 import { CrossSellWidget } from './CrossSellWidget'
+import { resolveCrossSellWidgetVisibleBlocks } from './lib/visibleBlocks'
 import type {
   CrossSellWidgetContentOverrides,
   CrossSellWidgetOrder,
   CrossSellWidgetProps,
+  CrossSellWidgetVisibleBlocks,
 } from './types'
 
 export type CrossSellWidgetConnectedErrorMode = 'hidden' | 'message'
 export type CrossSellWidgetConnectedEnvironment = LiontravelDomainMode
+export type CrossSellWidgetSourceProduct = 'flight' | 'hotel' | 'ticket'
 
 export type CrossSellWidgetConnectedConfig = Omit<
   CrossSellWidgetContentOverrides,
@@ -40,7 +43,9 @@ export interface CrossSellWidgetConnectedProps extends CrossSellWidgetConnectedC
   promoDurationSeconds?: number
   promoStartsAt?: string
   recommendProductTypes?: Ap56CrossSellRecommendProductTypes
+  sourceProduct?: CrossSellWidgetSourceProduct
   travelInsuranceContactEmail?: string
+  visibleBlocks?: CrossSellWidgetVisibleBlocks
 }
 
 interface CrossSellWidgetConnectedInternalProps extends CrossSellWidgetConnectedProps {
@@ -53,6 +58,21 @@ interface CrossSellWidgetConnectedInternalProps extends CrossSellWidgetConnected
 const connectedWidgetRootProps = createWidgetRootProps(
   'cross-sell-widget-connected',
 )
+const visibleBlocksBySourceProduct: Record<
+  CrossSellWidgetSourceProduct,
+  CrossSellWidgetVisibleBlocks
+> = {
+  flight: {},
+  hotel: {
+    hotel: false,
+    reminders: false,
+  },
+  ticket: {
+    hotel: false,
+    hsr: false,
+    reminders: false,
+  },
+}
 
 function createConnectedQueryClient() {
   return new QueryClient({
@@ -106,6 +126,16 @@ function createDefaultOrderYear(orderNumber: string) {
   return new Date().getFullYear().toString()
 }
 
+function resolveConnectedVisibleBlocks(
+  sourceProduct?: CrossSellWidgetSourceProduct,
+  visibleBlocks?: CrossSellWidgetVisibleBlocks,
+) {
+  return resolveCrossSellWidgetVisibleBlocks({
+    ...(sourceProduct ? visibleBlocksBySourceProduct[sourceProduct] : {}),
+    ...visibleBlocks,
+  })
+}
+
 //#endregion - Functions
 
 //#region - Sub Components
@@ -129,9 +159,15 @@ function CrossSellWidgetConnectedContent({
   reminders,
   requestClient,
   sectionContentOverrides,
+  sourceProduct,
   travelInsuranceContactEmail,
+  visibleBlocks,
 }: CrossSellWidgetConnectedInternalProps) {
   const domainMode = environment
+  const resolvedVisibleBlocks = useMemo(
+    () => resolveConnectedVisibleBlocks(sourceProduct, visibleBlocks),
+    [sourceProduct, visibleBlocks],
+  )
   const resolvedPromo = useMemo(() => {
     if (!promo && !promoStartsAt && promoDurationSeconds === undefined) {
       return undefined
@@ -192,6 +228,7 @@ function CrossSellWidgetConnectedContent({
             ? { email: travelInsuranceContactEmail }
             : undefined
         }
+        visibleBlocks={resolvedVisibleBlocks}
       />
     )
   }

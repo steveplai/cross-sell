@@ -44,6 +44,20 @@ export type CrossSellWidgetSectionKind =
   | 'transport'
   | 'flight'
 
+export type CrossSellWidgetBlockKey =
+  | 'promoHeader'
+  | 'hotel'
+  | 'hsr'
+  | 'attraction'
+  | 'transport'
+  | 'flight'
+  | 'other'
+  | 'reminders'
+
+export type CrossSellWidgetVisibleBlocks = Partial<
+  Record<CrossSellWidgetBlockKey, boolean>
+>
+
 export interface CrossSellWidgetPopularSearch {
   id?: string
   label: string
@@ -153,6 +167,7 @@ export interface CrossSellWidgetAddonEvent {
 export interface CrossSellWidgetProps extends CrossSellWidgetContentOverrides {
   order?: CrossSellWidgetOrder
   sections: CrossSellWidgetSection[]
+  visibleBlocks?: CrossSellWidgetVisibleBlocks
   onSelectItem?: (event: CrossSellWidgetItemEvent) => void
   onViewMore?: (event: CrossSellWidgetViewMoreEvent) => void
   onSelectAddon?: (event: CrossSellWidgetAddonEvent) => void

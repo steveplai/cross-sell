@@ -535,6 +535,74 @@ test('cross sell widget connected web component handoff emits item event', async
   ).toContainText('cross-sell-widget:item-select')
 })
 
+test('cross sell widget connected web component applies source product attribute', async ({
+  page,
+}) => {
+  await gotoHandoffExample(
+    page,
+    '/examples/cross-sell-widget-connected/wc/basic.html',
+  )
+
+  await expect
+    .poll(() => getWebComponentWidgetText(page, 'cross-sell-widget-connected'))
+    .toContain('探索地區飯店')
+
+  await page.locator('cross-sell-widget-connected').evaluate((element) => {
+    element.setAttribute('source-product', 'hotel')
+  })
+
+  await expect
+    .poll(() => getWebComponentWidgetText(page, 'cross-sell-widget-connected'))
+    .not.toContain('探索地區飯店')
+  await expect
+    .poll(() => getWebComponentWidgetText(page, 'cross-sell-widget-connected'))
+    .toContain('前往加購')
+  await expect
+    .poll(() => getWebComponentWidgetText(page, 'cross-sell-widget-connected'))
+    .not.toContain('簽證護照')
+})
+
+test('cross sell widget connected web component applies visible blocks attribute', async ({
+  page,
+}) => {
+  await gotoHandoffExample(
+    page,
+    '/examples/cross-sell-widget-connected/wc/basic.html',
+  )
+
+  await expect
+    .poll(() => getWebComponentWidgetText(page, 'cross-sell-widget-connected'))
+    .toContain('前往加購')
+
+  await page.locator('cross-sell-widget-connected').evaluate((element) => {
+    element.setAttribute('visible-blocks', JSON.stringify({ hsr: false }))
+  })
+
+  await expect
+    .poll(() => getWebComponentWidgetText(page, 'cross-sell-widget-connected'))
+    .not.toContain('前往加購')
+})
+
+test('cross sell widget connected web component ignores visible blocks in config', async ({
+  page,
+}) => {
+  await gotoHandoffExample(
+    page,
+    '/examples/cross-sell-widget-connected/wc/basic.html',
+  )
+
+  await page.locator('cross-sell-widget-connected').evaluate((element) => {
+    element.setAttribute(
+      'config',
+      JSON.stringify({ visibleBlocks: { hsr: false } }),
+    )
+  })
+
+  await expect
+    .poll(() => getWebComponentWidgetText(page, 'cross-sell-widget-connected'))
+    .toContain('前往加購')
+})
+
 test('cross sell widget connected web component applies config attribute overrides', async ({
   page,
 }) => {

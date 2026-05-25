@@ -168,6 +168,69 @@ describe('CrossSellWidget', () => {
     ).not.toBeInTheDocument()
   })
 
+  it('hides selected recommendation and reminder blocks', () => {
+    render(
+      <CrossSellWidget
+        {...cloneSampleData({
+          visibleBlocks: {
+            hotel: false,
+            reminders: false,
+          },
+        })}
+      />,
+    )
+
+    expect(screen.getByText('您已解鎖限時優惠！')).toBeInTheDocument()
+    expect(
+      screen.queryByRole('heading', { name: '探索地區飯店' }),
+    ).not.toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '前往加購' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: '探索地區 景點不錯過' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: '當地交通 一次搞定' }),
+    ).toBeInTheDocument()
+    expect(screen.queryByText('簽證護照')).not.toBeInTheDocument()
+    expect(screen.queryByText('旅遊綜合險')).not.toBeInTheDocument()
+  })
+
+  it('can hide the promo header while keeping the hotel block', () => {
+    render(
+      <CrossSellWidget
+        {...cloneSampleData({
+          visibleBlocks: {
+            promoHeader: false,
+          },
+        })}
+      />,
+    )
+
+    expect(screen.queryByText('您已解鎖限時優惠！')).not.toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: '探索地區飯店' }),
+    ).toBeInTheDocument()
+  })
+
+  it('hides the promo and hotel panel content when both blocks are hidden', () => {
+    render(
+      <CrossSellWidget
+        {...cloneSampleData({
+          visibleBlocks: {
+            promoHeader: false,
+            hotel: false,
+          },
+        })}
+      />,
+    )
+
+    expect(screen.queryByText('您已解鎖限時優惠！')).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('heading', { name: '探索地區飯店' }),
+    ).not.toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '前往加購' })).toBeInTheDocument()
+  })
+
   it('keeps popular search overflow hints hidden when popular searches fit', () => {
     render(<CrossSellWidget {...cloneSampleData()} />)
 

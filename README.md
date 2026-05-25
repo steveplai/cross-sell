@@ -197,14 +197,25 @@ Public contract:
 - Web Component tag: `cross-sell-widget-connected`
 - Mount API global: `window.CrossSellWidgetConnected`
 - Attributes: `order-number`, `order-destination`, `recommend-product-types`,
-  `environment`, `error-mode`, `locale`, `currency`, `promo-starts-at`,
-  `promo-duration-seconds`, `travel-insurance-contact-email`, `config`
+  `source-product`, `visible-blocks`, `environment`, `error-mode`, `locale`,
+  `currency`, `promo-starts-at`, `promo-duration-seconds`,
+  `travel-insurance-contact-email`, `config`
 - `environment` values: `uat`, `production`
 - `error-mode` values: `hidden`, `message`
 - `recommend-product-types` default: `htl,etk`
+- `source-product` values: `flight`, `hotel`, `ticket`
+- `source-product` presets:
+  - `flight`: shows all blocks
+  - `hotel`: hides hotel recommendations and reminders
+  - `ticket`: hides hotel recommendations, HSR add-on, and reminders
+- `visible-blocks` JSON attribute/property can override block visibility with
+  boolean values for `promoHeader`, `hotel`, `hsr`, `attraction`, `transport`,
+  `flight`, `other`, and `reminders`
 - `config` JSON/property supports static content overrides such as `promo`,
   `reminders`, `hsrAddon`, `sectionContentOverrides`, `orderDestination`,
   `locale`, and `currency`
+- `config` does not control block visibility. Use `source-product` and
+  `visible-blocks` for visibility rules.
 - `promo-starts-at` / `promo-duration-seconds` override
   `config.promo.startsAt` / `config.promo.durationSeconds`
 - Events:

@@ -36,6 +36,7 @@ const meta = {
     promoStartsAt: createActivePromoStartsAt(),
     promoDurationSeconds: 30 * 24 * 60 * 60,
     recommendProductTypes: 'htl,etk',
+    sourceProduct: 'flight',
     travelInsuranceContactEmail: 'customer-service@liontravel.com',
   },
   argTypes: {
@@ -64,6 +65,13 @@ const meta = {
     },
     recommendProductTypes: {
       control: 'text',
+    },
+    sourceProduct: {
+      control: 'inline-radio',
+      options: ['flight', 'hotel', 'ticket'],
+    },
+    visibleBlocks: {
+      control: 'object',
     },
     useMockResponse: {
       control: 'boolean',
