@@ -48,6 +48,34 @@ function expectElementsInDocumentOrder(elements: Element[]) {
   })
 }
 
+function getCrossSellBlock(blockKey: string) {
+  const block = document.querySelector(`[data-cross-sell-block="${blockKey}"]`)
+
+  expect(block).not.toBeNull()
+
+  return block as HTMLElement
+}
+
+function expectNoCrossSellBlock(blockKey: string) {
+  expect(
+    document.querySelector(`[data-cross-sell-block="${blockKey}"]`),
+  ).toBeNull()
+}
+
+function expectCrossSellBlockTopMargin(
+  blockKey: string,
+  hasTopMargin: boolean,
+) {
+  const block = getCrossSellBlock(blockKey)
+
+  if (hasTopMargin) {
+    expect(block).toHaveClass('mt-2.5')
+    return
+  }
+
+  expect(block).not.toHaveClass('mt-2.5')
+}
+
 const defaultProductImageUrl =
   'https://static.liontech.com.tw/CommonResources/images/lionTravel/default_img.png'
 
@@ -229,6 +257,90 @@ describe('CrossSellWidget', () => {
       screen.queryByRole('heading', { name: '探索地區飯店' }),
     ).not.toBeInTheDocument()
     expect(screen.getByRole('link', { name: '前往加購' })).toBeInTheDocument()
+  })
+
+  it('attaches the promo header to the hotel block by default', () => {
+    render(<CrossSellWidget {...cloneSampleData()} />)
+
+    expectCrossSellBlockTopMargin('promoHeader', false)
+    expectCrossSellBlockTopMargin('hotel', false)
+    expectCrossSellBlockTopMargin('hsr', true)
+    expect(getCrossSellBlock('promoHeader')).toHaveClass(
+      'lion-desktop:rounded-t-(--lion-panel-radius)',
+    )
+    expect(getCrossSellBlock('hotel')).toHaveClass(
+      'lion-desktop:rounded-b-(--lion-panel-radius)',
+    )
+  })
+
+  it('attaches the promo header to HSR when hotel recommendations are hidden', () => {
+    render(
+      <CrossSellWidget
+        {...cloneSampleData({
+          visibleBlocks: {
+            hotel: false,
+          },
+        })}
+      />,
+    )
+
+    expectNoCrossSellBlock('hotel')
+    expectCrossSellBlockTopMargin('hsr', false)
+    expectCrossSellBlockTopMargin('attraction', true)
+    expect(getCrossSellBlock('hsr')).toHaveClass(
+      'lion-desktop:rounded-b-(--lion-panel-radius)',
+    )
+  })
+
+  it('attaches the promo header to attraction recommendations when hotel and HSR are hidden', () => {
+    render(
+      <CrossSellWidget
+        {...cloneSampleData({
+          visibleBlocks: {
+            hotel: false,
+            hsr: false,
+          },
+        })}
+      />,
+    )
+
+    expectNoCrossSellBlock('hotel')
+    expectNoCrossSellBlock('hsr')
+    expectCrossSellBlockTopMargin('attraction', false)
+    expectCrossSellBlockTopMargin('transport', true)
+  })
+
+  it('does not add top margin to the first content block when the promo header is hidden', () => {
+    render(
+      <CrossSellWidget
+        {...cloneSampleData({
+          visibleBlocks: {
+            promoHeader: false,
+          },
+        })}
+      />,
+    )
+
+    expectNoCrossSellBlock('promoHeader')
+    expectCrossSellBlockTopMargin('hotel', false)
+    expectCrossSellBlockTopMargin('hsr', true)
+  })
+
+  it('keeps a gap after the promo header when no attachable product block is visible', () => {
+    render(
+      <CrossSellWidget
+        {...cloneSampleData({
+          visibleBlocks: {
+            attraction: false,
+            hotel: false,
+            hsr: false,
+          },
+        })}
+      />,
+    )
+
+    expectCrossSellBlockTopMargin('promoHeader', false)
+    expectCrossSellBlockTopMargin('transport', true)
   })
 
   it('keeps popular search overflow hints hidden when popular searches fit', () => {

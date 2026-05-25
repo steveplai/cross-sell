@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect, useState } from 'react'
+import { Fragment, type ReactNode, useEffect, useState } from 'react'
 
 import { cn } from '@/lib/utils'
 import {
@@ -47,21 +47,61 @@ const insuranceMailBody = [
   '關係：',
 ].join('\n')
 
+type ContentPanelShape = 'default' | 'flatBottom' | 'flatTop'
+type CrossSellWidgetContentBlockKey =
+  | 'hotel'
+  | 'hsr'
+  | 'attraction'
+  | 'transport'
+  | 'flight'
+  | 'other'
+  | 'reminders'
+
+interface CrossSellWidgetContentBlockRenderOptions {
+  className?: string
+  panelShape?: ContentPanelShape
+}
+
+interface CrossSellWidgetContentBlock {
+  key: CrossSellWidgetContentBlockKey
+  render: (options?: CrossSellWidgetContentBlockRenderOptions) => ReactNode
+}
+
+const promoAttachableBlockKeys = new Set<CrossSellWidgetContentBlockKey>([
+  'hotel',
+  'hsr',
+  'attraction',
+])
+
 //#region - Sub Components
 
 function ContentPanel({
   allowOverflow = false,
+  blockKey,
   children,
+  className,
+  panelShape = 'default',
 }: {
   allowOverflow?: boolean
+  blockKey?: 'promoHeader' | CrossSellWidgetContentBlockKey
   children: ReactNode
+  className?: string
+  panelShape?: ContentPanelShape
 }) {
   return (
     <div
       className={cn(
-        'rounded-none lion-desktop:rounded-(--lion-panel-radius)',
+        'rounded-none',
+        panelShape === 'default' &&
+          'lion-desktop:rounded-(--lion-panel-radius)',
+        panelShape === 'flatBottom' &&
+          'lion-desktop:rounded-t-(--lion-panel-radius)',
+        panelShape === 'flatTop' &&
+          'lion-desktop:rounded-b-(--lion-panel-radius)',
         allowOverflow ? 'overflow-visible' : 'overflow-hidden',
+        className,
       )}
+      data-cross-sell-block={blockKey}
     >
       {children}
     </div>
@@ -100,14 +140,10 @@ function CrossSellWidgetContent({
     return sections.filter((section) => section.items.length > 0)
   }
 
-  const renderableAttractionSections = getRenderableSections(
-    sectionGroups.attraction,
-  )
-
-  function renderDefaultSectionPanel(
-    blockKey: 'transport' | 'flight' | 'other',
+  function createSectionListBlock(
+    blockKey: 'hotel' | 'transport' | 'flight' | 'other',
     sections: CrossSellWidgetResolvedSection[],
-  ) {
+  ): CrossSellWidgetContentBlock | null {
     if (!resolvedVisibleBlocks[blockKey]) {
       return null
     }
@@ -118,52 +154,127 @@ function CrossSellWidgetContent({
       return null
     }
 
-    return (
-      <ContentPanel>
-        <CrossSellSectionList
-          currency={currency}
-          isPromoActive={isPromoActive}
-          locale={locale}
-          onSelectItem={onSelectItem}
-          onViewMore={onViewMore}
-          sections={renderableSections}
-        />
-      </ContentPanel>
-    )
-  }
-
-  function renderPromoHotelPanel() {
-    const renderableHotelSections = resolvedVisibleBlocks.hotel
-      ? getRenderableSections(sectionGroups.hotel)
-      : []
-    const shouldRenderPromoHeader = resolvedVisibleBlocks.promoHeader
-
-    if (!shouldRenderPromoHeader && renderableHotelSections.length === 0) {
-      return null
-    }
-
-    return (
-      <ContentPanel allowOverflow>
-        {shouldRenderPromoHeader ? (
-          <PromoHeader
-            isPromoActive={isPromoActive}
-            promo={data.promo}
-            remainingSeconds={remainingSeconds}
-          />
-        ) : null}
-        {renderableHotelSections.length > 0 ? (
+    return {
+      key: blockKey,
+      render: ({ className, panelShape } = {}) => (
+        <ContentPanel
+          blockKey={blockKey}
+          className={className}
+          panelShape={panelShape}
+        >
           <CrossSellSectionList
             currency={currency}
             isPromoActive={isPromoActive}
             locale={locale}
             onSelectItem={onSelectItem}
             onViewMore={onViewMore}
-            sections={renderableHotelSections}
+            sections={renderableSections}
           />
-        ) : null}
-      </ContentPanel>
-    )
+        </ContentPanel>
+      ),
+    }
   }
+
+  function createHsrBlock(): CrossSellWidgetContentBlock | null {
+    if (!resolvedVisibleBlocks.hsr) {
+      return null
+    }
+
+    return {
+      key: 'hsr',
+      render: ({ className, panelShape } = {}) => (
+        <ContentPanel
+          blockKey="hsr"
+          className={className}
+          panelShape={panelShape}
+        >
+          <HsrAddonBanner
+            addon={hsrAddon}
+            href={hsrAddonHref}
+            onSelectAddon={() =>
+              onSelectAddon?.({ addonId: hsrAddon.id ?? hsrAddonId })
+            }
+          />
+        </ContentPanel>
+      ),
+    }
+  }
+
+  function createAttractionBlock(): CrossSellWidgetContentBlock | null {
+    if (!resolvedVisibleBlocks.attraction) {
+      return null
+    }
+
+    const renderableSections = getRenderableSections(sectionGroups.attraction)
+
+    if (renderableSections.length === 0) {
+      return null
+    }
+
+    return {
+      key: 'attraction',
+      render: ({ className, panelShape } = {}) => (
+        <ContentPanel
+          blockKey="attraction"
+          className={className}
+          panelShape={panelShape}
+        >
+          <AttractionRecommendationsPanel
+            currency={currency}
+            isPromoActive={isPromoActive}
+            locale={locale}
+            onSelectItem={onSelectItem}
+            onViewMore={onViewMore}
+            sections={renderableSections}
+          />
+        </ContentPanel>
+      ),
+    }
+  }
+
+  function createRemindersBlock(): CrossSellWidgetContentBlock | null {
+    if (!resolvedVisibleBlocks.reminders || !data.reminders) {
+      return null
+    }
+
+    const remindersData = data.reminders
+
+    return {
+      key: 'reminders',
+      render: ({ className, panelShape } = {}) => (
+        <ContentPanel
+          blockKey="reminders"
+          className={className}
+          panelShape={panelShape}
+        >
+          <ReminderCards
+            items={createReminderItems(remindersData.items, {
+              insuranceMailtoHref,
+              visaPassportHref,
+            })}
+            onSelectAddon={(addonId) => onSelectAddon?.({ addonId })}
+            subtitle={remindersData.subtitle}
+            title={remindersData.title}
+          />
+        </ContentPanel>
+      ),
+    }
+  }
+
+  const shouldRenderPromoHeader = resolvedVisibleBlocks.promoHeader
+  const contentBlocks = [
+    createSectionListBlock('hotel', sectionGroups.hotel),
+    createHsrBlock(),
+    createAttractionBlock(),
+    createSectionListBlock('transport', sectionGroups.transport),
+    createSectionListBlock('flight', sectionGroups.flight),
+    createSectionListBlock('other', sectionGroups.other),
+    createRemindersBlock(),
+  ].filter((block): block is CrossSellWidgetContentBlock => block !== null)
+  const promoAttachedBlockKey = shouldRenderPromoHeader
+    ? contentBlocks.find((block) => promoAttachableBlockKeys.has(block.key))
+        ?.key
+    : undefined
 
   return (
     <section
@@ -174,52 +285,35 @@ function CrossSellWidgetContent({
       data-promo-state={isPromoActive ? 'active' : 'expired'}
       {...crossSellWidgetRootProps}
     >
-      <div className="mx-auto flex w-full max-w-297.5 flex-col gap-2.5 py-0 lion-desktop:py-0">
-        {renderPromoHotelPanel()}
-
-        {resolvedVisibleBlocks.hsr ? (
-          <ContentPanel>
-            <HsrAddonBanner
-              addon={hsrAddon}
-              href={hsrAddonHref}
-              onSelectAddon={() =>
-                onSelectAddon?.({ addonId: hsrAddon.id ?? hsrAddonId })
-              }
-            />
-          </ContentPanel>
-        ) : null}
-
-        {resolvedVisibleBlocks.attraction &&
-        renderableAttractionSections.length > 0 ? (
-          <ContentPanel>
-            <AttractionRecommendationsPanel
-              currency={currency}
+      <div className="mx-auto flex w-full max-w-297.5 flex-col py-0 lion-desktop:py-0">
+        {shouldRenderPromoHeader ? (
+          <ContentPanel
+            allowOverflow
+            blockKey="promoHeader"
+            panelShape={promoAttachedBlockKey ? 'flatBottom' : 'default'}
+          >
+            <PromoHeader
               isPromoActive={isPromoActive}
-              locale={locale}
-              onSelectItem={onSelectItem}
-              onViewMore={onViewMore}
-              sections={renderableAttractionSections}
+              promo={data.promo}
+              remainingSeconds={remainingSeconds}
             />
           </ContentPanel>
         ) : null}
 
-        {renderDefaultSectionPanel('transport', sectionGroups.transport)}
-        {renderDefaultSectionPanel('flight', sectionGroups.flight)}
-        {renderDefaultSectionPanel('other', sectionGroups.other)}
+        {contentBlocks.map((block, index) => {
+          const isAttachedToPromo = block.key === promoAttachedBlockKey
+          const shouldAddTopMargin =
+            index > 0 || (shouldRenderPromoHeader && !isAttachedToPromo)
 
-        {resolvedVisibleBlocks.reminders && data.reminders ? (
-          <ContentPanel>
-            <ReminderCards
-              items={createReminderItems(data.reminders.items, {
-                insuranceMailtoHref,
-                visaPassportHref,
+          return (
+            <Fragment key={block.key}>
+              {block.render({
+                className: cn(shouldAddTopMargin && 'mt-2.5'),
+                panelShape: isAttachedToPromo ? 'flatTop' : 'default',
               })}
-              onSelectAddon={(addonId) => onSelectAddon?.({ addonId })}
-              subtitle={data.reminders.subtitle}
-              title={data.reminders.title}
-            />
-          </ContentPanel>
-        ) : null}
+            </Fragment>
+          )
+        })}
       </div>
     </section>
   )
