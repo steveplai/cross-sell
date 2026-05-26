@@ -20,7 +20,17 @@ import type {
   Ap56ProductInfo,
 } from './ap56CrossSellTypes'
 
-const popularSearchProductionHostname = 'activity.liontravel.com'
+const popularSearchProductionHostname = 'search.liontravel.com'
+
+const popularSearchTaglistBySectionKind: Record<
+  CrossSellWidgetSectionKind,
+  string
+> = {
+  attraction: 'etk',
+  flight: 'flt',
+  hotel: 'htl',
+  transport: 'etk',
+}
 
 interface MapAp56SectionsToWidgetSectionsOptions {
   domainMode: LiontravelDomainMode
@@ -28,7 +38,14 @@ interface MapAp56SectionsToWidgetSectionsOptions {
 
 interface Ap56SectionAccumulator extends CrossSellWidgetSection {
   kind: CrossSellWidgetSectionKind
+  popularSearchLabels: string[]
+  popularSearchTrackingParams?: PopularSearchTrackingParams
   productCandidates: Ap56ProductItemCandidate[]
+}
+
+interface PopularSearchTrackingParams {
+  mtl?: string
+  mtld?: string
 }
 
 export function mapAp56SectionsToWidgetSections(
@@ -64,15 +81,15 @@ export function mapAp56SectionsToWidgetSections(
 
     // AP-56 uses pList both for product cards and for "view more" URL rows.
     if (isSearchViewMoreType(type)) {
-      section.viewMoreHref = getFirstUrl(pList) ?? section.viewMoreHref
-      const popularSearches = createPopularSearches(
-        rawSection.CombineTagList,
-        domainMode,
-      )
+      const viewMoreHref = getFirstUrl(pList)
 
-      if (popularSearches.length > 0) {
-        section.popularSearches = popularSearches
+      if (viewMoreHref) {
+        section.viewMoreHref = viewMoreHref
+        section.popularSearchTrackingParams =
+          getPopularSearchTrackingParams(viewMoreHref)
       }
+
+      updatePopularSearchLabels(section, rawSection.CombineTagList)
 
       return
     }
@@ -89,27 +106,35 @@ export function mapAp56SectionsToWidgetSections(
       section.viewMoreHref = section.viewMoreHref ?? getFirstUrl(pList)
     }
 
-    const popularSearches = createPopularSearches(
-      rawSection.CombineTagList,
-      domainMode,
-    )
-
-    if (popularSearches.length > 0) {
-      section.popularSearches = popularSearches
-    }
+    updatePopularSearchLabels(section, rawSection.CombineTagList)
   })
 
   return Array.from(sectionAccumulators.values()).map(
-    ({ productCandidates, ...section }) => ({
-      ...section,
-      items: productCandidates.map(({ item, product }, index) =>
-        mapProductInfoToItem(item, product, {
-          index,
-          kind: section.kind,
-          totalItems: productCandidates.length,
-        }),
-      ),
-    }),
+    ({
+      productCandidates,
+      popularSearchLabels,
+      popularSearchTrackingParams,
+      ...section
+    }) => {
+      const popularSearches = createPopularSearches({
+        domainMode,
+        kind: section.kind,
+        labels: popularSearchLabels,
+        trackingParams: popularSearchTrackingParams,
+      })
+
+      return {
+        ...section,
+        ...(popularSearches.length > 0 ? { popularSearches } : {}),
+        items: productCandidates.map(({ item, product }, index) =>
+          mapProductInfoToItem(item, product, {
+            index,
+            kind: section.kind,
+            totalItems: productCandidates.length,
+          }),
+        ),
+      }
+    },
   )
 }
 
@@ -127,6 +152,7 @@ function getOrCreateSectionAccumulator(
     id: `api-${kind}`,
     kind,
     items: [],
+    popularSearchLabels: [],
     productCandidates: [],
   }
 
@@ -157,34 +183,81 @@ function isSearchViewMoreType(type: string | undefined) {
   return type?.includes('看更多(搜尋頁)') ?? false
 }
 
-function createPopularSearches(
+function updatePopularSearchLabels(
+  section: Ap56SectionAccumulator,
   value: unknown,
-  domainMode: LiontravelDomainMode,
-): CrossSellWidgetPopularSearch[] {
+) {
   if (!Array.isArray(value)) {
-    return []
+    return
   }
 
-  return value
-    .map(asString)
-    .filter((label): label is string => !!label)
-    .map((label) => ({
-      id: label,
-      label,
-      href: createPopularSearchHref(label, domainMode),
-    }))
+  const labels = value.map(asString).filter((label): label is string => !!label)
+
+  if (labels.length > 0) {
+    section.popularSearchLabels = labels
+  }
 }
 
-function createPopularSearchHref(
-  label: string,
-  domainMode: LiontravelDomainMode,
-) {
+interface CreatePopularSearchesOptions {
+  domainMode: LiontravelDomainMode
+  kind: CrossSellWidgetSectionKind
+  labels: string[]
+  trackingParams?: PopularSearchTrackingParams
+}
+
+function createPopularSearches({
+  domainMode,
+  kind,
+  labels,
+  trackingParams,
+}: CreatePopularSearchesOptions): CrossSellWidgetPopularSearch[] {
+  return labels.map((label) => ({
+    id: label,
+    label,
+    href: createPopularSearchHref({
+      domainMode,
+      kind,
+      label,
+      trackingParams,
+    }),
+  }))
+}
+
+interface CreatePopularSearchHrefOptions {
+  domainMode: LiontravelDomainMode
+  kind: CrossSellWidgetSectionKind
+  label: string
+  trackingParams?: PopularSearchTrackingParams
+}
+
+function createPopularSearchHref({
+  domainMode,
+  kind,
+  label,
+  trackingParams,
+}: CreatePopularSearchHrefOptions) {
   return createLiontravelUrl({
     domainMode,
-    pathname: '/search',
+    pathname: `/zh-tw/${encodeURIComponent(label)}`,
     productionHostname: popularSearchProductionHostname,
     query: {
-      SearchKeyword: label,
+      taglist: popularSearchTaglistBySectionKind[kind],
+      mtl: trackingParams?.mtl,
+      mtld: trackingParams?.mtld,
     },
   })
+}
+
+function getPopularSearchTrackingParams(
+  href: string,
+): PopularSearchTrackingParams | undefined {
+  try {
+    const url = new URL(href)
+    const mtl = asString(url.searchParams.get('mtl'))
+    const mtld = asString(url.searchParams.get('mtld'))
+
+    return mtl || mtld ? { mtl, mtld } : undefined
+  } catch {
+    return undefined
+  }
 }

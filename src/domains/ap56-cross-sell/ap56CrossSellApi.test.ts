@@ -195,12 +195,12 @@ describe('AP-56 cross-sell API', () => {
         {
           id: '東京 旅遊',
           label: '東京 旅遊',
-          href: 'https://activity.liontravel.com/search?SearchKeyword=%E6%9D%B1%E4%BA%AC+%E6%97%85%E9%81%8A',
+          href: 'https://search.liontravel.com/zh-tw/%E6%9D%B1%E4%BA%AC%20%E6%97%85%E9%81%8A?taglist=htl',
         },
         {
           id: '東京 鐵塔',
           label: '東京 鐵塔',
-          href: 'https://activity.liontravel.com/search?SearchKeyword=%E6%9D%B1%E4%BA%AC+%E9%90%B5%E5%A1%94',
+          href: 'https://search.liontravel.com/zh-tw/%E6%9D%B1%E4%BA%AC%20%E9%90%B5%E5%A1%94?taglist=htl',
         },
       ],
       items: [
@@ -608,7 +608,55 @@ describe('AP-56 cross-sell API', () => {
     expect(hotelSection?.popularSearches?.[0]).toMatchObject({
       id: '東京 旅遊',
       label: '東京 旅遊',
-      href: 'https://uactivity.liontravel.com/search?SearchKeyword=%E6%9D%B1%E4%BA%AC+%E6%97%85%E9%81%8A',
+      href: 'https://usearch.liontravel.com/zh-tw/%E6%9D%B1%E4%BA%AC%20%E6%97%85%E9%81%8A?taglist=htl',
+    })
+  })
+
+  it('maps AP-56 popular search links with section taglist and view-more tracking params', () => {
+    const sections = mapAp56CrossSellResponseToSections([
+      {
+        Type: '票券(玩樂)',
+        CombineTagList: ['主題樂園,門票'],
+        pList: [
+          {
+            ID: 'ticket-1',
+            Title: '上海主題樂園門票',
+            ProductUrl: 'https://activity.liontravel.com/detail/ticket-1',
+            Price: 1200,
+          },
+        ],
+      },
+      {
+        Type: '票券(玩樂)-看更多(搜尋頁)',
+        pList: [
+          {
+            ProductUrl:
+              'https://uactivity.liontravel.com/search?Foreign=1&SearchKeyword=%E9%A6%99%E6%B8%AF&searchkindname=%E9%81%8A%E7%A8%8B&mtl=crossell&mtld=afc233a5706ad7f01b326de7b3ae12f4',
+          },
+        ],
+      },
+      {
+        Type: '票券(交通)',
+        CombineTagList: ['機場接送'],
+        pList: [],
+      },
+    ])
+    const attractionSection = sections.find(
+      (section) => section.kind === 'attraction',
+    )
+    const transportSection = sections.find(
+      (section) => section.kind === 'transport',
+    )
+
+    expect(attractionSection?.popularSearches?.[0]).toMatchObject({
+      id: '主題樂園,門票',
+      label: '主題樂園,門票',
+      href: 'https://search.liontravel.com/zh-tw/%E4%B8%BB%E9%A1%8C%E6%A8%82%E5%9C%92%2C%E9%96%80%E7%A5%A8?taglist=etk&mtl=crossell&mtld=afc233a5706ad7f01b326de7b3ae12f4',
+    })
+    expect(transportSection?.popularSearches?.[0]).toMatchObject({
+      id: '機場接送',
+      label: '機場接送',
+      href: 'https://search.liontravel.com/zh-tw/%E6%A9%9F%E5%A0%B4%E6%8E%A5%E9%80%81?taglist=etk',
     })
   })
 
