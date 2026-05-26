@@ -47,7 +47,7 @@ function getOptionalAttribute(element: HTMLElement, name: string) {
   return value || undefined
 }
 
-function parseConfigAttribute(
+function parseJsonConfigAttribute(
   value: string | null,
 ): CrossSellWidgetConnectedConfig {
   if (!value) {
@@ -85,7 +85,7 @@ function parseOptionalNumber(value: string | null | undefined) {
   return Number.isFinite(numberValue) ? numberValue : undefined
 }
 
-function parseVisibleBlocksAttribute(value: string | null) {
+function parseJsonVisibleBlocksAttribute(value: string | null) {
   if (!value) {
     return undefined
   }
@@ -246,6 +246,20 @@ function pickConnectedConfig(value: unknown): CrossSellWidgetConnectedConfig {
   return config
 }
 
+function dispatchWidgetEvent(
+  element: HTMLElement,
+  name: string,
+  detail: unknown,
+) {
+  element.dispatchEvent(
+    new CustomEvent(name, {
+      bubbles: true,
+      composed: true,
+      detail,
+    }),
+  )
+}
+
 //#endregion - Functions
 
 createReactWebComponent<CrossSellWidgetConnectedProps>({
@@ -277,78 +291,93 @@ createReactWebComponent<CrossSellWidgetConnectedProps>({
   ],
   styles,
   mapElementToProps: (element) => {
-    const environment = getOptionalAttribute(element, 'environment')
-    const attributeConfig = parseConfigAttribute(element.getAttribute('config'))
+    const attributeConfig = parseJsonConfigAttribute(
+      element.getAttribute('config'),
+    )
     const propertyConfig = getConfigProperty(element)
-
-    return {
-      ...attributeConfig,
-      ...propertyConfig,
-      currency:
-        getOptionalAttribute(element, 'currency') ??
-        propertyConfig.currency ??
-        attributeConfig.currency,
-      environment: isLiontravelDomainMode(environment)
-        ? environment
-        : undefined,
-      errorMode: parseErrorMode(getOptionalAttribute(element, 'error-mode')),
-      locale:
-        getOptionalAttribute(element, 'locale') ??
-        propertyConfig.locale ??
-        attributeConfig.locale,
-      orderDestination:
-        getOptionalAttribute(element, 'order-destination') ??
-        getOptionalStringProperty(element, 'orderDestination') ??
-        propertyConfig.orderDestination ??
-        attributeConfig.orderDestination,
+    const directAttributes = {
+      currency: getOptionalAttribute(element, 'currency'),
+      environment: getOptionalAttribute(element, 'environment'),
+      errorMode: getOptionalAttribute(element, 'error-mode'),
+      locale: getOptionalAttribute(element, 'locale'),
+      orderDestination: getOptionalAttribute(element, 'order-destination'),
       orderNumber: getOptionalAttribute(element, 'order-number'),
-      promoDurationSeconds:
-        parseOptionalNumber(
-          getOptionalAttribute(element, 'promo-duration-seconds'),
-        ) ?? getOptionalNumberProperty(element, 'promoDurationSeconds'),
-      promoStartsAt:
-        getOptionalAttribute(element, 'promo-starts-at') ??
-        getOptionalStringProperty(element, 'promoStartsAt'),
+      promoDurationSeconds: parseOptionalNumber(
+        getOptionalAttribute(element, 'promo-duration-seconds'),
+      ),
+      promoStartsAt: getOptionalAttribute(element, 'promo-starts-at'),
       recommendProductTypes: getOptionalAttribute(
         element,
         'recommend-product-types',
       ),
+      sourceProduct: getOptionalAttribute(element, 'source-product'),
+      travelInsuranceContactEmail: getOptionalAttribute(
+        element,
+        'travel-insurance-contact-email',
+      ),
+      visibleBlocks: parseJsonVisibleBlocksAttribute(
+        element.getAttribute('visible-blocks'),
+      ),
+    }
+    const directProperties = {
+      orderDestination: getOptionalStringProperty(element, 'orderDestination'),
+      promoDurationSeconds: getOptionalNumberProperty(
+        element,
+        'promoDurationSeconds',
+      ),
+      promoStartsAt: getOptionalStringProperty(element, 'promoStartsAt'),
+      sourceProduct: getOptionalStringProperty(element, 'sourceProduct'),
+      travelInsuranceContactEmail: getOptionalStringProperty(
+        element,
+        'travelInsuranceContactEmail',
+      ),
+      visibleBlocks: getVisibleBlocksProperty(element),
+    }
+
+    // Keep these precedence rules stable; they are part of the external WC contract.
+    return {
+      ...attributeConfig,
+      ...propertyConfig,
+      currency:
+        directAttributes.currency ??
+        propertyConfig.currency ??
+        attributeConfig.currency,
+      environment: isLiontravelDomainMode(directAttributes.environment)
+        ? directAttributes.environment
+        : undefined,
+      errorMode: parseErrorMode(directAttributes.errorMode),
+      locale:
+        directAttributes.locale ??
+        propertyConfig.locale ??
+        attributeConfig.locale,
+      orderDestination:
+        directAttributes.orderDestination ??
+        directProperties.orderDestination ??
+        propertyConfig.orderDestination ??
+        attributeConfig.orderDestination,
+      orderNumber: directAttributes.orderNumber,
+      promoDurationSeconds:
+        directAttributes.promoDurationSeconds ??
+        directProperties.promoDurationSeconds,
+      promoStartsAt:
+        directAttributes.promoStartsAt ?? directProperties.promoStartsAt,
+      recommendProductTypes: directAttributes.recommendProductTypes,
       sourceProduct: parseSourceProduct(
-        getOptionalAttribute(element, 'source-product') ??
-          getOptionalStringProperty(element, 'sourceProduct'),
+        directAttributes.sourceProduct ?? directProperties.sourceProduct,
       ),
       travelInsuranceContactEmail:
-        getOptionalAttribute(element, 'travel-insurance-contact-email') ??
-        getOptionalStringProperty(element, 'travelInsuranceContactEmail'),
+        directAttributes.travelInsuranceContactEmail ??
+        directProperties.travelInsuranceContactEmail,
       visibleBlocks:
-        getVisibleBlocksProperty(element) ??
-        parseVisibleBlocksAttribute(element.getAttribute('visible-blocks')),
+        directProperties.visibleBlocks ?? directAttributes.visibleBlocks,
       onSelectItem: (detail) => {
-        element.dispatchEvent(
-          new CustomEvent('cross-sell-widget:item-select', {
-            bubbles: true,
-            composed: true,
-            detail,
-          }),
-        )
+        dispatchWidgetEvent(element, 'cross-sell-widget:item-select', detail)
       },
       onViewMore: (detail) => {
-        element.dispatchEvent(
-          new CustomEvent('cross-sell-widget:view-more', {
-            bubbles: true,
-            composed: true,
-            detail,
-          }),
-        )
+        dispatchWidgetEvent(element, 'cross-sell-widget:view-more', detail)
       },
       onSelectAddon: (detail) => {
-        element.dispatchEvent(
-          new CustomEvent('cross-sell-widget:addon-select', {
-            bubbles: true,
-            composed: true,
-            detail,
-          }),
-        )
+        dispatchWidgetEvent(element, 'cross-sell-widget:addon-select', detail)
       },
     }
   },
