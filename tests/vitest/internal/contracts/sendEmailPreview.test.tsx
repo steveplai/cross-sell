@@ -21,26 +21,26 @@ describe('send email preview contracts', () => {
   it('defines template metadata for dist and React Email sources', () => {
     expect(previewEmailTemplates['demo-product-offer']).toMatchObject({
       defaultSubject: '你的專屬加購推薦',
-      distFileName: 'demo-product-offer.html',
+      distFileName: 'demo-product-offer/index.html',
       isTravelPlan: false,
     })
     expect(previewEmailTemplates['flight-established']).toMatchObject({
       defaultSubject: '旅遊計劃書與限時加購優惠',
-      distFileName: 'flight-established.html',
+      distFileName: 'travel-plan-cross-sell/flight/established.html',
       isTravelPlan: true,
     })
     expect(previewEmailTemplates['hotel-established']).toMatchObject({
       defaultSubject: '旅遊計劃書與限時加購優惠',
-      distFileName: 'hotel-established.html',
+      distFileName: 'travel-plan-cross-sell/hotel/established.html',
       isTravelPlan: true,
     })
     expect(previewEmailTemplates['flight-sales']).toMatchObject({
-      distFileName: 'flight-sales.html',
+      distFileName: 'travel-plan-cross-sell/flight/sales.html',
       isTravelPlan: true,
     })
     expect(previewEmailTemplates['flight-insurance']).toMatchObject({
       defaultSubject: '旅遊計劃書與簽證護照提醒',
-      distFileName: 'flight-insurance.html',
+      distFileName: 'travel-plan-cross-sell/flight/insurance.html',
       isTravelPlan: true,
     })
   })
@@ -116,9 +116,11 @@ describe('send email preview contracts', () => {
   it('creates an html payload from a dist email file', async () => {
     const root = join(tmpdir(), `email-preview-${randomUUID()}`)
 
-    await mkdir(join(root, 'dist/emails'), { recursive: true })
+    await mkdir(join(root, 'dist/emails/travel-plan-cross-sell/flight'), {
+      recursive: true,
+    })
     await writeFile(
-      join(root, 'dist/emails/flight-established.html'),
+      join(root, 'dist/emails/travel-plan-cross-sell/flight/established.html'),
       '<html><body>preview</body></html>',
       'utf8',
     )
@@ -168,14 +170,16 @@ describe('send email preview contracts', () => {
   it('creates payloads for multiple templates with shared send settings and separate subjects', async () => {
     const root = join(tmpdir(), `email-preview-multiple-${randomUUID()}`)
 
-    await mkdir(join(root, 'dist/emails'), { recursive: true })
+    await mkdir(join(root, 'dist/emails/travel-plan-cross-sell/flight'), {
+      recursive: true,
+    })
     await writeFile(
-      join(root, 'dist/emails/flight-established.html'),
+      join(root, 'dist/emails/travel-plan-cross-sell/flight/established.html'),
       '<html><body>order</body></html>',
       'utf8',
     )
     await writeFile(
-      join(root, 'dist/emails/flight-sales.html'),
+      join(root, 'dist/emails/travel-plan-cross-sell/flight/sales.html'),
       '<html><body>sales</body></html>',
       'utf8',
     )

@@ -67,7 +67,7 @@ interface PreviewEmailTemplate {
 export const previewEmailTemplates = {
   'demo-product-offer': {
     defaultSubject: '你的專屬加購推薦',
-    distFileName: 'demo-product-offer.html',
+    distFileName: 'demo-product-offer/index.html',
     isTravelPlan: false,
     label: 'Demo product offer',
     createReactEmail: () => (
@@ -80,7 +80,7 @@ export const previewEmailTemplates = {
   },
   'flight-established': {
     defaultSubject: '旅遊計劃書與限時加購優惠',
-    distFileName: 'flight-established.html',
+    distFileName: 'travel-plan-cross-sell/flight/established.html',
     isTravelPlan: true,
     label: 'Flight established',
     createReactEmail: (domainMode) => (
@@ -93,7 +93,7 @@ export const previewEmailTemplates = {
   },
   'hotel-established': {
     defaultSubject: '旅遊計劃書與限時加購優惠',
-    distFileName: 'hotel-established.html',
+    distFileName: 'travel-plan-cross-sell/hotel/established.html',
     isTravelPlan: true,
     label: 'Hotel established',
     createReactEmail: (domainMode) => (
@@ -106,7 +106,7 @@ export const previewEmailTemplates = {
   },
   'flight-sales': {
     defaultSubject: '旅遊計劃書與限時加購優惠',
-    distFileName: 'flight-sales.html',
+    distFileName: 'travel-plan-cross-sell/flight/sales.html',
     isTravelPlan: true,
     label: 'Flight sales',
     createReactEmail: (domainMode) => (
@@ -119,7 +119,7 @@ export const previewEmailTemplates = {
   },
   'flight-insurance': {
     defaultSubject: '旅遊計劃書與簽證護照提醒',
-    distFileName: 'flight-insurance.html',
+    distFileName: 'travel-plan-cross-sell/flight/insurance.html',
     isTravelPlan: true,
     label: 'Flight insurance',
     createReactEmail: (domainMode) => (
@@ -132,7 +132,7 @@ export const previewEmailTemplates = {
   },
   'full-flight-established': {
     defaultSubject: '旅遊計劃書',
-    distFileName: 'full-flight-established.html',
+    distFileName: 'travel-plan-cross-sell/flight/full-established.html',
     isTravelPlan: true,
     label: 'Full flight established',
     createReactEmail: (domainMode) => (
@@ -145,7 +145,7 @@ export const previewEmailTemplates = {
   },
   'full-flight-sales': {
     defaultSubject: '限時加購優惠',
-    distFileName: 'full-flight-sales.html',
+    distFileName: 'travel-plan-cross-sell/flight/full-sales.html',
     isTravelPlan: true,
     label: 'Full flight sales',
     createReactEmail: (domainMode) => (
@@ -158,7 +158,7 @@ export const previewEmailTemplates = {
   },
   'full-flight-insurance': {
     defaultSubject: '簽證護照提醒',
-    distFileName: 'full-flight-insurance.html',
+    distFileName: 'travel-plan-cross-sell/flight/full-insurance.html',
     isTravelPlan: true,
     label: 'Full flight insurance',
     createReactEmail: (domainMode) => (

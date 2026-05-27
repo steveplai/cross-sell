@@ -1,5 +1,5 @@
-import { mkdir, writeFile } from 'node:fs/promises'
-import { resolve } from 'node:path'
+import { mkdir, rm, writeFile } from 'node:fs/promises'
+import { dirname, resolve } from 'node:path'
 
 import { render } from '@react-email/render'
 
@@ -18,7 +18,7 @@ import {
 import { TravelPlanCrossSellEmail } from '../src/emails/travel-plan-cross-sell/TravelPlanCrossSellEmail'
 
 interface EmailOutput {
-  fileName: string
+  relativePath: string
   html: string
 }
 
@@ -46,49 +46,6 @@ function getDomainModeArg(args: string[]) {
   return undefined
 }
 
-function extractHtmlTagContent(html: string, tagName: 'body' | 'head') {
-  const tagPattern = new RegExp(
-    `<${tagName}\\b[^>]*>([\\s\\S]*)<\\/${tagName}>`,
-    'i',
-  )
-  const match = html.match(tagPattern)
-
-  if (!match) {
-    throw new Error(
-      `Unable to extract <${tagName}> content from rendered email.`,
-    )
-  }
-
-  return `${match[1].trim()}\n`
-}
-
-function createFragmentOutput(fileName: string, html: string): EmailOutput {
-  return {
-    fileName,
-    html: extractHtmlTagContent(html, 'body'),
-  }
-}
-
-function createHeadOutput(fileName: string, html: string): EmailOutput {
-  return {
-    fileName,
-    html: extractHtmlTagContent(html, 'head'),
-  }
-}
-
-function createTravelPlanCrossSellOutputs(
-  baseFileName: string,
-  html: string,
-): EmailOutput[] {
-  const baseName = baseFileName.replace(/\.html$/, '')
-
-  return [
-    { fileName: baseFileName, html },
-    createFragmentOutput(`${baseName}.fragment.html`, html),
-    createHeadOutput(`${baseName}.head.html`, html),
-  ]
-}
-
 const outDir = resolve(process.cwd(), 'dist/emails')
 const travelPlanCrossSellEmailDomainMode =
   resolveTravelPlanCrossSellEmailDomainMode(
@@ -98,6 +55,7 @@ const travelPlanCrossSellAssetUrls = createTravelPlanCrossSellAssetUrls(
   travelPlanCrossSellEmailDomainMode,
 )
 
+await rm(outDir, { force: true, recursive: true })
 await mkdir(outDir, { recursive: true })
 
 const flightEstablishedHtml = await render(
@@ -129,7 +87,7 @@ const flightInsuranceHtml = await render(
 
 const emails: EmailOutput[] = [
   {
-    fileName: 'demo-product-offer.html',
+    relativePath: 'demo-product-offer/index.html',
     html: await render(
       <DemoProductOfferEmail
         ctaUrl="https://example.com/recommendations"
@@ -138,23 +96,29 @@ const emails: EmailOutput[] = [
       />,
     ),
   },
-  ...createTravelPlanCrossSellOutputs(
-    'flight-established.html',
-    flightEstablishedHtml,
-  ),
-  ...createTravelPlanCrossSellOutputs(
-    'hotel-established.html',
-    hotelEstablishedHtml,
-  ),
-  ...createTravelPlanCrossSellOutputs('flight-sales.html', flightSalesHtml),
-  ...createTravelPlanCrossSellOutputs(
-    'flight-insurance.html',
-    flightInsuranceHtml,
-  ),
+  {
+    relativePath: 'travel-plan-cross-sell/flight/established.html',
+    html: flightEstablishedHtml,
+  },
+  {
+    relativePath: 'travel-plan-cross-sell/hotel/established.html',
+    html: hotelEstablishedHtml,
+  },
+  {
+    relativePath: 'travel-plan-cross-sell/flight/sales.html',
+    html: flightSalesHtml,
+  },
+  {
+    relativePath: 'travel-plan-cross-sell/flight/insurance.html',
+    html: flightInsuranceHtml,
+  },
 ]
 
 await Promise.all(
-  emails.map((email) =>
-    writeFile(resolve(outDir, email.fileName), email.html, 'utf8'),
-  ),
+  emails.map(async (email) => {
+    const filePath = resolve(outDir, email.relativePath)
+
+    await mkdir(dirname(filePath), { recursive: true })
+    await writeFile(filePath, email.html, 'utf8')
+  }),
 )
