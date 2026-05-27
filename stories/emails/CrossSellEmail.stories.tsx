@@ -4,8 +4,8 @@ import {
   flightEstablishedCrossSellEmailContent,
   flightInsuranceCrossSellEmailContent,
   flightSalesCrossSellEmailContent,
-} from '../../src/emails/travel-plan-cross-sell/content/index'
-import { EmailPreview } from './TravelPlanCrossSellEmailPreview'
+} from '../../src/emails/cross-sell-email/content/index'
+import { EmailPreview } from './CrossSellEmailPreview'
 
 const meta = {
   title: 'Emails/Cross Sell/Email/Flight',

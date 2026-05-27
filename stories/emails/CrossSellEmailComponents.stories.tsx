@@ -3,15 +3,15 @@ import { render } from '@react-email/render'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { type ReactNode, useEffect, useState } from 'react'
 
-import { CrossSellSection } from '../../src/emails/travel-plan-cross-sell/components/CrossSellSection'
-import { Header } from '../../src/emails/travel-plan-cross-sell/components/Header'
-import { Highlights } from '../../src/emails/travel-plan-cross-sell/components/Highlights'
+import { CrossSellSection } from '../../src/emails/cross-sell-email/components/CrossSellSection'
+import { Header } from '../../src/emails/cross-sell-email/components/Header'
+import { Highlights } from '../../src/emails/cross-sell-email/components/Highlights'
 import {
   flightEstablishedCrossSellEmailContent,
   flightInsuranceCrossSellEmailContent,
-} from '../../src/emails/travel-plan-cross-sell/content/index'
-import { travelPlanCrossSellTailwindConfig } from '../../src/emails/travel-plan-cross-sell/tailwind-config'
-import type { TravelPlanCrossSellSection } from '../../src/emails/travel-plan-cross-sell/types'
+} from '../../src/emails/cross-sell-email/content/index'
+import { crossSellEmailTailwindConfig } from '../../src/emails/cross-sell-email/tailwind-config'
+import type { CrossSellEmailSection } from '../../src/emails/cross-sell-email/types'
 
 const previewHeight = 430
 const previewWidth = 640
@@ -24,7 +24,7 @@ interface EmailCanvasResult {
 function EmailCanvasDocument({ children }: { children: ReactNode }) {
   return (
     <Html lang="zh-TW">
-      <Tailwind config={travelPlanCrossSellTailwindConfig}>
+      <Tailwind config={crossSellEmailTailwindConfig}>
         <Head />
         <Body className="m-0 bg-white p-0">
           <Container className="text-ink mx-auto w-150 max-w-150 rounded-[5px] bg-white p-5 font-sans">
@@ -101,12 +101,12 @@ function EmailCanvas({ children }: { children: ReactNode }) {
         maxWidth: '100%',
         width: previewWidth,
       }}
-      title="Travel plan cross sell component preview"
+      title="Cross sell email component preview"
     />
   )
 }
 
-function getSection(id: string): TravelPlanCrossSellSection {
+function getSection(id: string): CrossSellEmailSection {
   const section = [
     ...flightEstablishedCrossSellEmailContent.sections,
     ...flightInsuranceCrossSellEmailContent.sections,
@@ -119,7 +119,7 @@ function getSection(id: string): TravelPlanCrossSellSection {
   return section
 }
 
-function getInsuranceSection(id: string): TravelPlanCrossSellSection {
+function getInsuranceSection(id: string): CrossSellEmailSection {
   const section = flightInsuranceCrossSellEmailContent.sections.find(
     (item) => item.id === id,
   )

@@ -13,7 +13,7 @@ function createEmailPixelSpacingScale(max = 200) {
   return spacing
 }
 
-export const travelPlanCrossSellTailwindConfig = {
+export const crossSellEmailTailwindConfig = {
   presets: [pixelBasedPreset],
   theme: {
     extend: {

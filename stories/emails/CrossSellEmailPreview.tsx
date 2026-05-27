@@ -1,15 +1,15 @@
 import { render } from '@react-email/render'
 import { useEffect, useState } from 'react'
 
-import { TravelPlanCrossSellEmail } from '../../src/emails/travel-plan-cross-sell/TravelPlanCrossSellEmail'
-import type { TravelPlanCrossSellEmailProps } from '../../src/emails/travel-plan-cross-sell/types'
+import { CrossSellEmail } from '../../src/emails/cross-sell-email/CrossSellEmail'
+import type { CrossSellEmailProps } from '../../src/emails/cross-sell-email/types'
 
 interface EmailPreviewProps {
-  data: TravelPlanCrossSellEmailProps
+  data: CrossSellEmailProps
 }
 
 interface EmailPreviewResult {
-  data: TravelPlanCrossSellEmailProps
+  data: CrossSellEmailProps
   errorMessage?: string
   html?: string
 }
@@ -20,7 +20,7 @@ export function EmailPreview({ data }: EmailPreviewProps) {
   useEffect(() => {
     let isCurrent = true
 
-    void render(<TravelPlanCrossSellEmail {...data} />, { pretty: true })
+    void render(<CrossSellEmail {...data} />, { pretty: true })
       .then((renderedHtml) => {
         if (isCurrent) {
           setResult({ data, html: renderedHtml })

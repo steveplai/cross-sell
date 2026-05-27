@@ -1,4 +1,10 @@
 export {
+  createCrossSellEmailContent,
+  type CreateCrossSellEmailContentOptions,
+  type CrossSellEmailScenario,
+  type CrossSellEmailSourceProductLine,
+} from './create-content'
+export {
   createFlightEstablishedCrossSellEmailContent,
   createFlightInsuranceCrossSellEmailContent,
   createFlightSalesCrossSellEmailContent,
@@ -9,9 +15,9 @@ export {
   hotelEstablishedCrossSellEmailContent,
 } from './presets'
 export {
-  createTravelPlanCrossSellAssetUrls,
-  defaultTravelPlanCrossSellAssetUrls,
-  resolveTravelPlanCrossSellEmailDomainMode,
-  type TravelPlanCrossSellAssetUrls,
-  type TravelPlanCrossSellEmailDomainMode,
+  createCrossSellEmailAssetUrls,
+  type CrossSellEmailAssetUrls,
+  type CrossSellEmailDomainMode,
+  defaultCrossSellEmailAssetUrls,
+  resolveCrossSellEmailDomainMode,
 } from './shared-assets'

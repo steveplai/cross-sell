@@ -4,18 +4,18 @@ import { resolve } from 'node:path'
 import type { ReactNode } from 'react'
 import type { CreateEmailOptions } from 'resend'
 
-import { DemoProductOfferEmail } from '../src/emails/demo-product-offer/DemoProductOfferEmail'
-import { sampleProducts } from '../src/emails/demo-product-offer/sample-data'
 import {
+  createCrossSellEmailAssetUrls,
   createFlightEstablishedCrossSellEmailContent,
   createFlightInsuranceCrossSellEmailContent,
   createFlightSalesCrossSellEmailContent,
   createHotelEstablishedCrossSellEmailContent,
-  createTravelPlanCrossSellAssetUrls,
-  resolveTravelPlanCrossSellEmailDomainMode,
-  type TravelPlanCrossSellEmailDomainMode,
-} from '../src/emails/travel-plan-cross-sell/content/index'
-import { TravelPlanCrossSellEmail } from '../src/emails/travel-plan-cross-sell/TravelPlanCrossSellEmail'
+  type CrossSellEmailDomainMode,
+  resolveCrossSellEmailDomainMode,
+} from '../src/emails/cross-sell-email/content/index'
+import { CrossSellEmail } from '../src/emails/cross-sell-email/CrossSellEmail'
+import { DemoProductOfferEmail } from '../src/emails/demo-product-offer/DemoProductOfferEmail'
+import { sampleProducts } from '../src/emails/demo-product-offer/sample-data'
 
 export const previewEmailSources = ['dist', 'react'] as const
 export type PreviewEmailSource = (typeof previewEmailSources)[number]
@@ -34,7 +34,7 @@ export interface PreviewEmailCliOptions {
 
 export interface PreviewEmailDefaults {
   apiKey?: string
-  domainMode?: TravelPlanCrossSellEmailDomainMode
+  domainMode?: CrossSellEmailDomainMode
   from?: string
   fromOptions?: string[]
   source?: PreviewEmailSource
@@ -44,7 +44,7 @@ export interface PreviewEmailDefaults {
 }
 
 export interface PreviewEmailDraft {
-  domainMode?: TravelPlanCrossSellEmailDomainMode
+  domainMode?: CrossSellEmailDomainMode
   from: string
   source: PreviewEmailSource
   subjects: Partial<Record<PreviewEmailTemplateKey, string>>
@@ -55,18 +55,16 @@ export interface PreviewEmailDraft {
 interface PreviewEmailTemplate {
   defaultSubject: string
   distFileName: string
-  isTravelPlan: boolean
+  usesCrossSellEmailDomainMode: boolean
   label: string
-  createReactEmail: (
-    domainMode: TravelPlanCrossSellEmailDomainMode,
-  ) => ReactNode
+  createReactEmail: (domainMode: CrossSellEmailDomainMode) => ReactNode
 }
 
 export const previewEmailTemplates = {
   'demo-product-offer': {
     defaultSubject: '你的專屬加購推薦',
     distFileName: 'demo-product-offer/index.html',
-    isTravelPlan: false,
+    usesCrossSellEmailDomainMode: false,
     label: 'Demo product offer',
     createReactEmail: () => (
       <DemoProductOfferEmail
@@ -78,91 +76,91 @@ export const previewEmailTemplates = {
   },
   'flight-established': {
     defaultSubject: '旅遊計劃書與限時加購優惠',
-    distFileName: 'travel-plan-cross-sell/flight/established.html',
-    isTravelPlan: true,
+    distFileName: 'cross-sell-email/flight/established.html',
+    usesCrossSellEmailDomainMode: true,
     label: 'Flight established',
     createReactEmail: (domainMode) => (
-      <TravelPlanCrossSellEmail
+      <CrossSellEmail
         {...createFlightEstablishedCrossSellEmailContent(
-          createTravelPlanCrossSellAssetUrls(domainMode),
+          createCrossSellEmailAssetUrls(domainMode),
         )}
       />
     ),
   },
   'hotel-established': {
     defaultSubject: '旅遊計劃書與限時加購優惠',
-    distFileName: 'travel-plan-cross-sell/hotel/established.html',
-    isTravelPlan: true,
+    distFileName: 'cross-sell-email/hotel/established.html',
+    usesCrossSellEmailDomainMode: true,
     label: 'Hotel established',
     createReactEmail: (domainMode) => (
-      <TravelPlanCrossSellEmail
+      <CrossSellEmail
         {...createHotelEstablishedCrossSellEmailContent(
-          createTravelPlanCrossSellAssetUrls(domainMode),
+          createCrossSellEmailAssetUrls(domainMode),
         )}
       />
     ),
   },
   'flight-sales': {
     defaultSubject: '旅遊計劃書與限時加購優惠',
-    distFileName: 'travel-plan-cross-sell/flight/sales.html',
-    isTravelPlan: true,
+    distFileName: 'cross-sell-email/flight/sales.html',
+    usesCrossSellEmailDomainMode: true,
     label: 'Flight sales',
     createReactEmail: (domainMode) => (
-      <TravelPlanCrossSellEmail
+      <CrossSellEmail
         {...createFlightSalesCrossSellEmailContent(
-          createTravelPlanCrossSellAssetUrls(domainMode),
+          createCrossSellEmailAssetUrls(domainMode),
         )}
       />
     ),
   },
   'flight-insurance': {
     defaultSubject: '旅遊計劃書與簽證護照提醒',
-    distFileName: 'travel-plan-cross-sell/flight/insurance.html',
-    isTravelPlan: true,
+    distFileName: 'cross-sell-email/flight/insurance.html',
+    usesCrossSellEmailDomainMode: true,
     label: 'Flight insurance',
     createReactEmail: (domainMode) => (
-      <TravelPlanCrossSellEmail
+      <CrossSellEmail
         {...createFlightEstablishedCrossSellEmailContent(
-          createTravelPlanCrossSellAssetUrls(domainMode),
+          createCrossSellEmailAssetUrls(domainMode),
         )}
       />
     ),
   },
   'full-flight-established': {
     defaultSubject: '旅遊計劃書',
-    distFileName: 'travel-plan-cross-sell/flight/full-established.html',
-    isTravelPlan: true,
+    distFileName: 'cross-sell-email/flight/full-established.html',
+    usesCrossSellEmailDomainMode: true,
     label: 'Full flight established',
     createReactEmail: (domainMode) => (
-      <TravelPlanCrossSellEmail
+      <CrossSellEmail
         {...createFlightSalesCrossSellEmailContent(
-          createTravelPlanCrossSellAssetUrls(domainMode),
+          createCrossSellEmailAssetUrls(domainMode),
         )}
       />
     ),
   },
   'full-flight-sales': {
     defaultSubject: '限時加購優惠',
-    distFileName: 'travel-plan-cross-sell/flight/full-sales.html',
-    isTravelPlan: true,
+    distFileName: 'cross-sell-email/flight/full-sales.html',
+    usesCrossSellEmailDomainMode: true,
     label: 'Full flight sales',
     createReactEmail: (domainMode) => (
-      <TravelPlanCrossSellEmail
+      <CrossSellEmail
         {...createFlightInsuranceCrossSellEmailContent(
-          createTravelPlanCrossSellAssetUrls(domainMode),
+          createCrossSellEmailAssetUrls(domainMode),
         )}
       />
     ),
   },
   'full-flight-insurance': {
     defaultSubject: '簽證護照提醒',
-    distFileName: 'travel-plan-cross-sell/flight/full-insurance.html',
-    isTravelPlan: true,
+    distFileName: 'cross-sell-email/flight/full-insurance.html',
+    usesCrossSellEmailDomainMode: true,
     label: 'Full flight insurance',
     createReactEmail: (domainMode) => (
-      <TravelPlanCrossSellEmail
+      <CrossSellEmail
         {...createFlightInsuranceCrossSellEmailContent(
-          createTravelPlanCrossSellAssetUrls(domainMode),
+          createCrossSellEmailAssetUrls(domainMode),
         )}
       />
     ),
@@ -268,7 +266,7 @@ export function resolvePreviewEmailDefaults(
     ? resolvePreviewEmailSource(cliOptions.source)
     : undefined
   const domainMode = cliOptions.domainMode
-    ? resolveTravelPlanCrossSellEmailDomainMode(cliOptions.domainMode)
+    ? resolveCrossSellEmailDomainMode(cliOptions.domainMode)
     : undefined
 
   return {

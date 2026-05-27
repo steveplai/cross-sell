@@ -5,9 +5,9 @@ import { config as loadDotenv } from 'dotenv'
 import { Resend } from 'resend'
 
 import {
-  resolveTravelPlanCrossSellEmailDomainMode,
-  type TravelPlanCrossSellEmailDomainMode,
-} from '../src/emails/travel-plan-cross-sell/content/index'
+  type CrossSellEmailDomainMode,
+  resolveCrossSellEmailDomainMode,
+} from '../src/emails/cross-sell-email/content/index'
 import {
   createPreviewEmailPayloads,
   getPreviewEmailUsage,
@@ -105,7 +105,10 @@ async function promptForPreviewEmailDraft(
     )
     const domainMode =
       source === 'react' &&
-      templates.some((template) => previewEmailTemplates[template].isTravelPlan)
+      templates.some(
+        (template) =>
+          previewEmailTemplates[template].usesCrossSellEmailDomainMode,
+      )
         ? await promptDomainMode(rl, defaults.domainMode)
         : undefined
     const to = await promptRequiredInput(rl, 'To', defaults.to)
@@ -355,7 +358,7 @@ function parseMultiSelectAnswer<T extends string>(
 
 async function promptDomainMode(
   rl: ReturnType<typeof createInterface>,
-  defaultValue?: TravelPlanCrossSellEmailDomainMode,
+  defaultValue?: CrossSellEmailDomainMode,
 ) {
   const value = await promptSelect(
     rl,
@@ -365,7 +368,7 @@ async function promptDomainMode(
     defaultValue ?? 'uat',
   )
 
-  return resolveTravelPlanCrossSellEmailDomainMode(value)
+  return resolveCrossSellEmailDomainMode(value)
 }
 
 async function promptFrom(

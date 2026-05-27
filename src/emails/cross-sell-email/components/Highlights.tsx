@@ -1,9 +1,9 @@
 import { Column, Img, Row, Section } from '@react-email/components'
 
-import type { TravelPlanCrossSellHighlight } from '../types'
+import type { CrossSellEmailHighlight } from '../types'
 
 interface HighlightsProps {
-  highlights: TravelPlanCrossSellHighlight[]
+  highlights: CrossSellEmailHighlight[]
 }
 
 export function Highlights({ highlights }: HighlightsProps) {

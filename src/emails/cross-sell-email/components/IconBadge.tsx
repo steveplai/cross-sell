@@ -1,9 +1,9 @@
 import { Img, Section } from '@react-email/components'
 
-import type { TravelPlanCrossSellSection } from '../types'
+import type { CrossSellEmailSection } from '../types'
 
 interface IconBadgeProps {
-  section: TravelPlanCrossSellSection
+  section: CrossSellEmailSection
 }
 
 export function IconBadge({ section }: IconBadgeProps) {

@@ -1,7 +1,7 @@
 import { render as renderEmail } from '@react-email/render'
 import { describe, expect, it } from 'vitest'
 
-import type { TravelPlanCrossSellSection } from '../types'
+import type { CrossSellEmailSection } from '../types'
 import { FeaturedSection } from './FeaturedSection'
 
 function parseEmailHtml(html: string) {
@@ -19,7 +19,7 @@ describe('FeaturedSection', () => {
       id: 'transportation',
       title: '抵達啟程',
       variant: 'featured',
-    } satisfies TravelPlanCrossSellSection
+    } satisfies CrossSellEmailSection
 
     const html = await renderEmail(<FeaturedSection section={section} />)
     const document = parseEmailHtml(html)
@@ -52,7 +52,7 @@ describe('FeaturedSection', () => {
       showHeaderDescriptionAndCta: true,
       title: '抵達啟程',
       variant: 'featured',
-    } satisfies TravelPlanCrossSellSection
+    } satisfies CrossSellEmailSection
 
     const html = await renderEmail(<FeaturedSection section={section} />)
     const document = parseEmailHtml(html)
@@ -81,7 +81,7 @@ describe('FeaturedSection', () => {
       ],
       title: '抵達啟程',
       variant: 'featured',
-    } satisfies TravelPlanCrossSellSection
+    } satisfies CrossSellEmailSection
 
     const html = await renderEmail(<FeaturedSection section={section} />)
     const document = parseEmailHtml(html)

@@ -1,21 +1,21 @@
-import type { TravelPlanCrossSellRecommendation } from '../../types'
-import type { TravelPlanCrossSellAssetUrls } from '../shared-assets'
-import type { TravelPlanCrossSellLinkProfileKey } from './links'
-import { createTravelPlanCrossSellUrl } from './links'
+import type { CrossSellEmailRecommendation } from '../../types'
+import type { CrossSellEmailAssetUrls } from '../shared-assets'
+import type { CrossSellEmailLinkProfileKey } from './links'
+import { createCrossSellEmailUrl } from './links'
 
-export type TravelPlanCrossSellRecommendationSetKey =
+export type CrossSellEmailRecommendationSetKey =
   | 'tokyoHotels'
   | 'tokyoTransportation'
 
 interface CreateRecommendationSetOptions {
-  assetUrls: TravelPlanCrossSellAssetUrls
-  linkProfileKey: TravelPlanCrossSellLinkProfileKey
+  assetUrls: CrossSellEmailAssetUrls
+  linkProfileKey: CrossSellEmailLinkProfileKey
 }
 
-export function createTravelPlanCrossSellRecommendations(
-  key: TravelPlanCrossSellRecommendationSetKey,
+export function createCrossSellEmailRecommendations(
+  key: CrossSellEmailRecommendationSetKey,
   options: CreateRecommendationSetOptions,
-): TravelPlanCrossSellRecommendation[] {
+): CrossSellEmailRecommendation[] {
   if (key === 'tokyoHotels') {
     return createTokyoHotelRecommendations(options)
   }
@@ -26,12 +26,12 @@ export function createTravelPlanCrossSellRecommendations(
 function createTokyoTransportationRecommendations({
   assetUrls,
   linkProfileKey,
-}: CreateRecommendationSetOptions): TravelPlanCrossSellRecommendation[] {
+}: CreateRecommendationSetOptions): CrossSellEmailRecommendation[] {
   return [
     {
       arrowIconUrl: assetUrls.arrowIconUrl,
       text: '日本-東京成田/羽田機場至東京市區/郊區 | 機場接送專車',
-      url: createTravelPlanCrossSellUrl(
+      url: createCrossSellEmailUrl(
         linkProfileKey,
         'transportationRecommendation',
         'airport-transfer',
@@ -40,7 +40,7 @@ function createTokyoTransportationRecommendations({
     {
       arrowIconUrl: assetUrls.arrowIconUrl,
       text: '日本-東京地鐵乘車券 Tokyo Subway Ticket',
-      url: createTravelPlanCrossSellUrl(
+      url: createCrossSellEmailUrl(
         linkProfileKey,
         'transportationRecommendation',
         'tokyo-subway-ticket',
@@ -49,7 +49,7 @@ function createTokyoTransportationRecommendations({
     {
       arrowIconUrl: assetUrls.arrowIconUrl,
       text: '日本-京成電鐵Skyliner特急券| 東京成田機場往返上野・日暮里',
-      url: createTravelPlanCrossSellUrl(
+      url: createCrossSellEmailUrl(
         linkProfileKey,
         'transportationRecommendation',
         'keisei-skyliner',
@@ -61,12 +61,12 @@ function createTokyoTransportationRecommendations({
 function createTokyoHotelRecommendations({
   assetUrls,
   linkProfileKey,
-}: CreateRecommendationSetOptions): TravelPlanCrossSellRecommendation[] {
+}: CreateRecommendationSetOptions): CrossSellEmailRecommendation[] {
   return [
     {
       arrowIconUrl: assetUrls.arrowIconUrl,
       text: 'OMO5 東京大塚 by 星野集團',
-      url: createTravelPlanCrossSellUrl(
+      url: createCrossSellEmailUrl(
         linkProfileKey,
         'hotelRecommendation',
         'omo5-tokyo-otsuka',
@@ -75,7 +75,7 @@ function createTokyoHotelRecommendations({
     {
       arrowIconUrl: assetUrls.arrowIconUrl,
       text: '淺草田原町站前APA飯店',
-      url: createTravelPlanCrossSellUrl(
+      url: createCrossSellEmailUrl(
         linkProfileKey,
         'hotelRecommendation',
         'apa-asakusa-tawaramachi',
@@ -84,7 +84,7 @@ function createTokyoHotelRecommendations({
     {
       arrowIconUrl: assetUrls.arrowIconUrl,
       text: 'Super Hotel 淺草',
-      url: createTravelPlanCrossSellUrl(
+      url: createCrossSellEmailUrl(
         linkProfileKey,
         'hotelRecommendation',
         'super-hotel-asakusa',

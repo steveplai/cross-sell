@@ -1,19 +1,19 @@
 import { describe, expect, it } from 'vitest'
 
 import {
-  createTravelPlanCrossSellAssetUrls,
-  resolveTravelPlanCrossSellEmailDomainMode,
+  createCrossSellEmailAssetUrls,
+  resolveCrossSellEmailDomainMode,
 } from './shared-assets'
 
-describe('travel plan cross-sell email shared assets', () => {
+describe('cross-sell email email shared assets', () => {
   it('defaults to the UAT domain mode', () => {
-    expect(resolveTravelPlanCrossSellEmailDomainMode()).toBe('uat')
+    expect(resolveCrossSellEmailDomainMode()).toBe('uat')
   })
 
   it.each(['uat', 'production'] as const)(
     'resolves %s as a valid domain mode',
     (mode) => {
-      expect(resolveTravelPlanCrossSellEmailDomainMode(mode)).toBe(mode)
+      expect(resolveCrossSellEmailDomainMode(mode)).toBe(mode)
     },
   )
 
@@ -21,7 +21,7 @@ describe('travel plan cross-sell email shared assets', () => {
     ['uat', 'https://uwww.liontravel.com'],
     ['production', 'https://www.liontravel.com'],
   ] as const)('creates %s asset URLs', (mode, expectedDomain) => {
-    const assetUrls = createTravelPlanCrossSellAssetUrls(mode)
+    const assetUrls = createCrossSellEmailAssetUrls(mode)
     const expectedBaseUrl = `${expectedDomain}/_webassets/lightspeed/subsitebundles/common/imgs/crossSale/icons`
 
     expect(assetUrls).toEqual({
@@ -37,7 +37,7 @@ describe('travel plan cross-sell email shared assets', () => {
   })
 
   it('rejects unknown domain modes', () => {
-    expect(() => resolveTravelPlanCrossSellEmailDomainMode('staging')).toThrow(
+    expect(() => resolveCrossSellEmailDomainMode('staging')).toThrow(
       'Invalid EMAIL_DOMAIN_MODE "staging". Expected "uat" or "production".',
     )
   })

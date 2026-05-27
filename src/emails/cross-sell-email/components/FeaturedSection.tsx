@@ -1,11 +1,11 @@
 import { Column, Img, Link, Row, Section, Text } from '@react-email/components'
 
-import type { TravelPlanCrossSellSection } from '../types'
+import type { CrossSellEmailSection } from '../types'
 import { CtaButton } from './CtaButton'
 import { IconBadge } from './IconBadge'
 
 interface FeaturedSectionProps {
-  section: TravelPlanCrossSellSection
+  section: CrossSellEmailSection
 }
 
 export function FeaturedSection({ section }: FeaturedSectionProps) {

@@ -1,57 +1,57 @@
 import type {
-  TravelPlanCrossSellEmailProps,
-  TravelPlanCrossSellSection,
-  TravelPlanCrossSellSectionVariant,
+  CrossSellEmailProps,
+  CrossSellEmailSection,
+  CrossSellEmailSectionVariant,
 } from '../types'
 import {
-  createTravelPlanCrossSellHighlights,
-  type TravelPlanCrossSellHighlightKey,
+  createCrossSellEmailHighlights,
+  type CrossSellEmailHighlightKey,
 } from './catalogs/highlights'
 import {
-  createTravelPlanCrossSellUrl,
-  type TravelPlanCrossSellLinkProfileKey,
+  createCrossSellEmailUrl,
+  type CrossSellEmailLinkProfileKey,
 } from './catalogs/links'
 import {
-  createTravelPlanCrossSellRecommendations,
-  type TravelPlanCrossSellRecommendationSetKey,
+  createCrossSellEmailRecommendations,
+  type CrossSellEmailRecommendationSetKey,
 } from './catalogs/recommendations'
 import {
-  createTravelPlanCrossSellSection,
-  type TravelPlanCrossSellSectionKey,
+  createCrossSellEmailSection,
+  type CrossSellEmailSectionKey,
 } from './catalogs/sections'
 import {
-  defaultTravelPlanCrossSellAssetUrls,
-  type TravelPlanCrossSellAssetUrls,
+  type CrossSellEmailAssetUrls,
+  defaultCrossSellEmailAssetUrls,
 } from './shared-assets'
 
-export type TravelPlanCrossSellLifecycle = 'established' | 'insurance' | 'sales'
+export type CrossSellEmailScenario = 'established' | 'insurance' | 'sales'
 
-export type TravelPlanCrossSellSourceProduct = 'flight' | 'hotel'
+export type CrossSellEmailSourceProductLine = 'flight' | 'hotel'
 
-export interface CreateTravelPlanCrossSellEmailContentOptions {
-  assetUrls?: TravelPlanCrossSellAssetUrls
-  lifecycle: TravelPlanCrossSellLifecycle
-  sourceProduct: TravelPlanCrossSellSourceProduct
+export interface CreateCrossSellEmailContentOptions {
+  assetUrls?: CrossSellEmailAssetUrls
+  scenario: CrossSellEmailScenario
+  sourceProductLine: CrossSellEmailSourceProductLine
 }
 
-interface TravelPlanCrossSellPlan {
+interface CrossSellEmailPlan {
   deadlineText?: string
-  highlights?: TravelPlanCrossSellHighlightKey[]
-  linkProfileKey: TravelPlanCrossSellLinkProfileKey
+  highlights?: CrossSellEmailHighlightKey[]
+  linkProfileKey: CrossSellEmailLinkProfileKey
   previewText: string
-  sections: TravelPlanCrossSellSectionPlan[]
+  sections: CrossSellEmailSectionPlan[]
   title: string
 }
 
-interface TravelPlanCrossSellSectionPlan {
+interface CrossSellEmailSectionPlan {
   ctaIcon?: 'search'
   ctaLabel?: string
   description?: string
-  key: TravelPlanCrossSellSectionKey
-  recommendations?: TravelPlanCrossSellRecommendationSetKey
+  key: CrossSellEmailSectionKey
+  recommendations?: CrossSellEmailRecommendationSetKey
   recommendationsTitle?: string
   showHeaderDescriptionAndCta?: boolean
-  variant?: TravelPlanCrossSellSectionVariant
+  variant?: CrossSellEmailSectionVariant
 }
 
 const establishedDeadlineText = '加購優惠於2026/04/10 13:49 截止！'
@@ -60,8 +60,8 @@ const title = '旅遊計劃書'
 
 const plans: Partial<
   Record<
-    TravelPlanCrossSellLifecycle,
-    Partial<Record<TravelPlanCrossSellSourceProduct, TravelPlanCrossSellPlan>>
+    CrossSellEmailScenario,
+    Partial<Record<CrossSellEmailSourceProductLine, CrossSellEmailPlan>>
   >
 > = {
   insurance: {
@@ -147,23 +147,23 @@ const plans: Partial<
   },
 }
 
-export function createTravelPlanCrossSellEmailContent({
-  assetUrls = defaultTravelPlanCrossSellAssetUrls,
-  lifecycle,
-  sourceProduct,
-}: CreateTravelPlanCrossSellEmailContentOptions): TravelPlanCrossSellEmailProps {
-  const plan = plans[lifecycle]?.[sourceProduct]
+export function createCrossSellEmailContent({
+  assetUrls = defaultCrossSellEmailAssetUrls,
+  scenario,
+  sourceProductLine,
+}: CreateCrossSellEmailContentOptions): CrossSellEmailProps {
+  const plan = plans[scenario]?.[sourceProductLine]
 
   if (!plan) {
     throw new Error(
-      `Unsupported travel plan cross-sell content: ${lifecycle} ${sourceProduct}.`,
+      `Unsupported cross-sell email content: ${scenario} ${sourceProductLine}.`,
     )
   }
 
   return {
     deadlineText: plan.deadlineText,
     highlights: plan.highlights
-      ? createTravelPlanCrossSellHighlights(plan.highlights, assetUrls)
+      ? createCrossSellEmailHighlights(plan.highlights, assetUrls)
       : undefined,
     previewText: plan.previewText,
     sections: plan.sections.map((section) =>
@@ -174,22 +174,22 @@ export function createTravelPlanCrossSellEmailContent({
 }
 
 function createSection(
-  sectionPlan: TravelPlanCrossSellSectionPlan,
-  linkProfileKey: TravelPlanCrossSellLinkProfileKey,
-  assetUrls: TravelPlanCrossSellAssetUrls,
-): TravelPlanCrossSellSection {
+  sectionPlan: CrossSellEmailSectionPlan,
+  linkProfileKey: CrossSellEmailLinkProfileKey,
+  assetUrls: CrossSellEmailAssetUrls,
+): CrossSellEmailSection {
   const recommendations = sectionPlan.recommendations
-    ? createTravelPlanCrossSellRecommendations(sectionPlan.recommendations, {
+    ? createCrossSellEmailRecommendations(sectionPlan.recommendations, {
         assetUrls,
         linkProfileKey,
       })
     : undefined
 
-  const section = createTravelPlanCrossSellSection(sectionPlan.key, {
+  const section = createCrossSellEmailSection(sectionPlan.key, {
     assetUrls,
     ctaIconUrl:
       sectionPlan.ctaIcon === 'search' ? assetUrls.searchIconUrl : undefined,
-    ctaUrl: createTravelPlanCrossSellUrl(linkProfileKey, sectionPlan.key),
+    ctaUrl: createCrossSellEmailUrl(linkProfileKey, sectionPlan.key),
     description: sectionPlan.description,
     recommendations,
     recommendationsTitle: sectionPlan.recommendationsTitle,

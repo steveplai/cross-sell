@@ -3,17 +3,17 @@ import { dirname, resolve } from 'node:path'
 
 import { render } from '@react-email/render'
 
-import { DemoProductOfferEmail } from '../src/emails/demo-product-offer/DemoProductOfferEmail'
-import { sampleProducts } from '../src/emails/demo-product-offer/sample-data'
 import {
+  createCrossSellEmailAssetUrls,
   createFlightEstablishedCrossSellEmailContent,
   createFlightInsuranceCrossSellEmailContent,
   createFlightSalesCrossSellEmailContent,
   createHotelEstablishedCrossSellEmailContent,
-  createTravelPlanCrossSellAssetUrls,
-  resolveTravelPlanCrossSellEmailDomainMode,
-} from '../src/emails/travel-plan-cross-sell/content/index'
-import { TravelPlanCrossSellEmail } from '../src/emails/travel-plan-cross-sell/TravelPlanCrossSellEmail'
+  resolveCrossSellEmailDomainMode,
+} from '../src/emails/cross-sell-email/content/index'
+import { CrossSellEmail } from '../src/emails/cross-sell-email/CrossSellEmail'
+import { DemoProductOfferEmail } from '../src/emails/demo-product-offer/DemoProductOfferEmail'
+import { sampleProducts } from '../src/emails/demo-product-offer/sample-data'
 
 interface EmailOutput {
   relativePath: string
@@ -45,41 +45,34 @@ function getDomainModeArg(args: string[]) {
 }
 
 const outDir = resolve(process.cwd(), 'dist/emails')
-const travelPlanCrossSellEmailDomainMode =
-  resolveTravelPlanCrossSellEmailDomainMode(
-    getDomainModeArg(process.argv.slice(2)) ?? process.env.EMAIL_DOMAIN_MODE,
-  )
-const travelPlanCrossSellAssetUrls = createTravelPlanCrossSellAssetUrls(
-  travelPlanCrossSellEmailDomainMode,
+const crossSellEmailDomainMode = resolveCrossSellEmailDomainMode(
+  getDomainModeArg(process.argv.slice(2)) ?? process.env.EMAIL_DOMAIN_MODE,
+)
+const crossSellEmailAssetUrls = createCrossSellEmailAssetUrls(
+  crossSellEmailDomainMode,
 )
 
 await rm(outDir, { force: true, recursive: true })
 await mkdir(outDir, { recursive: true })
 
 const flightEstablishedHtml = await render(
-  <TravelPlanCrossSellEmail
-    {...createFlightEstablishedCrossSellEmailContent(
-      travelPlanCrossSellAssetUrls,
-    )}
+  <CrossSellEmail
+    {...createFlightEstablishedCrossSellEmailContent(crossSellEmailAssetUrls)}
   />,
 )
 const hotelEstablishedHtml = await render(
-  <TravelPlanCrossSellEmail
-    {...createHotelEstablishedCrossSellEmailContent(
-      travelPlanCrossSellAssetUrls,
-    )}
+  <CrossSellEmail
+    {...createHotelEstablishedCrossSellEmailContent(crossSellEmailAssetUrls)}
   />,
 )
 const flightSalesHtml = await render(
-  <TravelPlanCrossSellEmail
-    {...createFlightSalesCrossSellEmailContent(travelPlanCrossSellAssetUrls)}
+  <CrossSellEmail
+    {...createFlightSalesCrossSellEmailContent(crossSellEmailAssetUrls)}
   />,
 )
 const flightInsuranceHtml = await render(
-  <TravelPlanCrossSellEmail
-    {...createFlightInsuranceCrossSellEmailContent(
-      travelPlanCrossSellAssetUrls,
-    )}
+  <CrossSellEmail
+    {...createFlightInsuranceCrossSellEmailContent(crossSellEmailAssetUrls)}
   />,
 )
 
@@ -95,19 +88,19 @@ const emails: EmailOutput[] = [
     ),
   },
   {
-    relativePath: 'travel-plan-cross-sell/flight/established.html',
+    relativePath: 'cross-sell-email/flight/established.html',
     html: flightEstablishedHtml,
   },
   {
-    relativePath: 'travel-plan-cross-sell/hotel/established.html',
+    relativePath: 'cross-sell-email/hotel/established.html',
     html: hotelEstablishedHtml,
   },
   {
-    relativePath: 'travel-plan-cross-sell/flight/sales.html',
+    relativePath: 'cross-sell-email/flight/sales.html',
     html: flightSalesHtml,
   },
   {
-    relativePath: 'travel-plan-cross-sell/flight/insurance.html',
+    relativePath: 'cross-sell-email/flight/insurance.html',
     html: flightInsuranceHtml,
   },
 ]

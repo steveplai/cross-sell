@@ -13,34 +13,34 @@ import {
 import { CrossSellSection } from './components/CrossSellSection'
 import { Header } from './components/Header'
 import { Highlights } from './components/Highlights'
-import { travelPlanCrossSellTailwindConfig } from './tailwind-config'
-import type { TravelPlanCrossSellEmailProps } from './types'
+import { crossSellEmailTailwindConfig } from './tailwind-config'
+import type { CrossSellEmailProps } from './types'
 
-const travelPlanCrossSellHeadStyles = `
+const crossSellEmailHeadStyles = `
 .recommendation-link-text-anchor:hover .recommendation-link-text {
   text-decoration: underline !important;
 }
 `
 
 export type {
-  TravelPlanCrossSellEmailProps,
-  TravelPlanCrossSellHighlight,
-  TravelPlanCrossSellRecommendation,
-  TravelPlanCrossSellSection,
-  TravelPlanCrossSellSectionVariant,
+  CrossSellEmailHighlight,
+  CrossSellEmailProps,
+  CrossSellEmailRecommendation,
+  CrossSellEmailSection,
+  CrossSellEmailSectionVariant,
 } from './types'
 
-export type TravelPlanCrossSellContentProps = Omit<
-  TravelPlanCrossSellEmailProps,
+export type CrossSellEmailContentProps = Omit<
+  CrossSellEmailProps,
   'previewText'
 >
 
-export function TravelPlanCrossSellContent({
+export function CrossSellEmailContent({
   title,
   deadlineText,
   highlights = [],
   sections,
-}: TravelPlanCrossSellContentProps) {
+}: CrossSellEmailContentProps) {
   return (
     <Container className="text-ink mx-auto w-150 max-w-150 table-fixed rounded-[5px] bg-white font-sans">
       <Section className="m-0 w-full table-fixed">
@@ -60,19 +60,19 @@ export function TravelPlanCrossSellContent({
   )
 }
 
-export function TravelPlanCrossSellEmail({
+export function CrossSellEmail({
   previewText,
   ...contentProps
-}: TravelPlanCrossSellEmailProps) {
+}: CrossSellEmailProps) {
   return (
     <Html lang="zh-TW">
-      <Tailwind config={travelPlanCrossSellTailwindConfig}>
+      <Tailwind config={crossSellEmailTailwindConfig}>
         <Head>
-          <style>{travelPlanCrossSellHeadStyles}</style>
+          <style>{crossSellEmailHeadStyles}</style>
         </Head>
         <Preview>{previewText}</Preview>
         <Body className="m-0 rounded-[10px] bg-white p-0">
-          <TravelPlanCrossSellContent {...contentProps} />
+          <CrossSellEmailContent {...contentProps} />
         </Body>
       </Tailwind>
     </Html>

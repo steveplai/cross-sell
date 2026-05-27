@@ -1,13 +1,13 @@
-import type { TravelPlanCrossSellSectionKey } from './sections'
+import type { CrossSellEmailSectionKey } from './sections'
 
-export type TravelPlanCrossSellLinkProfileKey =
+export type CrossSellEmailLinkProfileKey =
   | 'flightEstablished'
   | 'flightInsurance'
   | 'flightSales'
   | 'hotelEstablished'
 
-export type TravelPlanCrossSellLinkTarget =
-  | TravelPlanCrossSellSectionKey
+export type CrossSellEmailLinkTarget =
+  | CrossSellEmailSectionKey
   | 'hotelRecommendation'
   | 'transportationRecommendation'
 
@@ -18,7 +18,7 @@ interface LinkProfile {
   visaPassportBasePath?: string
 }
 
-const linkProfiles: Record<TravelPlanCrossSellLinkProfileKey, LinkProfile> = {
+const linkProfiles: Record<CrossSellEmailLinkProfileKey, LinkProfile> = {
   flightInsurance: {
     basePath: 'flight-insurance',
     content: 'flight',
@@ -44,8 +44,8 @@ const linkProfiles: Record<TravelPlanCrossSellLinkProfileKey, LinkProfile> = {
 }
 
 const campaignByTarget: Record<
-  TravelPlanCrossSellLinkProfileKey,
-  Partial<Record<TravelPlanCrossSellLinkTarget, string>>
+  CrossSellEmailLinkProfileKey,
+  Partial<Record<CrossSellEmailLinkTarget, string>>
 > = {
   flightInsurance: {
     hotel: 'hotel-addon',
@@ -86,11 +86,11 @@ const pathByTarget = {
   transportation: 'transportation',
   transportationRecommendation: 'transportation',
   visaPassport: 'visa-passport',
-} satisfies Record<TravelPlanCrossSellLinkTarget, string>
+} satisfies Record<CrossSellEmailLinkTarget, string>
 
-export function createTravelPlanCrossSellUrl(
-  profileKey: TravelPlanCrossSellLinkProfileKey,
-  target: TravelPlanCrossSellLinkTarget,
+export function createCrossSellEmailUrl(
+  profileKey: CrossSellEmailLinkProfileKey,
+  target: CrossSellEmailLinkTarget,
   pathSuffix?: string,
 ) {
   const profile = linkProfiles[profileKey]

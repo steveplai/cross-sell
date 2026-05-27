@@ -1,9 +1,9 @@
-import type { TravelPlanCrossSellSection } from '../types'
+import type { CrossSellEmailSection } from '../types'
 import { CompactSection } from './CompactSection'
 import { FeaturedSection } from './FeaturedSection'
 
 interface CrossSellSectionProps {
-  section: TravelPlanCrossSellSection
+  section: CrossSellEmailSection
 }
 
 export function CrossSellSection({ section }: CrossSellSectionProps) {

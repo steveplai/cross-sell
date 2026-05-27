@@ -2,14 +2,14 @@ import { render as renderEmail } from '@react-email/render'
 import { describe, expect, it } from 'vitest'
 
 import {
+  createCrossSellEmailAssetUrls,
   createFlightEstablishedCrossSellEmailContent,
   createFlightInsuranceCrossSellEmailContent,
   createFlightSalesCrossSellEmailContent,
   createHotelEstablishedCrossSellEmailContent,
-  createTravelPlanCrossSellAssetUrls,
 } from './content/index'
-import { TravelPlanCrossSellEmail } from './TravelPlanCrossSellEmail'
-import type { TravelPlanCrossSellEmailProps } from './types'
+import { CrossSellEmail } from './CrossSellEmail'
+import type { CrossSellEmailProps } from './types'
 
 function parseEmailHtml(html: string) {
   return new DOMParser().parseFromString(html, 'text/html')
@@ -157,7 +157,7 @@ function expectFeaturedTimelineRailUsesFixedCentering(document: Document) {
   expect(arrowCell?.getAttribute('style')).toContain('text-align:center')
 }
 
-describe('TravelPlanCrossSellEmail', () => {
+describe('CrossSellEmail', () => {
   it.each([
     {
       name: 'flight established',
@@ -186,8 +186,8 @@ describe('TravelPlanCrossSellEmail', () => {
   ] satisfies Array<{
     name: string
     createContent: (
-      assetUrls: ReturnType<typeof createTravelPlanCrossSellAssetUrls>,
-    ) => TravelPlanCrossSellEmailProps
+      assetUrls: ReturnType<typeof createCrossSellEmailAssetUrls>,
+    ) => CrossSellEmailProps
     expectedCtaLabel: string
     expectedCtaUrl: string
     expectedRecommendation?: string
@@ -199,9 +199,9 @@ describe('TravelPlanCrossSellEmail', () => {
       expectedCtaUrl,
       expectedRecommendation,
     }) => {
-      const assetUrls = createTravelPlanCrossSellAssetUrls('production')
+      const assetUrls = createCrossSellEmailAssetUrls('production')
       const content = createContent(assetUrls)
-      const html = await renderEmail(<TravelPlanCrossSellEmail {...content} />)
+      const html = await renderEmail(<CrossSellEmail {...content} />)
       const document = parseEmailHtml(html)
 
       expect(document.documentElement.getAttribute('lang')).toBe('zh-TW')
@@ -248,7 +248,7 @@ describe('TravelPlanCrossSellEmail', () => {
   )
 
   it('enables header description and CTA only for the configured featured content', () => {
-    const assetUrls = createTravelPlanCrossSellAssetUrls('production')
+    const assetUrls = createCrossSellEmailAssetUrls('production')
     const flightEstablishedContent =
       createFlightEstablishedCrossSellEmailContent(assetUrls)
     const flightSalesContent = createFlightSalesCrossSellEmailContent(assetUrls)
@@ -273,9 +273,9 @@ describe('TravelPlanCrossSellEmail', () => {
   })
 
   it('renders the hotel established product plan', async () => {
-    const assetUrls = createTravelPlanCrossSellAssetUrls('production')
+    const assetUrls = createCrossSellEmailAssetUrls('production')
     const content = createHotelEstablishedCrossSellEmailContent(assetUrls)
-    const html = await renderEmail(<TravelPlanCrossSellEmail {...content} />)
+    const html = await renderEmail(<CrossSellEmail {...content} />)
     const document = parseEmailHtml(html)
 
     expect(content.sections.map((section) => section.id)).toEqual([

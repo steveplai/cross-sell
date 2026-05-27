@@ -1,7 +1,7 @@
-import type { TravelPlanCrossSellHighlight } from '../../types'
-import type { TravelPlanCrossSellAssetUrls } from '../shared-assets'
+import type { CrossSellEmailHighlight } from '../../types'
+import type { CrossSellEmailAssetUrls } from '../shared-assets'
 
-export type TravelPlanCrossSellHighlightKey =
+export type CrossSellEmailHighlightKey =
   | 'flightHotelFreeCancel'
   | 'hotelDiscount'
   | 'railDiscount'
@@ -26,12 +26,12 @@ const highlightCatalog = {
     id: 'rail-discount',
     text: '加購高鐵享8折',
   },
-} satisfies Record<TravelPlanCrossSellHighlightKey, HighlightCatalogItem>
+} satisfies Record<CrossSellEmailHighlightKey, HighlightCatalogItem>
 
-export function createTravelPlanCrossSellHighlights(
-  keys: readonly TravelPlanCrossSellHighlightKey[],
-  assetUrls: TravelPlanCrossSellAssetUrls,
-): TravelPlanCrossSellHighlight[] {
+export function createCrossSellEmailHighlights(
+  keys: readonly CrossSellEmailHighlightKey[],
+  assetUrls: CrossSellEmailAssetUrls,
+): CrossSellEmailHighlight[] {
   return keys.map((key) => ({
     ...highlightCatalog[key],
     checkIconSrc: assetUrls.checkIconUrl,

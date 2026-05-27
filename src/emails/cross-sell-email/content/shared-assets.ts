@@ -1,6 +1,6 @@
-export type TravelPlanCrossSellEmailDomainMode = 'uat' | 'production'
+export type CrossSellEmailDomainMode = 'uat' | 'production'
 
-export interface TravelPlanCrossSellAssetUrls {
+export interface CrossSellEmailAssetUrls {
   arrowIconUrl: string
   bedIconUrl: string
   checkIconUrl: string
@@ -11,22 +11,21 @@ export interface TravelPlanCrossSellAssetUrls {
   transportIconUrl: string
 }
 
-const defaultTravelPlanCrossSellEmailDomainMode: TravelPlanCrossSellEmailDomainMode =
-  'uat'
+const defaultCrossSellEmailDomainMode: CrossSellEmailDomainMode = 'uat'
 
-const travelPlanCrossSellEmailDomains = {
+const crossSellEmailDomains = {
   production: 'https://www.liontravel.com',
   uat: 'https://uwww.liontravel.com',
-} satisfies Record<TravelPlanCrossSellEmailDomainMode, string>
+} satisfies Record<CrossSellEmailDomainMode, string>
 
 const iconPath =
   '/_webassets/lightspeed/subsitebundles/common/imgs/crossSale/icons'
 
-export function resolveTravelPlanCrossSellEmailDomainMode(
+export function resolveCrossSellEmailDomainMode(
   value?: string,
-): TravelPlanCrossSellEmailDomainMode {
+): CrossSellEmailDomainMode {
   if (!value) {
-    return defaultTravelPlanCrossSellEmailDomainMode
+    return defaultCrossSellEmailDomainMode
   }
 
   if (value === 'uat' || value === 'production') {
@@ -38,10 +37,10 @@ export function resolveTravelPlanCrossSellEmailDomainMode(
   )
 }
 
-export function createTravelPlanCrossSellAssetUrls(
-  mode: TravelPlanCrossSellEmailDomainMode = defaultTravelPlanCrossSellEmailDomainMode,
-): TravelPlanCrossSellAssetUrls {
-  const baseUrl = `${travelPlanCrossSellEmailDomains[mode]}${iconPath}`
+export function createCrossSellEmailAssetUrls(
+  mode: CrossSellEmailDomainMode = defaultCrossSellEmailDomainMode,
+): CrossSellEmailAssetUrls {
+  const baseUrl = `${crossSellEmailDomains[mode]}${iconPath}`
 
   return {
     arrowIconUrl: `${baseUrl}/arrowIcon.png`,
@@ -55,5 +54,4 @@ export function createTravelPlanCrossSellAssetUrls(
   }
 }
 
-export const defaultTravelPlanCrossSellAssetUrls =
-  createTravelPlanCrossSellAssetUrls()
+export const defaultCrossSellEmailAssetUrls = createCrossSellEmailAssetUrls()

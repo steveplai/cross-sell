@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import { hotelEstablishedCrossSellEmailContent } from '../../src/emails/travel-plan-cross-sell/content/index'
-import { EmailPreview } from './TravelPlanCrossSellEmailPreview'
+import { hotelEstablishedCrossSellEmailContent } from '../../src/emails/cross-sell-email/content/index'
+import { EmailPreview } from './CrossSellEmailPreview'
 
 const meta = {
   title: 'Emails/Cross Sell/Email/Hotel',

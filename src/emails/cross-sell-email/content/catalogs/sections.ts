@@ -1,10 +1,10 @@
 import type {
-  TravelPlanCrossSellSection,
-  TravelPlanCrossSellSectionVariant,
+  CrossSellEmailSection,
+  CrossSellEmailSectionVariant,
 } from '../../types'
-import type { TravelPlanCrossSellAssetUrls } from '../shared-assets'
+import type { CrossSellEmailAssetUrls } from '../shared-assets'
 
-export type TravelPlanCrossSellSectionKey =
+export type CrossSellEmailSectionKey =
   | 'transportation'
   | 'hotel'
   | 'localExperience'
@@ -12,7 +12,7 @@ export type TravelPlanCrossSellSectionKey =
   | 'visaPassport'
 
 type AssetUrlKey = keyof Pick<
-  TravelPlanCrossSellAssetUrls,
+  CrossSellEmailAssetUrls,
   | 'bedIconUrl'
   | 'mountainIconUrl'
   | 'passportIconUrl'
@@ -30,14 +30,14 @@ interface SectionCatalogItem {
 }
 
 interface CreateSectionOptions {
-  assetUrls: TravelPlanCrossSellAssetUrls
+  assetUrls: CrossSellEmailAssetUrls
   ctaIconUrl?: string
   ctaUrl: string
   description?: string
-  recommendations?: TravelPlanCrossSellSection['recommendations']
+  recommendations?: CrossSellEmailSection['recommendations']
   recommendationsTitle?: string
   showHeaderDescriptionAndCta?: boolean
-  variant?: TravelPlanCrossSellSectionVariant
+  variant?: CrossSellEmailSectionVariant
 }
 
 const sectionCatalog = {
@@ -81,10 +81,10 @@ const sectionCatalog = {
     id: 'visa-passport',
     title: '簽證護照',
   },
-} satisfies Record<TravelPlanCrossSellSectionKey, SectionCatalogItem>
+} satisfies Record<CrossSellEmailSectionKey, SectionCatalogItem>
 
-export function createTravelPlanCrossSellSection(
-  key: TravelPlanCrossSellSectionKey,
+export function createCrossSellEmailSection(
+  key: CrossSellEmailSectionKey,
   {
     assetUrls,
     ctaIconUrl,
@@ -95,7 +95,7 @@ export function createTravelPlanCrossSellSection(
     showHeaderDescriptionAndCta,
     variant,
   }: CreateSectionOptions,
-): TravelPlanCrossSellSection {
+): CrossSellEmailSection {
   const section = sectionCatalog[key]
 
   return {
