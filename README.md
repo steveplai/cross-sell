@@ -41,6 +41,7 @@ dist/
         insurance.html
       hotel/
         established.html
+        sales.html
 ```
 
 `dist/` is generated output and should not be committed.
@@ -365,6 +366,7 @@ Current generated email files:
 - `cross-sell-email/flight/sales.html`
 - `cross-sell-email/flight/insurance.html`
 - `cross-sell-email/hotel/established.html`
+- `cross-sell-email/hotel/sales.html`
 
 For cross-sell emails, use the full `.html` file for preview and handoff
 review.

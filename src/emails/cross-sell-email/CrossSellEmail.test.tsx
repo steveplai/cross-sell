@@ -7,6 +7,7 @@ import {
   createFlightInsuranceCrossSellEmailContent,
   createFlightSalesCrossSellEmailContent,
   createHotelEstablishedCrossSellEmailContent,
+  createHotelSalesCrossSellEmailContent,
 } from './content/index'
 import { CrossSellEmail } from './CrossSellEmail'
 import type { CrossSellEmailProps } from './types'
@@ -302,6 +303,42 @@ describe('CrossSellEmail', () => {
       document,
       '立即預訂交通票券',
       'https://example.com/hotel-established/transportation?utm_source=orderconfirmation&utm_medium=email&utm_campaign=activity-traffic-more-addon&utm_content=hotel',
+    )
+    expectImage(document, assetUrls.transportIconUrl)
+    expectImage(document, assetUrls.arrowIconUrl)
+    expectFeaturedTimelineRailUsesFixedCentering(document)
+  })
+
+  it('renders the hotel sales product plan', async () => {
+    const assetUrls = createCrossSellEmailAssetUrls('production')
+    const content = createHotelSalesCrossSellEmailContent(assetUrls)
+    const html = await renderEmail(<CrossSellEmail {...content} />)
+    const document = parseEmailHtml(html)
+
+    expect(content.sections.map((section) => section.id)).toEqual([
+      'transportation',
+      'local-experience',
+      'rail',
+    ])
+    expect(content.highlights?.map((highlight) => highlight.id)).toEqual([
+      'hotel-discount',
+      'rail-discount',
+    ])
+    expect(html).toContain('抵達啟程')
+    expect(html).toContain('在地探索')
+    expect(html).toContain('高鐵加購')
+    expect(html).toContain('抵達後先搞定交通，行程更順暢')
+    expect(html).toContain('推薦熱門交通：')
+    expect(html).toContain(
+      '日本-東京成田/羽田機場至東京市區/郊區 | 機場接送專車',
+    )
+    expect(html).not.toContain('飯店下榻')
+    expect(html).not.toContain('簽證護照')
+    expect(html).not.toContain('航班異動可免費取消住宿')
+    expectLink(
+      document,
+      '立即預訂交通票券',
+      'https://example.com/hotel-sales/transportation?utm_source=crosssell&utm_medium=email&utm_campaign=activity-traffic-more-addon&utm_content=hotel',
     )
     expectImage(document, assetUrls.transportIconUrl)
     expectImage(document, assetUrls.arrowIconUrl)

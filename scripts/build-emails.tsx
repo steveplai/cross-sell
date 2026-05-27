@@ -9,6 +9,7 @@ import {
   createFlightInsuranceCrossSellEmailContent,
   createFlightSalesCrossSellEmailContent,
   createHotelEstablishedCrossSellEmailContent,
+  createHotelSalesCrossSellEmailContent,
   resolveCrossSellEmailDomainMode,
 } from '../src/emails/cross-sell-email/content/index'
 import { CrossSellEmail } from '../src/emails/cross-sell-email/CrossSellEmail'
@@ -70,6 +71,11 @@ const flightSalesHtml = await render(
     {...createFlightSalesCrossSellEmailContent(crossSellEmailAssetUrls)}
   />,
 )
+const hotelSalesHtml = await render(
+  <CrossSellEmail
+    {...createHotelSalesCrossSellEmailContent(crossSellEmailAssetUrls)}
+  />,
+)
 const flightInsuranceHtml = await render(
   <CrossSellEmail
     {...createFlightInsuranceCrossSellEmailContent(crossSellEmailAssetUrls)}
@@ -98,6 +104,10 @@ const emails: EmailOutput[] = [
   {
     relativePath: 'cross-sell-email/flight/sales.html',
     html: flightSalesHtml,
+  },
+  {
+    relativePath: 'cross-sell-email/hotel/sales.html',
+    html: hotelSalesHtml,
   },
   {
     relativePath: 'cross-sell-email/flight/insurance.html',

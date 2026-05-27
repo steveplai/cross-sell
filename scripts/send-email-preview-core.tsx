@@ -10,6 +10,7 @@ import {
   createFlightInsuranceCrossSellEmailContent,
   createFlightSalesCrossSellEmailContent,
   createHotelEstablishedCrossSellEmailContent,
+  createHotelSalesCrossSellEmailContent,
   type CrossSellEmailDomainMode,
   resolveCrossSellEmailDomainMode,
 } from '../src/emails/cross-sell-email/content/index'
@@ -108,6 +109,19 @@ export const previewEmailTemplates = {
     createReactEmail: (domainMode) => (
       <CrossSellEmail
         {...createFlightSalesCrossSellEmailContent(
+          createCrossSellEmailAssetUrls(domainMode),
+        )}
+      />
+    ),
+  },
+  'hotel-sales': {
+    defaultSubject: '旅遊計劃書與限時加購優惠',
+    distFileName: 'cross-sell-email/hotel/sales.html',
+    usesCrossSellEmailDomainMode: true,
+    label: 'Hotel sales',
+    createReactEmail: (domainMode) => (
+      <CrossSellEmail
+        {...createHotelSalesCrossSellEmailContent(
           createCrossSellEmailAssetUrls(domainMode),
         )}
       />

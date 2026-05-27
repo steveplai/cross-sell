@@ -144,6 +144,26 @@ const plans: Partial<
       ],
       title,
     },
+    hotel: {
+      deadlineText: establishedDeadlineText,
+      highlights: ['hotelDiscount', 'railDiscount'],
+      linkProfileKey: 'hotelSales',
+      previewText: offerPreviewText,
+      sections: [
+        {
+          ctaIcon: 'search',
+          ctaLabel: '立即預訂交通票券',
+          description: '抵達後先搞定交通，行程更順暢',
+          key: 'transportation',
+          recommendations: 'tokyoTransportation',
+          recommendationsTitle: '推薦熱門交通：',
+          variant: 'featured',
+        },
+        { key: 'localExperience' },
+        { key: 'rail' },
+      ],
+      title,
+    },
   },
 }
 

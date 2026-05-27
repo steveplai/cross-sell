@@ -45,6 +45,12 @@ export function createFlightSalesCrossSellEmailContent(
   return createCrossSellEmailPresetContent('sales', 'flight', assetUrls)
 }
 
+export function createHotelSalesCrossSellEmailContent(
+  assetUrls: CrossSellEmailAssetUrls = defaultCrossSellEmailAssetUrls,
+): CrossSellEmailProps {
+  return createCrossSellEmailPresetContent('sales', 'hotel', assetUrls)
+}
+
 export const flightEstablishedCrossSellEmailContent =
   createFlightEstablishedCrossSellEmailContent()
 
@@ -56,3 +62,6 @@ export const flightInsuranceCrossSellEmailContent =
 
 export const flightSalesCrossSellEmailContent =
   createFlightSalesCrossSellEmailContent()
+
+export const hotelSalesCrossSellEmailContent =
+  createHotelSalesCrossSellEmailContent()

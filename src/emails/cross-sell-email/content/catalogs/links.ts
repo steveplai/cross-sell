@@ -5,6 +5,7 @@ export type CrossSellEmailLinkProfileKey =
   | 'flightInsurance'
   | 'flightSales'
   | 'hotelEstablished'
+  | 'hotelSales'
 
 export type CrossSellEmailLinkTarget =
   | CrossSellEmailSectionKey
@@ -41,6 +42,11 @@ const linkProfiles: Record<CrossSellEmailLinkProfileKey, LinkProfile> = {
     content: 'hotel',
     source: 'orderconfirmation',
   },
+  hotelSales: {
+    basePath: 'hotel-sales',
+    content: 'hotel',
+    source: 'crosssell',
+  },
 }
 
 const campaignByTarget: Record<
@@ -71,6 +77,12 @@ const campaignByTarget: Record<
     visaPassport: 'visa-addon',
   },
   hotelEstablished: {
+    localExperience: 'activity-addon',
+    rail: 'thsrc-addon',
+    transportation: 'activity-traffic-more-addon',
+    transportationRecommendation: 'activity-traffic-addon',
+  },
+  hotelSales: {
     localExperience: 'activity-addon',
     rail: 'thsrc-addon',
     transportation: 'activity-traffic-more-addon',

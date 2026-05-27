@@ -9,10 +9,12 @@ export {
   createFlightInsuranceCrossSellEmailContent,
   createFlightSalesCrossSellEmailContent,
   createHotelEstablishedCrossSellEmailContent,
+  createHotelSalesCrossSellEmailContent,
   flightEstablishedCrossSellEmailContent,
   flightInsuranceCrossSellEmailContent,
   flightSalesCrossSellEmailContent,
   hotelEstablishedCrossSellEmailContent,
+  hotelSalesCrossSellEmailContent,
 } from './presets'
 export {
   createCrossSellEmailAssetUrls,

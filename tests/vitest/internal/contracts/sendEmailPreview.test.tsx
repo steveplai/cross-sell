@@ -38,6 +38,10 @@ describe('send email preview contracts', () => {
       distFileName: 'cross-sell-email/flight/sales.html',
       usesCrossSellEmailDomainMode: true,
     })
+    expect(previewEmailTemplates['hotel-sales']).toMatchObject({
+      distFileName: 'cross-sell-email/hotel/sales.html',
+      usesCrossSellEmailDomainMode: true,
+    })
     expect(previewEmailTemplates['flight-insurance']).toMatchObject({
       defaultSubject: '旅遊計劃書與簽證護照提醒',
       distFileName: 'cross-sell-email/flight/insurance.html',
