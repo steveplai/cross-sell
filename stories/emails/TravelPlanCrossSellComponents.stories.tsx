@@ -117,6 +117,18 @@ function getSection(id: string): TravelPlanCrossSellSection {
   return section
 }
 
+function getInsuranceSection(id: string): TravelPlanCrossSellSection {
+  const section = flightInsuranceCrossSellEmailContent.sections.find(
+    (item) => item.id === id,
+  )
+
+  if (!section) {
+    throw new Error(`Missing insurance email sample section: ${id}`)
+  }
+
+  return section
+}
+
 const meta = {
   title: 'Emails/Cross Sell/Components',
   parameters: {
@@ -176,7 +188,7 @@ export const CompactSection: Story = {
 export const EmphasisSection: Story = {
   render: () => (
     <EmailCanvas>
-      <CrossSellSection section={getSection('visa-passport')} />
+      <CrossSellSection section={getInsuranceSection('visa-passport')} />
     </EmailCanvas>
   ),
 }
