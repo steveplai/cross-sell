@@ -118,7 +118,7 @@ function getSection(id: string): TravelPlanCrossSellSection {
 }
 
 const meta = {
-  title: 'Emails/Travel Plan Cross Sell/Components',
+  title: 'Emails/Cross Sell/Components',
   parameters: {
     layout: 'centered',
   },

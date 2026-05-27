@@ -1,93 +1,12 @@
-import { render } from '@react-email/render'
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { useEffect, useState } from 'react'
 
-import {
-  flightEstablishedCrossSellEmailContent,
-  hotelEstablishedCrossSellEmailContent,
-} from '../../src/emails/travel-plan-cross-sell/content/established'
+import { flightEstablishedCrossSellEmailContent } from '../../src/emails/travel-plan-cross-sell/content/established'
 import { flightInsuranceCrossSellEmailContent } from '../../src/emails/travel-plan-cross-sell/content/insurance'
 import { flightSalesCrossSellEmailContent } from '../../src/emails/travel-plan-cross-sell/content/sales'
-import { TravelPlanCrossSellEmail } from '../../src/emails/travel-plan-cross-sell/TravelPlanCrossSellEmail'
-import type { TravelPlanCrossSellEmailProps } from '../../src/emails/travel-plan-cross-sell/types'
-
-interface EmailPreviewProps {
-  data: TravelPlanCrossSellEmailProps
-}
-
-interface EmailPreviewResult {
-  data: TravelPlanCrossSellEmailProps
-  errorMessage?: string
-  html?: string
-}
-
-function EmailPreview({ data }: EmailPreviewProps) {
-  const [result, setResult] = useState<EmailPreviewResult>()
-
-  useEffect(() => {
-    let isCurrent = true
-
-    void render(<TravelPlanCrossSellEmail {...data} />, { pretty: true })
-      .then((renderedHtml) => {
-        if (isCurrent) {
-          setResult({ data, html: renderedHtml })
-        }
-      })
-      .catch((error: unknown) => {
-        if (isCurrent) {
-          setResult({
-            data,
-            errorMessage:
-              error instanceof Error
-                ? error.message
-                : 'Failed to render email.',
-          })
-        }
-      })
-
-    return () => {
-      isCurrent = false
-    }
-  }, [data])
-
-  if (!result || result.data !== data) {
-    return <div style={{ padding: 24 }}>Rendering email preview...</div>
-  }
-
-  if (result.errorMessage) {
-    return (
-      <pre
-        style={{
-          color: '#b91c1c',
-          whiteSpace: 'pre-wrap',
-        }}
-      >
-        {result.errorMessage}
-      </pre>
-    )
-  }
-
-  if (!result.html) {
-    return <div style={{ padding: 24 }}>Rendering email preview...</div>
-  }
-
-  return (
-    <iframe
-      srcDoc={result.html}
-      style={{
-        backgroundColor: '#ffffff',
-        border: 0,
-        height: 900,
-        maxWidth: '100%',
-        width: 640,
-      }}
-      title="Travel plan cross sell email preview"
-    />
-  )
-}
+import { EmailPreview } from './TravelPlanCrossSellEmailPreview'
 
 const meta = {
-  title: 'Emails/Travel Plan Cross Sell/Full Email',
+  title: 'Emails/Cross Sell/Email/Flight',
   component: EmailPreview,
   parameters: {
     layout: 'centered',
@@ -98,15 +17,9 @@ export default meta
 
 type Story = StoryObj<typeof meta>
 
-export const Order: Story = {
+export const Established: Story = {
   args: {
     data: flightEstablishedCrossSellEmailContent,
-  },
-}
-
-export const HotelOrder: Story = {
-  args: {
-    data: hotelEstablishedCrossSellEmailContent,
   },
 }
 
