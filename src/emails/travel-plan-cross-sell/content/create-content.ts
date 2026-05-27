@@ -6,19 +6,19 @@ import type {
 import {
   createTravelPlanCrossSellHighlights,
   type TravelPlanCrossSellHighlightKey,
-} from './highlight-catalog'
+} from './catalogs/highlights'
 import {
   createTravelPlanCrossSellUrl,
   type TravelPlanCrossSellLinkProfileKey,
-} from './link-profiles'
+} from './catalogs/links'
 import {
   createTravelPlanCrossSellRecommendations,
   type TravelPlanCrossSellRecommendationSetKey,
-} from './recommendation-catalog'
+} from './catalogs/recommendations'
 import {
   createTravelPlanCrossSellSection,
   type TravelPlanCrossSellSectionKey,
-} from './section-catalog'
+} from './catalogs/sections'
 import {
   defaultTravelPlanCrossSellAssetUrls,
   type TravelPlanCrossSellAssetUrls,

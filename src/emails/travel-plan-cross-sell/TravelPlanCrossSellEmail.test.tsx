@@ -3,11 +3,11 @@ import { describe, expect, it } from 'vitest'
 
 import {
   createFlightEstablishedCrossSellEmailContent,
+  createFlightInsuranceCrossSellEmailContent,
+  createFlightSalesCrossSellEmailContent,
   createHotelEstablishedCrossSellEmailContent,
-} from './content/established'
-import { createFlightInsuranceCrossSellEmailContent } from './content/insurance'
-import { createFlightSalesCrossSellEmailContent } from './content/sales'
-import { createTravelPlanCrossSellAssetUrls } from './content/shared-assets'
+  createTravelPlanCrossSellAssetUrls,
+} from './content/index'
 import { TravelPlanCrossSellEmail } from './TravelPlanCrossSellEmail'
 import type { TravelPlanCrossSellEmailProps } from './types'
 

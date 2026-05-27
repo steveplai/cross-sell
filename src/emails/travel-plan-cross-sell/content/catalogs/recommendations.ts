@@ -1,7 +1,7 @@
-import type { TravelPlanCrossSellRecommendation } from '../types'
-import type { TravelPlanCrossSellLinkProfileKey } from './link-profiles'
-import { createTravelPlanCrossSellUrl } from './link-profiles'
-import type { TravelPlanCrossSellAssetUrls } from './shared-assets'
+import type { TravelPlanCrossSellRecommendation } from '../../types'
+import type { TravelPlanCrossSellAssetUrls } from '../shared-assets'
+import type { TravelPlanCrossSellLinkProfileKey } from './links'
+import { createTravelPlanCrossSellUrl } from './links'
 
 export type TravelPlanCrossSellRecommendationSetKey =
   | 'tokyoHotels'

@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import { flightEstablishedCrossSellEmailContent } from '../../src/emails/travel-plan-cross-sell/content/established'
-import { flightInsuranceCrossSellEmailContent } from '../../src/emails/travel-plan-cross-sell/content/insurance'
-import { flightSalesCrossSellEmailContent } from '../../src/emails/travel-plan-cross-sell/content/sales'
+import {
+  flightEstablishedCrossSellEmailContent,
+  flightInsuranceCrossSellEmailContent,
+  flightSalesCrossSellEmailContent,
+} from '../../src/emails/travel-plan-cross-sell/content/index'
 import { EmailPreview } from './TravelPlanCrossSellEmailPreview'
 
 const meta = {

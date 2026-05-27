@@ -7,14 +7,12 @@ import { DemoProductOfferEmail } from '../src/emails/demo-product-offer/DemoProd
 import { sampleProducts } from '../src/emails/demo-product-offer/sample-data'
 import {
   createFlightEstablishedCrossSellEmailContent,
+  createFlightInsuranceCrossSellEmailContent,
+  createFlightSalesCrossSellEmailContent,
   createHotelEstablishedCrossSellEmailContent,
-} from '../src/emails/travel-plan-cross-sell/content/established'
-import { createFlightInsuranceCrossSellEmailContent } from '../src/emails/travel-plan-cross-sell/content/insurance'
-import { createFlightSalesCrossSellEmailContent } from '../src/emails/travel-plan-cross-sell/content/sales'
-import {
   createTravelPlanCrossSellAssetUrls,
   resolveTravelPlanCrossSellEmailDomainMode,
-} from '../src/emails/travel-plan-cross-sell/content/shared-assets'
+} from '../src/emails/travel-plan-cross-sell/content/index'
 import { TravelPlanCrossSellEmail } from '../src/emails/travel-plan-cross-sell/TravelPlanCrossSellEmail'
 
 interface EmailOutput {

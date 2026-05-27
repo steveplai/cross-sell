@@ -7,7 +7,7 @@ import { Resend } from 'resend'
 import {
   resolveTravelPlanCrossSellEmailDomainMode,
   type TravelPlanCrossSellEmailDomainMode,
-} from '../src/emails/travel-plan-cross-sell/content/shared-assets'
+} from '../src/emails/travel-plan-cross-sell/content/index'
 import {
   createPreviewEmailPayloads,
   getPreviewEmailUsage,

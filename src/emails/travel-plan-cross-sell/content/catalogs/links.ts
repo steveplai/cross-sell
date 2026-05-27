@@ -1,4 +1,4 @@
-import type { TravelPlanCrossSellSectionKey } from './section-catalog'
+import type { TravelPlanCrossSellSectionKey } from './sections'
 
 export type TravelPlanCrossSellLinkProfileKey =
   | 'flightEstablished'

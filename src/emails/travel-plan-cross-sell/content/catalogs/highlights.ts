@@ -1,5 +1,5 @@
-import type { TravelPlanCrossSellHighlight } from '../types'
-import type { TravelPlanCrossSellAssetUrls } from './shared-assets'
+import type { TravelPlanCrossSellHighlight } from '../../types'
+import type { TravelPlanCrossSellAssetUrls } from '../shared-assets'
 
 export type TravelPlanCrossSellHighlightKey =
   | 'flightHotelFreeCancel'

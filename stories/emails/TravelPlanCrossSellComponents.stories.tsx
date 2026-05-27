@@ -6,8 +6,10 @@ import { type ReactNode, useEffect, useState } from 'react'
 import { CrossSellSection } from '../../src/emails/travel-plan-cross-sell/components/CrossSellSection'
 import { Header } from '../../src/emails/travel-plan-cross-sell/components/Header'
 import { Highlights } from '../../src/emails/travel-plan-cross-sell/components/Highlights'
-import { flightEstablishedCrossSellEmailContent } from '../../src/emails/travel-plan-cross-sell/content/established'
-import { flightInsuranceCrossSellEmailContent } from '../../src/emails/travel-plan-cross-sell/content/insurance'
+import {
+  flightEstablishedCrossSellEmailContent,
+  flightInsuranceCrossSellEmailContent,
+} from '../../src/emails/travel-plan-cross-sell/content/index'
 import { travelPlanCrossSellTailwindConfig } from '../../src/emails/travel-plan-cross-sell/tailwind-config'
 import type { TravelPlanCrossSellSection } from '../../src/emails/travel-plan-cross-sell/types'
 

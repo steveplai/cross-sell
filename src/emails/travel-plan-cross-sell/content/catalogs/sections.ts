@@ -1,8 +1,8 @@
 import type {
   TravelPlanCrossSellSection,
   TravelPlanCrossSellSectionVariant,
-} from '../types'
-import type { TravelPlanCrossSellAssetUrls } from './shared-assets'
+} from '../../types'
+import type { TravelPlanCrossSellAssetUrls } from '../shared-assets'
 
 export type TravelPlanCrossSellSectionKey =
   | 'transportation'
