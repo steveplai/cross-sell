@@ -33,18 +33,18 @@ dist/
       mount.js
   emails/
     demo-product-offer.html
-    order-cross-sell.html
-    order-cross-sell.fragment.html
-    order-cross-sell.head.html
-    hotel-order-cross-sell.html
-    hotel-order-cross-sell.fragment.html
-    hotel-order-cross-sell.head.html
-    sales-cross-sell.html
-    sales-cross-sell.fragment.html
-    sales-cross-sell.head.html
-    insurance-cross-sell.html
-    insurance-cross-sell.fragment.html
-    insurance-cross-sell.head.html
+    flight-established.html
+    flight-established.fragment.html
+    flight-established.head.html
+    hotel-established.html
+    hotel-established.fragment.html
+    hotel-established.head.html
+    flight-sales.html
+    flight-sales.fragment.html
+    flight-sales.head.html
+    flight-insurance.html
+    flight-insurance.fragment.html
+    flight-insurance.head.html
 ```
 
 `dist/` is generated output and should not be committed.
@@ -365,18 +365,18 @@ Email templates are React Email components under `src/emails/`.
 Current generated email files:
 
 - `demo-product-offer.html`
-- `order-cross-sell.html`
-- `order-cross-sell.fragment.html`
-- `order-cross-sell.head.html`
-- `hotel-order-cross-sell.html`
-- `hotel-order-cross-sell.fragment.html`
-- `hotel-order-cross-sell.head.html`
-- `sales-cross-sell.html`
-- `sales-cross-sell.fragment.html`
-- `sales-cross-sell.head.html`
-- `insurance-cross-sell.html`
-- `insurance-cross-sell.fragment.html`
-- `insurance-cross-sell.head.html`
+- `flight-established.html`
+- `flight-established.fragment.html`
+- `flight-established.head.html`
+- `hotel-established.html`
+- `hotel-established.fragment.html`
+- `hotel-established.head.html`
+- `flight-sales.html`
+- `flight-sales.fragment.html`
+- `flight-sales.head.html`
+- `flight-insurance.html`
+- `flight-insurance.fragment.html`
+- `flight-insurance.head.html`
 
 For travel plan cross-sell emails, use the full `.html` file for preview and
 handoff review. Use `.fragment.html` when another email template needs a body

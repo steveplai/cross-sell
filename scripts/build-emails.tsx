@@ -5,12 +5,12 @@ import { render } from '@react-email/render'
 
 import { DemoProductOfferEmail } from '../src/emails/demo-product-offer/DemoProductOfferEmail'
 import { sampleProducts } from '../src/emails/demo-product-offer/sample-data'
-import { createInsuranceCrossSellEmailContent } from '../src/emails/travel-plan-cross-sell/content/insurance'
 import {
-  createHotelOrderCrossSellEmailContent,
-  createOrderCrossSellEmailContent,
-} from '../src/emails/travel-plan-cross-sell/content/order'
-import { createSalesCrossSellEmailContent } from '../src/emails/travel-plan-cross-sell/content/sales'
+  createFlightEstablishedCrossSellEmailContent,
+  createHotelEstablishedCrossSellEmailContent,
+} from '../src/emails/travel-plan-cross-sell/content/established'
+import { createFlightInsuranceCrossSellEmailContent } from '../src/emails/travel-plan-cross-sell/content/insurance'
+import { createFlightSalesCrossSellEmailContent } from '../src/emails/travel-plan-cross-sell/content/sales'
 import {
   createTravelPlanCrossSellAssetUrls,
   resolveTravelPlanCrossSellEmailDomainMode,
@@ -100,24 +100,30 @@ const travelPlanCrossSellAssetUrls = createTravelPlanCrossSellAssetUrls(
 
 await mkdir(outDir, { recursive: true })
 
-const orderCrossSellHtml = await render(
+const flightEstablishedHtml = await render(
   <TravelPlanCrossSellEmail
-    {...createOrderCrossSellEmailContent(travelPlanCrossSellAssetUrls)}
+    {...createFlightEstablishedCrossSellEmailContent(
+      travelPlanCrossSellAssetUrls,
+    )}
   />,
 )
-const hotelOrderCrossSellHtml = await render(
+const hotelEstablishedHtml = await render(
   <TravelPlanCrossSellEmail
-    {...createHotelOrderCrossSellEmailContent(travelPlanCrossSellAssetUrls)}
+    {...createHotelEstablishedCrossSellEmailContent(
+      travelPlanCrossSellAssetUrls,
+    )}
   />,
 )
-const salesCrossSellHtml = await render(
+const flightSalesHtml = await render(
   <TravelPlanCrossSellEmail
-    {...createSalesCrossSellEmailContent(travelPlanCrossSellAssetUrls)}
+    {...createFlightSalesCrossSellEmailContent(travelPlanCrossSellAssetUrls)}
   />,
 )
-const insuranceCrossSellHtml = await render(
+const flightInsuranceHtml = await render(
   <TravelPlanCrossSellEmail
-    {...createInsuranceCrossSellEmailContent(travelPlanCrossSellAssetUrls)}
+    {...createFlightInsuranceCrossSellEmailContent(
+      travelPlanCrossSellAssetUrls,
+    )}
   />,
 )
 
@@ -133,20 +139,17 @@ const emails: EmailOutput[] = [
     ),
   },
   ...createTravelPlanCrossSellOutputs(
-    'order-cross-sell.html',
-    orderCrossSellHtml,
+    'flight-established.html',
+    flightEstablishedHtml,
   ),
   ...createTravelPlanCrossSellOutputs(
-    'hotel-order-cross-sell.html',
-    hotelOrderCrossSellHtml,
+    'hotel-established.html',
+    hotelEstablishedHtml,
   ),
+  ...createTravelPlanCrossSellOutputs('flight-sales.html', flightSalesHtml),
   ...createTravelPlanCrossSellOutputs(
-    'sales-cross-sell.html',
-    salesCrossSellHtml,
-  ),
-  ...createTravelPlanCrossSellOutputs(
-    'insurance-cross-sell.html',
-    insuranceCrossSellHtml,
+    'flight-insurance.html',
+    flightInsuranceHtml,
   ),
 ]
 

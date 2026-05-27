@@ -24,32 +24,32 @@ describe('send email preview contracts', () => {
       distFileName: 'demo-product-offer.html',
       isTravelPlan: false,
     })
-    expect(previewEmailTemplates['order-cross-sell']).toMatchObject({
+    expect(previewEmailTemplates['flight-established']).toMatchObject({
       defaultSubject: '旅遊計劃書與限時加購優惠',
-      distFileName: 'order-cross-sell.html',
+      distFileName: 'flight-established.html',
       isTravelPlan: true,
     })
-    expect(previewEmailTemplates['hotel-order-cross-sell']).toMatchObject({
+    expect(previewEmailTemplates['hotel-established']).toMatchObject({
       defaultSubject: '旅遊計劃書與限時加購優惠',
-      distFileName: 'hotel-order-cross-sell.html',
+      distFileName: 'hotel-established.html',
       isTravelPlan: true,
     })
-    expect(previewEmailTemplates['sales-cross-sell']).toMatchObject({
-      distFileName: 'sales-cross-sell.html',
+    expect(previewEmailTemplates['flight-sales']).toMatchObject({
+      distFileName: 'flight-sales.html',
       isTravelPlan: true,
     })
-    expect(previewEmailTemplates['insurance-cross-sell']).toMatchObject({
+    expect(previewEmailTemplates['flight-insurance']).toMatchObject({
       defaultSubject: '旅遊計劃書與簽證護照提醒',
-      distFileName: 'insurance-cross-sell.html',
+      distFileName: 'flight-insurance.html',
       isTravelPlan: true,
     })
   })
 
   it('parses CLI options and applies env defaults', () => {
     const cliOptions = parsePreviewEmailArgs([
-      '--template=order-cross-sell,sales-cross-sell',
+      '--template=flight-established,flight-sales',
       '--template',
-      'insurance-cross-sell',
+      'flight-insurance',
       '--source',
       'react',
       '--to',
@@ -67,11 +67,7 @@ describe('send email preview contracts', () => {
       domainMode: 'production',
       fromOptions: ['sender@example.com', 'other-sender@example.com'],
       source: 'react',
-      templates: [
-        'order-cross-sell',
-        'sales-cross-sell',
-        'insurance-cross-sell',
-      ],
+      templates: ['flight-established', 'flight-sales', 'flight-insurance'],
       to: 'cli-to@example.com',
     })
   })
@@ -112,7 +108,7 @@ describe('send email preview contracts', () => {
   it('returns a clear error when a dist email file is missing', async () => {
     const root = join(tmpdir(), `email-preview-missing-${randomUUID()}`)
 
-    await expect(readDistEmailHtml('order-cross-sell', root)).rejects.toThrow(
+    await expect(readDistEmailHtml('flight-established', root)).rejects.toThrow(
       'Run pnpm build:emails first',
     )
   })
@@ -122,7 +118,7 @@ describe('send email preview contracts', () => {
 
     await mkdir(join(root, 'dist/emails'), { recursive: true })
     await writeFile(
-      join(root, 'dist/emails/order-cross-sell.html'),
+      join(root, 'dist/emails/flight-established.html'),
       '<html><body>preview</body></html>',
       'utf8',
     )
@@ -134,7 +130,7 @@ describe('send email preview contracts', () => {
             from: 'sender@example.com',
             source: 'dist',
             subject: 'Preview',
-            template: 'order-cross-sell',
+            template: 'flight-established',
             to: 'recipient@example.com',
           },
           root,
@@ -156,7 +152,7 @@ describe('send email preview contracts', () => {
       from: 'sender@example.com',
       source: 'react',
       subject: 'Preview',
-      template: 'insurance-cross-sell',
+      template: 'flight-insurance',
       to: 'recipient@example.com',
     })
 
@@ -174,12 +170,12 @@ describe('send email preview contracts', () => {
 
     await mkdir(join(root, 'dist/emails'), { recursive: true })
     await writeFile(
-      join(root, 'dist/emails/order-cross-sell.html'),
+      join(root, 'dist/emails/flight-established.html'),
       '<html><body>order</body></html>',
       'utf8',
     )
     await writeFile(
-      join(root, 'dist/emails/sales-cross-sell.html'),
+      join(root, 'dist/emails/flight-sales.html'),
       '<html><body>sales</body></html>',
       'utf8',
     )
@@ -191,10 +187,10 @@ describe('send email preview contracts', () => {
             from: 'sender@example.com',
             source: 'dist',
             subjects: {
-              'order-cross-sell': 'Order Preview',
-              'sales-cross-sell': 'Sales Preview',
+              'flight-established': 'Order Preview',
+              'flight-sales': 'Sales Preview',
             },
-            templates: ['order-cross-sell', 'sales-cross-sell'],
+            templates: ['flight-established', 'flight-sales'],
             to: 'recipient@example.com',
           },
           root,

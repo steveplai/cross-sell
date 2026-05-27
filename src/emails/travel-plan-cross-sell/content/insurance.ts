@@ -5,7 +5,7 @@ import {
   type TravelPlanCrossSellAssetUrls,
 } from './shared-assets'
 
-export function createInsuranceCrossSellEmailContent(
+export function createFlightInsuranceCrossSellEmailContent(
   assetUrls: TravelPlanCrossSellAssetUrls = defaultTravelPlanCrossSellAssetUrls,
 ): TravelPlanCrossSellEmailProps {
   return createTravelPlanCrossSellEmailContent({
@@ -15,5 +15,5 @@ export function createInsuranceCrossSellEmailContent(
   })
 }
 
-export const insuranceCrossSellEmailContent =
-  createInsuranceCrossSellEmailContent()
+export const flightInsuranceCrossSellEmailContent =
+  createFlightInsuranceCrossSellEmailContent()

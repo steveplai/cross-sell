@@ -24,10 +24,7 @@ import {
   type TravelPlanCrossSellAssetUrls,
 } from './shared-assets'
 
-export type TravelPlanCrossSellLifecycle =
-  | 'insurance'
-  | 'order-confirmation'
-  | 'sales'
+export type TravelPlanCrossSellLifecycle = 'established' | 'insurance' | 'sales'
 
 export type TravelPlanCrossSellSourceProduct = 'flight' | 'hotel'
 
@@ -57,7 +54,7 @@ interface TravelPlanCrossSellSectionPlan {
   variant?: TravelPlanCrossSellSectionVariant
 }
 
-const orderDeadlineText = '加購優惠於2026/04/10 13:49 截止！'
+const establishedDeadlineText = '加購優惠於2026/04/10 13:49 截止！'
 const offerPreviewText = '旅遊計劃書與限時加購優惠'
 const title = '旅遊計劃書'
 
@@ -81,11 +78,11 @@ const plans: Partial<
       title,
     },
   },
-  'order-confirmation': {
+  established: {
     flight: {
-      deadlineText: orderDeadlineText,
+      deadlineText: establishedDeadlineText,
       highlights: ['hotelDiscount', 'flightHotelFreeCancel', 'railDiscount'],
-      linkProfileKey: 'flightOrderConfirmation',
+      linkProfileKey: 'flightEstablished',
       previewText: offerPreviewText,
       sections: [
         {
@@ -104,9 +101,9 @@ const plans: Partial<
       title,
     },
     hotel: {
-      deadlineText: orderDeadlineText,
+      deadlineText: establishedDeadlineText,
       highlights: ['hotelDiscount', 'railDiscount'],
-      linkProfileKey: 'hotelOrderConfirmation',
+      linkProfileKey: 'hotelEstablished',
       previewText: offerPreviewText,
       sections: [
         {
@@ -126,7 +123,7 @@ const plans: Partial<
   },
   sales: {
     flight: {
-      deadlineText: orderDeadlineText,
+      deadlineText: establishedDeadlineText,
       highlights: ['hotelDiscount', 'flightHotelFreeCancel', 'railDiscount'],
       linkProfileKey: 'flightSales',
       previewText: offerPreviewText,

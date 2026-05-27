@@ -1,10 +1,10 @@
 import type { TravelPlanCrossSellSectionKey } from './section-catalog'
 
 export type TravelPlanCrossSellLinkProfileKey =
+  | 'flightEstablished'
   | 'flightInsurance'
-  | 'flightOrderConfirmation'
   | 'flightSales'
-  | 'hotelOrderConfirmation'
+  | 'hotelEstablished'
 
 export type TravelPlanCrossSellLinkTarget =
   | TravelPlanCrossSellSectionKey
@@ -20,24 +20,24 @@ interface LinkProfile {
 
 const linkProfiles: Record<TravelPlanCrossSellLinkProfileKey, LinkProfile> = {
   flightInsurance: {
-    basePath: 'insurance-cross-sell',
+    basePath: 'flight-insurance',
     content: 'flight',
     source: 'insurance',
   },
-  flightOrderConfirmation: {
-    basePath: 'order-cross-sell',
+  flightEstablished: {
+    basePath: 'flight-established',
     content: 'flight',
     source: 'orderconfirmation',
-    visaPassportBasePath: 'insurance-cross-sell',
+    visaPassportBasePath: 'flight-insurance',
   },
   flightSales: {
-    basePath: 'sales-cross-sell',
+    basePath: 'flight-sales',
     content: 'flight',
     source: 'crosssell',
-    visaPassportBasePath: 'insurance-cross-sell',
+    visaPassportBasePath: 'flight-insurance',
   },
-  hotelOrderConfirmation: {
-    basePath: 'hotel-order-cross-sell',
+  hotelEstablished: {
+    basePath: 'hotel-established',
     content: 'hotel',
     source: 'orderconfirmation',
   },
@@ -54,7 +54,7 @@ const campaignByTarget: Record<
     transportation: 'activity-traffic-addon',
     visaPassport: 'visa-addon',
   },
-  flightOrderConfirmation: {
+  flightEstablished: {
     hotel: 'hotel-addon',
     localExperience: 'activity-addon',
     rail: 'thsrc-addon',
@@ -70,7 +70,7 @@ const campaignByTarget: Record<
     transportation: 'activity-traffic-more-addon',
     visaPassport: 'visa-addon',
   },
-  hotelOrderConfirmation: {
+  hotelEstablished: {
     localExperience: 'activity-addon',
     rail: 'thsrc-addon',
     transportation: 'activity-traffic-more-addon',

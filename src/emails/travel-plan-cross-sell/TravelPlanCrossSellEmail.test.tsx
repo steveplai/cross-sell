@@ -1,12 +1,12 @@
 import { render as renderEmail } from '@react-email/render'
 import { describe, expect, it } from 'vitest'
 
-import { createInsuranceCrossSellEmailContent } from './content/insurance'
 import {
-  createHotelOrderCrossSellEmailContent,
-  createOrderCrossSellEmailContent,
-} from './content/order'
-import { createSalesCrossSellEmailContent } from './content/sales'
+  createFlightEstablishedCrossSellEmailContent,
+  createHotelEstablishedCrossSellEmailContent,
+} from './content/established'
+import { createFlightInsuranceCrossSellEmailContent } from './content/insurance'
+import { createFlightSalesCrossSellEmailContent } from './content/sales'
 import { createTravelPlanCrossSellAssetUrls } from './content/shared-assets'
 import { TravelPlanCrossSellEmail } from './TravelPlanCrossSellEmail'
 import type { TravelPlanCrossSellEmailProps } from './types'
@@ -160,28 +160,28 @@ function expectFeaturedTimelineRailUsesFixedCentering(document: Document) {
 describe('TravelPlanCrossSellEmail', () => {
   it.each([
     {
-      name: 'order',
-      createContent: createOrderCrossSellEmailContent,
+      name: 'flight established',
+      createContent: createFlightEstablishedCrossSellEmailContent,
       expectedCtaLabel: '立即預訂交通票券',
       expectedCtaUrl:
-        'https://example.com/order-cross-sell/transportation?utm_source=orderconfirmation&utm_medium=email&utm_campaign=activity-traffic-more-addon&utm_content=flight',
+        'https://example.com/flight-established/transportation?utm_source=orderconfirmation&utm_medium=email&utm_campaign=activity-traffic-more-addon&utm_content=flight',
       expectedRecommendation:
         '日本-東京成田/羽田機場至東京市區/郊區 | 機場接送專車',
     },
     {
       name: 'sales',
-      createContent: createSalesCrossSellEmailContent,
+      createContent: createFlightSalesCrossSellEmailContent,
       expectedCtaLabel: '立即搜尋飯店',
       expectedCtaUrl:
-        'https://example.com/sales-cross-sell/hotels?utm_source=crosssell&utm_medium=email&utm_campaign=hotel-more-addon&utm_content=flight',
+        'https://example.com/flight-sales/hotels?utm_source=crosssell&utm_medium=email&utm_campaign=hotel-more-addon&utm_content=flight',
       expectedRecommendation: 'OMO5 東京大塚 by 星野集團',
     },
     {
       name: 'insurance',
-      createContent: createInsuranceCrossSellEmailContent,
+      createContent: createFlightInsuranceCrossSellEmailContent,
       expectedCtaLabel: '申請簽證代辦',
       expectedCtaUrl:
-        'https://example.com/insurance-cross-sell/visa-passport?utm_source=insurance&utm_medium=email&utm_campaign=visa-addon&utm_content=flight',
+        'https://example.com/flight-insurance/visa-passport?utm_source=insurance&utm_medium=email&utm_campaign=visa-addon&utm_content=flight',
     },
   ] satisfies Array<{
     name: string
@@ -249,28 +249,32 @@ describe('TravelPlanCrossSellEmail', () => {
 
   it('enables header description and CTA only for the configured featured content', () => {
     const assetUrls = createTravelPlanCrossSellAssetUrls('production')
-    const orderContent = createOrderCrossSellEmailContent(assetUrls)
-    const salesContent = createSalesCrossSellEmailContent(assetUrls)
-    const insuranceContent = createInsuranceCrossSellEmailContent(assetUrls)
+    const flightEstablishedContent =
+      createFlightEstablishedCrossSellEmailContent(assetUrls)
+    const flightSalesContent = createFlightSalesCrossSellEmailContent(assetUrls)
+    const flightInsuranceContent =
+      createFlightInsuranceCrossSellEmailContent(assetUrls)
 
     expect(
-      orderContent.sections.find((section) => section.variant === 'featured')
-        ?.showHeaderDescriptionAndCta,
+      flightEstablishedContent.sections.find(
+        (section) => section.variant === 'featured',
+      )?.showHeaderDescriptionAndCta,
     ).toBeUndefined()
     expect(
-      salesContent.sections.find((section) => section.variant === 'featured')
-        ?.showHeaderDescriptionAndCta,
+      flightSalesContent.sections.find(
+        (section) => section.variant === 'featured',
+      )?.showHeaderDescriptionAndCta,
     ).toBe(true)
     expect(
-      insuranceContent.sections.filter(
+      flightInsuranceContent.sections.filter(
         (section) => section.showHeaderDescriptionAndCta,
       ),
     ).toHaveLength(0)
   })
 
-  it('renders the hotel order-confirmation product plan', async () => {
+  it('renders the hotel established product plan', async () => {
     const assetUrls = createTravelPlanCrossSellAssetUrls('production')
-    const content = createHotelOrderCrossSellEmailContent(assetUrls)
+    const content = createHotelEstablishedCrossSellEmailContent(assetUrls)
     const html = await renderEmail(<TravelPlanCrossSellEmail {...content} />)
     const document = parseEmailHtml(html)
 
@@ -297,7 +301,7 @@ describe('TravelPlanCrossSellEmail', () => {
     expectLink(
       document,
       '立即預訂交通票券',
-      'https://example.com/hotel-order-cross-sell/transportation?utm_source=orderconfirmation&utm_medium=email&utm_campaign=activity-traffic-more-addon&utm_content=hotel',
+      'https://example.com/hotel-established/transportation?utm_source=orderconfirmation&utm_medium=email&utm_campaign=activity-traffic-more-addon&utm_content=hotel',
     )
     expectImage(document, assetUrls.transportIconUrl)
     expectImage(document, assetUrls.arrowIconUrl)

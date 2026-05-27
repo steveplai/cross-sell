@@ -6,12 +6,12 @@ import type { CreateEmailOptions } from 'resend'
 
 import { DemoProductOfferEmail } from '../src/emails/demo-product-offer/DemoProductOfferEmail'
 import { sampleProducts } from '../src/emails/demo-product-offer/sample-data'
-import { createInsuranceCrossSellEmailContent } from '../src/emails/travel-plan-cross-sell/content/insurance'
 import {
-  createHotelOrderCrossSellEmailContent,
-  createOrderCrossSellEmailContent,
-} from '../src/emails/travel-plan-cross-sell/content/order'
-import { createSalesCrossSellEmailContent } from '../src/emails/travel-plan-cross-sell/content/sales'
+  createFlightEstablishedCrossSellEmailContent,
+  createHotelEstablishedCrossSellEmailContent,
+} from '../src/emails/travel-plan-cross-sell/content/established'
+import { createFlightInsuranceCrossSellEmailContent } from '../src/emails/travel-plan-cross-sell/content/insurance'
+import { createFlightSalesCrossSellEmailContent } from '../src/emails/travel-plan-cross-sell/content/sales'
 import {
   createTravelPlanCrossSellAssetUrls,
   resolveTravelPlanCrossSellEmailDomainMode,
@@ -78,53 +78,92 @@ export const previewEmailTemplates = {
       />
     ),
   },
-  'order-cross-sell': {
+  'flight-established': {
     defaultSubject: '旅遊計劃書與限時加購優惠',
-    distFileName: 'order-cross-sell.html',
+    distFileName: 'flight-established.html',
     isTravelPlan: true,
-    label: 'Order cross-sell',
+    label: 'Flight established',
     createReactEmail: (domainMode) => (
       <TravelPlanCrossSellEmail
-        {...createOrderCrossSellEmailContent(
+        {...createFlightEstablishedCrossSellEmailContent(
           createTravelPlanCrossSellAssetUrls(domainMode),
         )}
       />
     ),
   },
-  'hotel-order-cross-sell': {
+  'hotel-established': {
     defaultSubject: '旅遊計劃書與限時加購優惠',
-    distFileName: 'hotel-order-cross-sell.html',
+    distFileName: 'hotel-established.html',
     isTravelPlan: true,
-    label: 'Hotel order cross-sell',
+    label: 'Hotel established',
     createReactEmail: (domainMode) => (
       <TravelPlanCrossSellEmail
-        {...createHotelOrderCrossSellEmailContent(
+        {...createHotelEstablishedCrossSellEmailContent(
           createTravelPlanCrossSellAssetUrls(domainMode),
         )}
       />
     ),
   },
-  'sales-cross-sell': {
+  'flight-sales': {
     defaultSubject: '旅遊計劃書與限時加購優惠',
-    distFileName: 'sales-cross-sell.html',
+    distFileName: 'flight-sales.html',
     isTravelPlan: true,
-    label: 'Sales cross-sell',
+    label: 'Flight sales',
     createReactEmail: (domainMode) => (
       <TravelPlanCrossSellEmail
-        {...createSalesCrossSellEmailContent(
+        {...createFlightSalesCrossSellEmailContent(
           createTravelPlanCrossSellAssetUrls(domainMode),
         )}
       />
     ),
   },
-  'insurance-cross-sell': {
+  'flight-insurance': {
     defaultSubject: '旅遊計劃書與簽證護照提醒',
-    distFileName: 'insurance-cross-sell.html',
+    distFileName: 'flight-insurance.html',
     isTravelPlan: true,
-    label: 'Insurance cross-sell',
+    label: 'Flight insurance',
     createReactEmail: (domainMode) => (
       <TravelPlanCrossSellEmail
-        {...createInsuranceCrossSellEmailContent(
+        {...createFlightEstablishedCrossSellEmailContent(
+          createTravelPlanCrossSellAssetUrls(domainMode),
+        )}
+      />
+    ),
+  },
+  'full-flight-established': {
+    defaultSubject: '旅遊計劃書',
+    distFileName: 'full-flight-established.html',
+    isTravelPlan: true,
+    label: 'Full flight established',
+    createReactEmail: (domainMode) => (
+      <TravelPlanCrossSellEmail
+        {...createFlightSalesCrossSellEmailContent(
+          createTravelPlanCrossSellAssetUrls(domainMode),
+        )}
+      />
+    ),
+  },
+  'full-flight-sales': {
+    defaultSubject: '限時加購優惠',
+    distFileName: 'full-flight-sales.html',
+    isTravelPlan: true,
+    label: 'Full flight sales',
+    createReactEmail: (domainMode) => (
+      <TravelPlanCrossSellEmail
+        {...createFlightInsuranceCrossSellEmailContent(
+          createTravelPlanCrossSellAssetUrls(domainMode),
+        )}
+      />
+    ),
+  },
+  'full-flight-insurance': {
+    defaultSubject: '簽證護照提醒',
+    distFileName: 'full-flight-insurance.html',
+    isTravelPlan: true,
+    label: 'Full flight insurance',
+    createReactEmail: (domainMode) => (
+      <TravelPlanCrossSellEmail
+        {...createFlightInsuranceCrossSellEmailContent(
           createTravelPlanCrossSellAssetUrls(domainMode),
         )}
       />

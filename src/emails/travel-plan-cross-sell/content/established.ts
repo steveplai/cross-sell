@@ -5,27 +5,28 @@ import {
   type TravelPlanCrossSellAssetUrls,
 } from './shared-assets'
 
-export function createOrderCrossSellEmailContent(
+export function createFlightEstablishedCrossSellEmailContent(
   assetUrls: TravelPlanCrossSellAssetUrls = defaultTravelPlanCrossSellAssetUrls,
 ): TravelPlanCrossSellEmailProps {
   return createTravelPlanCrossSellEmailContent({
     assetUrls,
-    lifecycle: 'order-confirmation',
+    lifecycle: 'established',
     sourceProduct: 'flight',
   })
 }
 
-export function createHotelOrderCrossSellEmailContent(
+export function createHotelEstablishedCrossSellEmailContent(
   assetUrls: TravelPlanCrossSellAssetUrls = defaultTravelPlanCrossSellAssetUrls,
 ): TravelPlanCrossSellEmailProps {
   return createTravelPlanCrossSellEmailContent({
     assetUrls,
-    lifecycle: 'order-confirmation',
+    lifecycle: 'established',
     sourceProduct: 'hotel',
   })
 }
 
-export const orderCrossSellEmailContent = createOrderCrossSellEmailContent()
+export const flightEstablishedCrossSellEmailContent =
+  createFlightEstablishedCrossSellEmailContent()
 
-export const hotelOrderCrossSellEmailContent =
-  createHotelOrderCrossSellEmailContent()
+export const hotelEstablishedCrossSellEmailContent =
+  createHotelEstablishedCrossSellEmailContent()

@@ -2,12 +2,12 @@ import { render } from '@react-email/render'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useEffect, useState } from 'react'
 
-import { insuranceCrossSellEmailContent } from '../../src/emails/travel-plan-cross-sell/content/insurance'
 import {
-  hotelOrderCrossSellEmailContent,
-  orderCrossSellEmailContent,
-} from '../../src/emails/travel-plan-cross-sell/content/order'
-import { salesCrossSellEmailContent } from '../../src/emails/travel-plan-cross-sell/content/sales'
+  flightEstablishedCrossSellEmailContent,
+  hotelEstablishedCrossSellEmailContent,
+} from '../../src/emails/travel-plan-cross-sell/content/established'
+import { flightInsuranceCrossSellEmailContent } from '../../src/emails/travel-plan-cross-sell/content/insurance'
+import { flightSalesCrossSellEmailContent } from '../../src/emails/travel-plan-cross-sell/content/sales'
 import { TravelPlanCrossSellEmail } from '../../src/emails/travel-plan-cross-sell/TravelPlanCrossSellEmail'
 import type { TravelPlanCrossSellEmailProps } from '../../src/emails/travel-plan-cross-sell/types'
 
@@ -100,24 +100,24 @@ type Story = StoryObj<typeof meta>
 
 export const Order: Story = {
   args: {
-    data: orderCrossSellEmailContent,
+    data: flightEstablishedCrossSellEmailContent,
   },
 }
 
 export const HotelOrder: Story = {
   args: {
-    data: hotelOrderCrossSellEmailContent,
+    data: hotelEstablishedCrossSellEmailContent,
   },
 }
 
 export const Sales: Story = {
   args: {
-    data: salesCrossSellEmailContent,
+    data: flightSalesCrossSellEmailContent,
   },
 }
 
 export const Insurance: Story = {
   args: {
-    data: insuranceCrossSellEmailContent,
+    data: flightInsuranceCrossSellEmailContent,
   },
 }
