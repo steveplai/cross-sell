@@ -36,6 +36,9 @@ dist/
     order-cross-sell.html
     order-cross-sell.fragment.html
     order-cross-sell.head.html
+    hotel-order-cross-sell.html
+    hotel-order-cross-sell.fragment.html
+    hotel-order-cross-sell.head.html
     sales-cross-sell.html
     sales-cross-sell.fragment.html
     sales-cross-sell.head.html
@@ -365,6 +368,9 @@ Current generated email files:
 - `order-cross-sell.html`
 - `order-cross-sell.fragment.html`
 - `order-cross-sell.head.html`
+- `hotel-order-cross-sell.html`
+- `hotel-order-cross-sell.fragment.html`
+- `hotel-order-cross-sell.head.html`
 - `sales-cross-sell.html`
 - `sales-cross-sell.fragment.html`
 - `sales-cross-sell.head.html`

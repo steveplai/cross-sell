@@ -29,6 +29,11 @@ describe('send email preview contracts', () => {
       distFileName: 'order-cross-sell.html',
       isTravelPlan: true,
     })
+    expect(previewEmailTemplates['hotel-order-cross-sell']).toMatchObject({
+      defaultSubject: '旅遊計劃書與限時加購優惠',
+      distFileName: 'hotel-order-cross-sell.html',
+      isTravelPlan: true,
+    })
     expect(previewEmailTemplates['sales-cross-sell']).toMatchObject({
       distFileName: 'sales-cross-sell.html',
       isTravelPlan: true,

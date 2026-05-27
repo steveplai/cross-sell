@@ -6,7 +6,10 @@ import { render } from '@react-email/render'
 import { DemoProductOfferEmail } from '../src/emails/demo-product-offer/DemoProductOfferEmail'
 import { sampleProducts } from '../src/emails/demo-product-offer/sample-data'
 import { createInsuranceCrossSellEmailContent } from '../src/emails/travel-plan-cross-sell/content/insurance'
-import { createOrderCrossSellEmailContent } from '../src/emails/travel-plan-cross-sell/content/order'
+import {
+  createHotelOrderCrossSellEmailContent,
+  createOrderCrossSellEmailContent,
+} from '../src/emails/travel-plan-cross-sell/content/order'
 import { createSalesCrossSellEmailContent } from '../src/emails/travel-plan-cross-sell/content/sales'
 import {
   createTravelPlanCrossSellAssetUrls,
@@ -102,6 +105,11 @@ const orderCrossSellHtml = await render(
     {...createOrderCrossSellEmailContent(travelPlanCrossSellAssetUrls)}
   />,
 )
+const hotelOrderCrossSellHtml = await render(
+  <TravelPlanCrossSellEmail
+    {...createHotelOrderCrossSellEmailContent(travelPlanCrossSellAssetUrls)}
+  />,
+)
 const salesCrossSellHtml = await render(
   <TravelPlanCrossSellEmail
     {...createSalesCrossSellEmailContent(travelPlanCrossSellAssetUrls)}
@@ -127,6 +135,10 @@ const emails: EmailOutput[] = [
   ...createTravelPlanCrossSellOutputs(
     'order-cross-sell.html',
     orderCrossSellHtml,
+  ),
+  ...createTravelPlanCrossSellOutputs(
+    'hotel-order-cross-sell.html',
+    hotelOrderCrossSellHtml,
   ),
   ...createTravelPlanCrossSellOutputs(
     'sales-cross-sell.html',

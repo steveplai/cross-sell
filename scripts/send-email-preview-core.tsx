@@ -7,7 +7,10 @@ import type { CreateEmailOptions } from 'resend'
 import { DemoProductOfferEmail } from '../src/emails/demo-product-offer/DemoProductOfferEmail'
 import { sampleProducts } from '../src/emails/demo-product-offer/sample-data'
 import { createInsuranceCrossSellEmailContent } from '../src/emails/travel-plan-cross-sell/content/insurance'
-import { createOrderCrossSellEmailContent } from '../src/emails/travel-plan-cross-sell/content/order'
+import {
+  createHotelOrderCrossSellEmailContent,
+  createOrderCrossSellEmailContent,
+} from '../src/emails/travel-plan-cross-sell/content/order'
 import { createSalesCrossSellEmailContent } from '../src/emails/travel-plan-cross-sell/content/sales'
 import {
   createTravelPlanCrossSellAssetUrls,
@@ -83,6 +86,19 @@ export const previewEmailTemplates = {
     createReactEmail: (domainMode) => (
       <TravelPlanCrossSellEmail
         {...createOrderCrossSellEmailContent(
+          createTravelPlanCrossSellAssetUrls(domainMode),
+        )}
+      />
+    ),
+  },
+  'hotel-order-cross-sell': {
+    defaultSubject: '旅遊計劃書與限時加購優惠',
+    distFileName: 'hotel-order-cross-sell.html',
+    isTravelPlan: true,
+    label: 'Hotel order cross-sell',
+    createReactEmail: (domainMode) => (
+      <TravelPlanCrossSellEmail
+        {...createHotelOrderCrossSellEmailContent(
           createTravelPlanCrossSellAssetUrls(domainMode),
         )}
       />
