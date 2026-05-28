@@ -75,6 +75,7 @@ export const previewEmailTemplates = {
       />
     ),
   },
+
   'flight-established': {
     defaultSubject: '旅遊計劃書與限時加購優惠',
     distFileName: 'cross-sell-email/flight/established.html',
@@ -83,19 +84,6 @@ export const previewEmailTemplates = {
     createReactEmail: (domainMode) => (
       <CrossSellEmail
         {...createFlightEstablishedCrossSellEmailContent(
-          createCrossSellEmailAssetUrls(domainMode),
-        )}
-      />
-    ),
-  },
-  'hotel-established': {
-    defaultSubject: '旅遊計劃書與限時加購優惠',
-    distFileName: 'cross-sell-email/hotel/established.html',
-    usesCrossSellEmailDomainMode: true,
-    label: 'Hotel established',
-    createReactEmail: (domainMode) => (
-      <CrossSellEmail
-        {...createHotelEstablishedCrossSellEmailContent(
           createCrossSellEmailAssetUrls(domainMode),
         )}
       />
@@ -114,19 +102,6 @@ export const previewEmailTemplates = {
       />
     ),
   },
-  'hotel-sales': {
-    defaultSubject: '旅遊計劃書與限時加購優惠',
-    distFileName: 'cross-sell-email/hotel/sales.html',
-    usesCrossSellEmailDomainMode: true,
-    label: 'Hotel sales',
-    createReactEmail: (domainMode) => (
-      <CrossSellEmail
-        {...createHotelSalesCrossSellEmailContent(
-          createCrossSellEmailAssetUrls(domainMode),
-        )}
-      />
-    ),
-  },
   'flight-insurance': {
     defaultSubject: '旅遊計劃書與簽證護照提醒',
     distFileName: 'cross-sell-email/flight/insurance.html',
@@ -140,6 +115,34 @@ export const previewEmailTemplates = {
       />
     ),
   },
+
+  'hotel-established': {
+    defaultSubject: '旅遊計劃書與限時加購優惠',
+    distFileName: 'cross-sell-email/hotel/established.html',
+    usesCrossSellEmailDomainMode: true,
+    label: 'Hotel established',
+    createReactEmail: (domainMode) => (
+      <CrossSellEmail
+        {...createHotelEstablishedCrossSellEmailContent(
+          createCrossSellEmailAssetUrls(domainMode),
+        )}
+      />
+    ),
+  },
+  'hotel-sales': {
+    defaultSubject: '旅遊計劃書與限時加購優惠',
+    distFileName: 'cross-sell-email/hotel/sales.html',
+    usesCrossSellEmailDomainMode: true,
+    label: 'Hotel sales',
+    createReactEmail: (domainMode) => (
+      <CrossSellEmail
+        {...createHotelSalesCrossSellEmailContent(
+          createCrossSellEmailAssetUrls(domainMode),
+        )}
+      />
+    ),
+  },
+
   'full-flight-established': {
     defaultSubject: '旅遊計劃書',
     distFileName: 'cross-sell-email/flight/full-established.html',

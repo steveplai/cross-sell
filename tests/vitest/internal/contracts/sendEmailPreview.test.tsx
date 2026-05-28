@@ -120,11 +120,11 @@ describe('send email preview contracts', () => {
   it('creates an html payload from a dist email file', async () => {
     const root = join(tmpdir(), `email-preview-${randomUUID()}`)
 
-    await mkdir(join(root, 'dist/emails/cross-sell-email/flight'), {
+    await mkdir(join(root, 'dist/emails/latest/cross-sell-email/flight'), {
       recursive: true,
     })
     await writeFile(
-      join(root, 'dist/emails/cross-sell-email/flight/established.html'),
+      join(root, 'dist/emails/latest/cross-sell-email/flight/established.html'),
       '<html><body>preview</body></html>',
       'utf8',
     )
@@ -174,16 +174,16 @@ describe('send email preview contracts', () => {
   it('creates payloads for multiple templates with shared send settings and separate subjects', async () => {
     const root = join(tmpdir(), `email-preview-multiple-${randomUUID()}`)
 
-    await mkdir(join(root, 'dist/emails/cross-sell-email/flight'), {
+    await mkdir(join(root, 'dist/emails/latest/cross-sell-email/flight'), {
       recursive: true,
     })
     await writeFile(
-      join(root, 'dist/emails/cross-sell-email/flight/established.html'),
+      join(root, 'dist/emails/latest/cross-sell-email/flight/established.html'),
       '<html><body>order</body></html>',
       'utf8',
     )
     await writeFile(
-      join(root, 'dist/emails/cross-sell-email/flight/sales.html'),
+      join(root, 'dist/emails/latest/cross-sell-email/flight/sales.html'),
       '<html><body>sales</body></html>',
       'utf8',
     )
