@@ -425,7 +425,7 @@ export async function readDistEmailHtml(
   root = process.cwd(),
 ) {
   const fileName = previewEmailTemplates[template].distFileName
-  const filePath = resolve(root, 'dist/emails', fileName)
+  const filePath = resolve(root, 'dist/emails', 'latest', fileName)
 
   try {
     return await readFile(filePath, 'utf8')

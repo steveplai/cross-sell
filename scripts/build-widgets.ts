@@ -1,4 +1,4 @@
-import { rm } from 'node:fs/promises'
+import { rename, rm, symlink } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { fileURLToPath, URL } from 'node:url'
 
@@ -6,7 +6,12 @@ import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { build, type InlineConfig } from 'vite'
 
+import { getBuildVersion, pruneOldVersions } from './build-version'
+
 const root = process.cwd()
+const version = getBuildVersion()
+
+console.log(`Building widgets: ${version}`)
 
 const entries = [
   {
@@ -51,7 +56,10 @@ const entries = [
   },
 ]
 
-await rm(resolve(root, 'dist/widgets'), { force: true, recursive: true })
+await rm(resolve(root, 'dist/widgets', version), {
+  force: true,
+  recursive: true,
+})
 
 for (const item of entries) {
   const config: InlineConfig = {
@@ -68,7 +76,7 @@ for (const item of entries) {
     },
     build: {
       emptyOutDir: false,
-      outDir: resolve(root, 'dist/widgets'),
+      outDir: resolve(root, 'dist/widgets', version),
       lib: {
         entry: item.entry,
         formats: ['iife'],
@@ -83,3 +91,10 @@ for (const item of entries) {
 
   await build(config)
 }
+
+await pruneOldVersions(resolve(root, 'dist/widgets'), 5)
+
+const latestLink = resolve(root, 'dist/widgets/latest')
+const latestTmp = `${latestLink}.tmp`
+await symlink(version, latestTmp)
+await rename(latestTmp, latestLink)

@@ -1,4 +1,4 @@
-import { mkdir, rm, writeFile } from 'node:fs/promises'
+import { mkdir, rename, rm, symlink, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 
 import { render } from '@react-email/render'
@@ -15,6 +15,7 @@ import {
 import { CrossSellEmail } from '../src/emails/cross-sell-email/CrossSellEmail'
 import { DemoProductOfferEmail } from '../src/emails/demo-product-offer/DemoProductOfferEmail'
 import { sampleProducts } from '../src/emails/demo-product-offer/sample-data'
+import { getBuildVersion, pruneOldVersions } from './build-version'
 
 interface EmailOutput {
   relativePath: string
@@ -45,7 +46,10 @@ function getDomainModeArg(args: string[]) {
   return undefined
 }
 
-const outDir = resolve(process.cwd(), 'dist/emails')
+const version = getBuildVersion()
+const outDir = resolve(process.cwd(), 'dist/emails', version)
+
+console.log(`Building emails: ${version}`)
 const crossSellEmailDomainMode = resolveCrossSellEmailDomainMode(
   getDomainModeArg(process.argv.slice(2)) ?? process.env.EMAIL_DOMAIN_MODE,
 )
@@ -123,3 +127,10 @@ await Promise.all(
     await writeFile(filePath, email.html, 'utf8')
   }),
 )
+
+await pruneOldVersions(resolve(process.cwd(), 'dist/emails'), 5)
+
+const latestLink = resolve(process.cwd(), 'dist/emails/latest')
+const latestTmp = `${latestLink}.tmp`
+await symlink(version, latestTmp)
+await rename(latestTmp, latestLink)
