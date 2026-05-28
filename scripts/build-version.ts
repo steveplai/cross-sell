@@ -11,11 +11,17 @@ function isGitDirty(): boolean {
   return execSync('git status --porcelain', { encoding: 'utf8' }).trim() !== ''
 }
 
-function formatTimestamp(): string {
-  return new Date()
+function formatTimestamp(date = new Date()): string {
+  return date
     .toISOString()
     .replace(/[-:T.Z]/g, '')
     .slice(0, 14)
+}
+
+export interface BuildMetadata {
+  version: string
+  commit: string
+  builtAt: string
 }
 
 export async function pruneOldVersions(
@@ -61,7 +67,7 @@ export async function pruneOldVersions(
   }
 }
 
-export function getBuildVersion(): string {
+export function getBuildVersion(date = new Date()): string {
   const { version } = createRequire(import.meta.url)('../package.json') as {
     version: string
   }
@@ -71,7 +77,15 @@ export function getBuildVersion(): string {
   }
 
   const sha = getGitShortSha()
-  const devSuffix = isGitDirty() ? `${sha}.${formatTimestamp()}` : sha
+  const devSuffix = isGitDirty() ? `${sha}.${formatTimestamp(date)}` : sha
 
   return `${version}-dev.${devSuffix}`
+}
+
+export function getBuildMetadata(date = new Date()): BuildMetadata {
+  return {
+    version: getBuildVersion(date),
+    commit: getGitShortSha(),
+    builtAt: date.toISOString(),
+  }
 }

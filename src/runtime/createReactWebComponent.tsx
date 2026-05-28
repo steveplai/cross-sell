@@ -2,11 +2,13 @@ import type { ComponentType } from 'react'
 import { createElement } from 'react'
 import { createRoot, type Root } from 'react-dom/client'
 
+import type { WidgetBuildMetadata } from './buildMetadata'
 import { injectStyles } from './injectStyles'
 
 interface CreateReactWebComponentOptions<Props extends object> {
   tagName: string
   Component: ComponentType<Props>
+  build?: WidgetBuildMetadata
   observedAttributes: string[]
   observedProperties?: string[]
   styles: string
@@ -16,6 +18,7 @@ interface CreateReactWebComponentOptions<Props extends object> {
 export function createReactWebComponent<Props extends object>({
   tagName,
   Component,
+  build: buildMetadata,
   observedAttributes,
   observedProperties = [],
   styles,
@@ -35,6 +38,9 @@ export function createReactWebComponent<Props extends object>({
   }
 
   class ReactWebComponent extends HTMLElement {
+    static version = buildMetadata?.version
+    static build = buildMetadata
+
     private root?: Root
     private mountNode?: HTMLDivElement
     private shadow?: ShadowRoot
@@ -48,7 +54,19 @@ export function createReactWebComponent<Props extends object>({
       return observedAttributes
     }
 
+    get version() {
+      return buildMetadata?.version
+    }
+
+    get build() {
+      return buildMetadata
+    }
+
     connectedCallback() {
+      if (buildMetadata) {
+        this.setAttribute('data-cross-sell-version', buildMetadata.version)
+      }
+
       if (!this.mountNode) {
         this.shadow = this.attachShadow({ mode: 'open' })
         injectStyles(this.shadow, tagName, styles)

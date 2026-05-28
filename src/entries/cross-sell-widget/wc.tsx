@@ -1,3 +1,4 @@
+import { createWidgetBuildMetadata } from '../../runtime/buildMetadata'
 import { createReactWebComponent } from '../../runtime/createReactWebComponent'
 import baseStyles from '../../styles/widget.css?inline'
 import {
@@ -66,6 +67,7 @@ function mapDataToProps(data: CrossSellWidgetProps): CrossSellWidgetProps {
 createReactWebComponent<CrossSellWidgetProps>({
   tagName: 'cross-sell-widget',
   Component: CrossSellWidget,
+  build: createWidgetBuildMetadata('cross-sell-widget', 'wc'),
   observedAttributes: ['data'],
   observedProperties: ['data'],
   styles,

@@ -259,6 +259,18 @@ The connected widget does not accept full static `data`; use
 Web Component data passed through HTML attributes is string-based. Complex props
 such as `products` are parsed from JSON by the entrypoint.
 
+Web Component builds expose runtime metadata on the custom element constructor
+and on each element instance:
+
+```js
+customElements.get('demo-product-banner').build
+document.querySelector('demo-product-banner').build
+document.querySelector('demo-product-banner').version
+```
+
+Each connected element also receives a `data-cross-sell-version` attribute for
+DOM inspection.
+
 Dark mode is enabled by adding `class="dark"` to the custom element host:
 
 ```html
@@ -302,6 +314,15 @@ boundary.
 Mount API scripts inject widget CSS into the document and render into the target
 element. Dark mode follows the host page convention: if the mount target is
 inside a `.dark` ancestor, the widget renders with dark tokens.
+
+Mount API builds expose the same metadata on the public global API object:
+
+```js
+DemoProductBanner.version
+DemoProductBanner.build
+```
+
+`build` contains `version`, `widgetName`, `commit`, `mode`, and `builtAt`.
 
 ## Styling and Theming
 

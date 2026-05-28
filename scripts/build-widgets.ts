@@ -6,10 +6,11 @@ import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { build, type InlineConfig } from 'vite'
 
-import { getBuildVersion, pruneOldVersions } from './build-version'
+import { getBuildMetadata, pruneOldVersions } from './build-version'
 
 const root = process.cwd()
-const version = getBuildVersion()
+const buildMetadata = getBuildMetadata()
+const { version } = buildMetadata
 
 console.log(`Building widgets: ${version}`)
 
@@ -65,6 +66,9 @@ for (const item of entries) {
   const config: InlineConfig = {
     configFile: false,
     define: {
+      __CROSS_SELL_BUILD_BUILT_AT__: JSON.stringify(buildMetadata.builtAt),
+      __CROSS_SELL_BUILD_COMMIT__: JSON.stringify(buildMetadata.commit),
+      __CROSS_SELL_BUILD_VERSION__: JSON.stringify(buildMetadata.version),
       'process.env.NODE_ENV': JSON.stringify('production'),
     },
     mode: 'production',

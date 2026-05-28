@@ -1,6 +1,7 @@
 import { act, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
+import type { WidgetBuildMetadata } from '../../../../src/runtime/buildMetadata'
 import type {
   CrossSellWidgetConnectedConfig,
   CrossSellWidgetConnectedProps,
@@ -27,6 +28,8 @@ vi.mock('../../../../src/widgets/cross-sell-widget', async (importOriginal) => {
 import '../../../../src/entries/cross-sell-widget/connected.wc'
 
 type ConnectedElement = HTMLElement & {
+  version?: string
+  build?: WidgetBuildMetadata
   config?: unknown
   orderDestination?: unknown
   promoDurationSeconds?: unknown
@@ -109,6 +112,34 @@ describe('cross-sell-widget-connected Web Component contract', () => {
       expect(descriptor?.set).toBeTypeOf('function')
       expect(property in element).toBe(true)
     })
+  })
+
+  it('exposes build metadata on the constructor and element instance', async () => {
+    const elementConstructor = customElements.get(
+      'cross-sell-widget-connected',
+    ) as
+      | (CustomElementConstructor & {
+          version?: string
+          build?: WidgetBuildMetadata
+        })
+      | undefined
+
+    expect(elementConstructor?.version).toBe('development')
+    expect(elementConstructor?.build).toEqual({
+      version: 'development',
+      widgetName: 'cross-sell-widget-connected',
+      commit: 'unknown',
+      mode: 'wc',
+      builtAt: 'unknown',
+    })
+
+    const element = createElement()
+
+    await renderElement(element)
+
+    expect(element.version).toBe('development')
+    expect(element.build).toEqual(elementConstructor?.build)
+    expect(element.getAttribute('data-cross-sell-version')).toBe('development')
   })
 
   it('falls back safely for invalid JSON and invalid enum-like attributes', async () => {

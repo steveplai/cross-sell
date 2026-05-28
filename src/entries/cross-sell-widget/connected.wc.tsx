@@ -1,3 +1,4 @@
+import { createWidgetBuildMetadata } from '../../runtime/buildMetadata'
 import { createReactWebComponent } from '../../runtime/createReactWebComponent'
 import { isLiontravelDomainMode } from '../../shared/utils/liontravelUrl'
 import baseStyles from '../../styles/widget.css?inline'
@@ -265,6 +266,7 @@ function dispatchWidgetEvent(
 createReactWebComponent<CrossSellWidgetConnectedProps>({
   tagName: 'cross-sell-widget-connected',
   Component: CrossSellWidgetConnected,
+  build: createWidgetBuildMetadata('cross-sell-widget-connected', 'wc'),
   observedAttributes: [
     'config',
     'currency',

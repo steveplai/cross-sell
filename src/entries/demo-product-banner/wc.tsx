@@ -1,3 +1,4 @@
+import { createWidgetBuildMetadata } from '../../runtime/buildMetadata'
 import { createReactWebComponent } from '../../runtime/createReactWebComponent'
 import styles from '../../styles/widget.css?inline'
 import type {
@@ -24,6 +25,7 @@ function parseProducts(value: string | null) {
 createReactWebComponent<DemoProductBannerProps>({
   tagName: 'demo-product-banner',
   Component: DemoProductBanner,
+  build: createWidgetBuildMetadata('demo-product-banner', 'wc'),
   observedAttributes: ['title', 'locale', 'layout', 'products'],
   styles,
   mapElementToProps: (element) => ({
