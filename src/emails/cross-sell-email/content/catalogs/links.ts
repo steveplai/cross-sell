@@ -1,3 +1,5 @@
+import { createLiontravelOrigin } from '../../../../shared/utils/liontravelUrl'
+import type { CrossSellEmailDomainMode } from '../shared-assets'
 import type { CrossSellEmailSectionKey } from './sections'
 
 export type CrossSellEmailLinkProfileKey =
@@ -13,37 +15,28 @@ export type CrossSellEmailLinkTarget =
   | 'transportationRecommendation'
 
 interface LinkProfile {
-  basePath: string
   content: string
   source: string
-  visaPassportBasePath?: string
 }
 
 const linkProfiles: Record<CrossSellEmailLinkProfileKey, LinkProfile> = {
   flightInsurance: {
-    basePath: 'flight-insurance',
     content: 'flight',
     source: 'insurance',
   },
   flightEstablished: {
-    basePath: 'flight-established',
     content: 'flight',
     source: 'orderconfirmation',
-    visaPassportBasePath: 'flight-insurance',
   },
   flightSales: {
-    basePath: 'flight-sales',
     content: 'flight',
     source: 'crosssell',
-    visaPassportBasePath: 'flight-insurance',
   },
   hotelEstablished: {
-    basePath: 'hotel-established',
     content: 'hotel',
     source: 'orderconfirmation',
   },
   hotelSales: {
-    basePath: 'hotel-sales',
     content: 'hotel',
     source: 'crosssell',
   },
@@ -90,20 +83,99 @@ const campaignByTarget: Record<
   },
 }
 
-const pathByTarget = {
-  hotel: 'hotels',
-  hotelRecommendation: 'hotels',
-  localExperience: 'experiences',
-  rail: 'rail',
-  transportation: 'transportation',
-  transportationRecommendation: 'transportation',
-  visaPassport: 'visa-passport',
-} satisfies Record<CrossSellEmailLinkTarget, string>
+const productionHostnameByTarget = {
+  hotel: 'hotel.liontravel.com',
+  localExperience: 'activity.liontravel.com',
+  rail: 'vacation.liontravel.com',
+  transportation: 'activity.liontravel.com',
+  visaPassport: 'visa.liontravel.com',
+} satisfies Record<CrossSellEmailSectionKey, string>
+
+const recommendationProductionHostnameByTarget = {
+  hotelRecommendation: 'hotel.liontravel.com',
+  transportationRecommendation: 'activity.liontravel.com',
+} satisfies Record<
+  Exclude<CrossSellEmailLinkTarget, CrossSellEmailSectionKey>,
+  string
+>
+
+function createUrl(
+  domainMode: CrossSellEmailDomainMode,
+  productionHostname: string,
+  pathname: string,
+  query?: Record<string, string>,
+) {
+  const url = new URL(
+    pathname,
+    createLiontravelOrigin(productionHostname, domainMode),
+  )
+
+  if (query) {
+    Object.entries(query).forEach(([key, value]) => {
+      url.searchParams.set(key, value)
+    })
+  }
+
+  return url
+}
+
+function createProductUrl(
+  target: CrossSellEmailLinkTarget,
+  domainMode: CrossSellEmailDomainMode,
+  pathSuffix?: string,
+) {
+  if (target === 'hotelRecommendation') {
+    return createUrl(
+      domainMode,
+      recommendationProductionHostnameByTarget.hotelRecommendation,
+      ['/detail', pathSuffix].filter(Boolean).join('/'),
+    )
+  }
+
+  if (target === 'transportationRecommendation') {
+    return createUrl(
+      domainMode,
+      recommendationProductionHostnameByTarget.transportationRecommendation,
+      ['/search', pathSuffix].filter(Boolean).join('/'),
+      {
+        Foreign: '1',
+        SearchKindName: '交通票券',
+      },
+    )
+  }
+
+  const queryByTarget = {
+    hotel: { searchParam: '' },
+    localExperience: { Foreign: '1', SearchKindName: '遊程' },
+    rail: undefined,
+    transportation: { Foreign: '1', SearchKindName: '交通票券' },
+    visaPassport: { Countrylicensing: 'TW' },
+  } satisfies Record<
+    CrossSellEmailSectionKey,
+    Record<string, string> | undefined
+  >
+
+  const pathnameByTarget = {
+    hotel: '/search',
+    localExperience: '/search',
+    rail: '/thsrdetail',
+    transportation: '/search',
+    visaPassport: '/search',
+  } satisfies Record<CrossSellEmailSectionKey, string>
+
+  return createUrl(
+    domainMode,
+    productionHostnameByTarget[target],
+    pathnameByTarget[target],
+    queryByTarget[target],
+  )
+}
 
 export function createCrossSellEmailUrl(
   profileKey: CrossSellEmailLinkProfileKey,
   target: CrossSellEmailLinkTarget,
   pathSuffix?: string,
+  domainMode: CrossSellEmailDomainMode = 'uat',
 ) {
   const profile = linkProfiles[profileKey]
   const campaign = campaignByTarget[profileKey][target]
@@ -114,19 +186,17 @@ export function createCrossSellEmailUrl(
     )
   }
 
-  const basePath =
-    target === 'visaPassport' && profile.visaPassportBasePath
-      ? profile.visaPassportBasePath
-      : profile.basePath
-  const path = [basePath, pathByTarget[target], pathSuffix]
-    .filter(Boolean)
-    .join('/')
-  const utmQuery = new URLSearchParams({
+  const url = createProductUrl(target, domainMode, pathSuffix)
+  const utmQuery = {
     utm_source: profile.source,
     utm_medium: 'email',
     utm_campaign: campaign,
     utm_content: profile.content,
+  }
+
+  Object.entries(utmQuery).forEach(([key, value]) => {
+    url.searchParams.set(key, value)
   })
 
-  return `https://example.com/${path}?${utmQuery.toString()}`
+  return url.toString()
 }

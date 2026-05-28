@@ -165,7 +165,7 @@ describe('CrossSellEmail', () => {
       createContent: createFlightEstablishedCrossSellEmailContent,
       expectedCtaLabel: '立即預訂交通票券',
       expectedCtaUrl:
-        'https://example.com/flight-established/transportation?utm_source=orderconfirmation&utm_medium=email&utm_campaign=activity-traffic-more-addon&utm_content=flight',
+        'https://activity.liontravel.com/search?Foreign=1&SearchKindName=%E4%BA%A4%E9%80%9A%E7%A5%A8%E5%88%B8&utm_source=orderconfirmation&utm_medium=email&utm_campaign=activity-traffic-more-addon&utm_content=flight',
       expectedRecommendation:
         '日本-東京成田/羽田機場至東京市區/郊區 | 機場接送專車',
     },
@@ -174,7 +174,7 @@ describe('CrossSellEmail', () => {
       createContent: createFlightSalesCrossSellEmailContent,
       expectedCtaLabel: '立即搜尋飯店',
       expectedCtaUrl:
-        'https://example.com/flight-sales/hotels?utm_source=crosssell&utm_medium=email&utm_campaign=hotel-more-addon&utm_content=flight',
+        'https://hotel.liontravel.com/search?searchParam=&utm_source=crosssell&utm_medium=email&utm_campaign=hotel-more-addon&utm_content=flight',
       expectedRecommendation: 'OMO5 東京大塚 by 星野集團',
     },
     {
@@ -182,7 +182,7 @@ describe('CrossSellEmail', () => {
       createContent: createFlightInsuranceCrossSellEmailContent,
       expectedCtaLabel: '申請簽證代辦',
       expectedCtaUrl:
-        'https://example.com/flight-insurance/visa-passport?utm_source=insurance&utm_medium=email&utm_campaign=visa-addon&utm_content=flight',
+        'https://visa.liontravel.com/search?Countrylicensing=TW&utm_source=insurance&utm_medium=email&utm_campaign=visa-addon&utm_content=flight',
     },
   ] satisfies Array<{
     name: string
@@ -302,7 +302,7 @@ describe('CrossSellEmail', () => {
     expectLink(
       document,
       '立即預訂交通票券',
-      'https://example.com/hotel-established/transportation?utm_source=orderconfirmation&utm_medium=email&utm_campaign=activity-traffic-more-addon&utm_content=hotel',
+      'https://activity.liontravel.com/search?Foreign=1&SearchKindName=%E4%BA%A4%E9%80%9A%E7%A5%A8%E5%88%B8&utm_source=orderconfirmation&utm_medium=email&utm_campaign=activity-traffic-more-addon&utm_content=hotel',
     )
     expectImage(document, assetUrls.transportIconUrl)
     expectImage(document, assetUrls.arrowIconUrl)
@@ -338,7 +338,7 @@ describe('CrossSellEmail', () => {
     expectLink(
       document,
       '立即預訂交通票券',
-      'https://example.com/hotel-sales/transportation?utm_source=crosssell&utm_medium=email&utm_campaign=activity-traffic-more-addon&utm_content=hotel',
+      'https://activity.liontravel.com/search?Foreign=1&SearchKindName=%E4%BA%A4%E9%80%9A%E7%A5%A8%E5%88%B8&utm_source=crosssell&utm_medium=email&utm_campaign=activity-traffic-more-addon&utm_content=hotel',
     )
     expectImage(document, assetUrls.transportIconUrl)
     expectImage(document, assetUrls.arrowIconUrl)

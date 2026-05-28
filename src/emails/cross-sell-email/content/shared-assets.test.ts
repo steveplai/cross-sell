@@ -28,6 +28,7 @@ describe('cross-sell email email shared assets', () => {
       arrowIconUrl: `${expectedBaseUrl}/arrowIcon.png`,
       bedIconUrl: `${expectedBaseUrl}/bedIcon.png`,
       checkIconUrl: `${expectedBaseUrl}/checkIcon.png`,
+      domainMode: mode,
       mountainIconUrl: `${expectedBaseUrl}/mountainIcon.png`,
       passportIconUrl: `${expectedBaseUrl}/passportIcon.png`,
       searchIconUrl: `${expectedBaseUrl}/searchIcon.png`,

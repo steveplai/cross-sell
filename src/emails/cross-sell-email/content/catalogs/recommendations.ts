@@ -35,6 +35,7 @@ function createTokyoTransportationRecommendations({
         linkProfileKey,
         'transportationRecommendation',
         'airport-transfer',
+        assetUrls.domainMode,
       ),
     },
     {
@@ -44,6 +45,7 @@ function createTokyoTransportationRecommendations({
         linkProfileKey,
         'transportationRecommendation',
         'tokyo-subway-ticket',
+        assetUrls.domainMode,
       ),
     },
     {
@@ -53,6 +55,7 @@ function createTokyoTransportationRecommendations({
         linkProfileKey,
         'transportationRecommendation',
         'keisei-skyliner',
+        assetUrls.domainMode,
       ),
     },
   ]
@@ -70,6 +73,7 @@ function createTokyoHotelRecommendations({
         linkProfileKey,
         'hotelRecommendation',
         'omo5-tokyo-otsuka',
+        assetUrls.domainMode,
       ),
     },
     {
@@ -79,6 +83,7 @@ function createTokyoHotelRecommendations({
         linkProfileKey,
         'hotelRecommendation',
         'apa-asakusa-tawaramachi',
+        assetUrls.domainMode,
       ),
     },
     {
@@ -88,6 +93,7 @@ function createTokyoHotelRecommendations({
         linkProfileKey,
         'hotelRecommendation',
         'super-hotel-asakusa',
+        assetUrls.domainMode,
       ),
     },
   ]

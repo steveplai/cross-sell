@@ -4,6 +4,7 @@ export interface CrossSellEmailAssetUrls {
   arrowIconUrl: string
   bedIconUrl: string
   checkIconUrl: string
+  domainMode: CrossSellEmailDomainMode
   mountainIconUrl: string
   passportIconUrl: string
   searchIconUrl: string
@@ -46,6 +47,7 @@ export function createCrossSellEmailAssetUrls(
     arrowIconUrl: `${baseUrl}/arrowIcon.png`,
     bedIconUrl: `${baseUrl}/bedIcon.png`,
     checkIconUrl: `${baseUrl}/checkIcon.png`,
+    domainMode: mode,
     mountainIconUrl: `${baseUrl}/mountainIcon.png`,
     passportIconUrl: `${baseUrl}/passportIcon.png`,
     searchIconUrl: `${baseUrl}/searchIcon.png`,

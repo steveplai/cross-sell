@@ -209,7 +209,12 @@ function createSection(
     assetUrls,
     ctaIconUrl:
       sectionPlan.ctaIcon === 'search' ? assetUrls.searchIconUrl : undefined,
-    ctaUrl: createCrossSellEmailUrl(linkProfileKey, sectionPlan.key),
+    ctaUrl: createCrossSellEmailUrl(
+      linkProfileKey,
+      sectionPlan.key,
+      undefined,
+      assetUrls.domainMode,
+    ),
     description: sectionPlan.description,
     recommendations,
     recommendationsTitle: sectionPlan.recommendationsTitle,
