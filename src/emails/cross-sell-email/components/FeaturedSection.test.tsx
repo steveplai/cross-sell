@@ -99,10 +99,62 @@ describe('FeaturedSection', () => {
       `img[src="${recommendation.arrowIconUrl}"]`,
     )
     const arrowCell = arrowImage?.closest('td')
+    const recommendationCardTable = Array.from(
+      document.querySelectorAll('table[align="left"][width="489"]'),
+    ).find((table) =>
+      table.textContent?.includes(section.recommendationsTitle ?? ''),
+    )
+    const detailsContentCell = Array.from(
+      document.querySelectorAll('td[width="489"]'),
+    ).find(
+      (cell) =>
+        recommendationCardTable instanceof HTMLElement &&
+        cell.contains(recommendationCardTable),
+    )
+    const recommendationCardCell =
+      recommendationCardTable?.querySelector('td[width="459"]')
+    const recommendationListTable = textCell?.closest('table')
 
     expect(links).toHaveLength(2)
     expect(textLink?.textContent).toContain(recommendation.text)
     expect(arrowImage).not.toBeNull()
+    expect(detailsContentCell?.getAttribute('width')).toBe('489')
+    expect(detailsContentCell?.getAttribute('style')).toContain('width:489px')
+    expect(recommendationCardTable?.getAttribute('align')).toBe('left')
+    expect(recommendationCardTable?.getAttribute('width')).toBe('489')
+    expect(recommendationCardTable?.getAttribute('style')).toContain(
+      'width:489px',
+    )
+    expect(recommendationCardTable?.getAttribute('style')).toContain(
+      'table-layout:fixed',
+    )
+    expect(recommendationCardTable?.getAttribute('style')).not.toContain(
+      'background-color',
+    )
+    expect(recommendationCardTable?.getAttribute('style')).not.toContain(
+      'padding',
+    )
+    expect(recommendationCardCell?.getAttribute('width')).toBe('459')
+    expect(recommendationCardCell?.getAttribute('style')).toContain(
+      'background-color',
+    )
+    expect(recommendationCardCell?.getAttribute('style')).toContain(
+      'border-radius:5px',
+    )
+    expect(recommendationCardCell?.getAttribute('style')).toContain(
+      'padding:10px 15px',
+    )
+    expect(recommendationCardCell?.getAttribute('style')).toContain(
+      'width:459px',
+    )
+    expect(recommendationListTable?.getAttribute('align')).toBe('left')
+    expect(recommendationListTable?.getAttribute('width')).toBe('459')
+    expect(recommendationListTable?.getAttribute('style')).toContain(
+      'width:459px',
+    )
+    expect(recommendationListTable?.getAttribute('style')).toContain(
+      'table-layout:fixed',
+    )
     expect(textLink?.getAttribute('class')).toContain(
       'recommendation-link-text-anchor',
     )
@@ -113,7 +165,7 @@ describe('FeaturedSection', () => {
     expect(textLink?.getAttribute('style')).toContain('text-decoration:none')
     expect(textLink?.getAttribute('style')).not.toContain('underline')
     expect(textLink?.getAttribute('style')).toContain('white-space:nowrap')
-    expect(textLink?.getAttribute('style')).toContain('width:100%')
+    expect(textLink?.getAttribute('style')).toContain('width:439px')
     expect(textSpan?.getAttribute('class')).toContain(
       'recommendation-link-text',
     )
@@ -136,11 +188,11 @@ describe('FeaturedSection', () => {
     expect(textSpan?.getAttribute('style')).not.toMatch(/(^|;)width:100%(;|$)/)
     expect(textCell?.getAttribute('height')).toBe('24')
     expect(textCell?.getAttribute('valign')).toBe('middle')
-    expect(textCell?.getAttribute('width')).toBe('100%')
+    expect(textCell?.getAttribute('width')).toBe('439')
     expect(textCell?.getAttribute('style')).toContain('height:24px')
     expect(textCell?.getAttribute('style')).toContain('overflow:hidden')
     expect(textCell?.getAttribute('style')).toContain('vertical-align:middle')
-    expect(textCell?.getAttribute('style')).toContain('width:100%')
+    expect(textCell?.getAttribute('style')).toContain('width:439px')
     expect(arrowCell?.getAttribute('height')).toBe('24')
     expect(arrowCell?.getAttribute('valign')).toBe('middle')
     expect(arrowCell?.getAttribute('width')).toBe('20')
