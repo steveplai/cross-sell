@@ -461,6 +461,8 @@ priority 與 custom events 等 public integration details。除非需要 built a
 Internal tests 保留給 shared project mechanics 與 tooling contracts：runtime helpers、
 build/preview helpers、metadata helpers，以及適用於所有 examples 的 handoff workflow
 rules。它們不應為每個新增 widget 或 email template 都新增 test case。
+Internal handoff tests 使用代表性的 artifact smoke checks；完整 example rendering、
+entry behavior、events、theme tokens 與 config priority 應放在 app Playwright tests。
 
 不要機械式地替每個 `src/components/ui` primitive 加 tests。當 primitive 包含
 project-owned behavior、custom variants、accessibility logic、controlled state、

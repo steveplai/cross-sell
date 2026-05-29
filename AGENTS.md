@@ -341,6 +341,9 @@ Do not add detailed widget layout, carousel, visual interaction assertions, or
 widget-specific entry contract assertions to internal handoff tests. Handoff
 tests should verify project-level delivery mechanics: built examples load the
 delivered files as plain artifacts and can be consumed as delivered.
+Use representative artifact smoke checks for internal handoff coverage. Exhaustive
+example rendering, entry behavior, events, theme tokens, and config priority
+belong in app Playwright tests.
 
 ### Vitest Setup
 
