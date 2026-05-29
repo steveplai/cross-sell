@@ -1,27 +1,15 @@
-import { readFile } from 'node:fs/promises'
-import { resolve } from 'node:path'
-
-import type { ReactNode } from 'react'
-import type { CreateEmailOptions } from 'resend'
-
 import {
-  createCrossSellEmailAssetUrls,
-  createFlightEstablishedCrossSellEmailContent,
-  createFlightInsuranceCrossSellEmailContent,
-  createFlightSalesCrossSellEmailContent,
-  createHotelEstablishedCrossSellEmailContent,
-  createHotelSalesCrossSellEmailContent,
   type CrossSellEmailDomainMode,
   resolveCrossSellEmailDomainMode,
 } from '../src/emails/cross-sell-email/content/index'
-import { CrossSellEmail } from '../src/emails/cross-sell-email/CrossSellEmail'
-import { DemoProductOfferEmail } from '../src/emails/demo-product-offer/DemoProductOfferEmail'
-import { sampleProducts } from '../src/emails/demo-product-offer/sample-data'
-
-export const previewEmailSources = ['dist', 'react'] as const
-export type PreviewEmailSource = (typeof previewEmailSources)[number]
-
-export type PreviewEmailTemplateKey = keyof typeof previewEmailTemplates
+import {
+  isPreviewEmailTemplateKey,
+  previewAllEmailTemplateKeys,
+  type PreviewEmailSource,
+  previewEmailSources,
+  type PreviewEmailTemplateKey,
+  validatePreviewEmailTemplatesForSource,
+} from './email-preview-templates'
 
 export interface PreviewEmailCliOptions {
   domainMode?: string
@@ -52,141 +40,6 @@ export interface PreviewEmailDraft {
   templates: PreviewEmailTemplateKey[]
   to: string
 }
-
-interface PreviewEmailTemplate {
-  defaultSubject: string
-  distFileName: string
-  usesCrossSellEmailDomainMode: boolean
-  label: string
-  createReactEmail: (domainMode: CrossSellEmailDomainMode) => ReactNode
-}
-
-export const previewEmailTemplates = {
-  'demo-product-offer': {
-    defaultSubject: '你的專屬加購推薦',
-    distFileName: 'demo-product-offer/index.html',
-    usesCrossSellEmailDomainMode: false,
-    label: 'Demo product offer',
-    createReactEmail: () => (
-      <DemoProductOfferEmail
-        ctaUrl="https://example.com/recommendations"
-        products={sampleProducts}
-        title="你的專屬加購推薦"
-      />
-    ),
-  },
-
-  'flight-established': {
-    defaultSubject: '旅遊計劃書與限時加購優惠',
-    distFileName: 'cross-sell-email/flight/established.html',
-    usesCrossSellEmailDomainMode: true,
-    label: 'Flight established',
-    createReactEmail: (domainMode) => (
-      <CrossSellEmail
-        {...createFlightEstablishedCrossSellEmailContent(
-          createCrossSellEmailAssetUrls(domainMode),
-        )}
-      />
-    ),
-  },
-  'flight-sales': {
-    defaultSubject: '旅遊計劃書與限時加購優惠',
-    distFileName: 'cross-sell-email/flight/sales.html',
-    usesCrossSellEmailDomainMode: true,
-    label: 'Flight sales',
-    createReactEmail: (domainMode) => (
-      <CrossSellEmail
-        {...createFlightSalesCrossSellEmailContent(
-          createCrossSellEmailAssetUrls(domainMode),
-        )}
-      />
-    ),
-  },
-  'flight-insurance': {
-    defaultSubject: '旅遊計劃書與簽證護照提醒',
-    distFileName: 'cross-sell-email/flight/insurance.html',
-    usesCrossSellEmailDomainMode: true,
-    label: 'Flight insurance',
-    createReactEmail: (domainMode) => (
-      <CrossSellEmail
-        {...createFlightInsuranceCrossSellEmailContent(
-          createCrossSellEmailAssetUrls(domainMode),
-        )}
-      />
-    ),
-  },
-
-  'hotel-established': {
-    defaultSubject: '旅遊計劃書與限時加購優惠',
-    distFileName: 'cross-sell-email/hotel/established.html',
-    usesCrossSellEmailDomainMode: true,
-    label: 'Hotel established',
-    createReactEmail: (domainMode) => (
-      <CrossSellEmail
-        {...createHotelEstablishedCrossSellEmailContent(
-          createCrossSellEmailAssetUrls(domainMode),
-        )}
-      />
-    ),
-  },
-  'hotel-sales': {
-    defaultSubject: '旅遊計劃書與限時加購優惠',
-    distFileName: 'cross-sell-email/hotel/sales.html',
-    usesCrossSellEmailDomainMode: true,
-    label: 'Hotel sales',
-    createReactEmail: (domainMode) => (
-      <CrossSellEmail
-        {...createHotelSalesCrossSellEmailContent(
-          createCrossSellEmailAssetUrls(domainMode),
-        )}
-      />
-    ),
-  },
-
-  'full-flight-established': {
-    defaultSubject: '旅遊計劃書',
-    distFileName: 'cross-sell-email/flight/full-established.html',
-    usesCrossSellEmailDomainMode: true,
-    label: 'Full flight established',
-    createReactEmail: (domainMode) => (
-      <CrossSellEmail
-        {...createFlightSalesCrossSellEmailContent(
-          createCrossSellEmailAssetUrls(domainMode),
-        )}
-      />
-    ),
-  },
-  'full-flight-sales': {
-    defaultSubject: '限時加購優惠',
-    distFileName: 'cross-sell-email/flight/full-sales.html',
-    usesCrossSellEmailDomainMode: true,
-    label: 'Full flight sales',
-    createReactEmail: (domainMode) => (
-      <CrossSellEmail
-        {...createFlightInsuranceCrossSellEmailContent(
-          createCrossSellEmailAssetUrls(domainMode),
-        )}
-      />
-    ),
-  },
-  'full-flight-insurance': {
-    defaultSubject: '簽證護照提醒',
-    distFileName: 'cross-sell-email/flight/full-insurance.html',
-    usesCrossSellEmailDomainMode: true,
-    label: 'Full flight insurance',
-    createReactEmail: (domainMode) => (
-      <CrossSellEmail
-        {...createFlightInsuranceCrossSellEmailContent(
-          createCrossSellEmailAssetUrls(domainMode),
-        )}
-      />
-    ),
-  },
-} satisfies Record<string, PreviewEmailTemplate>
-
-export const previewEmailTemplateKeys = Object.keys(
-  previewEmailTemplates,
-) as PreviewEmailTemplateKey[]
 
 export function parsePreviewEmailArgs(args: string[]): PreviewEmailCliOptions {
   const options: PreviewEmailCliOptions = {}
@@ -276,15 +129,19 @@ export function resolvePreviewEmailDefaults(
   cliOptions: PreviewEmailCliOptions,
   env: NodeJS.ProcessEnv = process.env,
 ): PreviewEmailDefaults {
-  const templates = cliOptions.templates
-    ? resolvePreviewEmailTemplateKeys(cliOptions.templates)
-    : undefined
   const source = cliOptions.source
     ? resolvePreviewEmailSource(cliOptions.source)
+    : undefined
+  const templates = cliOptions.templates
+    ? resolvePreviewEmailTemplateKeys(cliOptions.templates)
     : undefined
   const domainMode = cliOptions.domainMode
     ? resolveCrossSellEmailDomainMode(cliOptions.domainMode)
     : undefined
+
+  if (source && templates) {
+    validatePreviewEmailTemplatesForSource(templates, source)
+  }
 
   return {
     apiKey: env.RESEND_API_KEY,
@@ -338,7 +195,7 @@ export function resolvePreviewEmailTemplateKey(
   }
 
   throw new Error(
-    `Invalid email template "${value}". Expected one of: ${previewEmailTemplateKeys.join(
+    `Invalid email template "${value}". Expected one of: ${previewAllEmailTemplateKeys.join(
       ', ',
     )}.`,
   )
@@ -358,90 +215,8 @@ export function resolvePreviewEmailSource(value: string): PreviewEmailSource {
   }
 
   throw new Error(
-    `Invalid email source "${value}". Expected "dist" or "react".`,
+    `Invalid email source "${value}". Expected "dist", "react", or "file".`,
   )
-}
-
-export async function createPreviewEmailPayload(
-  draft: Omit<PreviewEmailDraft, 'subjects' | 'templates'> & {
-    subject: string
-    template: PreviewEmailTemplateKey
-  },
-  root = process.cwd(),
-): Promise<CreateEmailOptions> {
-  const basePayload = {
-    from: draft.from,
-    subject: draft.subject,
-    to: draft.to,
-  }
-
-  if (draft.source === 'dist') {
-    return {
-      ...basePayload,
-      html: await readDistEmailHtml(draft.template, root),
-    }
-  }
-
-  return {
-    ...basePayload,
-    react: previewEmailTemplates[draft.template].createReactEmail(
-      draft.domainMode ?? 'uat',
-    ),
-  }
-}
-
-export async function createPreviewEmailPayloads(
-  draft: PreviewEmailDraft,
-  root = process.cwd(),
-): Promise<CreateEmailOptions[]> {
-  const { subjects, templates, ...sendSettings } = draft
-
-  return Promise.all(
-    templates.map((template) =>
-      createPreviewEmailPayload(
-        {
-          ...sendSettings,
-          subject: resolvePreviewEmailDraftSubject(subjects, template),
-          template,
-        },
-        root,
-      ),
-    ),
-  )
-}
-
-function resolvePreviewEmailDraftSubject(
-  subjects: PreviewEmailDraft['subjects'],
-  template: PreviewEmailTemplateKey,
-) {
-  const subject = subjects[template]?.trim()
-
-  if (!subject) {
-    throw new Error(`Missing subject for template "${template}".`)
-  }
-
-  return subject
-}
-
-export async function readDistEmailHtml(
-  template: PreviewEmailTemplateKey,
-  root = process.cwd(),
-) {
-  const fileName = previewEmailTemplates[template].distFileName
-  const filePath = resolve(root, 'dist/emails', 'latest', fileName)
-
-  try {
-    return await readFile(filePath, 'utf8')
-  } catch (error) {
-    if (isNodeError(error) && error.code === 'ENOENT') {
-      throw new Error(
-        `Missing dist email file: ${filePath}. Run pnpm build:emails first, or choose source "react".`,
-        { cause: error },
-      )
-    }
-
-    throw error
-  }
 }
 
 export function getPreviewEmailUsage() {
@@ -449,10 +224,10 @@ export function getPreviewEmailUsage() {
   pnpm send:email:preview [options]
 
 Options:
-  --template <template>       ${previewEmailTemplateKeys.join(' | ')}
+  --template <template>       ${previewAllEmailTemplateKeys.join(' | ')}
                               May be comma-separated or repeated.
-  --source <source>           dist | react
-  --domain-mode <mode>        uat | production
+  --source <source>           dist | react | file
+  --domain-mode <mode>        uat | production (react source only)
   --to <email>                Recipient email. Defaults to RESEND_TO.
   --from <sender>             Sender email. Skips RESEND_FROM_OPTIONS prompt.
   --subject <subject>         Default subject for each selected email.
@@ -462,15 +237,8 @@ Optional environment:
   RESEND_API_KEY (prompted if missing)
   RESEND_FROM_OPTIONS (JSON array of sender choices)
   RESEND_TO
+
+Manual file source:
+  Copy full HTML emails into manual-emails/ before using --source=file.
 `
-}
-
-function isPreviewEmailTemplateKey(
-  value: string,
-): value is PreviewEmailTemplateKey {
-  return Object.hasOwn(previewEmailTemplates, value)
-}
-
-function isNodeError(error: unknown): error is NodeJS.ErrnoException {
-  return error instanceof Error && 'code' in error
 }

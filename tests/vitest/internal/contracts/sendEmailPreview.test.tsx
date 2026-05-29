@@ -13,9 +13,15 @@ import {
 import {
   createPreviewEmailPayload,
   createPreviewEmailPayloads,
-  parsePreviewEmailArgs,
-  previewEmailTemplates,
   readDistEmailHtml,
+  readManualEmailHtml,
+} from '../../../../scripts/email-preview-payload'
+import {
+  manualEmailTemplates,
+  previewEmailTemplates,
+} from '../../../../scripts/email-preview-templates'
+import {
+  parsePreviewEmailArgs,
   resolvePreviewEmailDefaults,
   resolvePreviewEmailFromOptions,
   resolvePreviewEmailSource,
@@ -102,6 +108,18 @@ describe('email preview 寄送契約', () => {
       distFileName: 'cross-sell-email/flight/insurance.html',
       usesCrossSellEmailDomainMode: true,
     })
+    expect(manualEmailTemplates['full-flight-established']).toMatchObject({
+      defaultSubject: '旅遊計劃書',
+      fileName: 'full-flight-established.html',
+    })
+    expect(manualEmailTemplates['full-flight-sales']).toMatchObject({
+      defaultSubject: '限時加購優惠',
+      fileName: 'full-flight-sales.html',
+    })
+    expect(manualEmailTemplates['full-flight-insurance']).toMatchObject({
+      defaultSubject: '簽證護照提醒',
+      fileName: 'full-flight-insurance.html',
+    })
   })
 
   it('會解析 CLI options 並套用環境變數預設值', () => {
@@ -135,8 +153,9 @@ describe('email preview 寄送契約', () => {
     expect(() => resolvePreviewEmailTemplateKey('unknown')).toThrow(
       'Invalid email template "unknown"',
     )
-    expect(() => resolvePreviewEmailSource('file')).toThrow(
-      'Invalid email source "file"',
+    expect(resolvePreviewEmailSource('file')).toBe('file')
+    expect(() => resolvePreviewEmailSource('ftp')).toThrow(
+      'Invalid email source "ftp"',
     )
     expect(() =>
       resolvePreviewEmailDefaults(
@@ -205,6 +224,94 @@ describe('email preview 寄送契約', () => {
     } finally {
       await rm(root, { force: true, recursive: true })
     }
+  })
+
+  it('會從 manual email 檔案建立 HTML payload', async () => {
+    const root = join(tmpdir(), `manual-email-preview-${randomUUID()}`)
+
+    await mkdir(join(root, 'manual-emails'), { recursive: true })
+    await writeFile(
+      join(root, 'manual-emails/full-flight-insurance.html'),
+      '<html><body>full flight insurance</body></html>',
+      'utf8',
+    )
+
+    try {
+      await expect(
+        createPreviewEmailPayload(
+          {
+            from: 'sender@example.com',
+            source: 'file',
+            subject: 'Manual Preview',
+            template: 'full-flight-insurance',
+            to: 'recipient@example.com',
+          },
+          root,
+        ),
+      ).resolves.toMatchObject({
+        from: 'sender@example.com',
+        html: '<html><body>full flight insurance</body></html>',
+        subject: 'Manual Preview',
+        to: 'recipient@example.com',
+      })
+    } finally {
+      await rm(root, { force: true, recursive: true })
+    }
+  })
+
+  it('manual email 檔案不存在時會回傳清楚的錯誤', async () => {
+    const root = join(tmpdir(), `manual-email-missing-${randomUUID()}`)
+
+    await expect(
+      readManualEmailHtml('full-flight-insurance', root),
+    ).rejects.toThrow(
+      'Copy the full HTML email into manual-emails/full-flight-insurance.html',
+    )
+  })
+
+  it('會拒絕 source 與 template 類型不相容的組合', async () => {
+    expect(() =>
+      resolvePreviewEmailDefaults(
+        parsePreviewEmailArgs(['--source=file', '--template=flight-insurance']),
+        {},
+      ),
+    ).toThrow('Template "flight-insurance" does not support source "file"')
+    expect(() =>
+      resolvePreviewEmailDefaults(
+        parsePreviewEmailArgs([
+          '--source=react',
+          '--template=full-flight-insurance',
+        ]),
+        {},
+      ),
+    ).toThrow(
+      'Template "full-flight-insurance" does not support source "react"',
+    )
+    await expect(
+      createPreviewEmailPayload({
+        from: 'sender@example.com',
+        source: 'file',
+        subject: 'Preview',
+        template: 'flight-insurance',
+        to: 'recipient@example.com',
+      }),
+    ).rejects.toThrow(
+      'Template "flight-insurance" does not support source "file"',
+    )
+    await expect(
+      createPreviewEmailPayload({
+        from: 'sender@example.com',
+        source: 'react',
+        subject: 'Preview',
+        template: 'full-flight-insurance',
+        to: 'recipient@example.com',
+      }),
+    ).rejects.toThrow(
+      'Template "full-flight-insurance" does not support source "react"',
+    )
+    await expect(readDistEmailHtml('full-flight-insurance')).rejects.toThrow(
+      'Template "full-flight-insurance" does not support source "dist"',
+    )
   })
 
   it('會建立不預先渲染 HTML 的 React Email payload', async () => {

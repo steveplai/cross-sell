@@ -11,10 +11,10 @@ import {
 import { CrossSellEmail } from '../src/emails/cross-sell-email/CrossSellEmail'
 import { DemoProductOfferEmail } from '../src/emails/demo-product-offer/DemoProductOfferEmail'
 import { sampleProducts } from '../src/emails/demo-product-offer/sample-data'
-import type { PreviewEmailTemplateKey } from './send-email-preview-core'
+import type { PreviewBuiltEmailTemplateKey } from './email-preview-templates'
 
 export interface EmailBuildOutput {
-  templateKey: PreviewEmailTemplateKey
+  templateKey: PreviewBuiltEmailTemplateKey
   relativePath: string
   createReactEmail: (assetUrls: CrossSellEmailAssetUrls) => ReactNode
 }

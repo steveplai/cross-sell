@@ -9,6 +9,7 @@ storybook-static/
 coverage/
 test-results/
 playwright-report/
+manual-emails/*.html
 
 # Tool caches
 .vite/

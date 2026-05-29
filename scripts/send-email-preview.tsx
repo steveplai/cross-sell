@@ -8,16 +8,20 @@ import {
   type CrossSellEmailDomainMode,
   resolveCrossSellEmailDomainMode,
 } from '../src/emails/cross-sell-email/content/index'
+import { createPreviewEmailPayloads } from './email-preview-payload'
 import {
-  createPreviewEmailPayloads,
+  getPreviewEmailTemplateDefaultSubject,
+  getPreviewEmailTemplateKeysForSource,
+  getPreviewEmailTemplateLabel,
+  previewEmailSources,
+  type PreviewEmailTemplateKey,
+  previewEmailTemplateUsesCrossSellEmailDomainMode,
+} from './email-preview-templates'
+import {
   getPreviewEmailUsage,
   parsePreviewEmailArgs,
   type PreviewEmailDefaults,
   type PreviewEmailDraft,
-  previewEmailSources,
-  type PreviewEmailTemplateKey,
-  previewEmailTemplateKeys,
-  previewEmailTemplates,
   resolvePreviewEmailDefaults,
 } from './send-email-preview-core'
 
@@ -89,13 +93,6 @@ async function promptForPreviewEmailDraft(
   const rl = createInterface({ input, output })
 
   try {
-    const templates = await promptMultiSelect(
-      rl,
-      'Templates',
-      previewEmailTemplateKeys,
-      (value) => `${value} - ${previewEmailTemplates[value].label}`,
-      defaults.templates,
-    )
     const source = await promptSelect(
       rl,
       'Source',
@@ -103,11 +100,18 @@ async function promptForPreviewEmailDraft(
       (value) => value,
       defaults.source,
     )
+    const templateOptions = getPreviewEmailTemplateKeysForSource(source)
+    const templates = await promptMultiSelect(
+      rl,
+      'Templates',
+      templateOptions,
+      (value) => `${value} - ${getPreviewEmailTemplateLabel(value)}`,
+      defaults.templates,
+    )
     const domainMode =
       source === 'react' &&
-      templates.some(
-        (template) =>
-          previewEmailTemplates[template].usesCrossSellEmailDomainMode,
+      templates.some((template) =>
+        previewEmailTemplateUsesCrossSellEmailDomainMode(template),
       )
         ? await promptDomainMode(rl, defaults.domainMode)
         : undefined
@@ -144,7 +148,7 @@ async function promptForPreviewEmailSubjects(
     subjects[template] = await promptRequiredInput(
       rl,
       label,
-      defaultSubject ?? previewEmailTemplates[template].defaultSubject,
+      defaultSubject ?? getPreviewEmailTemplateDefaultSubject(template),
     )
   }
 
