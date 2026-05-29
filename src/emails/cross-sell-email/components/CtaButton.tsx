@@ -21,24 +21,50 @@ const toneClassNames = {
 
 const variantClassNames = {
   compact: {
-    cell: 'h-8.5 w-26 rounded-[5px] border border-solid bg-white px-0 text-center align-middle',
-    height: '34',
+    cell: 'h-8.5 rounded-[5px] border border-solid bg-white px-0 text-center align-middle',
+    fontSize: 14,
+    height: 34,
     iconCell: 'w-4 align-middle text-[0px] leading-none',
+    lineHeight: 22,
     link: 'font-sans text-[14px] leading-[22px] whitespace-nowrap no-underline',
+    paddingX: 10,
     spacerCell: 'w-1.25 text-[0px] leading-none',
-    table: 'w-26',
-    width: '104',
   },
   regular: {
-    cell: 'h-9 w-42.5 rounded-[5px] border border-solid bg-white px-0 text-center align-middle',
-    height: '36',
+    cell: 'h-8.5 rounded-[5px] border border-solid bg-white px-0 text-center align-middle',
+    fontSize: 16,
+    height: 34,
     iconCell: 'w-4 align-middle text-[0px] leading-none',
+    lineHeight: 24,
     link: 'font-sans text-[16px] leading-6 whitespace-nowrap no-underline',
+    paddingX: 10,
     spacerCell: 'w-1.25 text-[0px] leading-none',
-    table: 'w-42.5',
-    width: '170',
   },
 } as const
+
+const iconSize = 16
+const iconGap = 5
+
+function calculateCtaButtonMetrics({
+  hasIcon,
+  label,
+  variant,
+}: {
+  hasIcon: boolean
+  label: string
+  variant: keyof typeof variantClassNames
+}) {
+  const variantClassName = variantClassNames[variant]
+  const textWidth = label.length * variantClassName.fontSize
+  const contentWidth = textWidth + (hasIcon ? iconSize + iconGap : 0)
+  const buttonWidth = contentWidth + variantClassName.paddingX * 2
+
+  return {
+    buttonWidth: `${buttonWidth}`,
+    contentWidth: `${contentWidth}`,
+    textWidth: `${textWidth}`,
+  }
+}
 
 export function CtaButton({
   href,
@@ -49,59 +75,76 @@ export function CtaButton({
 }: CtaButtonProps) {
   const toneClassName = toneClassNames[tone]
   const variantClassName = variantClassNames[variant]
+  const hasIcon = Boolean(iconUrl)
+  const metrics = calculateCtaButtonMetrics({ hasIcon, label, variant })
+  const height = `${variantClassName.height}`
+  const lineHeight = `${variantClassName.lineHeight}px`
 
   return (
     <Row
       align="right"
-      className={variantClassName.table}
-      width={variantClassName.width}
+      style={{ width: `${metrics.buttonWidth}px` }}
+      width={metrics.buttonWidth}
     >
       <Column
         align="center"
         className={`${variantClassName.cell} ${toneClassName.border}`}
-        height={variantClassName.height}
-        style={{ verticalAlign: 'middle' }}
+        height={height}
+        style={{
+          verticalAlign: 'middle',
+          width: `${metrics.buttonWidth}px`,
+        }}
         valign="middle"
-        width={variantClassName.width}
+        width={metrics.buttonWidth}
       >
         {iconUrl ? (
-          <Row align="center" className="w-auto" width="auto">
+          <Row
+            align="center"
+            style={{ width: `${metrics.contentWidth}px` }}
+            width={metrics.contentWidth}
+          >
             <Column
               className={variantClassName.iconCell}
-              height={variantClassName.height}
+              height={height}
               style={{ verticalAlign: 'middle' }}
               valign="middle"
-              width="16"
+              width={`${iconSize}`}
             >
               <Img
                 alt=""
                 className="block"
-                height="16"
+                height={`${iconSize}`}
                 src={iconUrl}
-                width="16"
+                width={`${iconSize}`}
               />
             </Column>
             <Column
               className={variantClassName.spacerCell}
-              height={variantClassName.height}
+              height={height}
               style={{ verticalAlign: 'middle' }}
               valign="middle"
-              width="5"
+              width={`${iconGap}`}
             >
               &nbsp;
             </Column>
             <Column
-              height={variantClassName.height}
-              style={{ verticalAlign: 'middle' }}
+              height={height}
+              style={{
+                verticalAlign: 'middle',
+                width: `${metrics.textWidth}px`,
+              }}
               valign="middle"
+              width={metrics.textWidth}
             >
               <Link
                 className={`${variantClassName.link} ${toneClassName.text}`}
                 href={href}
                 rel="noopener noreferrer"
                 style={{
-                  lineHeight: `${variantClassName.height}px`,
+                  display: 'block',
+                  lineHeight,
                   textDecoration: 'none',
+                  width: `${metrics.textWidth}px`,
                 }}
                 target="_blank"
               >
@@ -116,10 +159,10 @@ export function CtaButton({
             rel="noopener noreferrer"
             style={{
               display: 'block',
-              lineHeight: `${variantClassName.height}px`,
+              lineHeight: `${height}px`,
               textAlign: 'center',
               textDecoration: 'none',
-              width: `${variantClassName.width}px`,
+              width: `${metrics.buttonWidth}px`,
             }}
             target="_blank"
           >
