@@ -73,7 +73,7 @@ src/lib/        Shared React/Tailwind utility helpers
 src/styles/     Shared widget CSS and design tokens
 examples/       Plain HTML examples that load built dist files
 stories/        Storybook playground stories
-tests/          Internal contract and handoff tests
+tests/          Playwright app tests plus project-level internal tests
 scripts/        Build and static server scripts
 ```
 
@@ -439,15 +439,19 @@ examples/
 ```
 
 These examples intentionally load `dist/widgets/<widget>/{wc,mount}.js` directly. Internal
-Playwright handoff tests serve them with `scripts/dev/serve-static.mjs` so the files
+Playwright handoff tests serve them with `scripts/serve-static.mjs` so the files
 behave like real handoff artifacts, without Vite dev-server transforms.
 
 ## Testing Strategy
 
 - Storybook is the playground for widget and email states.
-- Vitest + Testing Library cover source React components and small contracts.
-- Internal Vitest tests protect project-level runtime contracts.
-- Playwright opens built examples and verifies real `dist` artifacts.
+- Vitest + Testing Library cover source React components, email templates, entry
+  contracts, and small project-level contracts.
+- Internal Vitest tests protect project-level runtime and tooling contracts that
+  should not grow just because a widget or email template is added.
+- Playwright opens built examples and verifies real `dist` artifacts. App
+  Playwright tests cover browser-specific widget behavior; internal Playwright
+  tests cover project-level handoff mechanics.
 - Storybook executable tests are intentionally deferred.
 
 Test folders under `tests/` are organized by runner first, then responsibility:
@@ -459,6 +463,16 @@ tests/playwright/internal/handoff/
 ```
 
 Source-level Vitest app tests stay near the code they cover as `src/**/*.test.*`.
+Widget-specific Web Component and Mount API entry contracts are app tests even
+when they cover public integration details such as tag names, global names,
+observed attributes, DOM properties, config priority, and custom events. Prefer
+placing those near `src/entries/` unless they require a built artifact and real
+browser.
+
+Internal tests are reserved for shared project mechanics and tooling contracts:
+runtime helpers, build/preview helpers, metadata helpers, and handoff workflow
+rules that apply across examples. They should not need a new test case for every
+new widget or email template.
 
 Do not add tests to every `src/components/ui` primitive mechanically. Add focused
 tests when a primitive contains project-owned behavior, custom variants,

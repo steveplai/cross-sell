@@ -250,20 +250,27 @@ Tests are split into two high-level responsibilities: app tests and internal tes
 
 ### App Tests
 
-App tests protect the behavior of developed widgets, email components, and shared
-UI logic so future changes do not break the intended component behavior.
+App tests protect the behavior, public contracts, and integration entrypoints of
+developed widgets, email components, and shared UI logic. These tests may grow
+as new widgets, email templates, or widget entrypoints are added.
 
 Use app tests for:
 
 - component render output
 - callback payloads and public component props
 - deterministic logic such as countdowns, formatting, and expired/active states
+- widget-specific Web Component and Mount API entry contracts, including tag
+  names, global names, observed attributes, DOM properties, event names, and
+  event `detail` shapes
+- email-template-specific render output and content contracts
 - browser-only widget behavior such as real layout, overflow, keyboard operation,
   responsive exposure, and carousel movement
 
 App test locations:
 
 ```txt
+src/entries/**/*.test.ts
+src/entries/**/*.test.tsx
 src/**/*.test.tsx
 src/**/*.test.ts
 tests/playwright/app/
@@ -278,21 +285,29 @@ real browser. Examples include `getBoundingClientRect()`, flex/grid layout, real
 CSS overflow, responsive viewport behavior, keyboard focus behavior, or a library
 such as Embla that relies on browser layout.
 
-Do not put app-level widget behavior tests under internal handoff tests.
+Do not put app-level widget, email, or widget-entry behavior tests under internal
+handoff tests.
 
 ### Internal Tests
 
-Internal tests protect project mechanics and delivery contracts rather than a
-specific widget's product behavior.
+Internal tests protect project-level mechanics, rules, and workflows that should
+not require new test cases merely because another widget or email template is
+added. They cover how the packaging project operates rather than any specific
+widget, email, or entrypoint contract.
 
 Use internal tests for:
 
-- runtime markers and shared runtime contracts
-- email renderer or build helper contracts
-- built `dist/` artifacts loading from `examples/`
-- Web Component and Mount API handoff behavior
-- external integration contracts such as tag names, globals, custom events, and
-  example pages
+- shared runtime contracts such as Web Component property upgrade behavior,
+  Shadow DOM style injection, and runtime root marker mechanics
+- project tooling contracts such as build helpers, email preview helpers, and
+  metadata shape helpers
+- built `dist/` artifact handoff workflow rules that apply across examples
+- static-server handoff mechanics that ensure examples are served as plain files
+
+Do not use internal tests for widget-specific or email-specific public contracts.
+For example, a specific widget's tag name, global Mount API name, observed
+attributes, DOM properties, config priority rules, custom event names, or email
+template output belongs in app tests.
 
 Internal test locations:
 
@@ -305,9 +320,10 @@ Internal test folders are organized by runner first, then responsibility. Vitest
 contract tests should stay in `tests/vitest/internal/contracts/`. Playwright
 handoff tests should stay in `tests/playwright/internal/handoff/`.
 
-Do not add detailed widget layout, carousel, or visual interaction assertions to
-handoff tests. Handoff tests should verify that the built example can be consumed
-as delivered.
+Do not add detailed widget layout, carousel, visual interaction assertions, or
+widget-specific entry contract assertions to internal handoff tests. Handoff
+tests should verify project-level delivery mechanics: built examples load the
+delivered files as plain artifacts and can be consumed as delivered.
 
 ### Vitest Setup
 
@@ -335,7 +351,7 @@ $RefreshSig$ is not defined
 This project instead uses a very small static server:
 
 ```txt
-scripts/dev/serve-static.mjs
+scripts/serve-static.mjs
 ```
 
 Playwright serves plain files exactly like a real handoff page:
@@ -366,8 +382,8 @@ Storybook = visual/component playground
 Storybook tests = protect playground states
 App Vitest = component logic and deterministic behavior tests
 App Playwright = browser-only widget behavior tests
-Internal Vitest = project contract tests
-Internal Playwright = dist/examples handoff tests
+Internal Vitest = project-level runtime and tooling contract tests
+Internal Playwright = project-level dist/examples handoff workflow tests
 ```
 
 ## Commands
