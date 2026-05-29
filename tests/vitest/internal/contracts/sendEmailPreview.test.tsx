@@ -17,8 +17,8 @@ import {
   resolvePreviewEmailTemplateKey,
 } from '../../../../scripts/send-email-preview-core'
 
-describe('send email preview contracts', () => {
-  it('defines template metadata for dist and React Email sources', () => {
+describe('email preview 寄送契約', () => {
+  it('會定義 dist 與 React Email 來源的 template metadata', () => {
     expect(previewEmailTemplates['demo-product-offer']).toMatchObject({
       defaultSubject: '你的專屬加購推薦',
       distFileName: 'demo-product-offer/index.html',
@@ -49,7 +49,7 @@ describe('send email preview contracts', () => {
     })
   })
 
-  it('parses CLI options and applies env defaults', () => {
+  it('會解析 CLI options 並套用環境變數預設值', () => {
     const cliOptions = parsePreviewEmailArgs([
       '--template=flight-established,flight-sales',
       '--template',
@@ -76,7 +76,7 @@ describe('send email preview contracts', () => {
     })
   })
 
-  it('rejects invalid template, source, and domain mode values', () => {
+  it('會拒絕無效的 template、source 與 domain mode 值', () => {
     expect(() => resolvePreviewEmailTemplateKey('unknown')).toThrow(
       'Invalid email template "unknown"',
     )
@@ -94,7 +94,7 @@ describe('send email preview contracts', () => {
     )
   })
 
-  it('ignores RESEND_FROM_OPTIONS when --from is provided', () => {
+  it('提供 --from 時會忽略 RESEND_FROM_OPTIONS', () => {
     const defaults = resolvePreviewEmailDefaults(
       parsePreviewEmailArgs(['--from=cli-sender@example.com']),
       {
@@ -109,7 +109,7 @@ describe('send email preview contracts', () => {
     })
   })
 
-  it('returns a clear error when a dist email file is missing', async () => {
+  it('dist email 檔案不存在時會回傳清楚的錯誤', async () => {
     const root = join(tmpdir(), `email-preview-missing-${randomUUID()}`)
 
     await expect(readDistEmailHtml('flight-established', root)).rejects.toThrow(
@@ -117,7 +117,7 @@ describe('send email preview contracts', () => {
     )
   })
 
-  it('creates an html payload from a dist email file', async () => {
+  it('會從 dist email 檔案建立 HTML payload', async () => {
     const root = join(tmpdir(), `email-preview-${randomUUID()}`)
 
     await mkdir(join(root, 'dist/emails/latest/cross-sell-email/flight'), {
@@ -152,7 +152,7 @@ describe('send email preview contracts', () => {
     }
   })
 
-  it('creates a React Email payload without rendering html', async () => {
+  it('會建立不預先渲染 HTML 的 React Email payload', async () => {
     const payload = await createPreviewEmailPayload({
       domainMode: 'production',
       from: 'sender@example.com',
@@ -171,7 +171,7 @@ describe('send email preview contracts', () => {
     expect('html' in payload).toBe(false)
   })
 
-  it('creates payloads for multiple templates with shared send settings and separate subjects', async () => {
+  it('會為多個 templates 建立共用寄送設定且主旨各自獨立的 payloads', async () => {
     const root = join(tmpdir(), `email-preview-multiple-${randomUUID()}`)
 
     await mkdir(join(root, 'dist/emails/latest/cross-sell-email/flight'), {

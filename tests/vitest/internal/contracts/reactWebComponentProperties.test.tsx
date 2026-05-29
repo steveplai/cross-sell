@@ -17,14 +17,14 @@ function getShadowText(element: HTMLElement) {
   return element.shadowRoot?.textContent ?? ''
 }
 
-describe('createReactWebComponent observed properties', () => {
+describe('createReactWebComponent 的 observed properties 契約', () => {
   afterEach(async () => {
     await act(async () => {
       document.body.innerHTML = ''
     })
   })
 
-  it('re-renders when an observed property is set', async () => {
+  it('設定 observed property 時會重新渲染', async () => {
     createReactWebComponent<ConfigurableTestWidgetProps>({
       tagName: 'csc-property-rerender-test',
       Component: ConfigurableTestWidget,
@@ -55,7 +55,7 @@ describe('createReactWebComponent observed properties', () => {
     })
   })
 
-  it('captures an observed property set before custom element upgrade', async () => {
+  it('會保留 custom element upgrade 前已設定的 observed property', async () => {
     const element = document.createElement('csc-property-upgrade-test')
 
     ;(element as HTMLElement & ConfigurableTestWidgetProps).config = {

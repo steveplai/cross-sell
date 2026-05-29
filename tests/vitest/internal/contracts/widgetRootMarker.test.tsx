@@ -1,39 +1,64 @@
-import { render } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { cleanup, render } from '@testing-library/react'
+import type { ReactElement } from 'react'
+import { afterEach, describe, expect, it } from 'vitest'
 
 import {
   widgetRootNameAttribute,
   widgetRootSelector,
 } from '../../../../src/runtime/widgetRoot'
+import {
+  CrossSellWidget,
+  CrossSellWidgetConnected,
+  crossSellWidgetSampleData,
+} from '../../../../src/widgets/cross-sell-widget'
 import { DemoProductBanner } from '../../../../src/widgets/demo-product-banner'
 import { ThemedDemoProductBanner } from '../../../../src/widgets/themed-demo-product-banner'
 
 const products = [{ id: 'p1', name: '商品 A', price: 1200 }]
 
-describe('widget root marker', () => {
-  it('renders the base widget root marker', () => {
-    const { container } = render(
-      <DemoProductBanner title="推薦商品" products={products} />,
-    )
+type WidgetRootMarkerCase = {
+  renderWidget: () => ReactElement
+  widgetName: string
+}
 
-    const root = container.querySelector(widgetRootSelector)
+const widgetRootMarkerCases: WidgetRootMarkerCase[] = [
+  {
+    renderWidget: () => (
+      <DemoProductBanner title="推薦商品" products={products} />
+    ),
+    widgetName: 'demo-product-banner',
+  },
+  {
+    renderWidget: () => (
+      <ThemedDemoProductBanner title="推薦商品" products={products} />
+    ),
+    widgetName: 'themed-demo-product-banner',
+  },
+  {
+    renderWidget: () => <CrossSellWidget {...crossSellWidgetSampleData} />,
+    widgetName: 'cross-sell-widget',
+  },
+  {
+    renderWidget: () => <CrossSellWidgetConnected errorMode="message" />,
+    widgetName: 'cross-sell-widget-connected',
+  },
+]
 
-    expect(root).not.toBeNull()
-    expect(root?.getAttribute(widgetRootNameAttribute)).toBe(
-      'demo-product-banner',
-    )
+describe('widget 根節點標記', () => {
+  afterEach(() => {
+    cleanup()
   })
 
-  it('renders the themed widget root marker', () => {
-    const { container } = render(
-      <ThemedDemoProductBanner title="推薦商品" products={products} />,
-    )
+  for (const widget of widgetRootMarkerCases) {
+    it(`會渲染 ${widget.widgetName} 的根節點標記`, () => {
+      const { container } = render(widget.renderWidget())
 
-    const root = container.querySelector(widgetRootSelector)
+      const root = container.querySelector(widgetRootSelector)
 
-    expect(root).not.toBeNull()
-    expect(root?.getAttribute(widgetRootNameAttribute)).toBe(
-      'themed-demo-product-banner',
-    )
-  })
+      expect(root).not.toBeNull()
+      expect(root?.getAttribute(widgetRootNameAttribute)).toBe(
+        widget.widgetName,
+      )
+    })
+  }
 })

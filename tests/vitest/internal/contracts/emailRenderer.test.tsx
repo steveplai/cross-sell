@@ -8,8 +8,8 @@ function parseEmailHtml(html: string) {
   return new DOMParser().parseFromString(html, 'text/html')
 }
 
-describe('email renderer', () => {
-  it('renders a React Email template to HTML', async () => {
+describe('email 渲染器', () => {
+  it('會將 React Email template 渲染成 HTML', async () => {
     const ctaUrl = 'https://example.com/recommendations'
     const title = '你的專屬加購推薦'
     const html = await renderEmail(

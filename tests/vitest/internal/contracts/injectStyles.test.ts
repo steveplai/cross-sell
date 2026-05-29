@@ -2,13 +2,13 @@ import { afterEach, describe, expect, it } from 'vitest'
 
 import { injectStyles } from '../../../../src/runtime/injectStyles'
 
-describe('injectStyles', () => {
+describe('injectStyles 樣式注入契約', () => {
   afterEach(() => {
     document.head.innerHTML = ''
     document.body.innerHTML = ''
   })
 
-  it('registers CSS property rules on the document for Shadow DOM styles', () => {
+  it('會將 Shadow DOM 樣式中的 CSS property rules 註冊到 document', () => {
     const host = document.createElement('div')
     const shadow = host.attachShadow({ mode: 'open' })
     const css = [

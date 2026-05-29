@@ -57,7 +57,7 @@ async function renderElement(element: HTMLElement) {
   return widgetMockState.props as CrossSellWidgetConnectedProps
 }
 
-describe('cross-sell-widget-connected Web Component contract', () => {
+describe('cross-sell-widget-connected Web Component 契約', () => {
   afterEach(async () => {
     await act(async () => {
       document.body.innerHTML = ''
@@ -66,7 +66,7 @@ describe('cross-sell-widget-connected Web Component contract', () => {
     widgetMockState.props = undefined
   })
 
-  it('keeps the public observed attributes and properties unchanged', () => {
+  it('會維持公開 observed attributes 與 properties 不變', () => {
     const elementConstructor = customElements.get(
       'cross-sell-widget-connected',
     ) as
@@ -114,7 +114,7 @@ describe('cross-sell-widget-connected Web Component contract', () => {
     })
   })
 
-  it('exposes build metadata on the constructor and element instance', async () => {
+  it('會在 constructor 與 element instance 上暴露建置資訊', async () => {
     const elementConstructor = customElements.get(
       'cross-sell-widget-connected',
     ) as
@@ -142,7 +142,7 @@ describe('cross-sell-widget-connected Web Component contract', () => {
     expect(element.getAttribute('data-cross-sell-version')).toBe('development')
   })
 
-  it('falls back safely for invalid JSON and invalid enum-like attributes', async () => {
+  it('遇到無效 JSON 與無效 enum-like attributes 時會安全 fallback', async () => {
     const element = createElement()
 
     element.setAttribute('config', '{')
@@ -160,7 +160,7 @@ describe('cross-sell-widget-connected Web Component contract', () => {
     expect(props.sourceProduct).toBeUndefined()
   })
 
-  it('sanitizes supported config fields from the config attribute', async () => {
+  it('會從 config attribute 清理出支援的 config 欄位', async () => {
     const element = createElement()
 
     element.setAttribute(
@@ -229,7 +229,7 @@ describe('cross-sell-widget-connected Web Component contract', () => {
     expect('serviceAgent' in props).toBe(false)
   })
 
-  it('preserves scalar attribute priority over properties and config', async () => {
+  it('會保留 scalar attributes 高於 properties 與 config 的優先序', async () => {
     const element = createElement()
 
     element.setAttribute(
@@ -277,7 +277,7 @@ describe('cross-sell-widget-connected Web Component contract', () => {
     })
   })
 
-  it('uses direct properties and config properties at their current priority when scalar attributes are absent', async () => {
+  it('沒有 scalar attributes 時會依目前優先序使用 direct properties 與 config properties', async () => {
     const element = createElement()
 
     element.setAttribute(
@@ -317,7 +317,7 @@ describe('cross-sell-widget-connected Web Component contract', () => {
     } satisfies CrossSellWidgetVisibleBlocks)
   })
 
-  it('parses valid enum-like attributes and source product properties', async () => {
+  it('會解析有效的 enum-like attributes 與 source product properties', async () => {
     const element = createElement()
 
     element.setAttribute('environment', 'uat')
@@ -331,7 +331,7 @@ describe('cross-sell-widget-connected Web Component contract', () => {
     expect(props.sourceProduct).toBe('hotel')
   })
 
-  it('bridges callbacks to composed bubbling CustomEvents', async () => {
+  it('會將 callbacks 橋接成 composed bubbling CustomEvents', async () => {
     const element = createElement()
     const events: CustomEvent[] = []
 
