@@ -5,16 +5,9 @@ import { render } from '@react-email/render'
 
 import {
   createCrossSellEmailAssetUrls,
-  createFlightEstablishedCrossSellEmailContent,
-  createFlightInsuranceCrossSellEmailContent,
-  createFlightSalesCrossSellEmailContent,
-  createHotelEstablishedCrossSellEmailContent,
-  createHotelSalesCrossSellEmailContent,
   resolveCrossSellEmailDomainMode,
 } from '../src/emails/cross-sell-email/content/index'
-import { CrossSellEmail } from '../src/emails/cross-sell-email/CrossSellEmail'
-import { DemoProductOfferEmail } from '../src/emails/demo-product-offer/DemoProductOfferEmail'
-import { sampleProducts } from '../src/emails/demo-product-offer/sample-data'
+import { emailBuildOutputs } from './build-emails-core'
 import { getBuildVersion, pruneOldVersions } from './build-version'
 
 interface EmailOutput {
@@ -60,64 +53,12 @@ const crossSellEmailAssetUrls = createCrossSellEmailAssetUrls(
 await rm(outDir, { force: true, recursive: true })
 await mkdir(outDir, { recursive: true })
 
-const flightEstablishedHtml = await render(
-  <CrossSellEmail
-    {...createFlightEstablishedCrossSellEmailContent(crossSellEmailAssetUrls)}
-  />,
+const emails: EmailOutput[] = await Promise.all(
+  emailBuildOutputs.map(async (email) => ({
+    relativePath: email.relativePath,
+    html: await render(email.createReactEmail(crossSellEmailAssetUrls)),
+  })),
 )
-const hotelEstablishedHtml = await render(
-  <CrossSellEmail
-    {...createHotelEstablishedCrossSellEmailContent(crossSellEmailAssetUrls)}
-  />,
-)
-const flightSalesHtml = await render(
-  <CrossSellEmail
-    {...createFlightSalesCrossSellEmailContent(crossSellEmailAssetUrls)}
-  />,
-)
-const hotelSalesHtml = await render(
-  <CrossSellEmail
-    {...createHotelSalesCrossSellEmailContent(crossSellEmailAssetUrls)}
-  />,
-)
-const flightInsuranceHtml = await render(
-  <CrossSellEmail
-    {...createFlightInsuranceCrossSellEmailContent(crossSellEmailAssetUrls)}
-  />,
-)
-
-const emails: EmailOutput[] = [
-  {
-    relativePath: 'demo-product-offer/index.html',
-    html: await render(
-      <DemoProductOfferEmail
-        ctaUrl="https://example.com/recommendations"
-        products={sampleProducts}
-        title="你的專屬加購推薦"
-      />,
-    ),
-  },
-  {
-    relativePath: 'cross-sell-email/flight/established.html',
-    html: flightEstablishedHtml,
-  },
-  {
-    relativePath: 'cross-sell-email/hotel/established.html',
-    html: hotelEstablishedHtml,
-  },
-  {
-    relativePath: 'cross-sell-email/flight/sales.html',
-    html: flightSalesHtml,
-  },
-  {
-    relativePath: 'cross-sell-email/hotel/sales.html',
-    html: hotelSalesHtml,
-  },
-  {
-    relativePath: 'cross-sell-email/flight/insurance.html',
-    html: flightInsuranceHtml,
-  },
-]
 
 await Promise.all(
   emails.map(async (email) => {
