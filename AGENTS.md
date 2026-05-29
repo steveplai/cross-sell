@@ -335,7 +335,7 @@ $RefreshSig$ is not defined
 This project instead uses a very small static server:
 
 ```txt
-scripts/serve-static.mjs
+scripts/dev/serve-static.mjs
 ```
 
 Playwright serves plain files exactly like a real handoff page:

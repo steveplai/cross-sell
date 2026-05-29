@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { build, type InlineConfig } from 'vite'
 
-import { getBuildMetadata, pruneOldVersions } from './build-version'
+import { getBuildMetadata, pruneOldVersions } from '../build-version'
 
 const root = process.cwd()
 const buildMetadata = getBuildMetadata()
@@ -75,7 +75,7 @@ for (const item of entries) {
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
-        '@': fileURLToPath(new URL('../src', import.meta.url)),
+        '@': fileURLToPath(new URL('../../src', import.meta.url)),
       },
     },
     build: {

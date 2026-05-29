@@ -9,7 +9,7 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   webServer: {
-    command: 'node scripts/serve-static.mjs 4174',
+    command: 'node scripts/dev/serve-static.mjs 4174',
     url: 'http://127.0.0.1:4174/examples/demo-product-banner/wc/basic.html',
     reuseExistingServer: !process.env.CI,
   },
