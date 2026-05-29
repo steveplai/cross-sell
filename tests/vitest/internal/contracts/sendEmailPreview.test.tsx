@@ -9,24 +9,24 @@ import { describe, expect, it } from 'vitest'
 import {
   type EmailBuildOutput,
   emailBuildOutputs,
-} from '../../../../scripts/build-emails-core'
-import {
-  createPreviewEmailPayload,
-  createPreviewEmailPayloads,
-  readDistEmailHtml,
-  readManualEmailHtml,
-} from '../../../../scripts/email-preview-payload'
-import {
-  manualEmailTemplates,
-  previewEmailTemplates,
-} from '../../../../scripts/email-preview-templates'
+} from '../../../../scripts/emails/build-core'
 import {
   parsePreviewEmailArgs,
   resolvePreviewEmailDefaults,
   resolvePreviewEmailFromOptions,
   resolvePreviewEmailSource,
   resolvePreviewEmailTemplateKey,
-} from '../../../../scripts/send-email-preview-core'
+} from '../../../../scripts/emails/preview-core'
+import {
+  createPreviewEmailPayload,
+  createPreviewEmailPayloads,
+  readDistEmailHtml,
+  readManualEmailHtml,
+} from '../../../../scripts/emails/preview-payload'
+import {
+  manualEmailTemplates,
+  previewEmailTemplates,
+} from '../../../../scripts/emails/preview-templates'
 
 type BuiltEmailTemplateKey = EmailBuildOutput['templateKey']
 

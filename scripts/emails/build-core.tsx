@@ -1,17 +1,17 @@
 import type { ReactNode } from 'react'
 
-import type { CrossSellEmailAssetUrls } from '../src/emails/cross-sell-email/content/index'
+import type { CrossSellEmailAssetUrls } from '../../src/emails/cross-sell-email/content/index'
 import {
   createFlightEstablishedCrossSellEmailContent,
   createFlightInsuranceCrossSellEmailContent,
   createFlightSalesCrossSellEmailContent,
   createHotelEstablishedCrossSellEmailContent,
   createHotelSalesCrossSellEmailContent,
-} from '../src/emails/cross-sell-email/content/index'
-import { CrossSellEmail } from '../src/emails/cross-sell-email/CrossSellEmail'
-import { DemoProductOfferEmail } from '../src/emails/demo-product-offer/DemoProductOfferEmail'
-import { sampleProducts } from '../src/emails/demo-product-offer/sample-data'
-import type { PreviewBuiltEmailTemplateKey } from './email-preview-templates'
+} from '../../src/emails/cross-sell-email/content/index'
+import { CrossSellEmail } from '../../src/emails/cross-sell-email/CrossSellEmail'
+import { DemoProductOfferEmail } from '../../src/emails/demo-product-offer/DemoProductOfferEmail'
+import { sampleProducts } from '../../src/emails/demo-product-offer/sample-data'
+import type { PreviewBuiltEmailTemplateKey } from './preview-templates'
 
 export interface EmailBuildOutput {
   templateKey: PreviewBuiltEmailTemplateKey

@@ -6,9 +6,9 @@ import { render } from '@react-email/render'
 import {
   createCrossSellEmailAssetUrls,
   resolveCrossSellEmailDomainMode,
-} from '../src/emails/cross-sell-email/content/index'
-import { emailBuildOutputs } from './build-emails-core'
-import { getBuildVersion, pruneOldVersions } from './build-version'
+} from '../../src/emails/cross-sell-email/content/index'
+import { getBuildVersion, pruneOldVersions } from '../build-version'
+import { emailBuildOutputs } from './build-core'
 
 interface EmailOutput {
   relativePath: string

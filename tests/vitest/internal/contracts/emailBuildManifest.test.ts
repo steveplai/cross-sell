@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import { emailBuildOutputs } from '../../../../scripts/build-emails-core'
-import { previewEmailTemplates } from '../../../../scripts/email-preview-templates'
+import { emailBuildOutputs } from '../../../../scripts/emails/build-core'
+import { previewEmailTemplates } from '../../../../scripts/emails/preview-templates'
 
 const builtEmailOutputPaths = [
   'demo-product-offer/index.html',

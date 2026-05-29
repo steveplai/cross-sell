@@ -3,6 +3,7 @@ import { resolve } from 'node:path'
 
 import type { CreateEmailOptions } from 'resend'
 
+import type { PreviewEmailDraft } from './preview-core'
 import {
   assertPreviewEmailTemplateSupportsSource,
   isPreviewBuiltEmailTemplateKey,
@@ -11,8 +12,7 @@ import {
   type PreviewEmailTemplateKey,
   previewEmailTemplates,
   validatePreviewEmailTemplatesForSource,
-} from './email-preview-templates'
-import type { PreviewEmailDraft } from './send-email-preview-core'
+} from './preview-templates'
 
 export async function createPreviewEmailPayload(
   draft: Omit<PreviewEmailDraft, 'subjects' | 'templates'> & {

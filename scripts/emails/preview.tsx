@@ -7,8 +7,15 @@ import { Resend } from 'resend'
 import {
   type CrossSellEmailDomainMode,
   resolveCrossSellEmailDomainMode,
-} from '../src/emails/cross-sell-email/content/index'
-import { createPreviewEmailPayloads } from './email-preview-payload'
+} from '../../src/emails/cross-sell-email/content/index'
+import {
+  getPreviewEmailUsage,
+  parsePreviewEmailArgs,
+  type PreviewEmailDefaults,
+  type PreviewEmailDraft,
+  resolvePreviewEmailDefaults,
+} from './preview-core'
+import { createPreviewEmailPayloads } from './preview-payload'
 import {
   getPreviewEmailTemplateDefaultSubject,
   getPreviewEmailTemplateKeysForSource,
@@ -16,14 +23,7 @@ import {
   previewEmailSources,
   type PreviewEmailTemplateKey,
   previewEmailTemplateUsesCrossSellEmailDomainMode,
-} from './email-preview-templates'
-import {
-  getPreviewEmailUsage,
-  parsePreviewEmailArgs,
-  type PreviewEmailDefaults,
-  type PreviewEmailDraft,
-  resolvePreviewEmailDefaults,
-} from './send-email-preview-core'
+} from './preview-templates'
 
 loadDotenv({ quiet: true })
 

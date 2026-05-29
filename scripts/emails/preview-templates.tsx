@@ -8,10 +8,10 @@ import {
   createHotelEstablishedCrossSellEmailContent,
   createHotelSalesCrossSellEmailContent,
   type CrossSellEmailDomainMode,
-} from '../src/emails/cross-sell-email/content/index'
-import { CrossSellEmail } from '../src/emails/cross-sell-email/CrossSellEmail'
-import { DemoProductOfferEmail } from '../src/emails/demo-product-offer/DemoProductOfferEmail'
-import { sampleProducts } from '../src/emails/demo-product-offer/sample-data'
+} from '../../src/emails/cross-sell-email/content/index'
+import { CrossSellEmail } from '../../src/emails/cross-sell-email/CrossSellEmail'
+import { DemoProductOfferEmail } from '../../src/emails/demo-product-offer/DemoProductOfferEmail'
+import { sampleProducts } from '../../src/emails/demo-product-offer/sample-data'
 
 interface PreviewEmailTemplate {
   defaultSubject: string

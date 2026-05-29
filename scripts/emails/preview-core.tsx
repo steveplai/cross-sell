@@ -1,7 +1,7 @@
 import {
   type CrossSellEmailDomainMode,
   resolveCrossSellEmailDomainMode,
-} from '../src/emails/cross-sell-email/content/index'
+} from '../../src/emails/cross-sell-email/content/index'
 import {
   isPreviewEmailTemplateKey,
   previewAllEmailTemplateKeys,
@@ -9,7 +9,7 @@ import {
   previewEmailSources,
   type PreviewEmailTemplateKey,
   validatePreviewEmailTemplatesForSource,
-} from './email-preview-templates'
+} from './preview-templates'
 
 export interface PreviewEmailCliOptions {
   domainMode?: string
