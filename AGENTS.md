@@ -42,6 +42,23 @@ The first version intentionally includes one complete example widget and one com
 - Playwright for browser-only widget behavior tests and built-artifact handoff tests
 - pnpm for package management
 
+## Language Guidelines
+
+Keep `AGENTS.md` itself in English by default because it is primarily read by
+future coding agents and tooling. English keeps the instruction file consistent
+with the rest of the project guidance and reduces ambiguity across agent
+implementations.
+
+When generating or editing human-readable descriptive text in documentation or
+test files, write that text in Traditional Chinese. This includes descriptions,
+test titles, fixture labels intended as prose, and explanatory comments about
+expected behavior.
+
+Keep code identifiers, public API names, attributes, event names, commands, file
+paths, product names, and library terms in their canonical language. Do not
+rewrite unrelated existing English text solely to apply this rule unless the user
+explicitly asks for that rewrite.
+
 ## Important Architecture
 
 ### Source Layers
