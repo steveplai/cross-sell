@@ -1,18 +1,18 @@
 import { act, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import type { WidgetBuildMetadata } from '../../../../src/runtime/buildMetadata'
+import type { WidgetBuildMetadata } from '../../runtime/buildMetadata'
 import type {
   CrossSellWidgetConnectedConfig,
   CrossSellWidgetConnectedProps,
   CrossSellWidgetVisibleBlocks,
-} from '../../../../src/widgets/cross-sell-widget'
+} from '../../widgets/cross-sell-widget'
 
 const widgetMockState = vi.hoisted(() => ({
   props: undefined as unknown,
 }))
 
-vi.mock('../../../../src/widgets/cross-sell-widget', async (importOriginal) => {
+vi.mock('../../widgets/cross-sell-widget', async (importOriginal) => {
   const actual = await importOriginal<object>()
 
   return {
@@ -25,7 +25,7 @@ vi.mock('../../../../src/widgets/cross-sell-widget', async (importOriginal) => {
   }
 })
 
-import '../../../../src/entries/cross-sell-widget/connected.wc'
+import './connected.wc'
 
 type ConnectedElement = HTMLElement & {
   version?: string
@@ -247,16 +247,28 @@ describe('cross-sell-widget-connected Web Component 契約', () => {
     } satisfies CrossSellWidgetConnectedConfig
     element.orderDestination = 'direct property destination'
     element.promoDurationSeconds = 240
-    element.visibleBlocks = {
-      hotel: true,
-      hsr: false,
-      promoHeader: 'invalid',
-    }
 
     element.setAttribute('currency', 'SCALAR_ATTRIBUTE_CURRENCY')
     element.setAttribute('locale', 'scalar-attribute-locale')
     element.setAttribute('order-destination', 'scalar attribute destination')
     element.setAttribute('promo-duration-seconds', '120')
+
+    const props = await renderElement(element)
+
+    expect(props.currency).toBe('SCALAR_ATTRIBUTE_CURRENCY')
+    expect(props.locale).toBe('scalar-attribute-locale')
+    expect(props.orderDestination).toBe('scalar attribute destination')
+    expect(props.promoDurationSeconds).toBe(120)
+  })
+
+  it('會保留 visibleBlocks property 高於 visible-blocks attribute 的優先序', async () => {
+    const element = createElement()
+
+    element.visibleBlocks = {
+      hotel: true,
+      hsr: false,
+      promoHeader: 'invalid',
+    }
     element.setAttribute(
       'visible-blocks',
       JSON.stringify({
@@ -267,10 +279,6 @@ describe('cross-sell-widget-connected Web Component 契約', () => {
 
     const props = await renderElement(element)
 
-    expect(props.currency).toBe('SCALAR_ATTRIBUTE_CURRENCY')
-    expect(props.locale).toBe('scalar-attribute-locale')
-    expect(props.orderDestination).toBe('scalar attribute destination')
-    expect(props.promoDurationSeconds).toBe(120)
     expect(props.visibleBlocks).toEqual({
       hotel: true,
       hsr: false,

@@ -3,6 +3,10 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import type { RequestClient } from '@/shared/request'
 
+import {
+  widgetRootNameAttribute,
+  widgetRootSelector,
+} from '../../runtime/widgetRoot'
 import { CrossSellWidgetConnectedForTesting } from './CrossSellWidgetConnected'
 
 type MockRequestClientRequest = (
@@ -101,6 +105,19 @@ describe('CrossSellWidgetConnected', () => {
   afterEach(() => {
     cleanup()
     vi.restoreAllMocks()
+  })
+
+  it('renders its widget root marker for connected states', () => {
+    const { container } = render(
+      <CrossSellWidgetConnectedForTesting errorMode="message" />,
+    )
+
+    const root = container.querySelector(widgetRootSelector)
+
+    expect(root).not.toBeNull()
+    expect(root?.getAttribute(widgetRootNameAttribute)).toBe(
+      'cross-sell-widget-connected',
+    )
   })
 
   it('shows an error message when order number is missing in message error mode', () => {

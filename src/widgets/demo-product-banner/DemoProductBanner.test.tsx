@@ -2,6 +2,10 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
+import {
+  widgetRootNameAttribute,
+  widgetRootSelector,
+} from '../../runtime/widgetRoot'
 import { DemoProductBanner } from './DemoProductBanner'
 
 const products = [
@@ -10,6 +14,19 @@ const products = [
 ]
 
 describe('DemoProductBanner', () => {
+  it('renders its widget root marker', () => {
+    const { container } = render(
+      <DemoProductBanner products={products} title="推薦商品" />,
+    )
+
+    const root = container.querySelector(widgetRootSelector)
+
+    expect(root).not.toBeNull()
+    expect(root?.getAttribute(widgetRootNameAttribute)).toBe(
+      'demo-product-banner',
+    )
+  })
+
   it('renders products and calls onSelectProduct', async () => {
     const user = userEvent.setup()
     const onSelectProduct = vi.fn()

@@ -2,6 +2,10 @@ import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
+import {
+  widgetRootNameAttribute,
+  widgetRootSelector,
+} from '../../runtime/widgetRoot'
 import { CrossSellWidget } from './CrossSellWidget'
 import { crossSellWidgetSampleData } from './sampleData'
 import type { CrossSellWidgetProps } from './types'
@@ -85,6 +89,17 @@ describe('CrossSellWidget', () => {
     resetTestUrl()
     vi.useRealTimers()
     vi.restoreAllMocks()
+  })
+
+  it('renders its widget root marker', () => {
+    const { container } = render(<CrossSellWidget {...cloneSampleData()} />)
+
+    const root = container.querySelector(widgetRootSelector)
+
+    expect(root).not.toBeNull()
+    expect(root?.getAttribute(widgetRootNameAttribute)).toBe(
+      'cross-sell-widget',
+    )
   })
 
   it('renders active promo countdown and title', () => {

@@ -439,7 +439,7 @@ examples/
 ```
 
 These examples intentionally load `dist/widgets/<widget>/{wc,mount}.js` directly. Internal
-Playwright handoff tests serve them with `scripts/serve-static.mjs` so the files
+Playwright handoff tests serve them with `scripts/dev/serve-static.mjs` so the files
 behave like real handoff artifacts, without Vite dev-server transforms.
 
 ## Testing Strategy

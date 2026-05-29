@@ -9,7 +9,7 @@ test.describe('CrossSellWidget', () => {
     await page.goto('/examples/cross-sell-widget/wc/basic.html')
 
     await expect(page.getByText('您已解鎖限時優惠！')).toBeVisible()
-    await expect(page.getByText('加購交通 行程更順暢')).toBeVisible()
+    await expect(page.getByText('加購高鐵 行程更順暢')).toBeVisible()
     await expect(page.getByText('東京灣精選飯店')).toBeVisible()
   })
 

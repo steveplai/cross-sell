@@ -1,4 +1,4 @@
-import '../../../../src/entries/cross-sell-widget/mount'
+import './mount'
 
 import { describe, expect, it } from 'vitest'
 
