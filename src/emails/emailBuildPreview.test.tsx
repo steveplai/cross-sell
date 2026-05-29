@@ -7,9 +7,17 @@ import {
 } from '../../scripts/emails/build-core'
 import { createPreviewEmailPayload } from '../../scripts/emails/preview-payload'
 import {
+  getPreviewEmailTemplateDefaultSubject,
+  getPreviewEmailTemplateKeysForSource,
+  getPreviewEmailTemplateLabel,
+  manualEmailTemplateKeys,
   manualEmailTemplates,
+  previewEmailTemplateKeys,
   previewEmailTemplates,
+  previewEmailTemplateUsesCrossSellEmailDomainMode,
+  validatePreviewEmailTemplatesForSource,
 } from '../../scripts/emails/preview-templates'
+import { createCrossSellEmailAssetUrls } from './cross-sell-email/content'
 
 type BuiltEmailTemplateKey = EmailBuildOutput['templateKey']
 
@@ -77,6 +85,29 @@ describe('email build 與 preview app 契約', () => {
     )
   })
 
+  it('每個 build output factory 都會產生可渲染的 HTML email', async () => {
+    const assetUrls = createCrossSellEmailAssetUrls('production')
+
+    for (const output of emailBuildOutputs) {
+      const expectation = previewReactEmailExpectations.find(
+        ({ templateKey }) => templateKey === output.templateKey,
+      )
+
+      if (!expectation) {
+        throw new Error(`缺少 "${output.templateKey}" 的 render expectation。`)
+      }
+
+      const html = await renderEmail(output.createReactEmail(assetUrls))
+
+      expectation.includes.forEach((text) => {
+        expect(html).toContain(text)
+      })
+      expectation.excludes?.forEach((text) => {
+        expect(html).not.toContain(text)
+      })
+    }
+  })
+
   it('會定義 preview sources 的 template metadata', () => {
     expect(previewEmailTemplates['demo-product-offer']).toMatchObject({
       defaultSubject: '你的專屬加購推薦',
@@ -118,6 +149,68 @@ describe('email build 與 preview app 契約', () => {
       defaultSubject: '簽證護照提醒',
       fileName: 'full-flight-insurance.html',
     })
+  })
+
+  it('會依照 preview source 回傳可用 template keys', () => {
+    expect(getPreviewEmailTemplateKeysForSource('react')).toEqual(
+      previewEmailTemplateKeys,
+    )
+    expect(getPreviewEmailTemplateKeysForSource('dist')).toEqual(
+      previewEmailTemplateKeys,
+    )
+    expect(getPreviewEmailTemplateKeysForSource('file')).toEqual(
+      manualEmailTemplateKeys,
+    )
+  })
+
+  it('會解析 built 與 manual template 的顯示 metadata', () => {
+    expect(getPreviewEmailTemplateLabel('flight-established')).toBe(
+      'Flight established',
+    )
+    expect(getPreviewEmailTemplateLabel('full-flight-established')).toBe(
+      'Full flight established',
+    )
+    expect(getPreviewEmailTemplateDefaultSubject('flight-insurance')).toBe(
+      '旅遊計劃書與簽證護照提醒',
+    )
+    expect(getPreviewEmailTemplateDefaultSubject('full-flight-insurance')).toBe(
+      '簽證護照提醒',
+    )
+    expect(
+      previewEmailTemplateUsesCrossSellEmailDomainMode('flight-established'),
+    ).toBe(true)
+    expect(
+      previewEmailTemplateUsesCrossSellEmailDomainMode('demo-product-offer'),
+    ).toBe(false)
+    expect(
+      previewEmailTemplateUsesCrossSellEmailDomainMode(
+        'full-flight-established',
+      ),
+    ).toBe(false)
+  })
+
+  it('會拒絕不支援指定 source 的 template', () => {
+    expect(() =>
+      validatePreviewEmailTemplatesForSource(['flight-established'], 'file'),
+    ).toThrow(
+      'Template "flight-established" does not support source "file". Expected one of: dist, react.',
+    )
+    expect(() =>
+      validatePreviewEmailTemplatesForSource(
+        ['full-flight-established'],
+        'react',
+      ),
+    ).toThrow(
+      'Template "full-flight-established" does not support source "react". Expected one of: file.',
+    )
+    expect(() =>
+      validatePreviewEmailTemplatesForSource(
+        ['full-flight-established'],
+        'dist',
+      ),
+    ).toThrow(
+      'Template "full-flight-established" does not support source "dist". Expected one of: file.',
+    )
   })
 
   it('會透過 React preview source 渲染 built templates 並包含預期內容', async () => {

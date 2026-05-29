@@ -2,7 +2,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vitest/config'
+import { coverageConfigDefaults, defineConfig } from 'vitest/config'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
@@ -17,6 +17,7 @@ export default defineConfig({
     setupFiles: ['./tests/setup.ts'],
     globals: true,
     coverage: {
+      exclude: [...coverageConfigDefaults.exclude, '**/*.css', '**/index.ts'],
       provider: 'v8',
       reporter: ['text', 'html'],
     },
