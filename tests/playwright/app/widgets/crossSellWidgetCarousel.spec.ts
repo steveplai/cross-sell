@@ -253,7 +253,7 @@ async function focusFirstCrossSellWidgetProduct(page: Page) {
   }, hotelSectionTestId)
 }
 
-test('cross sell widget carousel uses browser scrolling without a visible scrollbar', async ({
+test('cross sell widget carousel 會使用 browser scrolling 且不顯示 scrollbar', async ({
   page,
 }) => {
   await page.setViewportSize({
@@ -307,7 +307,7 @@ test('cross sell widget carousel uses browser scrolling without a visible scroll
     })
 })
 
-test('cross sell widget carousel moves one desktop page and fills the final page with a placeholder', async ({
+test('cross sell widget carousel 會移動一個 desktop page 並以 placeholder 補齊最後一頁', async ({
   page,
 }) => {
   await page.setViewportSize({
@@ -390,7 +390,7 @@ test('cross sell widget carousel moves one desktop page and fills the final page
     .toBeLessThan(1.05)
 })
 
-test('cross sell widget carousel supports mobile exposure and keyboard navigation', async ({
+test('cross sell widget carousel 會支援 mobile exposure 與 keyboard navigation', async ({
   page,
 }) => {
   await page.setViewportSize({ height: 900, width: 390 })

@@ -28,7 +28,7 @@ type MountApiExample = {
 
 const webComponentExamples: WebComponentExample[] = [
   {
-    name: 'web component basic',
+    name: 'web component 基本範例',
     path: '/examples/demo-product-banner/wc/basic.html',
     widgets: [
       {
@@ -38,7 +38,7 @@ const webComponentExamples: WebComponentExample[] = [
     ],
   },
   {
-    name: 'web component custom theme',
+    name: 'web component 客製主題範例',
     path: '/examples/themed-demo-product-banner/wc/basic.html',
     widgets: [
       {
@@ -48,7 +48,7 @@ const webComponentExamples: WebComponentExample[] = [
     ],
   },
   {
-    name: 'web component dark mode',
+    name: 'web component dark mode 範例',
     path: '/examples/demo-product-banner/wc/dark.html',
     widgets: [
       {
@@ -62,7 +62,7 @@ const webComponentExamples: WebComponentExample[] = [
     ],
   },
   {
-    name: 'web component events',
+    name: 'web component events 範例',
     path: '/examples/demo-product-banner/wc/events.html',
     widgets: [
       {
@@ -72,7 +72,7 @@ const webComponentExamples: WebComponentExample[] = [
     ],
   },
   {
-    name: 'web component multiple instances',
+    name: 'web component 多 instances 範例',
     path: '/examples/demo-product-banner/wc/multiple.html',
     widgets: [
       {
@@ -88,7 +88,7 @@ const webComponentExamples: WebComponentExample[] = [
     ],
   },
   {
-    name: 'cross sell widget web component basic',
+    name: 'cross sell widget web component 基本範例',
     path: '/examples/cross-sell-widget/wc/basic.html',
     widgets: [
       {
@@ -98,7 +98,7 @@ const webComponentExamples: WebComponentExample[] = [
     ],
   },
   {
-    name: 'cross sell widget web component full',
+    name: 'cross sell widget web component 完整範例',
     path: '/examples/cross-sell-widget/wc/full.html',
     widgets: [
       {
@@ -108,7 +108,7 @@ const webComponentExamples: WebComponentExample[] = [
     ],
   },
   {
-    name: 'cross sell widget web component property',
+    name: 'cross sell widget web component property 範例',
     path: '/examples/cross-sell-widget/wc/property.html',
     widgets: [
       {
@@ -118,7 +118,7 @@ const webComponentExamples: WebComponentExample[] = [
     ],
   },
   {
-    name: 'cross sell widget connected web component basic',
+    name: 'cross sell widget connected web component 基本範例',
     path: '/examples/cross-sell-widget-connected/wc/basic.html',
     widgets: [
       {
@@ -128,7 +128,7 @@ const webComponentExamples: WebComponentExample[] = [
     ],
   },
   {
-    name: 'cross sell widget connected web component full',
+    name: 'cross sell widget connected web component 完整範例',
     path: '/examples/cross-sell-widget-connected/wc/full.html',
     widgets: [
       {
@@ -138,7 +138,7 @@ const webComponentExamples: WebComponentExample[] = [
     ],
   },
   {
-    name: 'cross sell widget connected web component visible blocks',
+    name: 'cross sell widget connected web component visible blocks 範例',
     path: '/examples/cross-sell-widget-connected/wc/visible-blocks.html',
     widgets: [
       {
@@ -148,7 +148,7 @@ const webComponentExamples: WebComponentExample[] = [
     ],
   },
   {
-    name: 'cross sell widget connected web component property',
+    name: 'cross sell widget connected web component property 範例',
     path: '/examples/cross-sell-widget-connected/wc/property.html',
     widgets: [
       {
@@ -161,55 +161,55 @@ const webComponentExamples: WebComponentExample[] = [
 
 const mountApiExamples: MountApiExample[] = [
   {
-    name: 'mount API basic',
+    name: 'mount API 基本範例',
     path: '/examples/demo-product-banner/mount/basic.html',
     rootSelector: '#demo-product-root',
     text: '推薦商品',
   },
   {
-    name: 'mount API custom theme',
+    name: 'mount API 客製主題範例',
     path: '/examples/themed-demo-product-banner/mount/basic.html',
     rootSelector: '#custom-theme-root',
     text: '客製主題推薦商品',
   },
   {
-    name: 'mount API dark mode',
+    name: 'mount API dark mode 範例',
     path: '/examples/demo-product-banner/mount/dark.html',
     rootSelector: '#dark-root',
     text: '繼承深色商品',
   },
   {
-    name: 'mount API unmount',
+    name: 'mount API unmount 範例',
     path: '/examples/demo-product-banner/mount/unmount.html',
     rootSelector: '#demo-product-root',
     text: '推薦商品',
   },
   {
-    name: 'mount API update',
+    name: 'mount API update 範例',
     path: '/examples/demo-product-banner/mount/update.html',
     rootSelector: '#demo-product-root',
     text: '推薦商品',
   },
   {
-    name: 'cross sell widget mount API basic',
+    name: 'cross sell widget mount API 基本範例',
     path: '/examples/cross-sell-widget/mount/basic.html',
     rootSelector: '#cross-sell-widget-root',
     text: '探索地區飯店',
   },
   {
-    name: 'cross sell widget mount API full',
+    name: 'cross sell widget mount API 完整範例',
     path: '/examples/cross-sell-widget/mount/full.html',
     rootSelector: '#cross-sell-widget-root',
     text: '探索上海飯店',
   },
   {
-    name: 'cross sell widget connected mount API basic',
+    name: 'cross sell widget connected mount API 基本範例',
     path: '/examples/cross-sell-widget-connected/mount/basic.html',
     rootSelector: '#cross-sell-widget-connected-root',
     text: '探索地區飯店',
   },
   {
-    name: 'cross sell widget connected mount API full',
+    name: 'cross sell widget connected mount API 完整範例',
     path: '/examples/cross-sell-widget-connected/mount/full.html',
     rootSelector: '#cross-sell-widget-connected-root',
     text: '探索上海飯店',
@@ -450,7 +450,7 @@ async function expectMountApiExampleRenders(
   ).toContainText(example.text)
 }
 
-test.describe('all widget examples render', () => {
+test.describe('所有 widget examples 都會渲染', () => {
   for (const example of webComponentExamples) {
     test(example.name, async ({ page }) => {
       await expectWebComponentExampleRenders(page, example)
@@ -464,7 +464,7 @@ test.describe('all widget examples render', () => {
   }
 })
 
-test('web component example renders and emits event', async ({ page }) => {
+test('web component example 會渲染並 emit event', async ({ page }) => {
   await gotoHandoffExample(page, '/examples/demo-product-banner/wc/events.html')
 
   await expect(page.locator('demo-product-banner')).toHaveJSProperty(
@@ -478,7 +478,7 @@ test('web component example renders and emits event', async ({ page }) => {
       }),
     )
     .toContain('推薦商品')
-  await expect(page.getByTestId('event-log')).toContainText('No events yet')
+  await expect(page.getByTestId('event-log')).toContainText('尚未收到 events')
 
   await page.locator('demo-product-banner').evaluate((element) => {
     const button = element.shadowRoot?.querySelector('button')
@@ -490,7 +490,7 @@ test('web component example renders and emits event', async ({ page }) => {
   )
 })
 
-test('cross sell widget web component handoff exposes HSR addon link and event', async ({
+test('cross sell widget web component handoff 會暴露 HSR addon link 與 event', async ({
   page,
 }) => {
   await gotoHandoffExample(page, '/examples/cross-sell-widget/wc/full.html')
@@ -520,7 +520,7 @@ test('cross sell widget web component handoff exposes HSR addon link and event',
   )
 })
 
-test('cross sell widget connected web component handoff emits item event', async ({
+test('cross sell widget connected web component handoff 會 emit item event', async ({
   page,
 }) => {
   await gotoHandoffExample(
@@ -545,7 +545,7 @@ test('cross sell widget connected web component handoff emits item event', async
   ).toContainText('cross-sell-widget:item-select')
 })
 
-test('cross sell widget connected web component applies source product attribute', async ({
+test('cross sell widget connected web component 會套用 source product attribute', async ({
   page,
 }) => {
   await gotoHandoffExample(
@@ -572,7 +572,7 @@ test('cross sell widget connected web component applies source product attribute
     .not.toContain('簽證護照')
 })
 
-test('cross sell widget connected web component applies visible blocks attribute', async ({
+test('cross sell widget connected web component 會套用 visible blocks attribute', async ({
   page,
 }) => {
   await gotoHandoffExample(
@@ -593,7 +593,7 @@ test('cross sell widget connected web component applies visible blocks attribute
     .not.toContain('前往加購')
 })
 
-test('cross sell widget connected web component ignores visible blocks in config', async ({
+test('cross sell widget connected web component 會忽略 config 內的 visible blocks', async ({
   page,
 }) => {
   await gotoHandoffExample(
@@ -613,7 +613,7 @@ test('cross sell widget connected web component ignores visible blocks in config
     .toContain('前往加購')
 })
 
-test('cross sell widget connected web component applies config attribute overrides', async ({
+test('cross sell widget connected web component 會套用 config attribute overrides', async ({
   page,
 }) => {
   await gotoHandoffExample(
@@ -635,7 +635,7 @@ test('cross sell widget connected web component applies config attribute overrid
     .toContain('探索上海飯店')
 })
 
-test('cross sell widget connected web component applies config property and attribute priority', async ({
+test('cross sell widget connected web component 會套用 config property 與 attribute priority', async ({
   page,
 }) => {
   await gotoHandoffExample(
@@ -660,7 +660,7 @@ test('cross sell widget connected web component applies config property and attr
     .not.toContain('US$6,200')
 })
 
-test('web component host dark class controls shadow DOM theme', async ({
+test('web component host dark class 會控制 shadow DOM theme', async ({
   page,
 }) => {
   await gotoHandoffExample(page, '/examples/demo-product-banner/wc/dark.html')
@@ -684,7 +684,7 @@ test('web component host dark class controls shadow DOM theme', async ({
     })
 })
 
-test('web component applies widget-specific theme tokens', async ({ page }) => {
+test('web component 會套用 widget-specific theme tokens', async ({ page }) => {
   await gotoHandoffExample(
     page,
     '/examples/themed-demo-product-banner/wc/basic.html',
@@ -701,7 +701,7 @@ test('web component applies widget-specific theme tokens', async ({ page }) => {
     .toEqual(demoProductBannerThemeTokens)
 })
 
-test('mount API example can update and unmount', async ({ page }) => {
+test('mount API example 可以 update 與 unmount', async ({ page }) => {
   await gotoHandoffExample(
     page,
     '/examples/demo-product-banner/mount/update.html',
@@ -716,7 +716,7 @@ test('mount API example can update and unmount', async ({ page }) => {
   await expect(page.getByRole('heading', { name: '更新後商品' })).toHaveCount(0)
 })
 
-test('mount API applies widget-specific theme tokens', async ({ page }) => {
+test('mount API 會套用 widget-specific theme tokens', async ({ page }) => {
   await gotoHandoffExample(
     page,
     '/examples/themed-demo-product-banner/mount/basic.html',
@@ -732,7 +732,7 @@ test('mount API applies widget-specific theme tokens', async ({ page }) => {
     .toEqual(demoProductBannerThemeTokens)
 })
 
-test('mount API inherits host dark class', async ({ page }) => {
+test('mount API 會繼承 host dark class', async ({ page }) => {
   await gotoHandoffExample(
     page,
     '/examples/demo-product-banner/mount/dark.html',
@@ -750,7 +750,7 @@ test('mount API inherits host dark class', async ({ page }) => {
     })
 })
 
-test('mount API defaults to light theme without dark ancestor', async ({
+test('沒有 dark ancestor 時 mount API 會預設使用 light theme', async ({
   page,
 }) => {
   await gotoHandoffExample(

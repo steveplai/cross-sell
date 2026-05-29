@@ -5,7 +5,7 @@ type CrossSellWidgetTestWindow = Window & {
 }
 
 test.describe('CrossSellWidget', () => {
-  test('renders widget content correctly', async ({ page }) => {
+  test('會正確渲染 widget 內容', async ({ page }) => {
     await page.goto('/examples/cross-sell-widget/wc/basic.html')
 
     await expect(page.getByText('您已解鎖限時優惠！')).toBeVisible()
@@ -13,7 +13,7 @@ test.describe('CrossSellWidget', () => {
     await expect(page.getByText('東京灣精選飯店')).toBeVisible()
   })
 
-  test('renders carousel and view more placeholder', async ({ page }) => {
+  test('會渲染 carousel 與 view more placeholder', async ({ page }) => {
     await page.goto('/examples/cross-sell-widget/wc/basic.html')
 
     await expect(
@@ -25,7 +25,7 @@ test.describe('CrossSellWidget', () => {
     ).toBeVisible()
   })
 
-  test('dispatches custom events', async ({ page }) => {
+  test('會 dispatch custom events', async ({ page }) => {
     await page.goto('/examples/cross-sell-widget/wc/basic.html')
 
     await page.evaluate(() => {
@@ -48,7 +48,7 @@ test.describe('CrossSellWidget', () => {
     expect(events).toContain('cross-sell-widget:item-select')
   })
 
-  test('normalizes missing sections from data attribute and property', async ({
+  test('會正規化 data attribute 與 property 缺少 sections 的情境', async ({
     page,
   }) => {
     await page.goto('/examples/cross-sell-widget/wc/basic.html')

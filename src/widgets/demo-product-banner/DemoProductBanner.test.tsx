@@ -14,7 +14,7 @@ const products = [
 ]
 
 describe('DemoProductBanner', () => {
-  it('renders its widget root marker', () => {
+  it('會渲染 widget root marker', () => {
     const { container } = render(
       <DemoProductBanner products={products} title="推薦商品" />,
     )
@@ -27,7 +27,7 @@ describe('DemoProductBanner', () => {
     )
   })
 
-  it('renders products and calls onSelectProduct', async () => {
+  it('會渲染 products 並呼叫 onSelectProduct', async () => {
     const user = userEvent.setup()
     const onSelectProduct = vi.fn()
 
@@ -49,13 +49,13 @@ describe('DemoProductBanner', () => {
     )
   })
 
-  it('renders empty state without crashing', () => {
+  it('會渲染 empty state 且不會 crash', () => {
     render(<DemoProductBanner products={[]} title="推薦商品" />)
 
     expect(screen.getByText('目前沒有可推薦的商品。')).toBeInTheDocument()
   })
 
-  it('renders loading state', () => {
+  it('會渲染 loading state', () => {
     render(<DemoProductBanner loading products={[]} title="推薦商品" />)
 
     expect(screen.getByText('推薦商品')).toBeInTheDocument()
@@ -65,7 +65,7 @@ describe('DemoProductBanner', () => {
   it.each([
     ['compact', 'grid-cols-1'],
     ['carousel', 'overflow-x-auto'],
-  ] as const)('renders the %s layout class', (layout, expectedClassName) => {
+  ] as const)('會渲染 %s layout class', (layout, expectedClassName) => {
     render(
       <DemoProductBanner
         layout={layout}
@@ -77,7 +77,7 @@ describe('DemoProductBanner', () => {
     expect(screen.getByTestId('product-list')).toHaveClass(expectedClassName)
   })
 
-  it('renders product images when imageUrl is provided', () => {
+  it('提供 imageUrl 時會渲染 product images', () => {
     const { container } = render(
       <DemoProductBanner
         products={[

@@ -12,13 +12,13 @@ function createSection(
   return {
     id: 'section',
     items: [],
-    title: 'Section',
+    title: '區塊',
     ...section,
   }
 }
 
 describe('groupCrossSellWidgetSections', () => {
-  it('uses explicit section kind before fallback classification', () => {
+  it('會優先使用明確 section kind，再進行 fallback classification', () => {
     const section = createSection({
       id: 'tokyo-hotels',
       kind: 'flight',
@@ -28,7 +28,7 @@ describe('groupCrossSellWidgetSections', () => {
     expect(getCrossSellWidgetSectionKind(section)).toBe('flight')
   })
 
-  it('classifies legacy sections by id and title', () => {
+  it('會依 id 與 title 分類 legacy sections', () => {
     const sections = [
       createSection({ id: 'tokyo-hotels', title: '探索東京飯店' }),
       createSection({ id: 'tokyo-attractions', title: '探索東京 景點不錯過' }),

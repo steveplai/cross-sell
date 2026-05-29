@@ -10,7 +10,7 @@ interface ConfigurableTestWidgetProps {
 }
 
 function ConfigurableTestWidget({ config }: ConfigurableTestWidgetProps) {
-  return <div>{config?.title ?? 'fallback title'}</div>
+  return <div>{config?.title ?? 'fallback 標題'}</div>
 }
 
 function getShadowText(element: HTMLElement) {
@@ -42,16 +42,16 @@ describe('createReactWebComponent 的 observed properties 契約', () => {
     })
 
     await waitFor(() => {
-      expect(getShadowText(element)).toContain('fallback title')
+      expect(getShadowText(element)).toContain('fallback 標題')
     })
     await act(async () => {
       ;(element as HTMLElement & ConfigurableTestWidgetProps).config = {
-        title: 'property title',
+        title: 'property 標題',
       }
     })
 
     await waitFor(() => {
-      expect(getShadowText(element)).toContain('property title')
+      expect(getShadowText(element)).toContain('property 標題')
     })
   })
 
@@ -59,7 +59,7 @@ describe('createReactWebComponent 的 observed properties 契約', () => {
     const element = document.createElement('csc-property-upgrade-test')
 
     ;(element as HTMLElement & ConfigurableTestWidgetProps).config = {
-      title: 'pre-upgrade title',
+      title: 'pre-upgrade 標題',
     }
 
     await act(async () => {
@@ -81,7 +81,7 @@ describe('createReactWebComponent 的 observed properties 契約', () => {
     })
 
     await waitFor(() => {
-      expect(getShadowText(element)).toContain('pre-upgrade title')
+      expect(getShadowText(element)).toContain('pre-upgrade 標題')
     })
   })
 })

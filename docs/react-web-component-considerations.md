@@ -10,7 +10,7 @@ custom element connected
 -> 注入 widget CSS
 -> 建立 mount node
 -> React createRoot(mountNode)
--> render React component
+-> 渲染 React component
 ```
 
 這個模型很適合可嵌入式 widget SDK，但它不等同於把 React app 直接掛到 document 裡。每一個 Web Component instance 都會是 Shadow DOM 邊界內的一個獨立 React root。
@@ -125,7 +125,7 @@ Shadow DOM 可以保護 widget，避免大多數宿主頁 CSS 污染。這對嵌
 
 ### Portal 需要策略
 
-很多 React UI library 預設會把 overlay render 到 `document.body`：
+很多 React UI library 預設會把 overlay 渲染到 `document.body`：
 
 - Modal
 - Popover
@@ -191,7 +191,7 @@ hydrateRoot(...)
 
 Runtime 目前沒有替 widget 包 Error Boundary。
 
-如果要走向 production SDK，建議在每個 rendered widget 外層加上 boundary，讓 render error 可以被限制在 widget 內並回報，不要影響宿主頁。
+如果要走向 production SDK，建議在每個已渲染 widget 外層加上 boundary，讓 render error 可以被限制在 widget 內並回報，不要影響宿主頁。
 
 ```tsx
 <WidgetErrorBoundary>
@@ -235,9 +235,9 @@ Runtime 目前沒有替 widget 包 Error Boundary。
 當 element 被 disconnected 後又 reconnected：
 
 ```txt
-existing mount node remains
-root is recreated
-component renders again
+existing mount node 保留
+root 重新建立
+component 再次渲染
 ```
 
 這對目前的 widget model 是可接受的。

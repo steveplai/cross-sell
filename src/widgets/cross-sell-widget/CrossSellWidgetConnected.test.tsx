@@ -107,7 +107,7 @@ describe('CrossSellWidgetConnected', () => {
     vi.restoreAllMocks()
   })
 
-  it('renders its widget root marker for connected states', () => {
+  it('會在 connected states 渲染 widget root marker', () => {
     const { container } = render(
       <CrossSellWidgetConnectedForTesting errorMode="message" />,
     )
@@ -120,7 +120,7 @@ describe('CrossSellWidgetConnected', () => {
     )
   })
 
-  it('shows an error message when order number is missing in message error mode', () => {
+  it('message error mode 缺少 order number 時會顯示 error message', () => {
     const get = vi.fn<MockRequestClientRequest>()
     const requestClient = createMockRequestClient(get)
 
@@ -137,7 +137,7 @@ describe('CrossSellWidgetConnected', () => {
     expect(get).not.toHaveBeenCalled()
   })
 
-  it('loads AP-56 carousel data by order number and keeps static content', async () => {
+  it('會依 order number 載入 AP-56 carousel data 並保留 static content', async () => {
     const get = vi
       .fn<MockRequestClientRequest>()
       .mockResolvedValue(ap56CrossSellResponse)
@@ -190,7 +190,7 @@ describe('CrossSellWidgetConnected', () => {
     )
   })
 
-  it('keeps all existing blocks visible for the flight source product', async () => {
+  it('flight source product 會保留所有既有 blocks 可見', async () => {
     const get = vi
       .fn<MockRequestClientRequest>()
       .mockResolvedValue(ap56CrossSellResponse)
@@ -212,7 +212,7 @@ describe('CrossSellWidgetConnected', () => {
     expect(screen.getByText('旅遊綜合險')).toBeInTheDocument()
   })
 
-  it('hides hotel recommendations and reminders for the hotel source product', async () => {
+  it('hotel source product 會隱藏 hotel recommendations 與 reminders', async () => {
     const get = vi
       .fn<MockRequestClientRequest>()
       .mockResolvedValue(ap56CrossSellResponse)
@@ -237,7 +237,7 @@ describe('CrossSellWidgetConnected', () => {
     expect(screen.queryByText('旅遊綜合險')).not.toBeInTheDocument()
   })
 
-  it('hides hotel, HSR, and reminders for the ticket source product', async () => {
+  it('ticket source product 會隱藏 hotel、HSR 與 reminders', async () => {
     const get = vi
       .fn<MockRequestClientRequest>()
       .mockResolvedValue(ap56CrossSellResponse)
@@ -264,7 +264,7 @@ describe('CrossSellWidgetConnected', () => {
     expect(screen.queryByText('旅遊綜合險')).not.toBeInTheDocument()
   })
 
-  it('lets visible blocks override the source product preset', async () => {
+  it('會讓 visible blocks override source product preset', async () => {
     const get = vi
       .fn<MockRequestClientRequest>()
       .mockResolvedValue(ap56CrossSellResponse)
@@ -288,7 +288,7 @@ describe('CrossSellWidgetConnected', () => {
     ).not.toBeInTheDocument()
   })
 
-  it('renders AP-56 rating content by the spec thresholds', async () => {
+  it('會依 spec thresholds 渲染 AP-56 rating content', async () => {
     const get = vi
       .fn<MockRequestClientRequest>()
       .mockResolvedValue(ap56CrossSellResponse)
@@ -321,7 +321,7 @@ describe('CrossSellWidgetConnected', () => {
     expect(screen.queryByText('(34)')).not.toBeInTheDocument()
   })
 
-  it('passes custom recommend product types to the API', async () => {
+  it('會將 custom recommend product types 傳給 API', async () => {
     const get = vi.fn<MockRequestClientRequest>().mockResolvedValue([])
     const requestClient = createMockRequestClient(get)
 
@@ -350,7 +350,7 @@ describe('CrossSellWidgetConnected', () => {
     )
   })
 
-  it('applies section content overrides to API sections', async () => {
+  it('會將 section content overrides 套用到 API sections', async () => {
     const get = vi
       .fn<MockRequestClientRequest>()
       .mockResolvedValue(ap56CrossSellResponse)
@@ -377,7 +377,7 @@ describe('CrossSellWidgetConnected', () => {
     ).toBeInTheDocument()
   })
 
-  it('applies order destination to API section titles', async () => {
+  it('會將 order destination 套用到 API section titles', async () => {
     const get = vi
       .fn<MockRequestClientRequest>()
       .mockResolvedValue(ap56CrossSellResponse)
@@ -396,7 +396,7 @@ describe('CrossSellWidgetConnected', () => {
     ).toBeInTheDocument()
   })
 
-  it('renders static content when AP-56 returns empty sections', async () => {
+  it('AP-56 回傳 empty sections 時會渲染 static content', async () => {
     const get = vi.fn<MockRequestClientRequest>().mockResolvedValue([])
     const requestClient = createMockRequestClient(get)
 
@@ -418,7 +418,7 @@ describe('CrossSellWidgetConnected', () => {
     )
   })
 
-  it('lets first-level promo timing props override promo content timing', async () => {
+  it('會讓 first-level promo timing props override promo content timing', async () => {
     const get = vi.fn<MockRequestClientRequest>().mockResolvedValue([])
     const requestClient = createMockRequestClient(get)
 
@@ -441,10 +441,10 @@ describe('CrossSellWidgetConnected', () => {
     expect(screen.queryByText('倒數已結束')).not.toBeInTheDocument()
   })
 
-  it('hides the widget when API loading fails in hidden error mode', async () => {
+  it('hidden error mode 中 API loading 失敗時會隱藏 widget', async () => {
     const get = vi
       .fn<MockRequestClientRequest>()
-      .mockRejectedValue(new Error('failed'))
+      .mockRejectedValue(new Error('失敗'))
     const requestClient = createMockRequestClient(get)
 
     const { container } = render(
@@ -462,10 +462,10 @@ describe('CrossSellWidgetConnected', () => {
     })
   })
 
-  it('shows an error message when API loading fails in message error mode', async () => {
+  it('message error mode 中 API loading 失敗時會顯示 error message', async () => {
     const get = vi
       .fn<MockRequestClientRequest>()
-      .mockRejectedValue(new Error('failed'))
+      .mockRejectedValue(new Error('失敗'))
     const requestClient = createMockRequestClient(get)
 
     render(

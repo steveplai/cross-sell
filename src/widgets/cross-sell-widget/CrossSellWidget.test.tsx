@@ -31,7 +31,7 @@ function reconfigureTestUrl(url: string) {
   const jsdom = (globalThis as typeof globalThis & JsdomGlobal).jsdom
 
   if (!jsdom) {
-    throw new Error('Expected Vitest jsdom environment to expose jsdom global.')
+    throw new Error('預期 Vitest jsdom environment 會暴露 jsdom global。')
   }
 
   jsdom.reconfigure({ url })
@@ -91,7 +91,7 @@ describe('CrossSellWidget', () => {
     vi.restoreAllMocks()
   })
 
-  it('renders its widget root marker', () => {
+  it('會渲染 widget root marker', () => {
     const { container } = render(<CrossSellWidget {...cloneSampleData()} />)
 
     const root = container.querySelector(widgetRootSelector)
@@ -102,7 +102,7 @@ describe('CrossSellWidget', () => {
     )
   })
 
-  it('renders active promo countdown and title', () => {
+  it('會渲染 active promo countdown 與 title', () => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date('2026-04-21T10:00:00Z'))
 
@@ -124,7 +124,7 @@ describe('CrossSellWidget', () => {
     ).toBeInTheDocument()
   })
 
-  it('renders sections, products, and action CTAs', () => {
+  it('會渲染 sections、products 與 action CTAs', () => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date('2026-04-21T10:00:00Z'))
 
@@ -200,7 +200,7 @@ describe('CrossSellWidget', () => {
     )
   })
 
-  it('renders static content when recommendation sections are empty', () => {
+  it('recommendation sections 為空時會渲染 static content', () => {
     render(<CrossSellWidget {...cloneSampleData({ sections: [] })} />)
 
     expect(screen.getByText('您已解鎖限時優惠！')).toBeInTheDocument()
@@ -211,7 +211,7 @@ describe('CrossSellWidget', () => {
     ).not.toBeInTheDocument()
   })
 
-  it('hides selected recommendation and reminder blocks', () => {
+  it('會隱藏指定的 recommendation 與 reminder blocks', () => {
     render(
       <CrossSellWidget
         {...cloneSampleData({
@@ -238,7 +238,7 @@ describe('CrossSellWidget', () => {
     expect(screen.queryByText('旅遊綜合險')).not.toBeInTheDocument()
   })
 
-  it('can hide the promo header while keeping the hotel block', () => {
+  it('可以隱藏 promo header 並保留 hotel block', () => {
     render(
       <CrossSellWidget
         {...cloneSampleData({
@@ -255,7 +255,7 @@ describe('CrossSellWidget', () => {
     ).toBeInTheDocument()
   })
 
-  it('hides the promo and hotel panel content when both blocks are hidden', () => {
+  it('兩個 blocks 都隱藏時會隱藏 promo 與 hotel panel content', () => {
     render(
       <CrossSellWidget
         {...cloneSampleData({
@@ -274,7 +274,7 @@ describe('CrossSellWidget', () => {
     expect(screen.getByRole('link', { name: '前往加購' })).toBeInTheDocument()
   })
 
-  it('attaches the promo header to the hotel block by default', () => {
+  it('預設會將 promo header attached 到 hotel block', () => {
     render(<CrossSellWidget {...cloneSampleData()} />)
 
     expectCrossSellBlockTopMargin('promoHeader', false)
@@ -288,7 +288,7 @@ describe('CrossSellWidget', () => {
     )
   })
 
-  it('attaches the promo header to HSR when hotel recommendations are hidden', () => {
+  it('hotel recommendations 隱藏時會將 promo header attached 到 HSR', () => {
     render(
       <CrossSellWidget
         {...cloneSampleData({
@@ -307,7 +307,7 @@ describe('CrossSellWidget', () => {
     )
   })
 
-  it('attaches the promo header to attraction recommendations when hotel and HSR are hidden', () => {
+  it('hotel 與 HSR 隱藏時會將 promo header attached 到 attraction recommendations', () => {
     render(
       <CrossSellWidget
         {...cloneSampleData({
@@ -325,7 +325,7 @@ describe('CrossSellWidget', () => {
     expectCrossSellBlockTopMargin('transport', true)
   })
 
-  it('does not add top margin to the first content block when the promo header is hidden', () => {
+  it('promo header 隱藏時不會替第一個 content block 加上 top margin', () => {
     render(
       <CrossSellWidget
         {...cloneSampleData({
@@ -341,7 +341,7 @@ describe('CrossSellWidget', () => {
     expectCrossSellBlockTopMargin('hsr', true)
   })
 
-  it('keeps a gap after the promo header when no attachable product block is visible', () => {
+  it('沒有可 attach 的 product block 時會在 promo header 後保留 gap', () => {
     render(
       <CrossSellWidget
         {...cloneSampleData({
@@ -358,7 +358,7 @@ describe('CrossSellWidget', () => {
     expectCrossSellBlockTopMargin('transport', true)
   })
 
-  it('keeps popular search overflow hints hidden when popular searches fit', () => {
+  it('popular searches 可完整容納時會隱藏 popular search overflow hints', () => {
     render(<CrossSellWidget {...cloneSampleData()} />)
 
     const popularSearchScroller = screen.getByTestId(
@@ -384,7 +384,7 @@ describe('CrossSellWidget', () => {
     ).toHaveClass('opacity-0')
   })
 
-  it('updates popular search overflow hints while dragging horizontally', () => {
+  it('水平拖曳時會更新 popular search overflow hints', () => {
     render(<CrossSellWidget {...cloneSampleData()} />)
 
     const popularSearchScroller = screen.getByTestId(
@@ -438,7 +438,7 @@ describe('CrossSellWidget', () => {
     expect(endOverflow).toHaveClass('opacity-0')
   })
 
-  it('falls back to the insurance reminder button when service agent email is missing', () => {
+  it('service agent email 缺少時會 fallback 到 insurance reminder button', () => {
     render(
       <CrossSellWidget
         {...cloneSampleData({
@@ -457,7 +457,7 @@ describe('CrossSellWidget', () => {
     ).toBeInTheDocument()
   })
 
-  it('renders product slots in the new layout order', () => {
+  it('會依新的 layout order 渲染 product slots', () => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date('2026-04-21T10:00:00Z'))
 
@@ -486,7 +486,7 @@ describe('CrossSellWidget', () => {
     ])
   })
 
-  it('uses order destination for destination-aware section titles', () => {
+  it('會使用 order destination 產生 destination-aware section titles', () => {
     render(
       <CrossSellWidget
         {...cloneSampleData({
@@ -506,7 +506,7 @@ describe('CrossSellWidget', () => {
     ).toBeInTheDocument()
   })
 
-  it('falls back to the default destination when order destination is blank', () => {
+  it('order destination 空白時會 fallback 到 default destination', () => {
     render(
       <CrossSellWidget
         {...cloneSampleData({
@@ -520,7 +520,7 @@ describe('CrossSellWidget', () => {
     ).toBeInTheDocument()
   })
 
-  it('uses section content title overrides before order destination defaults', () => {
+  it('會優先使用 section content title overrides，再使用 order destination defaults', () => {
     render(
       <CrossSellWidget
         {...cloneSampleData({
@@ -542,7 +542,7 @@ describe('CrossSellWidget', () => {
     ).not.toBeInTheDocument()
   })
 
-  it('uses resolved section content overrides for view-more labels', () => {
+  it('會使用 resolved section content overrides 產生 view-more labels', () => {
     render(
       <CrossSellWidget
         {...cloneSampleData()}
@@ -565,7 +565,7 @@ describe('CrossSellWidget', () => {
     ).toBeInTheDocument()
   })
 
-  it('renders the default product image when item image data is missing', () => {
+  it('item image data 缺少時會渲染 default product image', () => {
     const data = cloneSampleData()
     data.sections[0].items[0].imageUrl = undefined
 
@@ -576,7 +576,7 @@ describe('CrossSellWidget', () => {
     ).toBeInTheDocument()
   })
 
-  it('replaces a failed product image with the default image', () => {
+  it('product image 載入失敗時會改用 default image', () => {
     const brokenImageUrl = 'https://example.com/missing-product.jpg'
     const data = cloneSampleData()
     data.sections[0].items[0].imageUrl = brokenImageUrl
@@ -591,7 +591,7 @@ describe('CrossSellWidget', () => {
     expect(image).toHaveAttribute('src', defaultProductImageUrl)
   })
 
-  it('renders HSR addon defaults and overrides', async () => {
+  it('會渲染 HSR addon defaults 與 overrides', async () => {
     const user = userEvent.setup()
     const onSelectAddon = vi.fn()
     const { rerender } = render(
@@ -646,7 +646,7 @@ describe('CrossSellWidget', () => {
     expect(onSelectAddon).toHaveBeenLastCalledWith({ addonId: 'custom-hsr' })
   })
 
-  it('renders the HSR addon CTA as a UAT link when order data is provided', async () => {
+  it('提供 order data 時會將 HSR addon CTA 渲染為 UAT link', async () => {
     const user = userEvent.setup()
     const onSelectAddon = vi.fn()
 
@@ -677,7 +677,7 @@ describe('CrossSellWidget', () => {
     expect(onSelectAddon).toHaveBeenCalledWith({ addonId: 'hsr' })
   })
 
-  it('renders the HSR addon CTA as a production link when production domain mode is provided', () => {
+  it('提供 production domain mode 時會將 HSR addon CTA 渲染為 production link', () => {
     reconfigureTestUrl('https://uflight.liontravel.com/orders')
 
     render(
@@ -698,7 +698,7 @@ describe('CrossSellWidget', () => {
     )
   })
 
-  it('uses the default UAT domain mode before hostname inference', () => {
+  it('會在 hostname inference 前使用預設 UAT domain mode', () => {
     reconfigureTestUrl('https://uflight.liontravel.com/orders')
 
     render(
@@ -719,7 +719,7 @@ describe('CrossSellWidget', () => {
     )
   })
 
-  it('falls back to the HSR addon button when order data is incomplete', async () => {
+  it('order data 不完整時會 fallback 到 HSR addon button', async () => {
     const user = userEvent.setup()
     const onSelectAddon = vi.fn()
 
@@ -742,7 +742,7 @@ describe('CrossSellWidget', () => {
     expect(onSelectAddon).toHaveBeenCalledWith({ addonId: 'hsr' })
   })
 
-  it('uses the default UAT domain mode when domain mode is omitted', () => {
+  it('省略 domain mode 時會使用預設 UAT domain mode', () => {
     reconfigureTestUrl('https://holiday.xxx.com/orders')
 
     render(
@@ -763,7 +763,7 @@ describe('CrossSellWidget', () => {
     )
   })
 
-  it('shows the full duration before the promo starts', () => {
+  it('promo 開始前會顯示完整 duration', () => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date('2026-04-21T10:00:00Z'))
 
@@ -784,7 +784,7 @@ describe('CrossSellWidget', () => {
     ).toBeInTheDocument()
   })
 
-  it('updates countdown every second and clears the interval on unmount', () => {
+  it('會每秒更新 countdown 並在 unmount 時清除 interval', () => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date('2026-04-21T10:00:00Z'))
     const clearIntervalSpy = vi.spyOn(window, 'clearInterval')
@@ -818,7 +818,7 @@ describe('CrossSellWidget', () => {
     expect(clearIntervalSpy).toHaveBeenCalled()
   })
 
-  it('renders expired state while keeping API-provided product discounts', () => {
+  it('會渲染 expired state 並保留 API-provided product discounts', () => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date('2026-04-21T10:00:00Z'))
 
@@ -843,7 +843,7 @@ describe('CrossSellWidget', () => {
     expect(screen.getAllByText('1,224,152').length).toBeGreaterThan(0)
   })
 
-  it('calls callbacks with product, section, and addon payloads', async () => {
+  it('會以 product、section 與 addon payloads 呼叫 callbacks', async () => {
     const user = userEvent.setup()
     const onSelectAddon = vi.fn()
     const onSelectItem = vi.fn()
@@ -878,7 +878,7 @@ describe('CrossSellWidget', () => {
     expect(onSelectAddon).toHaveBeenCalledWith({ addonId: 'hsr' })
   })
 
-  it('renders linked API products and still calls the select callback', async () => {
+  it('會渲染 linked API products 且仍呼叫 select callback', async () => {
     const user = userEvent.setup()
     const onSelectItem = vi.fn()
     const data = cloneSampleData()
@@ -908,7 +908,7 @@ describe('CrossSellWidget', () => {
     )
   })
 
-  it('uses the section view-more href when provided', () => {
+  it('提供 section view-more href 時會使用該 href', () => {
     const data = cloneSampleData()
     data.sections[0].viewMoreHref =
       'https://uhotel.liontravel.com/search?SearchKeyword=%E6%9D%B1%E4%BA%AC'
@@ -923,7 +923,7 @@ describe('CrossSellWidget', () => {
     )
   })
 
-  it('falls back to legacy section id and title classification without section kind', () => {
+  it('缺少 section kind 時會 fallback 到 legacy section id 與 title classification', () => {
     const legacySections = cloneSampleData().sections.map((section) => {
       if (section.kind === 'hotel') {
         return { ...section, kind: undefined, title: '探索東京飯店' }

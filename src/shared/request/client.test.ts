@@ -14,7 +14,7 @@ describe('createRequestClient', () => {
     vi.useRealTimers()
   })
 
-  it('combines the base URL, request headers, and parsed JSON body', async () => {
+  it('會組合 base URL、request headers 與解析後的 JSON body', async () => {
     const fetchMock = vi.fn<FetchMock>(async () => {
       return new Response(JSON.stringify({ ok: true }), { status: 200 })
     })
@@ -49,7 +49,7 @@ describe('createRequestClient', () => {
     expect(headers.get('x-request-id')).toBe('request-1')
   })
 
-  it('accepts host-only base URLs by assuming https', async () => {
+  it('會接受只有 host 的 base URLs 並預設使用 https', async () => {
     const fetchMock = vi.fn<FetchMock>(async () => {
       return new Response(JSON.stringify({ ok: true }), { status: 200 })
     })
@@ -66,7 +66,7 @@ describe('createRequestClient', () => {
     )
   })
 
-  it('normalizes non-2xx responses into ApiError', async () => {
+  it('會將非 2xx responses 正規化為 ApiError', async () => {
     const fetchImpl = vi.fn(async () => {
       return new Response(JSON.stringify({ message: 'bad request' }), {
         status: 400,
@@ -86,7 +86,7 @@ describe('createRequestClient', () => {
     })
   })
 
-  it('aborts requests after the configured timeout', async () => {
+  it('會在設定的 timeout 後中止 requests', async () => {
     vi.useFakeTimers()
 
     const fetchImpl = vi.fn((_url, init) => {
@@ -114,7 +114,7 @@ describe('createRequestClient', () => {
     await detailExpectation
   })
 
-  it('honors caller aborts without normalizing them as timeouts', async () => {
+  it('會保留 caller aborts，不會將其正規化為 timeout', async () => {
     const abortError = new DOMException('Aborted', 'AbortError')
     const fetchImpl = vi.fn((_url, init) => {
       return new Promise<Response>((_resolve, reject) => {
@@ -140,7 +140,7 @@ describe('createRequestClient', () => {
     await abortExpectation
   })
 
-  it('does not call fetch when the caller signal is already aborted', async () => {
+  it('caller signal 已經 aborted 時不會呼叫 fetch', async () => {
     const fetchImpl = vi.fn(async () => {
       return new Response(JSON.stringify({ ok: true }), { status: 200 })
     }) as unknown as typeof fetch

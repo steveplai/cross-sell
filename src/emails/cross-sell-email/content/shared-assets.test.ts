@@ -5,8 +5,8 @@ import {
   resolveCrossSellEmailDomainMode,
 } from './shared-assets'
 
-describe('cross-sell email email shared assets', () => {
-  it('defaults to the UAT domain mode', () => {
+describe('cross-sell email shared assets', () => {
+  it('會預設使用 UAT domain mode', () => {
     expect(resolveCrossSellEmailDomainMode()).toBe('uat')
   })
 
@@ -20,7 +20,7 @@ describe('cross-sell email email shared assets', () => {
   it.each([
     ['uat', 'https://uwww.liontravel.com'],
     ['production', 'https://www.liontravel.com'],
-  ] as const)('creates %s asset URLs', (mode, expectedDomain) => {
+  ] as const)('會建立 %s asset URLs', (mode, expectedDomain) => {
     const assetUrls = createCrossSellEmailAssetUrls(mode)
     const expectedBaseUrl = `${expectedDomain}/_webassets/lightspeed/subsitebundles/common/imgs/crossSale/icons`
 
@@ -37,7 +37,7 @@ describe('cross-sell email email shared assets', () => {
     })
   })
 
-  it('rejects unknown domain modes', () => {
+  it('會拒絕未知 domain modes', () => {
     expect(() => resolveCrossSellEmailDomainMode('staging')).toThrow(
       'Invalid EMAIL_DOMAIN_MODE "staging". Expected "uat" or "production".',
     )

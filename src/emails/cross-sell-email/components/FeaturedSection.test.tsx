@@ -9,7 +9,7 @@ function parseEmailHtml(html: string) {
 }
 
 describe('FeaturedSection', () => {
-  it('renders without optional CTA icon and recommendations', async () => {
+  it('沒有 optional CTA icon 與 recommendations 時仍會渲染', async () => {
     const section = {
       ctaLabel: '立即查看',
       ctaUrl: 'https://example.com/featured-section',
@@ -41,7 +41,7 @@ describe('FeaturedSection', () => {
     expect(html).not.toContain('推薦熱門')
   })
 
-  it('can repeat description and CTA in the header for configured featured sections', async () => {
+  it('會依設定在 featured sections 的 header 重複 description 與 CTA', async () => {
     const section = {
       ctaLabel: '立即查看',
       ctaUrl: 'https://example.com/featured-section',
@@ -63,7 +63,7 @@ describe('FeaturedSection', () => {
     ).toHaveLength(2)
   })
 
-  it('renders each recommendation as no-wrap text and arrow links', async () => {
+  it('會將每個 recommendation 渲染為 no-wrap text 與 arrow links', async () => {
     const section = {
       ctaLabel: '立即查看',
       ctaUrl: 'https://example.com/featured-section',

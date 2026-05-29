@@ -113,19 +113,19 @@ const ap56EnvelopeResponse = {
 }
 
 describe('AP-56 cross-sell API', () => {
-  it('creates the AP-56 endpoint path with default recommend product types', () => {
+  it('會使用預設 recommend product types 建立 AP-56 endpoint path', () => {
     expect(createAp56CrossSellPath('2026-123456')).toBe(
       '/category/_fringe/CrossSelling?OrderNo=2026-123456&RecommendProductType=htl%2Cetk',
     )
   })
 
-  it('supports custom recommend product types', () => {
+  it('會支援 custom recommend product types', () => {
     expect(createAp56CrossSellPath('2026-123456', ['htl', 'etk'])).toBe(
       '/category/_fringe/CrossSelling?OrderNo=2026-123456&RecommendProductType=htl%2Cetk',
     )
   })
 
-  it('prefers an explicit API base URL', () => {
+  it('會優先使用明確 API base URL', () => {
     expect(
       resolveAp56CrossSellBaseUrl('https://proxy.example.com', 'uat', {
         hostname: 'uflight.liontravel.com',
@@ -134,7 +134,7 @@ describe('AP-56 cross-sell API', () => {
     ).toBe('https://proxy.example.com')
   })
 
-  it('uses the current Lion Travel origin to keep browser requests same-origin', () => {
+  it('會使用目前 Lion Travel origin 讓 browser requests 維持 same-origin', () => {
     expect(
       resolveAp56CrossSellBaseUrl(undefined, 'uat', {
         hostname: 'uflight.liontravel.com',
@@ -150,7 +150,7 @@ describe('AP-56 cross-sell API', () => {
     ).toBe('https://flight.liontravel.com')
   })
 
-  it('falls back to the AP-56 www origin outside Lion Travel pages', () => {
+  it('在 Lion Travel pages 外會 fallback 到 AP-56 www origin', () => {
     expect(
       resolveAp56CrossSellBaseUrl(undefined, 'uat', {
         hostname: 'localhost',
@@ -163,7 +163,7 @@ describe('AP-56 cross-sell API', () => {
     )
   })
 
-  it('requests AP-56 and maps the raw array to carousel sections', async () => {
+  it('會 request AP-56 並將 raw array map 成 carousel sections', async () => {
     const get = vi
       .fn<MockRequestClientRequest>()
       .mockResolvedValue(ap56Response)
@@ -185,7 +185,7 @@ describe('AP-56 cross-sell API', () => {
     )
   })
 
-  it('maps AP-56 product fields to widget product fields', () => {
+  it('會將 AP-56 product fields map 到 widget product fields', () => {
     const sections = mapAp56CrossSellResponseToSections(ap56Response)
     const hotelSection = sections.find((section) => section.kind === 'hotel')
 
@@ -228,7 +228,7 @@ describe('AP-56 cross-sell API', () => {
     expect(hotelSection).not.toHaveProperty('title')
   })
 
-  it('assigns recommendation badges from the AP-56 product order', () => {
+  it('會依 AP-56 product order 指派 recommendation badges', () => {
     const createProduct = (index: number) => ({
       ID: `badge-${index}`,
       Title: `推薦商品 ${index}`,
@@ -276,7 +276,7 @@ describe('AP-56 cross-sell API', () => {
     ])
   })
 
-  it('maps AP-56 discount fields from PriceDiff and Discount', () => {
+  it('會從 PriceDiff 與 Discount map AP-56 discount fields', () => {
     const sections = mapAp56CrossSellResponseToSections([
       {
         Type: '訂房',
@@ -385,7 +385,7 @@ describe('AP-56 cross-sell API', () => {
     })
   })
 
-  it('maps AP-56 ClickCount to attraction and transport interest labels', () => {
+  it('會將 AP-56 ClickCount map 到 attraction 與 transport interest labels', () => {
     const sections = mapAp56CrossSellResponseToSections([
       {
         Type: '訂房',
@@ -466,7 +466,7 @@ describe('AP-56 cross-sell API', () => {
     })
   })
 
-  it('maps AP-56 product display fields by section kind', () => {
+  it('會依 section kind map AP-56 product display fields', () => {
     const createProduct = (index: number) => ({
       ID: `kind-${index}`,
       Title: `推薦商品 ${index}`,
@@ -526,7 +526,7 @@ describe('AP-56 cross-sell API', () => {
     expect(transportItem).not.toHaveProperty('starRating')
   })
 
-  it('maps AP-56 rating labels by the spec thresholds', () => {
+  it('會依 spec thresholds map AP-56 rating labels', () => {
     const sections = mapAp56CrossSellResponseToSections([
       {
         Type: '訂房',
@@ -592,7 +592,7 @@ describe('AP-56 cross-sell API', () => {
     ])
   })
 
-  it('maps AP-56 popular search links with the configured domain mode', async () => {
+  it('會依設定的 domain mode map AP-56 popular search links', async () => {
     const get = vi
       .fn<MockRequestClientRequest>()
       .mockResolvedValue(ap56Response)
@@ -612,7 +612,7 @@ describe('AP-56 cross-sell API', () => {
     })
   })
 
-  it('maps AP-56 popular search links with section taglist and view-more tracking params', () => {
+  it('會使用 section taglist 與 view-more tracking params map AP-56 popular search links', () => {
     const sections = mapAp56CrossSellResponseToSections([
       {
         Type: '票券(玩樂)',
@@ -660,7 +660,7 @@ describe('AP-56 cross-sell API', () => {
     })
   })
 
-  it('maps enveloped AP-56 responses and ProductUrl view-more rows', () => {
+  it('會 map enveloped AP-56 responses 與 ProductUrl view-more rows', () => {
     const sections = mapAp56CrossSellResponseToSections(ap56EnvelopeResponse)
     const hotelSection = sections.find((section) => section.kind === 'hotel')
 
@@ -684,7 +684,7 @@ describe('AP-56 cross-sell API', () => {
     })
   })
 
-  it('maps an empty AP-56 response to empty carousel sections', () => {
+  it('會將空 AP-56 response map 成空 carousel sections', () => {
     expect(mapAp56CrossSellResponseToSections([])).toEqual([])
   })
 })

@@ -39,7 +39,7 @@ describe('CtaButton', () => {
     }
   }
 
-  it('renders short regular icon buttons with the Figma CTA dimensions', async () => {
+  it('會依 Figma CTA dimensions 渲染較短的 regular icon buttons', async () => {
     const iconUrl = 'https://example.com/searchIcon.png'
     const { document, href } = await renderCtaButton({
       iconUrl,
@@ -67,7 +67,7 @@ describe('CtaButton', () => {
     expect(link?.getAttribute('style')).toContain('white-space:nowrap')
   })
 
-  it('renders long regular icon buttons with the Figma CTA dimensions', async () => {
+  it('會依 Figma CTA dimensions 渲染較長的 regular icon buttons', async () => {
     const iconUrl = 'https://example.com/searchIcon.png'
     const { document, href } = await renderCtaButton({
       iconUrl,
@@ -83,7 +83,7 @@ describe('CtaButton', () => {
     expect(link?.getAttribute('style')).toContain('line-height:24px')
   })
 
-  it('keeps compact text-only buttons at the expected width', async () => {
+  it('會讓 compact text-only buttons 維持預期寬度', async () => {
     const { document, href } = await renderCtaButton({
       label: '搜尋附近飯店',
       variant: 'compact',

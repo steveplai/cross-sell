@@ -12,25 +12,25 @@ function getFlipNumberElement(container: HTMLElement) {
 }
 
 describe('FlipNumber', () => {
-  it('pads numeric values to the minimum digit count', () => {
+  it('會將 numeric values 補齊到 minimum digit count', () => {
     const { container } = render(<FlipNumber value={9} />)
 
     expect(getFlipNumberElement(container).textContent).toBe('09')
   })
 
-  it('renders non-numeric strings without padding', () => {
+  it('會渲染 non-numeric strings 且不補位', () => {
     const { container } = render(<FlipNumber value="AB" />)
 
     expect(getFlipNumberElement(container).textContent).toBe('AB')
   })
 
-  it('pads numeric string values to the minimum digit count', () => {
+  it('會將 numeric string values 補齊到 minimum digit count', () => {
     const { container } = render(<FlipNumber value="9" />)
 
     expect(getFlipNumberElement(container).textContent).toBe('09')
   })
 
-  it('marks the divider as hidden when disabled', () => {
+  it('disabled 時會將 divider 標記為 hidden', () => {
     const { container } = render(
       <FlipNumber divider={{ visible: false }} value={9} />,
     )
@@ -41,7 +41,7 @@ describe('FlipNumber', () => {
     )
   })
 
-  it('maps divider options to CSS variables', () => {
+  it('會將 divider options 對應到 CSS variables', () => {
     const { container } = render(
       <FlipNumber
         divider={{

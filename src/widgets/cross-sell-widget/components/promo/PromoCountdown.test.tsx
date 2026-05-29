@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { PromoCountdown } from './PromoCountdown'
 
 describe('PromoCountdown', () => {
-  it('renders the countdown accessibility label and unit labels', () => {
+  it('會渲染 countdown accessibility label 與 unit labels', () => {
     render(<PromoCountdown remainingSeconds={90061} />)
 
     expect(

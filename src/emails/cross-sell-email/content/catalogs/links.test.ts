@@ -3,13 +3,13 @@ import { describe, expect, it } from 'vitest'
 import { createCrossSellEmailUrl } from './links'
 
 describe('createCrossSellEmailUrl', () => {
-  it('preserves product query parameters and appends UTM parameters', () => {
+  it('會保留 product query parameters 並加上 UTM parameters', () => {
     expect(createCrossSellEmailUrl('flightEstablished', 'transportation')).toBe(
       'https://uactivity.liontravel.com/search?Foreign=1&SearchKindName=%E4%BA%A4%E9%80%9A%E7%A5%A8%E5%88%B8&utm_source=orderconfirmation&utm_medium=email&utm_campaign=activity-traffic-more-addon&utm_content=flight',
     )
   })
 
-  it('uses production hostnames for production domain mode', () => {
+  it('production domain mode 會使用 production hostnames', () => {
     expect(
       createCrossSellEmailUrl(
         'flightEstablished',
@@ -22,7 +22,7 @@ describe('createCrossSellEmailUrl', () => {
     )
   })
 
-  it('uses target routes that match the placeholder product destinations', () => {
+  it('會使用符合 placeholder product destinations 的 target routes', () => {
     expect(createCrossSellEmailUrl('flightEstablished', 'hotel')).toBe(
       'https://uhotel.liontravel.com/search?searchParam=&utm_source=orderconfirmation&utm_medium=email&utm_campaign=hotel-addon&utm_content=flight',
     )
@@ -39,7 +39,7 @@ describe('createCrossSellEmailUrl', () => {
     )
   })
 
-  it('keeps recommendation suffixes as product route path segments', () => {
+  it('會保留 recommendation suffixes 作為 product route path segments', () => {
     expect(
       createCrossSellEmailUrl(
         'flightSales',
@@ -61,7 +61,7 @@ describe('createCrossSellEmailUrl', () => {
     )
   })
 
-  it('throws when a profile is missing a target campaign', () => {
+  it('profile 缺少 target campaign 時會 throw', () => {
     expect(() => createCrossSellEmailUrl('hotelSales', 'hotel')).toThrowError(
       'Missing UTM campaign for hotelSales hotel cross-sell link.',
     )

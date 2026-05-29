@@ -161,7 +161,7 @@ function expectFeaturedTimelineRailUsesFixedCentering(document: Document) {
 describe('CrossSellEmail', () => {
   it.each([
     {
-      name: 'flight established',
+      name: 'flight established 範本',
       createContent: createFlightEstablishedCrossSellEmailContent,
       expectedCtaLabel: '立即預訂交通票券',
       expectedCtaUrl:
@@ -170,7 +170,7 @@ describe('CrossSellEmail', () => {
         '日本-東京成田/羽田機場至東京市區/郊區 | 機場接送專車',
     },
     {
-      name: 'sales',
+      name: 'sales 範本',
       createContent: createFlightSalesCrossSellEmailContent,
       expectedCtaLabel: '立即搜尋飯店',
       expectedCtaUrl:
@@ -178,7 +178,7 @@ describe('CrossSellEmail', () => {
       expectedRecommendation: 'OMO5 東京大塚 by 星野集團',
     },
     {
-      name: 'insurance',
+      name: 'insurance 範本',
       createContent: createFlightInsuranceCrossSellEmailContent,
       expectedCtaLabel: '申請簽證代辦',
       expectedCtaUrl:
@@ -193,7 +193,7 @@ describe('CrossSellEmail', () => {
     expectedCtaUrl: string
     expectedRecommendation?: string
   }>)(
-    'renders the $name cross-sell content contract',
+    '會渲染 $name cross-sell content contract',
     async ({
       createContent,
       expectedCtaLabel,
@@ -248,7 +248,7 @@ describe('CrossSellEmail', () => {
     },
   )
 
-  it('enables header description and CTA only for the configured featured content', () => {
+  it('只會為設定的 featured content 啟用 header description 與 CTA', () => {
     const assetUrls = createCrossSellEmailAssetUrls('production')
     const flightEstablishedContent =
       createFlightEstablishedCrossSellEmailContent(assetUrls)
@@ -273,7 +273,7 @@ describe('CrossSellEmail', () => {
     ).toHaveLength(0)
   })
 
-  it('renders the hotel established product plan', async () => {
+  it('會渲染 hotel established product plan', async () => {
     const assetUrls = createCrossSellEmailAssetUrls('production')
     const content = createHotelEstablishedCrossSellEmailContent(assetUrls)
     const html = await renderEmail(<CrossSellEmail {...content} />)
@@ -309,7 +309,7 @@ describe('CrossSellEmail', () => {
     expectFeaturedTimelineRailUsesFixedCentering(document)
   })
 
-  it('renders the hotel sales product plan', async () => {
+  it('會渲染 hotel sales product plan', async () => {
     const assetUrls = createCrossSellEmailAssetUrls('production')
     const content = createHotelSalesCrossSellEmailContent(assetUrls)
     const html = await renderEmail(<CrossSellEmail {...content} />)

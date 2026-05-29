@@ -70,14 +70,14 @@ const previewReactEmailExpectations = [
   excludes?: string[]
 }>
 
-describe('email build and preview app contracts', () => {
-  it('declares the current dist email output paths', () => {
+describe('email build 與 preview app 契約', () => {
+  it('會宣告目前 dist email output paths', () => {
     expect(emailBuildOutputs.map((output) => output.relativePath)).toEqual(
       builtEmailOutputPaths,
     )
   })
 
-  it('defines template metadata for preview sources', () => {
+  it('會定義 preview sources 的 template metadata', () => {
     expect(previewEmailTemplates['demo-product-offer']).toMatchObject({
       defaultSubject: '你的專屬加購推薦',
       distFileName: 'demo-product-offer/index.html',
@@ -120,7 +120,7 @@ describe('email build and preview app contracts', () => {
     })
   })
 
-  it('renders built templates through the React preview source with expected content', async () => {
+  it('會透過 React preview source 渲染 built templates 並包含預期內容', async () => {
     expect(
       previewReactEmailExpectations.map(({ templateKey }) => templateKey),
     ).toEqual(emailBuildOutputs.map(({ templateKey }) => templateKey))
@@ -137,7 +137,7 @@ describe('email build and preview app contracts', () => {
 
       if (!('react' in payload)) {
         throw new Error(
-          `Expected "${expectation.templateKey}" to create a React Email payload.`,
+          `預期 "${expectation.templateKey}" 會建立 React Email payload。`,
         )
       }
 

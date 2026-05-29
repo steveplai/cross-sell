@@ -170,32 +170,32 @@ describe('cross-sell-widget-connected Web Component 契約', () => {
         domainMode: 'uat',
         hsrAddon: {
           id: 'hsr-addon',
-          title: 'HSR add-on',
-          description: 'Add HSR tickets',
-          ctaLabel: 'Choose HSR',
+          title: '高鐵加購',
+          description: '加購高鐵票券',
+          ctaLabel: '選擇高鐵',
           price: 1000,
         },
         locale: 'zh-TW',
-        orderDestination: 'Tokyo',
+        orderDestination: '東京',
         promo: {
           id: 'promo',
         },
         reminders: {
-          title: 'Travel reminder',
+          title: '旅遊提醒',
         },
         sectionContentOverrides: {
           hotel: {
-            title: 'Recommended hotels',
-            subtitle: 'Selected hotels',
-            viewMoreLabel: 'View more',
-            viewMorePlaceholderLabel: 'More hotels coming soon',
+            title: '推薦飯店',
+            subtitle: '精選飯店',
+            viewMoreLabel: '查看更多',
+            viewMorePlaceholderLabel: '更多飯店即將推出',
             ignored: 'ignored',
           },
           attraction: {
             title: 123,
           },
           unknown: {
-            title: 'Unsupported section',
+            title: '不支援的區塊',
           },
         },
         serviceAgent: {
@@ -208,21 +208,21 @@ describe('cross-sell-widget-connected Web Component 契約', () => {
 
     expect(props.currency).toBe('TWD')
     expect(props.locale).toBe('zh-TW')
-    expect(props.orderDestination).toBe('Tokyo')
+    expect(props.orderDestination).toBe('東京')
     expect(props.hsrAddon).toEqual({
       id: 'hsr-addon',
-      title: 'HSR add-on',
-      description: 'Add HSR tickets',
-      ctaLabel: 'Choose HSR',
+      title: '高鐵加購',
+      description: '加購高鐵票券',
+      ctaLabel: '選擇高鐵',
     })
     expect(props.promo).toEqual({ id: 'promo' })
-    expect(props.reminders).toEqual({ title: 'Travel reminder' })
+    expect(props.reminders).toEqual({ title: '旅遊提醒' })
     expect(props.sectionContentOverrides).toEqual({
       hotel: {
-        title: 'Recommended hotels',
-        subtitle: 'Selected hotels',
-        viewMoreLabel: 'View more',
-        viewMorePlaceholderLabel: 'More hotels coming soon',
+        title: '推薦飯店',
+        subtitle: '精選飯店',
+        viewMoreLabel: '查看更多',
+        viewMorePlaceholderLabel: '更多飯店即將推出',
       },
     })
     expect('domainMode' in props).toBe(false)
@@ -358,7 +358,7 @@ describe('cross-sell-widget-connected Web Component 契約', () => {
       sectionId: 'hotel',
       item: {
         id: 'hotel-1',
-        title: 'Hotel',
+        title: '飯店',
         price: 1200,
       },
     }
