@@ -109,7 +109,7 @@ export const previewEmailTemplates = {
     label: 'Flight insurance',
     createReactEmail: (domainMode) => (
       <CrossSellEmail
-        {...createFlightEstablishedCrossSellEmailContent(
+        {...createFlightInsuranceCrossSellEmailContent(
           createCrossSellEmailAssetUrls(domainMode),
         )}
       />
