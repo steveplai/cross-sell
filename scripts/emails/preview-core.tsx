@@ -221,7 +221,7 @@ export function resolvePreviewEmailSource(value: string): PreviewEmailSource {
 
 export function getPreviewEmailUsage() {
   return `Usage:
-  pnpm send:email:preview [options]
+  pnpm send:email [options]
 
 Options:
   --template <template>       ${previewAllEmailTemplateKeys.join(' | ')}

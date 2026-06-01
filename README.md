@@ -403,15 +403,15 @@ EMAIL_DOMAIN_MODE=production pnpm build:emails
 寄送 preview 範例：
 
 ```bash
-pnpm send:email:preview --source=dist --template=flight-insurance
-pnpm send:email:preview --source=react --template=flight-insurance
+pnpm send:email --source=dist --template=flight-insurance
+pnpm send:email --source=react --template=flight-insurance
 ```
 
 手動 full-email diagnostics 可使用 `manual-emails/` 下複製進來的 HTML 檔案。這些檔案
 不是由 `pnpm build:emails` 產生。
 
 ```bash
-pnpm send:email:preview --source=file --template=full-flight-insurance
+pnpm send:email --source=file --template=full-flight-insurance
 ```
 
 Storybook 在 `Emails/Travel Plan Cross Sell` 下提供 full email previews 與較小的
