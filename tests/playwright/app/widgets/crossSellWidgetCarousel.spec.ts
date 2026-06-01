@@ -1,11 +1,27 @@
 import type { Page } from '@playwright/test'
 import { expect, test } from '@playwright/test'
 
+type CrossSellWidgetItemSelectEventDetail = {
+  sectionId?: string
+  item?: {
+    id?: string
+    title?: string
+  }
+}
+
+type CrossSellWidgetCarouselTestWindow = Window & {
+  __crossSellWidgetItemSelectEvents?: Array<{
+    type: string
+    detail: CrossSellWidgetItemSelectEventDetail
+  }>
+}
+
 const desktopCarouselViewportWidth = 980
 const hotelSectionId = 'hotel-recommendations'
 const maxDensityCarouselViewportWidth = 1190
 const firstHotelTitle = '上海外灘精選飯店'
 const finalPageFirstHotelTitle = '靜安設計酒店'
+const secondHotelTitle = '浦東江景商旅'
 const hotelSectionTestId = `section-${hotelSectionId}`
 
 const crossSellWidgetCarouselData = {
@@ -139,21 +155,47 @@ async function getCrossSellWidgetCarouselState(page: Page) {
     const viewportStyles =
       viewport instanceof HTMLElement ? getComputedStyle(viewport) : null
     const firstCard = content.querySelector('article')
-    const fullyVisibleCards =
-      viewport instanceof HTMLElement
-        ? Array.from(content.querySelectorAll('article')).filter((card) => {
-            const cardRect = card.getBoundingClientRect()
-            const viewportRect = viewport.getBoundingClientRect()
+    const viewportRect =
+      viewport instanceof HTMLElement ? viewport.getBoundingClientRect() : null
+    const fullyVisibleCards = viewportRect
+      ? Array.from(content.querySelectorAll('article')).filter((card) => {
+          const cardRect = card.getBoundingClientRect()
 
-            return (
-              cardRect.left >= viewportRect.left &&
-              cardRect.right <= viewportRect.right
-            )
-          })
-        : []
+          return (
+            cardRect.left >= viewportRect.left &&
+            cardRect.right <= viewportRect.right
+          )
+        })
+      : []
+    const visibleCards = viewportRect
+      ? Array.from(content.querySelectorAll('article')).filter((card) => {
+          const cardRect = card.getBoundingClientRect()
+          const visibleWidth =
+            Math.min(cardRect.right, viewportRect.right) -
+            Math.max(cardRect.left, viewportRect.left)
+          const visibleHeight =
+            Math.min(cardRect.bottom, viewportRect.bottom) -
+            Math.max(cardRect.top, viewportRect.top)
+
+          return visibleWidth > 1 && visibleHeight > 1
+        })
+      : []
     const placeholder = content.querySelector(
       '[data-testid="cross-sell-view-more-placeholder"]',
     )
+    const placeholderRect =
+      placeholder instanceof HTMLElement
+        ? placeholder.getBoundingClientRect()
+        : null
+    const placeholderPartiallyVisible =
+      !!viewportRect &&
+      !!placeholderRect &&
+      Math.min(placeholderRect.right, viewportRect.right) -
+        Math.max(placeholderRect.left, viewportRect.left) >
+        1 &&
+      Math.min(placeholderRect.bottom, viewportRect.bottom) -
+        Math.max(placeholderRect.top, viewportRect.top) >
+        1
 
     return {
       contentTransform: getComputedStyle(content).transform,
@@ -164,22 +206,19 @@ async function getCrossSellWidgetCarouselState(page: Page) {
       firstFullyVisibleCardText: fullyVisibleCards[0]?.textContent ?? null,
       fullyVisibleCardCount: fullyVisibleCards.length,
       placeholderExists: placeholder instanceof HTMLElement,
-      placeholderFullyVisible:
-        viewport instanceof HTMLElement
-          ? (() => {
-              if (!(placeholder instanceof HTMLElement)) {
-                return false
-              }
+      placeholderFullyVisible: viewportRect
+        ? (() => {
+            if (!placeholderRect) {
+              return false
+            }
 
-              const placeholderRect = placeholder.getBoundingClientRect()
-              const viewportRect = viewport.getBoundingClientRect()
-
-              return (
-                placeholderRect.left >= viewportRect.left &&
-                placeholderRect.right <= viewportRect.right
-              )
-            })()
-          : false,
+            return (
+              placeholderRect.left >= viewportRect.left &&
+              placeholderRect.right <= viewportRect.right
+            )
+          })()
+        : false,
+      placeholderPartiallyVisible,
       placeholderItemWidth:
         placeholder?.parentElement instanceof HTMLElement
           ? placeholder.parentElement.getBoundingClientRect().width
@@ -187,36 +226,148 @@ async function getCrossSellWidgetCarouselState(page: Page) {
       nextDisplay:
         next instanceof HTMLElement ? getComputedStyle(next).display : null,
       nextExists: next instanceof HTMLElement,
+      nextVisible:
+        next instanceof HTMLElement
+          ? getComputedStyle(next).display !== 'none'
+          : false,
       previousDisplay:
         previous instanceof HTMLElement
           ? getComputedStyle(previous).display
           : null,
       previousExists: previous instanceof HTMLElement,
-      secondCardVisibleRatio:
-        viewport instanceof HTMLElement
-          ? (() => {
-              const secondCard = content.querySelectorAll('article')[1]
+      previousVisible:
+        previous instanceof HTMLElement
+          ? getComputedStyle(previous).display !== 'none'
+          : false,
+      secondCardVisibleRatio: viewportRect
+        ? (() => {
+            const secondCard = content.querySelectorAll('article')[1]
 
-              if (!(secondCard instanceof HTMLElement)) {
-                return 0
-              }
+            if (!(secondCard instanceof HTMLElement)) {
+              return 0
+            }
 
-              const cardRect = secondCard.getBoundingClientRect()
-              const viewportRect = viewport.getBoundingClientRect()
-              const visibleWidth =
-                Math.min(cardRect.right, viewportRect.right) -
-                Math.max(cardRect.left, viewportRect.left)
+            const cardRect = secondCard.getBoundingClientRect()
+            const visibleWidth =
+              Math.min(cardRect.right, viewportRect.right) -
+              Math.max(cardRect.left, viewportRect.left)
 
-              return Math.max(0, visibleWidth) / cardRect.width
-            })()
-          : 0,
+            return Math.max(0, visibleWidth) / cardRect.width
+          })()
+        : 0,
+      viewportRect: viewportRect
+        ? {
+            bottom: viewportRect.bottom,
+            height: viewportRect.height,
+            left: viewportRect.left,
+            right: viewportRect.right,
+            top: viewportRect.top,
+            width: viewportRect.width,
+          }
+        : null,
       viewportOverflowX: viewportStyles?.overflowX ?? null,
       viewportWidth:
         viewport instanceof HTMLElement
           ? viewport.getBoundingClientRect().width
           : null,
+      visibleCardTexts: visibleCards.map((card) => card.textContent ?? ''),
     }
   }, hotelSectionTestId)
+}
+
+async function getCrossSellWidgetCarouselVisibleText(page: Page) {
+  const state = await getCrossSellWidgetCarouselState(page)
+  const visibleTexts = state?.visibleCardTexts ?? []
+
+  return state?.placeholderPartiallyVisible
+    ? [...visibleTexts, 'cross-sell-view-more-placeholder']
+    : visibleTexts
+}
+
+async function dragCrossSellWidgetCarousel(page: Page, deltaX = 240) {
+  const state = await getCrossSellWidgetCarouselState(page)
+  const viewportRect = state?.viewportRect
+
+  if (!viewportRect) {
+    throw new Error('預期 carousel viewport 已經完成渲染。')
+  }
+
+  const startX = viewportRect.left + viewportRect.width * 0.8
+  const endX = startX - deltaX
+  const y = viewportRect.top + viewportRect.height / 2
+
+  await page.mouse.move(startX, y)
+  await page.mouse.down()
+  await page.mouse.move(endX, y, { steps: 12 })
+  await page.mouse.up()
+  await page.waitForTimeout(250)
+}
+
+async function listenCrossSellWidgetEvents(page: Page) {
+  await page.locator('cross-sell-widget').evaluate((element) => {
+    const testWindow = window as CrossSellWidgetCarouselTestWindow
+
+    testWindow.__crossSellWidgetItemSelectEvents = []
+    element.addEventListener('cross-sell-widget:item-select', (event) => {
+      const customEvent =
+        event as CustomEvent<CrossSellWidgetItemSelectEventDetail>
+
+      testWindow.__crossSellWidgetItemSelectEvents?.push({
+        type: customEvent.type,
+        detail: {
+          sectionId: customEvent.detail.sectionId,
+          item: {
+            id: customEvent.detail.item?.id,
+            title: customEvent.detail.item?.title,
+          },
+        },
+      })
+    })
+  })
+}
+
+async function getCrossSellWidgetItemSelectEvents(page: Page) {
+  return page.evaluate(
+    () =>
+      (window as CrossSellWidgetCarouselTestWindow)
+        .__crossSellWidgetItemSelectEvents ?? [],
+  )
+}
+
+async function clickVisibleCrossSellWidgetProduct(page: Page, title: string) {
+  await page.locator('cross-sell-widget').evaluate(
+    (element, { testId, title }) => {
+      const root = element.shadowRoot
+      const content = root?.querySelector(`[data-testid="${testId}-items"]`)
+      const viewport = content?.parentElement
+
+      if (!(viewport instanceof HTMLElement)) {
+        throw new Error('預期 carousel viewport 已經完成渲染。')
+      }
+
+      const viewportRect = viewport.getBoundingClientRect()
+      const button = Array.from(
+        content?.querySelectorAll('article button') ?? [],
+      ).find((candidate) => {
+        const buttonRect = candidate.getBoundingClientRect()
+        const visibleWidth =
+          Math.min(buttonRect.right, viewportRect.right) -
+          Math.max(buttonRect.left, viewportRect.left)
+
+        return candidate.textContent?.includes(title) && visibleWidth > 1
+      })
+
+      if (!(button instanceof HTMLButtonElement)) {
+        throw new Error(`預期 carousel 中會有可見商品「${title}」。`)
+      }
+
+      button.click()
+    },
+    {
+      testId: hotelSectionTestId,
+      title,
+    },
+  )
 }
 
 async function clickCrossSellWidgetCarouselNext(page: Page) {
@@ -428,4 +579,134 @@ test('cross sell widget carousel 會支援 mobile exposure 與 keyboard navigati
     .not.toMatchObject({
       contentTransform: initialState?.contentTransform,
     })
+})
+
+test('cross sell widget carousel mobile swipe 會移動內容且不顯示 desktop controls', async ({
+  page,
+}) => {
+  await page.setViewportSize({ height: 900, width: 390 })
+  await gotoCrossSellWidgetExample(page)
+
+  await expect
+    .poll(async () => {
+      const state = await getCrossSellWidgetCarouselState(page)
+
+      return state?.firstFullyVisibleCardText ?? ''
+    })
+    .toContain(firstHotelTitle)
+
+  await expect
+    .poll(async () => {
+      const state = await getCrossSellWidgetCarouselState(page)
+
+      return state?.secondCardVisibleRatio ?? 0
+    })
+    .toBeGreaterThanOrEqual(0.5)
+
+  await expect
+    .poll(() => getCrossSellWidgetCarouselState(page))
+    .toMatchObject({
+      nextVisible: false,
+      previousVisible: false,
+    })
+
+  const initialState = await getCrossSellWidgetCarouselState(page)
+
+  await dragCrossSellWidgetCarousel(page)
+
+  await expect
+    .poll(() => getCrossSellWidgetCarouselState(page))
+    .not.toMatchObject({
+      contentTransform: initialState?.contentTransform,
+    })
+
+  await expect
+    .poll(async () => {
+      const visibleText = await getCrossSellWidgetCarouselVisibleText(page)
+
+      return visibleText.join(' ')
+    })
+    .toContain(secondHotelTitle)
+
+  await expect
+    .poll(() => getCrossSellWidgetCarouselState(page))
+    .toMatchObject({
+      nextVisible: false,
+      previousVisible: false,
+    })
+})
+
+test('cross sell widget carousel mobile swipe 到尾端仍會顯示內容', async ({
+  page,
+}) => {
+  await page.setViewportSize({ height: 900, width: 390 })
+  await gotoCrossSellWidgetExample(page)
+
+  for (let index = 0; index < 10; index += 1) {
+    const state = await getCrossSellWidgetCarouselState(page)
+
+    if (state?.placeholderPartiallyVisible) {
+      break
+    }
+
+    await dragCrossSellWidgetCarousel(page)
+  }
+
+  await expect
+    .poll(async () => {
+      const visibleText = await getCrossSellWidgetCarouselVisibleText(page)
+
+      return visibleText.join(' ')
+    })
+    .not.toBe('')
+
+  await expect
+    .poll(async () => {
+      const state = await getCrossSellWidgetCarouselState(page)
+
+      return state?.placeholderPartiallyVisible ?? false
+    })
+    .toBe(true)
+
+  await expect
+    .poll(() => getCrossSellWidgetCarouselState(page))
+    .toMatchObject({
+      nextVisible: false,
+      previousVisible: false,
+    })
+})
+
+test('cross sell widget carousel mobile swipe 後仍可選取商品並 emit event', async ({
+  page,
+}) => {
+  await page.setViewportSize({ height: 900, width: 390 })
+  await gotoCrossSellWidgetExample(page)
+  await listenCrossSellWidgetEvents(page)
+
+  await dragCrossSellWidgetCarousel(page)
+
+  await expect
+    .poll(async () => {
+      const visibleText = await getCrossSellWidgetCarouselVisibleText(page)
+
+      return visibleText.join(' ')
+    })
+    .toContain(secondHotelTitle)
+
+  await clickVisibleCrossSellWidgetProduct(page, secondHotelTitle)
+
+  await expect
+    .poll(() => getCrossSellWidgetItemSelectEvents(page))
+    .toEqual([
+      {
+        type: 'cross-sell-widget:item-select',
+        detail: {
+          sectionId: hotelSectionId,
+          item: {
+            id: 'pudong-river-view-hotel',
+            title: secondHotelTitle,
+          },
+        },
+      },
+    ])
 })
