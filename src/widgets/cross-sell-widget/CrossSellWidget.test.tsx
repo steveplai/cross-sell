@@ -7,6 +7,7 @@ import {
   widgetRootSelector,
 } from '../../runtime/widgetRoot'
 import { CrossSellWidget } from './CrossSellWidget'
+import { maxTimerDelayMs } from './lib/countdown'
 import { crossSellWidgetSampleData } from './sampleData'
 import type { CrossSellWidgetProps } from './types'
 
@@ -87,8 +88,8 @@ describe('CrossSellWidget', () => {
   afterEach(() => {
     cleanup()
     resetTestUrl()
-    vi.useRealTimers()
     vi.restoreAllMocks()
+    vi.useRealTimers()
   })
 
   it('會渲染 widget root marker', () => {
@@ -784,38 +785,122 @@ describe('CrossSellWidget', () => {
     ).toBeInTheDocument()
   })
 
-  it('會每秒更新 countdown 並在 unmount 時清除 interval', () => {
+  it('promo 到期時會切換 expired state 並移除 countdown', () => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date('2026-04-21T10:00:00Z'))
-    const clearIntervalSpy = vi.spyOn(window, 'clearInterval')
 
-    const { unmount } = render(
+    const { container } = render(
       <CrossSellWidget
         {...cloneSampleData({
           promo: {
             ...crossSellWidgetSampleData.promo,
-            durationSeconds: 10,
+            durationSeconds: 1,
             startsAt: '2026-04-21T10:00:00Z',
           },
         })}
       />,
     )
 
+    const root = container.querySelector(widgetRootSelector)
+
+    expect(root).toHaveAttribute('data-promo-state', 'active')
+    expect(screen.getByText('您已解鎖限時優惠！')).toBeInTheDocument()
     expect(
-      screen.getByLabelText('優惠倒數 0 天 0 時 0 分 10 秒'),
+      screen.getByLabelText('優惠倒數 0 天 0 時 0 分 1 秒'),
     ).toBeInTheDocument()
 
     act(() => {
       vi.advanceTimersByTime(1000)
     })
 
+    expect(root).toHaveAttribute('data-promo-state', 'expired')
+    expect(screen.getByText('發現更多旅遊靈感！')).toBeInTheDocument()
+    expect(screen.queryByText('您已解鎖限時優惠！')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/優惠倒數/)).not.toBeInTheDocument()
+  })
+
+  it('promo header 隱藏時不建立 countdown interval 但仍會在到期時更新狀態', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-04-21T10:00:00Z'))
+    const setIntervalSpy = vi.spyOn(window, 'setInterval')
+    const setTimeoutSpy = vi.spyOn(window, 'setTimeout')
+
+    const { container } = render(
+      <CrossSellWidget
+        {...cloneSampleData({
+          promo: {
+            ...crossSellWidgetSampleData.promo,
+            durationSeconds: 1,
+            startsAt: '2026-04-21T10:00:00Z',
+          },
+          visibleBlocks: {
+            promoHeader: false,
+          },
+        })}
+      />,
+    )
+
+    const root = container.querySelector(widgetRootSelector)
+
+    expect(root).toHaveAttribute('data-promo-state', 'active')
+    expect(screen.queryByLabelText(/優惠倒數/)).not.toBeInTheDocument()
+    expect(setIntervalSpy).not.toHaveBeenCalled()
+    expect(setTimeoutSpy).toHaveBeenCalled()
+
+    act(() => {
+      vi.advanceTimersByTime(1000)
+    })
+
+    expect(container.querySelector(widgetRootSelector)).toHaveAttribute(
+      'data-promo-state',
+      'expired',
+    )
+  })
+
+  it('長天期 promo 會分段排程到期 timer 避免 overflow', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-04-21T10:00:00Z'))
+    const setTimeoutSpy = vi.spyOn(window, 'setTimeout')
+    const durationSeconds = 30 * 24 * 60 * 60
+    const totalDurationMs = durationSeconds * 1000
+    const finalTimerDelayMs = totalDurationMs - maxTimerDelayMs
+
+    const { container } = render(
+      <CrossSellWidget
+        {...cloneSampleData({
+          promo: {
+            ...crossSellWidgetSampleData.promo,
+            durationSeconds,
+            startsAt: '2026-04-21T10:00:00Z',
+          },
+          visibleBlocks: {
+            promoHeader: false,
+          },
+        })}
+      />,
+    )
+
+    const root = container.querySelector(widgetRootSelector)
+
+    expect(root).toHaveAttribute('data-promo-state', 'active')
     expect(
-      screen.getByLabelText('優惠倒數 0 天 0 時 0 分 9 秒'),
-    ).toBeInTheDocument()
+      setTimeoutSpy.mock.calls.some(([, delay]) => delay === maxTimerDelayMs),
+    ).toBe(true)
 
-    unmount()
+    act(() => {
+      vi.advanceTimersByTime(maxTimerDelayMs)
+    })
 
-    expect(clearIntervalSpy).toHaveBeenCalled()
+    expect(root).toHaveAttribute('data-promo-state', 'active')
+    expect(
+      setTimeoutSpy.mock.calls.some(([, delay]) => delay === finalTimerDelayMs),
+    ).toBe(true)
+
+    act(() => {
+      vi.advanceTimersByTime(finalTimerDelayMs)
+    })
+
+    expect(root).toHaveAttribute('data-promo-state', 'expired')
   })
 
   it('會渲染 expired state 並保留 API-provided product discounts', () => {

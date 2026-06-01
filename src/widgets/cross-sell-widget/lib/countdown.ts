@@ -3,6 +3,7 @@ import type { CrossSellWidgetPromo } from '../types'
 const secondsPerMinute = 60
 const secondsPerHour = secondsPerMinute * 60
 const secondsPerDay = secondsPerHour * 24
+export const maxTimerDelayMs = 2_147_483_647
 
 export interface CountdownParts {
   days: number
@@ -80,6 +81,25 @@ export function getRemainingPromoSeconds(
       promo.durationSeconds - adjustedElapsedSeconds,
     ),
   )
+}
+
+export function getMillisecondsUntilPromoExpires(
+  promo: Pick<CrossSellWidgetPromo, 'durationSeconds' | 'startsAt'>,
+  now = Date.now(),
+) {
+  const startsAt = parsePromoStartsAt(promo.startsAt)
+
+  if (startsAt === undefined || promo.durationSeconds <= 0) {
+    return 0
+  }
+
+  const expiresAt = startsAt + promo.durationSeconds * 1000
+
+  return Math.max(0, expiresAt - now)
+}
+
+export function getSafeTimerDelayMs(timeoutMs: number) {
+  return Math.min(Math.max(0, timeoutMs), maxTimerDelayMs)
 }
 
 export function getCountdownParts(totalSeconds: number): CountdownParts {

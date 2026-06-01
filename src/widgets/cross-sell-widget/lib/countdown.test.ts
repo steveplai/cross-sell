@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest'
 
-import { getRemainingPromoSeconds, parsePromoStartsAt } from './countdown'
+import {
+  getMillisecondsUntilPromoExpires,
+  getRemainingPromoSeconds,
+  getSafeTimerDelayMs,
+  maxTimerDelayMs,
+  parsePromoStartsAt,
+} from './countdown'
 
 describe('parsePromoStartsAt', () => {
   it('會接受帶有明確 UTC marker 的 ISO datetimes', () => {
@@ -54,5 +60,61 @@ describe('getRemainingPromoSeconds', () => {
         Date.parse('2026-05-14T00:00:00.000Z'),
       ),
     ).toBe(0)
+  })
+})
+
+describe('getMillisecondsUntilPromoExpires', () => {
+  it('會回傳距離 promo 真正到期時間的毫秒數', () => {
+    expect(
+      getMillisecondsUntilPromoExpires(
+        {
+          startsAt: '2026-05-14T10:00:00Z',
+          durationSeconds: 3600,
+        },
+        Date.parse('2026-05-14T10:30:00Z'),
+      ),
+    ).toBe(30 * 60 * 1000)
+  })
+
+  it('promo 尚未開始時會以 startsAt 加上 duration 計算到期時間', () => {
+    expect(
+      getMillisecondsUntilPromoExpires(
+        {
+          startsAt: '2026-05-14T10:10:00Z',
+          durationSeconds: 3600,
+        },
+        Date.parse('2026-05-14T10:00:00Z'),
+      ),
+    ).toBe(70 * 60 * 1000)
+  })
+
+  it('promo 無效或已過期時會回傳 0', () => {
+    expect(
+      getMillisecondsUntilPromoExpires(
+        {
+          startsAt: '2026-05-14',
+          durationSeconds: 3600,
+        },
+        Date.parse('2026-05-14T10:00:00Z'),
+      ),
+    ).toBe(0)
+
+    expect(
+      getMillisecondsUntilPromoExpires(
+        {
+          startsAt: '2026-05-14T10:00:00Z',
+          durationSeconds: 3600,
+        },
+        Date.parse('2026-05-14T11:00:00Z'),
+      ),
+    ).toBe(0)
+  })
+})
+
+describe('getSafeTimerDelayMs', () => {
+  it('會將 timer delay 限制在平台可接受範圍內', () => {
+    expect(getSafeTimerDelayMs(maxTimerDelayMs + 1000)).toBe(maxTimerDelayMs)
+    expect(getSafeTimerDelayMs(1000)).toBe(1000)
+    expect(getSafeTimerDelayMs(-1000)).toBe(0)
   })
 })

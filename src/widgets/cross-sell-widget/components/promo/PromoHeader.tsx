@@ -10,18 +10,13 @@ import { PromoCountdown } from './PromoCountdown'
 interface PromoHeaderProps {
   isPromoActive: boolean
   promo: CrossSellWidgetPromo
-  remainingSeconds: number
 }
 
 function getBenefitKey(benefit: CrossSellWidgetBenefit, index: number) {
   return benefit.id ?? `${benefit.label}-${index}`
 }
 
-export function PromoHeader({
-  isPromoActive,
-  promo,
-  remainingSeconds,
-}: PromoHeaderProps) {
+export function PromoHeader({ isPromoActive, promo }: PromoHeaderProps) {
   return (
     <div
       className={cn(
@@ -45,10 +40,7 @@ export function PromoHeader({
 
         {isPromoActive ? (
           <>
-            <PromoCountdown
-              remainingSeconds={remainingSeconds}
-              digitDivider={{ visible: false }}
-            />
+            <PromoCountdown digitDivider={{ visible: false }} promo={promo} />
             <div className="rounded-(--lion-panel-radius) border border-(--lion-gray-300) bg-transparent p-2">
               <p className="m-0 text-sm leading-5.5 text-foreground">
                 {promo.serviceLabel}

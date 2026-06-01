@@ -16,7 +16,11 @@ import {
   createCrossSellWidgetSectionContentDefaults,
   crossSellWidgetDefaultData,
 } from './defaultData'
-import { getRemainingPromoSeconds } from './lib/countdown'
+import {
+  getMillisecondsUntilPromoExpires,
+  getRemainingPromoSeconds,
+  getSafeTimerDelayMs,
+} from './lib/countdown'
 import { groupCrossSellWidgetSections } from './lib/groupSections'
 import { resolveCrossSellWidgetVisibleBlocks } from './lib/visibleBlocks'
 import type {
@@ -108,25 +112,21 @@ function CrossSellWidgetContent({
   onSelectAddon,
   onSelectItem,
   onViewMore,
-  promoKey,
   visibleBlocks,
 }: Pick<
   CrossSellWidgetProps,
   'onSelectAddon' | 'onSelectItem' | 'onViewMore'
 > & {
   data: CrossSellWidgetData
-  promoKey: string
   visibleBlocks?: CrossSellWidgetVisibleBlocks
 }) {
-  const now = useCurrentTime(promoKey)
   const locale = data.locale ?? 'zh-TW'
   const currency = data.currency ?? 'TWD'
   const hsrAddon = data.hsrAddon
   const hsrAddonHref = createHsrAddonHref(data)
   const insuranceMailtoHref = createInsuranceMailtoHref(data)
   const visaPassportHref = createVisaPassportHref(data)
-  const remainingSeconds = getRemainingPromoSeconds(data.promo, now)
-  const isPromoActive = remainingSeconds > 0
+  const isPromoActive = usePromoActive(data.promo)
   const sectionGroups = groupCrossSellWidgetSections(data.sections)
   const resolvedVisibleBlocks =
     resolveCrossSellWidgetVisibleBlocks(visibleBlocks)
@@ -263,11 +263,7 @@ function CrossSellWidgetContent({
             blockKey="promoHeader"
             panelJoinState={promoAttachedBlockKey ? 'joinsNext' : 'none'}
           >
-            <PromoHeader
-              isPromoActive={isPromoActive}
-              promo={data.promo}
-              remainingSeconds={remainingSeconds}
-            />
+            <PromoHeader isPromoActive={isPromoActive} promo={data.promo} />
           </ContentPanel>
         ) : null}
 
@@ -430,20 +426,50 @@ function getCurrentHostname() {
   return window.location.hostname
 }
 
-function useCurrentTime(promoKey: string) {
-  const [now, setNow] = useState(() => Date.now())
+function usePromoActive({
+  durationSeconds,
+  startsAt,
+}: Pick<CrossSellWidgetData['promo'], 'durationSeconds' | 'startsAt'>) {
+  const [, requestPromoActiveRefresh] = useState(0)
+  const isPromoActive =
+    getRemainingPromoSeconds({ durationSeconds, startsAt }) > 0
 
   useEffect(() => {
-    const intervalId = window.setInterval(() => {
-      setNow(Date.now())
-    }, 1000)
+    const promoTiming = { durationSeconds, startsAt }
+
+    if (getRemainingPromoSeconds(promoTiming) <= 0) {
+      return
+    }
+
+    let timeoutId: number | undefined
+
+    function schedulePromoActiveRefresh() {
+      const timeoutMs = getMillisecondsUntilPromoExpires(promoTiming)
+
+      if (timeoutMs <= 0) {
+        return
+      }
+
+      timeoutId = window.setTimeout(() => {
+        if (getMillisecondsUntilPromoExpires(promoTiming) <= 0) {
+          requestPromoActiveRefresh((refreshCount) => refreshCount + 1)
+          return
+        }
+
+        schedulePromoActiveRefresh()
+      }, getSafeTimerDelayMs(timeoutMs))
+    }
+
+    schedulePromoActiveRefresh()
 
     return () => {
-      window.clearInterval(intervalId)
+      if (timeoutId !== undefined) {
+        window.clearTimeout(timeoutId)
+      }
     }
-  }, [promoKey])
+  }, [durationSeconds, startsAt])
 
-  return now
+  return isPromoActive
 }
 
 //#endregion - Functions
@@ -499,7 +525,6 @@ export function CrossSellWidget({
       onSelectAddon={onSelectAddon}
       onSelectItem={onSelectItem}
       onViewMore={onViewMore}
-      promoKey={promoKey}
       visibleBlocks={visibleBlocks}
     />
   )
